@@ -59,17 +59,19 @@ namespace AdventuresOfOld {
             }
         }
 
-        public void HostLobby()
+        public async void HostLobby()
         {
-            transport.ConnectAddress = GetLocalIPv4();
-            NetworkManager.Singleton.StartHost();
+            //transport.ConnectAddress = GetLocalIPv4();
             StartCoroutine(HostingProcedure());
+            if (RelayManager.Instance.IsRelayEnabled)
+                await RelayManager.Instance.SetupRelay();
+            NetworkManager.Singleton.StartHost();
         }
 
         IEnumerator HostingProcedure()
         {
             hostingInProgress.SetActive(true);
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 20; i++)
             {
                 yield return new WaitForSeconds(.5f);
                 if (NetworkManager.Singleton.IsHost)
@@ -86,17 +88,19 @@ namespace AdventuresOfOld {
             }
         }
 
-        public void JoinLobby()
+        public async void JoinLobby()
         {
-            transport.ConnectAddress = joinAddress.text;
-            NetworkManager.Singleton.StartClient();
+            //transport.ConnectAddress = joinAddress.text;
             StartCoroutine(JoiningProcedure());
+            if (RelayManager.Instance.IsRelayEnabled && !string.IsNullOrEmpty(joinAddress.text))
+                await RelayManager.Instance.JoinRelay(joinAddress.text);
+            NetworkManager.Singleton.StartClient();
         }
 
         IEnumerator JoiningProcedure()
         {
             joiningInProgress.SetActive(true);
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 20; i++)
             {
                 yield return new WaitForSeconds(.5f);
                 if (NetworkManager.Singleton.IsConnectedClient)
@@ -115,7 +119,8 @@ namespace AdventuresOfOld {
 
         public void EnterLobby()
         {
-            hostAddress.text = transport.ConnectAddress;
+            //hostAddress.text = transport.ConnectAddress;
+            hostAddress.text = RelayManager.Instance.JoinCode;
             menuManager.SwapScene(5);
             inLobby = true;
         }
