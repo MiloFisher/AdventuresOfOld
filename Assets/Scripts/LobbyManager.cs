@@ -9,28 +9,30 @@ using Unity.Netcode;
 using Unity.Netcode.Transports.UNET;
 
 namespace AdventuresOfOld {
-    public class LobbyManager : MonoBehaviour
+    public class LobbyManager : Singleton<LobbyManager>
     {
-        public MenuManager menuManager;
-        public UNetTransport transport;
-        public TMP_InputField joinAddress;
-        public TMP_Text hostAddress;
+        public TMP_InputField joinCode;
+        public TMP_Text lobbyCode;
 
         public GameObject hostingInProgress;
         public GameObject joiningInProgress;
+        public GameObject startGameButton;
+        public GameObject addBotButton;
 
         public TMP_Text[] playerList;
+        public GameObject[] removeButtonList;
+
+        public GameObject botPlayerPrefab;
 
         private bool inLobby;
+        public int playersInLobby;
 
-        // Start is called before the first frame update
         void Start()
         {
             hostingInProgress.SetActive(false);
             joiningInProgress.SetActive(false);
         }
 
-        // Update is called once per frame
         void Update()
         {
             if(inLobby && !NetworkManager.Singleton.IsConnectedClient && !NetworkManager.Singleton.IsHost)
@@ -40,7 +42,9 @@ namespace AdventuresOfOld {
             if (inLobby)
             {
                 int x = 0;
-                foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player"))
+                GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+                playersInLobby = players.Length;
+                foreach (GameObject player in players)
                 {
                     if(x == 0)
                     {
@@ -51,20 +55,53 @@ namespace AdventuresOfOld {
                         playerList[x].text = "[Client] ";
                     }
                     playerList[x++].text += player.GetComponent<Player>().Username.Value + "";
+
+                    if (x != 0 && x < 6)
+                    {
+                        removeButtonList[x - 1].SetActive(NetworkManager.Singleton.IsHost);
+                    }
                 }
+
                 for (; x < 6; x++)
                 {
                     playerList[x].text = "";
+                    if(x != 0)
+                        removeButtonList[x-1].SetActive(false);
                 }
+
+                startGameButton.SetActive(playersInLobby >= 3 && NetworkManager.Singleton.IsHost);
+                addBotButton.SetActive(playersInLobby < 6 && NetworkManager.Singleton.IsHost);
             }
+        }
+
+        public void RemovePlayer(int id)
+        {
+            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+            // If Bot
+            if(players[id].GetComponent<Player>().IsOwnedByServer)
+            {
+                Destroy(players[id]);
+            }
+            //If player
+            else
+            {
+                players[id].GetComponent<Player>().Disconnect();
+            }
+        }
+
+        public void AddBot()
+        {
+            if(playersInLobby < 6)
+                Instantiate(botPlayerPrefab, Vector3.zero, Quaternion.identity).GetComponent<NetworkObject>().Spawn();
         }
 
         public async void HostLobby()
         {
-            //transport.ConnectAddress = GetLocalIPv4();
             StartCoroutine(HostingProcedure());
+
             if (RelayManager.Instance.IsRelayEnabled)
                 await RelayManager.Instance.SetupRelay();
+
             NetworkManager.Singleton.StartHost();
         }
 
@@ -90,10 +127,11 @@ namespace AdventuresOfOld {
 
         public async void JoinLobby()
         {
-            //transport.ConnectAddress = joinAddress.text;
             StartCoroutine(JoiningProcedure());
-            if (RelayManager.Instance.IsRelayEnabled && !string.IsNullOrEmpty(joinAddress.text))
-                await RelayManager.Instance.JoinRelay(joinAddress.text);
+
+            if (RelayManager.Instance.IsRelayEnabled && !string.IsNullOrEmpty(joinCode.text))
+                await RelayManager.Instance.JoinRelay(joinCode.text);
+
             NetworkManager.Singleton.StartClient();
         }
 
@@ -119,28 +157,28 @@ namespace AdventuresOfOld {
 
         public void EnterLobby()
         {
-            //hostAddress.text = transport.ConnectAddress;
-            hostAddress.text = RelayManager.Instance.JoinCode;
-            menuManager.SwapScene(5);
+            lobbyCode.text = RelayManager.Instance.JoinCode;
+            MenuManager.Instance.SwapScene(5);
             inLobby = true;
         }
 
         public void LeaveLobby()
         {
-            NetworkManager.Singleton.Shutdown();
+            if(NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsConnectedClient)
+                NetworkManager.Singleton.Shutdown();
             inLobby = false;
-            menuManager.SwapScene(0);
+            MenuManager.Instance.SwapScene(0);
         }
 
-        public string GetLocalIPv4()
-        {
-            foreach (IPAddress ip in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
-            {
-                if (ip.AddressFamily == AddressFamily.InterNetwork) {
-                    return ip.ToString();
-                }
-            }
-            return "No IP Found.";
-        }
+        //public string GetLocalIPv4()
+        //{
+        //    foreach (IPAddress ip in Dns.GetHostEntry(Dns.GetHostName()).AddressList)
+        //    {
+        //        if (ip.AddressFamily == AddressFamily.InterNetwork) {
+        //            return ip.ToString();
+        //        }
+        //    }
+        //    return "No IP Found.";
+        //}
     }
 }

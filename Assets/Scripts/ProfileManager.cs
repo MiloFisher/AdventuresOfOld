@@ -6,7 +6,7 @@ using TMPro;
 
 namespace AdventuresOfOld
 {
-    public class ProfileManager : MonoBehaviour
+    public class ProfileManager : Singleton<ProfileManager>
     {
         public Image profilePicture;
         public TMP_InputField usernameInputfield;

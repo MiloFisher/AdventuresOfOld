@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace AdventuresOfOld
 {
-    public class MenuManager : MonoBehaviour
+    public class MenuManager : Singleton<MenuManager>
     {
         public GameObject[] menuScenes;
 

@@ -8,13 +8,14 @@ namespace AdventuresOfOld
     {
         public NetworkVariable<Vector3> Position = new NetworkVariable<Vector3>();
         public NetworkVariable<FixedString64Bytes> Username = new NetworkVariable<FixedString64Bytes>();
+        public NetworkVariable<FixedString64Bytes> UUID = new NetworkVariable<FixedString64Bytes>();
 
         public override void OnNetworkSpawn()
         {
             if (IsOwner)
             {
                 //Move();
-                AssignUsername();
+                AssignUsernameAndUUID();
             }
         }
 
@@ -38,22 +39,42 @@ namespace AdventuresOfOld
             Position.Value = GetRandomPositionOnPlane();
         }
 
-        public void AssignUsername()
+        public void AssignUsernameAndUUID()
         {
+            ProfileManager p = GameObject.FindGameObjectWithTag("Profile Manager").GetComponent<ProfileManager>();
             if (NetworkManager.Singleton.IsServer)
             {
-                Username.Value = GameObject.FindGameObjectWithTag("Profile Manager").GetComponent<ProfileManager>().username;
+                Username.Value = p.username;
+                UUID.Value = p.uuid;
             }
             else
             {
-                AssignUsernameServerRPC(GameObject.FindGameObjectWithTag("Profile Manager").GetComponent<ProfileManager>().username);
+                AssignUsernameAndUUIDServerRPC(p.username, p.uuid);
             }
         }
 
         [ServerRpc]
-        void AssignUsernameServerRPC(FixedString64Bytes username, ServerRpcParams rpcParams = default)
+        void AssignUsernameAndUUIDServerRPC(FixedString64Bytes username, FixedString64Bytes uuid, ServerRpcParams rpcParams = default)
         {
             Username.Value = username;
+            UUID.Value = uuid;
+        }
+
+        public void Disconnect()
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                DisconnectClientRPC();
+            }
+        }
+
+        [ClientRpc]
+        private void DisconnectClientRPC(ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner)
+            {
+                LobbyManager.Instance.LeaveLobby();
+            }
         }
 
         static Vector3 GetRandomPositionOnPlane()
