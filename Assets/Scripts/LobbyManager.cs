@@ -46,15 +46,18 @@ namespace AdventuresOfOld {
                 playersInLobby = players.Length;
                 foreach (GameObject player in players)
                 {
-                    if(x == 0)
+                    if (x < 6)
                     {
-                        playerList[x].text = "[Host] ";
+                        if (x == 0)
+                        {
+                            playerList[x].text = "[Host] ";
+                        }
+                        else
+                        {
+                            playerList[x].text = "[Client] ";
+                        }
+                        playerList[x++].text += player.GetComponent<Player>().Username.Value + "";
                     }
-                    else
-                    {
-                        playerList[x].text = "[Client] ";
-                    }
-                    playerList[x++].text += player.GetComponent<Player>().Username.Value + "";
 
                     if (x != 0 && x < 6)
                     {
@@ -67,6 +70,14 @@ namespace AdventuresOfOld {
                     playerList[x].text = "";
                     if(x != 0)
                         removeButtonList[x-1].SetActive(false);
+                }
+
+                if (playersInLobby > 6)
+                {
+                    for(int i = 6; i < playersInLobby; i++)
+                    {
+                        RemovePlayer(i);
+                    }
                 }
 
                 startGameButton.SetActive(playersInLobby >= 3 && NetworkManager.Singleton.IsHost);
