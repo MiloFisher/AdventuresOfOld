@@ -61,12 +61,11 @@ namespace AdventuresOfOld
             }
         }
 
-        [ClientRpc]
-        public void ChangeSceneClientRPC(FixedString64Bytes scene, ClientRpcParams clientRpcParams = default)
+        public void ChangeScene(FixedString64Bytes scene)
         {
-            if (IsOwner)
+            if (NetworkManager.Singleton.IsServer)
             {
-                //NetworkSceneManager.LoadScene(scene+"",LoadSceneMode.Single);
+                NetworkManager.SceneManager.LoadScene(scene + "", LoadSceneMode.Single);
             }
         }
     }

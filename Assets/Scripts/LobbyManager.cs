@@ -190,11 +190,8 @@ namespace AdventuresOfOld {
 
         public void StartGame()
         {
-            foreach(GameObject player in GetOrderedPlayers())
-            {
-                if(!player.GetComponent<Player>().isBot)
-                    player.GetComponent<Player>().ChangeSceneClientRPC("Core Game");
-            }
+            GameObject p = GetOrderedPlayers()[0];
+            p.GetComponent<Player>().ChangeScene("Core Game");
         }
 
         //public string GetLocalIPv4()
