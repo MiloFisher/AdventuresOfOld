@@ -1,12 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
-using System.Net;
-using System.Net.Sockets;
 using Unity.Netcode;
-using Unity.Netcode.Transports.UNET;
 
 namespace AdventuresOfOld {
     public class LobbyManager : Singleton<LobbyManager>
@@ -51,6 +46,10 @@ namespace AdventuresOfOld {
                         if (x == 0)
                         {
                             playerList[x].text = "[Host] ";
+                        }
+                        else if(player.GetComponent<Player>().isBot)
+                        {
+                            playerList[x].text = "[Bot] ";
                         }
                         else
                         {
