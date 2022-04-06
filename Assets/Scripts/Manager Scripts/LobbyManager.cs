@@ -21,7 +21,9 @@ namespace AdventuresOfOld {
         public GameObject botPlayerPrefab;
 
         private bool inLobby;
+
         public int playersInLobby;
+        public string lobbyType;
 
         void Start()
         {
@@ -106,8 +108,10 @@ namespace AdventuresOfOld {
                 Instantiate(botPlayerPrefab, Vector3.zero, Quaternion.identity).GetComponent<NetworkObject>().Spawn();
         }
 
-        public async void HostLobby()
+        public async void HostLobby(string _lobbyType)
         {
+            lobbyType = _lobbyType; // "New Game" or "Load Game"
+
             StartCoroutine(HostingProcedure());
 
             if (RelayManager.Instance.IsRelayEnabled)
@@ -191,7 +195,12 @@ namespace AdventuresOfOld {
         public void StartGame()
         {
             GameObject p = GetOrderedPlayers()[0];
-            p.GetComponent<Player>().ChangeScene("Core Game");
+            if (lobbyType == "New Game")
+                p.GetComponent<Player>().ChangeScene("Character Creation");
+            else if (lobbyType == "Load Game")
+                p.GetComponent<Player>().ChangeScene("Core Game");
+            else
+                Debug.LogError("Unknown LobbyType: \"" + lobbyType + "\"");
         }
 
         //public string GetLocalIPv4()
