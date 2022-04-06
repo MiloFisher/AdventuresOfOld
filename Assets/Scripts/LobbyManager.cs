@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using TMPro;
 using Unity.Netcode;
+using System;
 
 namespace AdventuresOfOld {
     public class LobbyManager : Singleton<LobbyManager>
@@ -37,7 +38,7 @@ namespace AdventuresOfOld {
             if (inLobby)
             {
                 int x = 0;
-                GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+                GameObject[] players = GetOrderedPlayers();
                 playersInLobby = players.Length;
                 foreach (GameObject player in players)
                 {
@@ -86,7 +87,7 @@ namespace AdventuresOfOld {
 
         public void RemovePlayer(int id)
         {
-            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+            GameObject[] players = GetOrderedPlayers();
             // If Bot
             if(players[id].GetComponent<Player>().IsOwnedByServer)
             {
@@ -178,6 +179,13 @@ namespace AdventuresOfOld {
                 NetworkManager.Singleton.Shutdown();
             inLobby = false;
             MenuManager.Instance.SwapScene(0);
+        }
+
+        public GameObject[] GetOrderedPlayers()
+        {
+            GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+            Array.Sort(players, (a,b) => (int)a.GetComponent<Player>().NetworkObjectId - (int)b.GetComponent<Player>().NetworkObjectId);
+            return players;
         }
 
         //public string GetLocalIPv4()
