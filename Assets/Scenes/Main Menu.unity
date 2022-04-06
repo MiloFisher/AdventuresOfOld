@@ -3358,7 +3358,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 853043921}
         m_TargetAssemblyTypeName: AdventuresOfOld.LobbyManager, Assembly-CSharp
-        m_MethodName: LeaveLobby
+        m_MethodName: StartGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

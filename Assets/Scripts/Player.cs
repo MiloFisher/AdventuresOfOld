@@ -1,6 +1,7 @@
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace AdventuresOfOld
 {
@@ -51,20 +52,21 @@ namespace AdventuresOfOld
             }
         }
 
-        public void Disconnect()
-        {
-            if (NetworkManager.Singleton.IsServer)
-            {
-                DisconnectClientRPC();
-            }
-        }
-
         [ClientRpc]
-        private void DisconnectClientRPC(ClientRpcParams clientRpcParams = default)
+        public void DisconnectClientRPC(ClientRpcParams clientRpcParams = default)
         {
             if (IsOwner)
             {
                 LobbyManager.Instance.LeaveLobby();
+            }
+        }
+
+        [ClientRpc]
+        public void ChangeSceneClientRPC(FixedString64Bytes scene, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner)
+            {
+                //NetworkSceneManager.LoadScene(scene+"",LoadSceneMode.Single);
             }
         }
     }

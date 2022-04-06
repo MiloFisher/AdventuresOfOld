@@ -11,4 +11,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/JLMainMenu.unity
     guid: 3a4d2e1cc0e6c444e831e2ab565d2987
+  - enabled: 1
+    path: Assets/Scenes/Core Game.unity
+    guid: 360118703c17f4e89a37d7bd15d01d70
   m_configObjects: {}

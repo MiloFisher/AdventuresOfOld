@@ -96,7 +96,7 @@ namespace AdventuresOfOld {
             //If player
             else
             {
-                players[id].GetComponent<Player>().Disconnect();
+                players[id].GetComponent<Player>().DisconnectClientRPC();
             }
         }
 
@@ -186,6 +186,15 @@ namespace AdventuresOfOld {
             GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
             Array.Sort(players, (a,b) => (int)a.GetComponent<Player>().NetworkObjectId - (int)b.GetComponent<Player>().NetworkObjectId);
             return players;
+        }
+
+        public void StartGame()
+        {
+            foreach(GameObject player in GetOrderedPlayers())
+            {
+                if(!player.GetComponent<Player>().isBot)
+                    player.GetComponent<Player>().ChangeSceneClientRPC("Core Game");
+            }
         }
 
         //public string GetLocalIPv4()
