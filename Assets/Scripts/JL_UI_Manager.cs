@@ -5,25 +5,25 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-public class JL_UI_Manager : Selectable
+public class JL_UI_Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
-    BaseEventData m_BaseEvent;
-
-    void Update()
+    public void OnPointerEnter(PointerEventData eventData)
     {
-        //Check if the GameObject is being highlighted
-        if (IsHighlighted())
-        {
-            Transform daggerTransform = this.gameObject.transform.GetChild(1);
-            GameObject dagger = daggerTransform.gameObject;
-            dagger.SetActive(true);
-        }
+        Transform daggerTransform = this.gameObject.transform.GetChild(1);
+        GameObject dagger = daggerTransform.gameObject;
+        dagger.SetActive(true);
+    }
 
-        if (!IsHighlighted())
-        {
-            Transform daggerTransform = this.gameObject.transform.GetChild(1);
-            GameObject dagger = daggerTransform.gameObject;
-            dagger.SetActive(false);
-        }
+    public void OnPointerDown(PointerEventData eventData) {
+        Transform daggerTransform = this.gameObject.transform.GetChild(1);
+        GameObject dagger = daggerTransform.gameObject;
+        dagger.SetActive(false);
+    }
+    
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        Transform daggerTransform = this.gameObject.transform.GetChild(1);
+        GameObject dagger = daggerTransform.gameObject;
+        dagger.SetActive(false);
     }
 }
