@@ -47,6 +47,7 @@ namespace AdventuresOfOld
 
         // Additional Character Data
         public NetworkVariable<int> LevelUpPoints = new NetworkVariable<int>();
+        public NetworkVariable<Vector3Int> Position = new NetworkVariable<Vector3Int>();
 
 
         public override void OnNetworkSpawn()
