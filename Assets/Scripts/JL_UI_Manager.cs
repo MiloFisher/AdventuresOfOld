@@ -20,6 +20,7 @@ public class JL_UI_Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void OnPointerEnter(PointerEventData eventData)
     {
         this.GetComponent<Image>().sprite = asyncSpriteSelected.Result;
+        this.GetComponent<Image>().transform.localScale = new Vector2((float)1.2, (float)1.2);
         Transform daggerTransform = this.gameObject.transform.GetChild(1);
         GameObject dagger = daggerTransform.gameObject;
         dagger.SetActive(true);
@@ -27,6 +28,7 @@ public class JL_UI_Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerDown(PointerEventData eventData) {
         this.GetComponent<Image>().sprite = asyncSprite.Result;
+        this.GetComponent<Image>().transform.localScale = new Vector2(1, 1);
         Transform daggerTransform = this.gameObject.transform.GetChild(1);
         GameObject dagger = daggerTransform.gameObject;
         dagger.SetActive(false);
@@ -35,6 +37,7 @@ public class JL_UI_Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public void OnPointerExit(PointerEventData eventData)
     {
         this.GetComponent<Image>().sprite = asyncSprite.Result;
+        this.GetComponent<Image>().transform.localScale = new Vector2(1, 1);
         Transform daggerTransform = this.gameObject.transform.GetChild(1);
         GameObject dagger = daggerTransform.gameObject;
         dagger.SetActive(false);
