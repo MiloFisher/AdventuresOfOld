@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/JLMainMenu.unity
     guid: 3a4d2e1cc0e6c444e831e2ab565d2987
   - enabled: 1
+    path: Assets/Scenes/JLPauseMenu.unity
+    guid: 2af9a62bcb925ae42befa8f81e666265
+  - enabled: 1
     path: Assets/Scenes/Main Menu.unity
     guid: 2cda990e2423bbf4892e6590ba056729
   - enabled: 1
