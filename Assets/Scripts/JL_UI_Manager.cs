@@ -4,17 +4,29 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 
 public class JL_UI_Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
+    AsyncOperationHandle<Sprite> asyncSprite;
+    AsyncOperationHandle<Sprite> asyncSpriteSelected;
+
+    void Start() {
+        asyncSprite = Addressables.LoadAssetAsync<Sprite>("Assets/Game_Resources/UI/scroll_button.png");
+        asyncSpriteSelected = Addressables.LoadAssetAsync<Sprite>("Assets/Game_Resources/UI/scroll_button_selected.png");
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
+        this.GetComponent<Image>().sprite = asyncSpriteSelected.Result;
         Transform daggerTransform = this.gameObject.transform.GetChild(1);
         GameObject dagger = daggerTransform.gameObject;
         dagger.SetActive(true);
     }
 
     public void OnPointerDown(PointerEventData eventData) {
+        this.GetComponent<Image>().sprite = asyncSprite.Result;
         Transform daggerTransform = this.gameObject.transform.GetChild(1);
         GameObject dagger = daggerTransform.gameObject;
         dagger.SetActive(false);
@@ -22,6 +34,7 @@ public class JL_UI_Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     
     public void OnPointerExit(PointerEventData eventData)
     {
+        this.GetComponent<Image>().sprite = asyncSprite.Result;
         Transform daggerTransform = this.gameObject.transform.GetChild(1);
         GameObject dagger = daggerTransform.gameObject;
         dagger.SetActive(false);
