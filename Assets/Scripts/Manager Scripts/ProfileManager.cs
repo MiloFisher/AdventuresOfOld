@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-namespace AdventuresOfOld
+namespace AdventuresOfOldMultiplayer
 {
     public class ProfileManager : Singleton<ProfileManager>
     {

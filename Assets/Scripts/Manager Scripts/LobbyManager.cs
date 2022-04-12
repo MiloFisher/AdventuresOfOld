@@ -4,7 +4,8 @@ using TMPro;
 using Unity.Netcode;
 using System;
 
-namespace AdventuresOfOld {
+namespace AdventuresOfOldMultiplayer
+{
     public class LobbyManager : Singleton<LobbyManager>
     {
         public TMP_InputField joinCode;

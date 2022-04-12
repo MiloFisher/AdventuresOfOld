@@ -1,9 +1,9 @@
+using UnityEngine.SceneManagement;
 using Unity.Collections;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
-namespace AdventuresOfOld
+namespace AdventuresOfOldMultiplayer
 {
     public class Player : NetworkBehaviour
     {
@@ -47,8 +47,10 @@ namespace AdventuresOfOld
 
         // Additional Character Data
         public NetworkVariable<int> LevelUpPoints = new NetworkVariable<int>();
-        public NetworkVariable<Vector3Int> Position = new NetworkVariable<Vector3Int>();
 
+        // Gameplay Data
+        public NetworkVariable<Vector3Int> Position = new NetworkVariable<Vector3Int>();
+        public NetworkVariable<int> TurnPhase = new NetworkVariable<int>();
 
         public override void OnNetworkSpawn()
         {
@@ -61,6 +63,7 @@ namespace AdventuresOfOld
             }
         }
 
+        #region Main Menu
         void AssignUsernameAndUUID()
         {
             if (NetworkManager.Singleton.IsServer)
@@ -106,7 +109,9 @@ namespace AdventuresOfOld
                 NetworkManager.SceneManager.LoadScene(scene + "", LoadSceneMode.Single);
             }
         }
+        #endregion
 
+        #region Character
         public void SetValue(string valueName, string value)
         {
             if (NetworkManager.Singleton.IsServer)
@@ -206,5 +211,36 @@ namespace AdventuresOfOld
                 default: Debug.LogError("Unknown Value: \"" + valueName + "\""); break;
             }
         }
+        #endregion
+
+        #region Gameplay
+        public void SetPosition(Vector3Int pos)
+        {
+            if (NetworkManager.Singleton.IsServer)
+                Position.Value = pos;
+            else
+                SetPositionServerRPC(pos);
+        }
+
+        [ServerRpc]
+        private void SetPositionServerRPC(Vector3Int pos, ServerRpcParams rpcParams = default)
+        {
+            Position.Value = pos;
+        }
+
+        public void SetTurnPhase(int phase)
+        {
+            if (NetworkManager.Singleton.IsServer)
+                TurnPhase.Value = phase;
+            else
+                SetTurnPhaseServerRPC(phase);
+        }
+
+        [ServerRpc]
+        private void SetTurnPhaseServerRPC(int phase, ServerRpcParams rpcParams = default)
+        {
+            TurnPhase.Value = phase;
+        }
+        #endregion
     }
 }
