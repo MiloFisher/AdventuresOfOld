@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98ae6defad4554d89845a2d068cf7734, type: 3}
+  m_Name: GoblinHorde
+  m_EditorClassIdentifier: 
+  cardName: Goblin Horde
+  image: {fileID: 0}
+  flavorText: They play World of Warcraft!
+  type: 2
+  health: 57
+  attack: 10
+  speed: 17
+  physicalPower: 10
+  magicalPower: 8
+  skillName: Goblin Barrage!
+  skillDescription: All players in combat must make a STR Roll (8).  Players who
+    fail the roll are attacked by the Horde.
+  passiveName: Ambush Tactics
+  passiveDescription: Players cannot flee from this fight.

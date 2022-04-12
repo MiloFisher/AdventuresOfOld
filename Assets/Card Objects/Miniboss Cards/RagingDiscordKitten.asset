@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98ae6defad4554d89845a2d068cf7734, type: 3}
+  m_Name: RagingDiscordKitten
+  m_EditorClassIdentifier: 
+  cardName: Raging Discord Kitten
+  image: {fileID: 0}
+  flavorText: Kitten is vewy angy.
+  type: 2
+  health: 56
+  attack: 10
+  speed: 20
+  physicalPower: 9
+  magicalPower: 9
+  skillName: RAWR XD!
+  skillDescription: The player with the highest health in combat must make a Strength
+    Roll (11).  On a failure, that player is attacked by the Kitten.
+  passiveName: Annihilation Claws
+  passiveDescription: Whenever a player is damaged by the Kitten, they become <b>Plagued</b>.

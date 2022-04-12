@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98ae6defad4554d89845a2d068cf7734, type: 3}
+  m_Name: ShyUnfriendlyBandits
+  m_EditorClassIdentifier: 
+  cardName: Shy Unfriendly Bandits
+  image: {fileID: 0}
+  flavorText: "Give them your loot but don\u2019t talk to them!"
+  type: 0
+  health: 14
+  attack: 9
+  speed: 18
+  physicalPower: 8
+  magicalPower: 6
+  skillName: Pay Up!
+  skillDescription: The lowest health player in combat must make an INT Roll (10). 
+    On a failure, that player is attacked by the Bandits.
+  passiveName: Get Money
+  passiveDescription: When being attacked by the Bandits, players can pay 10 Gold
+    to ignore the incoming damage.  (Must be done before attempting to Dodge)

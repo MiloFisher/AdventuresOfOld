@@ -5,7 +5,6 @@ public enum MonsterType {BASIC, ELITE, MINIBOSS, BOSS, MINION};
 [CreateAssetMenu(fileName = "New Monster Card", menuName = "Cards/Monster Card")]
 public class MonsterCard : EncounterCard
 {
-    public int gold;
     public MonsterType type;
     public int health;
     public int attack;

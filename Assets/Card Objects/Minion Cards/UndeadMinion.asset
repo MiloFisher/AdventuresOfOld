@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98ae6defad4554d89845a2d068cf7734, type: 3}
+  m_Name: UndeadMinion
+  m_EditorClassIdentifier: 
+  cardName: Undead Minion
+  image: {fileID: 0}
+  flavorText: "A corpse raised to do its master\u2019s bidding"
+  type: 4
+  health: 10
+  attack: 2
+  speed: 14
+  physicalPower: 1
+  magicalPower: 0
+  skillName: 'Summon Description:'
+  skillDescription: "Upon summoning, add 2x the caster\u2019s level to Health, add
+    the caster\u2019s level to the Attack, and add the caster\u2019s level to the
+    Power.  On this minion\u2019s turn, make an Attack Roll using the minion\u2019s
+    Physical Power + 2 dice."
+  passiveName: Undead Loyalty
+  passiveDescription: Redirect all incoming attacks to the caster to this minion
+    instead.

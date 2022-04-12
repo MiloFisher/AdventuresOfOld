@@ -11,6 +11,9 @@ public class PlayManager : Singleton<PlayManager>
     public Player localPlayer;
     public List<Player> playerList;
 
+    [SerializeField] private EncounterCard[] encounterCardObjects;
+    public List<EncounterCard> encounterDeck = new List<EncounterCard>();
+
     void Start()
     {
         // Populates the player list
@@ -50,6 +53,13 @@ public class PlayManager : Singleton<PlayManager>
 
     private void InitialGameSetup()
     {
+        // Add 4 copies of each encounter card to the encounter deck
+        foreach(EncounterCard ec in encounterCardObjects)
+        {
+            for (int i = 0; i < 4; i++)
+                encounterDeck.Add(ec);
+        }
+        // Shuffle encounter deck
 
     }
 }

@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98ae6defad4554d89845a2d068cf7734, type: 3}
+  m_Name: RainbowSlime
+  m_EditorClassIdentifier: 
+  cardName: Rainbow Slime
+  image: {fileID: 0}
+  flavorText: LGBTQ+ Slime Pride
+  type: 2
+  health: 59
+  attack: 8
+  speed: 18
+  physicalPower: 9
+  magicalPower: 9
+  skillName: Epic Meal Time!
+  skillDescription: All players in combat must make an INT Roll (9).  Players who
+    fail the roll are attacked by the Slime and become <b>Eaten</b>.
+  passiveName: Rainbow Ooze
+  passiveDescription: Whenever a player damages the Slime, they become <b>Weakened
+    (3)</b>.

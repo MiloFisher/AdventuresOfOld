@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98ae6defad4554d89845a2d068cf7734, type: 3}
+  m_Name: DiscordKitten
+  m_EditorClassIdentifier: 
+  cardName: Discord Kitten
+  image: {fileID: 0}
+  flavorText: Come here kitten!
+  type: 2
+  health: 29
+  attack: 6
+  speed: 17
+  physicalPower: 8
+  magicalPower: 8
+  skillName: Rawr!
+  skillDescription: The player with the highest health in combat must make a Strength
+    Roll (3).  On a failure, that player is killed by cuteness.
+  passiveName: Sharp Claws
+  passiveDescription: Whenever a player is damaged by the Kitten, they become <b>Weakened
+    (1)</b>.

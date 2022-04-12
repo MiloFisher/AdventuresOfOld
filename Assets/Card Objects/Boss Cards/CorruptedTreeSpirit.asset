@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98ae6defad4554d89845a2d068cf7734, type: 3}
+  m_Name: CorruptedTreeSpirit
+  m_EditorClassIdentifier: 
+  cardName: Corrupted Tree Spirit
+  image: {fileID: 0}
+  flavorText: An old forgotten forest god, surrendered to the Chaos
+  type: 3
+  health: 140
+  attack: 10
+  speed: 18
+  physicalPower: 10
+  magicalPower: 10
+  skillName: Corruption Wave!
+  skillDescription: All players in combat must make a STR, DEX, or INT Roll (12)
+    based on their primary stat.  Players who fail the roll are attacked by the Spirit
+    and become <b>Plagued</b> and <b>Poisoned (3)</b>.
+  passiveName: Chaos Veil
+  passiveDescription: Whenever a player spends an Ability Charge, that player becomes
+    <b>Weakened (3)</b>.

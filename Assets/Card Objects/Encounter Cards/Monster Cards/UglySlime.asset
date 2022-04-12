@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98ae6defad4554d89845a2d068cf7734, type: 3}
+  m_Name: UglySlime
+  m_EditorClassIdentifier: 
+  cardName: Ugly Slime
+  image: {fileID: 0}
+  flavorText: The slimes are quite cute actually, the ugly thing is the monster attacking
+    them
+  type: 0
+  health: 15
+  attack: 6
+  speed: 15
+  physicalPower: 6
+  magicalPower: 8
+  skillName: Snack Time!
+  skillDescription: The Slime tries to eat your shoe.  Does nothing.
+  passiveName: Acidic Ooze
+  passiveDescription: Whenever a player damages the Slime, they become <b>Weakened
+    (1)</b>.

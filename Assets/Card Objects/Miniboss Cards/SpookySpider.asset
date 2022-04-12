@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 98ae6defad4554d89845a2d068cf7734, type: 3}
+  m_Name: SpookySpider
+  m_EditorClassIdentifier: 
+  cardName: SpookySpider
+  image: {fileID: 0}
+  flavorText: "If you hate spiders, you\u2019ll hate this mini-boss even more!"
+  type: 2
+  health: 55
+  attack: 7
+  speed: 19
+  physicalPower: 9
+  magicalPower: 9
+  skillName: Web Volley!
+  skillDescription: 'All players in combat must make a DEX Roll (8).  Players who
+    fail the roll are attacked by the Spider and become <b>Enwebbed</b>. '
+  passiveName: Ghastly Bite
+  passiveDescription: Whenever a player is damaged by the Spider, they must make
+    a CON Roll (8).  On a failure, that player becomes <b>Poisoned (3)</b>.
