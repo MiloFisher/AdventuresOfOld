@@ -1,0 +1,25 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81f79f3c8c2a943018699592ce509b42, type: 3}
+  m_Name: WellFromHell
+  m_EditorClassIdentifier: 
+  cardName: Well from Hell!
+  image: {fileID: 0}
+  flavorText: A well is cackling with chaotic energy! In 7 days a demon might arrive!
+  xp: 6
+  optionNames:
+  - 'Drink the Water:'
+  - 'Resist the Chaos:'
+  optionDescriptions:
+  - Restore all missing Ability Charges, +1 Chaos
+  - Make an ENG Roll (10).  On a success, gain +2 XP.  On a failure, lose Ability
+    Charges equal to the <b>Chaos Tier</b>

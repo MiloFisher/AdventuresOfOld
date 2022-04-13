@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81f79f3c8c2a943018699592ce509b42, type: 3}
+  m_Name: SomethingShiny
+  m_EditorClassIdentifier: 
+  cardName: Something Shiny
+  image: {fileID: 0}
+  flavorText: "Your eye catches something shimmering in the bushes, you check upon
+    it. Afterall, what\u2019s the worst that could happen?"
+  xp: 4
+  optionNames:
+  - '<Looter> Find the Treasure:'
+  - 'Investigate:'
+  - 'Ignore it:'
+  optionDescriptions:
+  - +1 Loot Card, +40 Gold
+  - Make an INT Roll (10).  On a success, gain +1 Loot Card and +40 Gold.  On a failure,
+    +1 Chaos
+  - Nothing

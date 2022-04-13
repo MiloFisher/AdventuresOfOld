@@ -4,4 +4,7 @@ using UnityEngine;
 public class EventCard : EncounterCard
 {
     public int xp;
+    public string[] optionNames;
+    public string[] optionDescriptions;
+    public void OptionEffect(int id) { EventOptionManager.Instance.CallOption(name,id); }
 }

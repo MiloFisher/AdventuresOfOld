@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81f79f3c8c2a943018699592ce509b42, type: 3}
+  m_Name: TrappedWolfCub
+  m_EditorClassIdentifier: 
+  cardName: Trapped Wolf Cub
+  image: {fileID: 0}
+  flavorText: You stumble across a wolf cub caught in a hunter's trap, it looks at
+    you and pleads for help.
+  xp: 3
+  optionNames:
+  - '<Animalkin> Soothe & Release the Cub:'
+  - Free the Cub
+  - Kill the Cub
+  optionDescriptions:
+  - +1 Loot Card, +2 XP
+  - Make a DEX Roll (9).  On a success, -1 Chaos
+  - +1 Loot Card, +2 XP, +1 Chaos

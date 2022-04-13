@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81f79f3c8c2a943018699592ce509b42, type: 3}
+  m_Name: SpiderNest
+  m_EditorClassIdentifier: 
+  cardName: Spider Nest
+  image: {fileID: 0}
+  flavorText: You stumble across a large swath of trees riddled with Spider Eggs!
+    What will you do?
+  xp: 4
+  optionNames:
+  - '<Berserk> Start Smashing:'
+  - 'Burn it Down (Requires a Torch):'
+  - 'Sprint Through:'
+  optionDescriptions:
+  - +1 Loot Card, +2 XP
+  - Discard the Torch, and gain +2 XP and -1 Chaos
+  - Make a SPD Roll (9).  On a failure, +1 Chaos

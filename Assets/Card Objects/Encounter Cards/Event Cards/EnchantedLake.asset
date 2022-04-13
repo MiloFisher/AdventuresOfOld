@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81f79f3c8c2a943018699592ce509b42, type: 3}
+  m_Name: EnchantedLake
+  m_EditorClassIdentifier: 
+  cardName: Enchanted Lake
+  image: {fileID: 0}
+  flavorText: "You come across a body of water that seems to glimmer with mystical
+    energy \u2026 or maybe that\u2019s just the sunlight."
+  xp: 4
+  optionNames:
+  - '<Elven> Offerings of the Lake:'
+  - 'Healing Waters (Chaos Tier 1-3):'
+  - 'Corrupted Waters (Chaos Tier 4-6):'
+  optionDescriptions:
+  - +2 Loot Cards or +4 XP
+  - Heal +10 Health or +2 XP
+  - Take 15 damage or discard 1 card from your inventory

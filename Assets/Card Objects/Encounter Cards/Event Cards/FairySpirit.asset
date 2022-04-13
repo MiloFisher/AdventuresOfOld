@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81f79f3c8c2a943018699592ce509b42, type: 3}
+  m_Name: FairySpirit
+  m_EditorClassIdentifier: 
+  cardName: FairySpirit
+  image: {fileID: 0}
+  flavorText: "She\u2019s searching for a boy who never ages\u2026"
+  xp: 2
+  optionNames:
+  - 'Attack the Fairy:'
+  - 'Follow the Fairy:'
+  - 'Ask for Blessing:'
+  optionDescriptions:
+  - Make a STR Roll (11).  On a success, gain +1 Loot Card, +4 XP, and +1 Chaos.
+    On a failure, gain +1 Chaos
+  - Arrive at the <i>Overgrown Temple</i>
+  - +35 Gold

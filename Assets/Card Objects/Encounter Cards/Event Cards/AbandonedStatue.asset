@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81f79f3c8c2a943018699592ce509b42, type: 3}
+  m_Name: AbandonedStatue
+  m_EditorClassIdentifier: 
+  cardName: Abandoned Statue
+  image: {fileID: 0}
+  flavorText: "You come across a statue toppled over on the side of the road, it\u2019s
+    bowl of offerings reveal a couple of gold pieces \u2026 you wouldn\u2019t steal
+    from the Church would you?"
+  xp: 4
+  optionNames:
+  - '<Angelkin or Holy> Fix the Statue:'
+  - 'Take the Offerings:'
+  - 'Destroy the Statue:'
+  optionDescriptions:
+  - Restore all missing Health
+  - +80 Gold & +1 Chaos
+  - +4 XP & +2 Chaos
