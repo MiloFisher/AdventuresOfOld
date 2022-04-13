@@ -165,7 +165,7 @@ public class PlayManager : Singleton<PlayManager>
         {
             miniBossDeck.Add(m.cardName, m);
         }
-        foreach (MonsterCard m in miniBossObjects)
+        foreach (MonsterCard m in minionObjects)
         {
             minionDeck.Add(m.cardName, m);
         }
