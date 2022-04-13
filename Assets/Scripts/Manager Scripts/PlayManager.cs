@@ -98,6 +98,16 @@ public class PlayManager : Singleton<PlayManager>
             itemReference.Add(l.cardName, l);
         }
 
+        // Construct Miniboss and Minion dictionaries
+        foreach (MonsterCard m in miniBossObjects)
+        {
+            miniBossDeck.Add(m.cardName, m);
+        }
+        foreach (MonsterCard m in minionObjects)
+        {
+            minionDeck.Add(m.cardName, m);
+        }
+
         // Run tests to find neighbors for each tile
         Vector3Int test1 = new Vector3Int(0, 1, -1);
         Vector3Int test2 = new Vector3Int(0, -1, 1);
@@ -160,15 +170,7 @@ public class PlayManager : Singleton<PlayManager>
         }
         ShuffleDeck(encounterDeck);
 
-        // 6) Setup Miniboss and Minion dictionaries
-        foreach(MonsterCard m in miniBossObjects)
-        {
-            miniBossDeck.Add(m.cardName, m);
-        }
-        foreach (MonsterCard m in minionObjects)
-        {
-            minionDeck.Add(m.cardName, m);
-        }
+        // 6) Miniboss and minion decks set up in BaseGameSetup()
 
         // 7) Equip players with starting gear
         foreach (Player p in playerList)
