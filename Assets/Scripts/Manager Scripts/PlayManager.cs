@@ -16,6 +16,12 @@ public class PlayManager : Singleton<PlayManager>
     [SerializeField] private List<QuestCard> questDeck;
     public List<QuestCard> quests = new List<QuestCard>();
 
+    [SerializeField] private List<MonsterCard> chapterBossDeck;
+    public MonsterCard chapterBoss;
+
+    [SerializeField] private LootCard[] lootCardObjects;
+    public List<LootCard> lootDeck = new List<LootCard>();
+
     [SerializeField] private EncounterCard[] encounterCardObjects;
     public List<EncounterCard> encounterDeck = new List<EncounterCard>();
 
@@ -116,14 +122,22 @@ public class PlayManager : Singleton<PlayManager>
             quests.Add(questDeck[i]);
         }
 
-        // Add 4 copies of each encounter card to the encounter deck
+        // 4) Deal Chapter Boss Card
+        ShuffleDeck(chapterBossDeck);
+        chapterBoss = chapterBossDeck[0];
+
+        // 5) Setup Loot and Encounter Decks
+        foreach (LootCard lc in lootCardObjects)
+        {
+            for (int i = 0; i < lc.copies; i++) // Add copies depending on amount specified
+                lootDeck.Add(lc);
+        }
+        ShuffleDeck(encounterDeck);
         foreach (EncounterCard ec in encounterCardObjects)
         {
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++) // Add 4 copies of each encounter card
                 encounterDeck.Add(ec);
         }
-
-        // Shuffle encounter deck
         ShuffleDeck(encounterDeck);
     }
 
