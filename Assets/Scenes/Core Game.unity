@@ -4707,6 +4707,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 22d4febcb099d48d390186adbfaba358, type: 2}
   - {fileID: 11400000, guid: 6243a698daba94d72b387ee3c10dff6c, type: 2}
   encounterDeck: []
+  chaosCounter: 0
 --- !u!1001 &356895336
 PrefabInstance:
   m_ObjectHideFlags: 0

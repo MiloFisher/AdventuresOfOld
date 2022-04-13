@@ -183,7 +183,7 @@ namespace AdventuresOfOldMultiplayer
             if(NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsConnectedClient)
                 NetworkManager.Singleton.Shutdown();
             inLobby = false;
-            MenuManager.Instance.SwapScene(0);
+            MenuManager.Instance.SwapScene(1);
         }
 
         public GameObject[] GetOrderedPlayers()
@@ -196,8 +196,9 @@ namespace AdventuresOfOldMultiplayer
         public void StartGame()
         {
             GameObject p = GetOrderedPlayers()[0];
+            PlayerPrefs.SetString("gameType", lobbyType);
             if (lobbyType == "New Game")
-                p.GetComponent<Player>().ChangeScene("Character Creation");
+                p.GetComponent<Player>().ChangeScene("Core Game"); //p.GetComponent<Player>().ChangeScene("Character Creation");
             else if (lobbyType == "Load Game")
                 p.GetComponent<Player>().ChangeScene("Core Game");
             else

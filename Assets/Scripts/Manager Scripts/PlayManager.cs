@@ -11,8 +11,12 @@ public class PlayManager : Singleton<PlayManager>
     public Player localPlayer;
     public List<Player> playerList;
 
+    public Dictionary<Vector3Int, Tile> gameboard = new Dictionary<Vector3Int, Tile>();
+
     [SerializeField] private EncounterCard[] encounterCardObjects;
     public List<EncounterCard> encounterDeck = new List<EncounterCard>();
+
+    public int chaosCounter;
 
     void Start()
     {
@@ -43,7 +47,11 @@ public class PlayManager : Singleton<PlayManager>
         }
 
         // Otherwise, setup game
-        InitialGameSetup();
+        BaseGameSetup();
+        if(PlayerPrefs.GetString("gameType") == "New Game")
+            NewGameSetup();
+        else
+            LoadGameSetup();
     }
 
     private void Update()
@@ -51,10 +59,55 @@ public class PlayManager : Singleton<PlayManager>
 
     }
 
-    private void InitialGameSetup()
+    private void BaseGameSetup()
     {
+        // Construct Gameboard dictionary
+        GameObject[] tiles = GameObject.FindGameObjectsWithTag("Tile");
+        foreach(GameObject g in tiles)
+        {
+            Tile t = g.GetComponent<Tile>();
+            gameboard.Add(t.position, t);
+        }
+
+        // Run tests to find neighbors for each tile
+        Vector3Int test1 = new Vector3Int(0, 1, -1);
+        Vector3Int test2 = new Vector3Int(0, -1, 1);
+        Vector3Int test3 = new Vector3Int(1, 0, -1);
+        Vector3Int test4 = new Vector3Int(-1, 0, 1);
+        Vector3Int test5 = new Vector3Int(1, -1, 0);
+        Vector3Int test6 = new Vector3Int(-1, 1, 0);
+        foreach (GameObject g in tiles)
+        {
+            Tile t = g.GetComponent<Tile>();
+            if (gameboard.ContainsKey(t.position + test1)) t.neighbors.Add(gameboard[t.position + test1]);
+            if (gameboard.ContainsKey(t.position + test2)) t.neighbors.Add(gameboard[t.position + test2]);
+            if (gameboard.ContainsKey(t.position + test3)) t.neighbors.Add(gameboard[t.position + test3]);
+            if (gameboard.ContainsKey(t.position + test4)) t.neighbors.Add(gameboard[t.position + test4]);
+            if (gameboard.ContainsKey(t.position + test5)) t.neighbors.Add(gameboard[t.position + test5]);
+            if (gameboard.ContainsKey(t.position + test6)) t.neighbors.Add(gameboard[t.position + test6]);
+        }
+
+    }
+
+    private void NewGameSetup()
+    {
+        // Set the Chaos Counter to 1
+        chaosCounter = 1;
+
+        // Enable Treasure Tokens
+        gameboard[new Vector3Int(3, 15, -18)].EnableTreasureToken();
+        gameboard[new Vector3Int(5, 9, -14)].EnableTreasureToken();
+        gameboard[new Vector3Int(3, 3, -6)].EnableTreasureToken();
+        gameboard[new Vector3Int(8, -4, -4)].EnableTreasureToken();
+        gameboard[new Vector3Int(7, 3, -10)].EnableTreasureToken();
+        gameboard[new Vector3Int(8, 6, -14)].EnableTreasureToken();
+        gameboard[new Vector3Int(16, 9, -25)].EnableTreasureToken();
+        gameboard[new Vector3Int(21, 0, -21)].EnableTreasureToken();
+        gameboard[new Vector3Int(15, -1, -14)].EnableTreasureToken();
+        gameboard[new Vector3Int(16, -8, -8)].EnableTreasureToken();
+
         // Add 4 copies of each encounter card to the encounter deck
-        foreach(EncounterCard ec in encounterCardObjects)
+        foreach (EncounterCard ec in encounterCardObjects)
         {
             for (int i = 0; i < 4; i++)
                 encounterDeck.Add(ec);
@@ -62,6 +115,10 @@ public class PlayManager : Singleton<PlayManager>
 
         // Shuffle encounter deck
         ShuffleDeck(encounterDeck);
+    }
+
+    private void LoadGameSetup()
+    {
 
     }
 

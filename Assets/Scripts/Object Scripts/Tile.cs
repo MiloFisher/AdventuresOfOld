@@ -8,13 +8,14 @@ public class Tile : MonoBehaviour
 {
     public Vector3Int position;
     public bool activated;
-    private List<Tile> neighbors;
+    public List<Tile> neighbors;
+    [SerializeField] private GameObject treasureToken;
 
     void Start()
     {
         GetComponent<Image>().alphaHitTestMinimumThreshold = 0.1f;
         Deactivate();
-        FindNeighbors();
+        DisableTreasureToken();
         if (position.x + position.y + position.z != 0)
             Debug.LogError(gameObject.name + " has an invalid position!");
     }
@@ -44,17 +45,18 @@ public class Tile : MonoBehaviour
         GetComponent<Button>().interactable = false;
     }
 
-    private void FindNeighbors()
+    public void EnableTreasureToken()
     {
-        neighbors = new List<Tile>();
-        GameObject[] tiles = GameObject.FindGameObjectsWithTag("Tile");
-        foreach(GameObject g in tiles)
-        {
-            Tile t = g.GetComponent<Tile>();
-            if(t.position != position && ((t.position.x == position.x && Mathf.Abs(t.position.y - position.y) == 1 && Mathf.Abs(t.position.z - position.z) == 1) || (Mathf.Abs(t.position.x - position.x) == 1 && t.position.y == position.y && Mathf.Abs(t.position.z - position.z) == 1) || (Mathf.Abs(t.position.x - position.x) == 1 && Mathf.Abs(t.position.y - position.y) == 1 && t.position.z == position.z)))
-            {
-                neighbors.Add(t);
-            }
-        }
+        treasureToken.SetActive(true);
+    }
+
+    public void DisableTreasureToken()
+    {
+        treasureToken.SetActive(false);
+    }
+
+    public bool TreasureTokenIsEnabled()
+    {
+        return treasureToken.activeInHierarchy;
     }
 }
