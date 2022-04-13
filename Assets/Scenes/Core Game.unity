@@ -4691,7 +4691,48 @@ MonoBehaviour:
   chapterBossDeck:
   - {fileID: 11400000, guid: d69e7b4a65d6b4dccbb42813005f474e, type: 2}
   chapterBoss: {fileID: 0}
-  lootCardObjects: []
+  miniBossDeck:
+  - {fileID: 11400000, guid: 19f8f83b8d1f94a289cd78a088811751, type: 2}
+  - {fileID: 11400000, guid: dc98951c4596f4a78ab14a848b24038b, type: 2}
+  - {fileID: 11400000, guid: 6ef9ce60707fe4bdaa5230e6d42b17fb, type: 2}
+  - {fileID: 11400000, guid: 39b1f0e53c80e46d4a7b635df320886a, type: 2}
+  - {fileID: 11400000, guid: 1994705b42edd4593aef11d44d6eff04, type: 2}
+  - {fileID: 11400000, guid: 3de39388a3d994566adfbb46e45712a3, type: 2}
+  minionDeck:
+  - {fileID: 11400000, guid: 3ef3187fa1f7441a194740494a09dd45, type: 2}
+  lootCardObjects:
+  - {fileID: 11400000, guid: 6d00cb8a028ed43e491d0673dce7b457, type: 2}
+  - {fileID: 11400000, guid: 239d81899093244d9b95ee5596e23aed, type: 2}
+  - {fileID: 11400000, guid: 2ecfaef5c75bb480389187a0b0c92326, type: 2}
+  - {fileID: 11400000, guid: efd2516920bc742529f3133e44aa0120, type: 2}
+  - {fileID: 11400000, guid: c3a89eed52d5045769220524d7470276, type: 2}
+  - {fileID: 11400000, guid: b6d3c8305929543abb23036b237d5f19, type: 2}
+  - {fileID: 11400000, guid: 7d5663d5f3c07499285d0b3c9884fe60, type: 2}
+  - {fileID: 11400000, guid: 454638fdd56ad490098700b319b63c84, type: 2}
+  - {fileID: 11400000, guid: 55c43d798802e463b97b818976b74dbb, type: 2}
+  - {fileID: 11400000, guid: e086e58b056504d2aa5b37da734ea72c, type: 2}
+  - {fileID: 11400000, guid: 7281e735d88d14ffaa536486d7faf112, type: 2}
+  - {fileID: 11400000, guid: 2fee11878550940f89dbab9d5306baf1, type: 2}
+  - {fileID: 11400000, guid: decb053cda02e4d8bbd839a935f81333, type: 2}
+  - {fileID: 11400000, guid: 2cddb591832fa45e0865f2e04976667e, type: 2}
+  - {fileID: 11400000, guid: 00efe20e36d1a4d008eff7ed12abf1a2, type: 2}
+  - {fileID: 11400000, guid: a57cf19c667444a4198841d88fdd092d, type: 2}
+  - {fileID: 11400000, guid: b909eda1c85b845eb9396370fafbd0c8, type: 2}
+  - {fileID: 11400000, guid: 289db8cbdbd3d4163869999a41dc8014, type: 2}
+  - {fileID: 11400000, guid: 1a6433588339649b2a4ae7f98b183ca2, type: 2}
+  - {fileID: 11400000, guid: edcf4f3d1c2ce44efbca99431a84f853, type: 2}
+  - {fileID: 11400000, guid: 51316224f8f48454a916a30ca81f9e9a, type: 2}
+  - {fileID: 11400000, guid: f815e5699c1614f0699ced38313d58f2, type: 2}
+  - {fileID: 11400000, guid: 285489d14eff745d38a27169ea341926, type: 2}
+  - {fileID: 11400000, guid: 3c663ed77c0614169ab9695d7a197fdc, type: 2}
+  - {fileID: 11400000, guid: 877297cabc2e4477fab1d186026441d0, type: 2}
+  - {fileID: 11400000, guid: 35191a0f4e50f46259abe3bc2c1e65e8, type: 2}
+  - {fileID: 11400000, guid: 3bd95f865953f47528f65916a5d0cb01, type: 2}
+  - {fileID: 11400000, guid: 9e9e43bbaa5ff4e51b5ed982e8fe2b10, type: 2}
+  - {fileID: 11400000, guid: 31e39ee93632c43708b448e281033043, type: 2}
+  - {fileID: 11400000, guid: 9b0fad43e445c457694c1593e2bf524f, type: 2}
+  - {fileID: 11400000, guid: 489a8cd763bc247ec9238c44be66a884, type: 2}
+  - {fileID: 11400000, guid: 74b6447d9acef4a019776952662c5f63, type: 2}
   lootDeck: []
   encounterCardObjects:
   - {fileID: 11400000, guid: 35aeffb84de5c43c5a68f378f6fac546, type: 2}

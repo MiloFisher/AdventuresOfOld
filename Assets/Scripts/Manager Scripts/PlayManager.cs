@@ -19,6 +19,10 @@ public class PlayManager : Singleton<PlayManager>
     [SerializeField] private List<MonsterCard> chapterBossDeck;
     public MonsterCard chapterBoss;
 
+    public List<MonsterCard> miniBossDeck;
+
+    public List<MonsterCard> minionDeck;
+
     [SerializeField] private LootCard[] lootCardObjects;
     public List<LootCard> lootDeck = new List<LootCard>();
 

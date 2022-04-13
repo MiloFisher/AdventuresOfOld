@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[CreateAssetMenu(fileName = "New Ring Card", menuName = "Cards/Ring Card")]
 public class RingCard : LootCard
 {
     public int strength;
