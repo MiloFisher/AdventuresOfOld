@@ -13,15 +13,21 @@ public class PlayManager : Singleton<PlayManager>
 
     public Dictionary<Vector3Int, Tile> gameboard = new Dictionary<Vector3Int, Tile>();
 
+    public Dictionary<string, LootCard> itemReference = new Dictionary<string, LootCard>();
+
     [SerializeField] private List<QuestCard> questDeck;
     public List<QuestCard> quests = new List<QuestCard>();
 
     [SerializeField] private List<MonsterCard> chapterBossDeck;
     public MonsterCard chapterBoss;
 
-    public List<MonsterCard> miniBossDeck;
+    [SerializeField] private MonsterCard[] miniBossObjects;
+    public Dictionary<string, MonsterCard> miniBossDeck = new Dictionary<string, MonsterCard>();
 
-    public List<MonsterCard> minionDeck;
+    [SerializeField] private MonsterCard[] minionObjects;
+    public Dictionary<string, MonsterCard> minionDeck = new Dictionary<string, MonsterCard>();
+
+    public List<LootCard> equipmentDeck;
 
     [SerializeField] private LootCard[] lootCardObjects;
     public List<LootCard> lootDeck = new List<LootCard>();
@@ -80,6 +86,16 @@ public class PlayManager : Singleton<PlayManager>
         {
             Tile t = g.GetComponent<Tile>();
             gameboard.Add(t.position, t);
+        }
+
+        // Construct Item Reference dictionary
+        foreach(LootCard l in equipmentDeck)
+        {
+            itemReference.Add(l.cardName, l);
+        }
+        foreach (LootCard l in lootCardObjects)
+        {
+            itemReference.Add(l.cardName, l);
         }
 
         // Run tests to find neighbors for each tile
@@ -143,6 +159,48 @@ public class PlayManager : Singleton<PlayManager>
                 encounterDeck.Add(ec);
         }
         ShuffleDeck(encounterDeck);
+
+        // 6) Setup Miniboss and Minion dictionaries
+        foreach(MonsterCard m in miniBossObjects)
+        {
+            miniBossDeck.Add(m.cardName, m);
+        }
+        foreach (MonsterCard m in miniBossObjects)
+        {
+            minionDeck.Add(m.cardName, m);
+        }
+
+        // 7) Equip players with starting gear
+        foreach (Player p in playerList)
+        {
+            switch(p.Class.Value+"")
+            {
+                case "Warrior":
+                    p.SetValue("Armor", "Simple Plate Armor");
+                    p.SetValue("Weapon", "Simple Sword & Shield");
+                    break;
+                case "Paladin":
+                    p.SetValue("Armor", "Simple Plate Armor");
+                    p.SetValue("Weapon", "Simple Greatsword");
+                    break;
+                case "Ranger":
+                    p.SetValue("Armor", "Simple Leather Armor");
+                    p.SetValue("Weapon", "Simple Bow");
+                    break;
+                case "Rogue":
+                    p.SetValue("Armor", "Simple Leather Armor");
+                    p.SetValue("Weapon", "Simple Daggers");
+                    break;
+                case "Sorcerer":
+                    p.SetValue("Armor", "Simple Cloth Robes");
+                    p.SetValue("Weapon", "Simple Magic Staff");
+                    break;
+                case "Necromancer":
+                    p.SetValue("Armor", "Simple Cloth Robes");
+                    p.SetValue("Weapon", "Simple Wand & Shield");
+                    break;
+            }
+        }
     }
 
     private void LoadGameSetup()

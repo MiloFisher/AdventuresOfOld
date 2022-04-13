@@ -4691,15 +4691,25 @@ MonoBehaviour:
   chapterBossDeck:
   - {fileID: 11400000, guid: d69e7b4a65d6b4dccbb42813005f474e, type: 2}
   chapterBoss: {fileID: 0}
-  miniBossDeck:
+  miniBossObjects:
   - {fileID: 11400000, guid: 19f8f83b8d1f94a289cd78a088811751, type: 2}
   - {fileID: 11400000, guid: dc98951c4596f4a78ab14a848b24038b, type: 2}
   - {fileID: 11400000, guid: 6ef9ce60707fe4bdaa5230e6d42b17fb, type: 2}
   - {fileID: 11400000, guid: 39b1f0e53c80e46d4a7b635df320886a, type: 2}
   - {fileID: 11400000, guid: 1994705b42edd4593aef11d44d6eff04, type: 2}
   - {fileID: 11400000, guid: 3de39388a3d994566adfbb46e45712a3, type: 2}
-  minionDeck:
+  minionObjects:
   - {fileID: 11400000, guid: 3ef3187fa1f7441a194740494a09dd45, type: 2}
+  equipmentDeck:
+  - {fileID: 11400000, guid: 9aa9f23b640ce4418850830e108bbc4c, type: 2}
+  - {fileID: 11400000, guid: abcbda5969e544f94a6b90a2a75168fb, type: 2}
+  - {fileID: 11400000, guid: 2da49d12bb31f46d3a6285b10a01b2de, type: 2}
+  - {fileID: 11400000, guid: 266175d16a5ef4c19aacc061bba68e3c, type: 2}
+  - {fileID: 11400000, guid: 6a1639815c77c478189015fc9afba06e, type: 2}
+  - {fileID: 11400000, guid: 714074c35a63b4b919d86bb316233cf6, type: 2}
+  - {fileID: 11400000, guid: ab87a34ccb05b4136a2c3755e3414173, type: 2}
+  - {fileID: 11400000, guid: 5796ca427c9fa4d4987d49f0ff0d32fa, type: 2}
+  - {fileID: 11400000, guid: b2f6f6fbdf38b449c9473471a05556ab, type: 2}
   lootCardObjects:
   - {fileID: 11400000, guid: 6d00cb8a028ed43e491d0673dce7b457, type: 2}
   - {fileID: 11400000, guid: 239d81899093244d9b95ee5596e23aed, type: 2}
