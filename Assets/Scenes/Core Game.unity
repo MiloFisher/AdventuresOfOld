@@ -4681,31 +4681,31 @@ MonoBehaviour:
   localPlayer: {fileID: 0}
   playerList: []
   encounterCardObjects:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: 35aeffb84de5c43c5a68f378f6fac546, type: 2}
+  - {fileID: 11400000, guid: 6160d226407ad44808f5bae21e62dcca, type: 2}
+  - {fileID: 11400000, guid: 63fd2183b82a74e99bd4b657b00f8053, type: 2}
+  - {fileID: 11400000, guid: a3f96a336150b4442acb4afbf10f865a, type: 2}
+  - {fileID: 11400000, guid: b98f36b1c70764a109652495ad0738b0, type: 2}
+  - {fileID: 11400000, guid: e2b3ba60c23f24d94a2358365d23e18f, type: 2}
+  - {fileID: 11400000, guid: 5ed847acf4332413987d0d3d02fb5998, type: 2}
+  - {fileID: 11400000, guid: e4bca921aa7504343aa8efaeed2c91ae, type: 2}
+  - {fileID: 11400000, guid: d62a93e9cebf345639b7867456eb338a, type: 2}
+  - {fileID: 11400000, guid: ba3aa7a47f8c945dd8b65900c5f63d7d, type: 2}
+  - {fileID: 11400000, guid: f7f4935bde5614201abccb8e8de72e9b, type: 2}
+  - {fileID: 11400000, guid: 53a0c28d2b8ba4414b6f6b3825c166fa, type: 2}
+  - {fileID: 11400000, guid: cf8eb11f45eb34102b40f5c64125a0ca, type: 2}
+  - {fileID: 11400000, guid: 016c38ecb111440eabc1ba0c649536ba, type: 2}
+  - {fileID: 11400000, guid: ca739ad1a283447e1b608abdfb350a99, type: 2}
+  - {fileID: 11400000, guid: ffe6e2536308f4e6ea31e206ec95eb8c, type: 2}
+  - {fileID: 11400000, guid: a2a007cdb67cf42f6a7166a63e8e0de1, type: 2}
+  - {fileID: 11400000, guid: 5245f66ce84824f63b17bc3876d04660, type: 2}
+  - {fileID: 11400000, guid: 4324ad1cee4974223a8ceb2d1806790e, type: 2}
+  - {fileID: 11400000, guid: 7a884386f715b477aa2a1687a6616189, type: 2}
+  - {fileID: 11400000, guid: 04aa689ce96bd49f5a82394524c532a4, type: 2}
+  - {fileID: 11400000, guid: 78f6780e120994ad296027c6701da314, type: 2}
+  - {fileID: 11400000, guid: 2b7c1b3450b054975b4b88a0b96995c8, type: 2}
+  - {fileID: 11400000, guid: 22d4febcb099d48d390186adbfaba358, type: 2}
+  - {fileID: 11400000, guid: 6243a698daba94d72b387ee3c10dff6c, type: 2}
   encounterDeck: []
 --- !u!1001 &356895336
 PrefabInstance:
@@ -11588,6 +11588,50 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2478782273146244618, guid: 9fd77695e2d9d4825a7023c805bf02e5, type: 3}
   m_PrefabInstance: {fileID: 837566160}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &853047652
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 853047654}
+  - component: {fileID: 853047653}
+  m_Layer: 0
+  m_Name: Event Option Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &853047653
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 853047652}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0a74ff2833994b3e99c2c4711c5c403, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &853047654
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 853047652}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &853277753
 PrefabInstance:
   m_ObjectHideFlags: 0

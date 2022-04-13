@@ -59,7 +59,20 @@ public class PlayManager : Singleton<PlayManager>
             for (int i = 0; i < 4; i++)
                 encounterDeck.Add(ec);
         }
-        // Shuffle encounter deck
 
+        // Shuffle encounter deck
+        ShuffleDeck(encounterDeck);
+
+    }
+
+    private void ShuffleDeck<CardType>(List<CardType> deck)
+    {
+        for (int i = 0; i < deck.Count; i++)
+        {
+            int randomIndex = UnityEngine.Random.Range(i, deck.Count);
+            CardType temp = deck[i];
+            deck[i] = deck[randomIndex];
+            deck[randomIndex] = temp;
+        }
     }
 }

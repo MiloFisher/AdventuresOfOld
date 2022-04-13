@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81f79f3c8c2a943018699592ce509b42, type: 3}
+  m_Name: MysteriousMushroom
+  m_EditorClassIdentifier: 
+  cardName: Mysterious Mushroom
+  image: {fileID: 0}
+  flavorText: A strange looking mushroom draws your eye.  Bright colors are always
+    a good sign in nature, right?
+  xp: 2
+  optionNames:
+  - '<Mystical> Extract Magic:'
+  - 'Eat the Mushroom:'
+  - 'Ignore the Mushroom:'
+  optionDescriptions:
+  - Restore +2 Ability Charges and gain +2 XP
+  - Make a CON Roll (9).  On a success, gain +4 XP and restore +5 Health.  On a failure,
+    take 10 damage
+  - Nothing
