@@ -4680,6 +4680,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   localPlayer: {fileID: 0}
   playerList: []
+  questDeck:
+  - {fileID: 11400000, guid: d2b51b80eda754a0f956c8ce90fea638, type: 2}
+  - {fileID: 11400000, guid: 5249da00e0b14437eaff790b4ee359f4, type: 2}
+  - {fileID: 11400000, guid: fb50bd045a11b4a44826eaa789e799de, type: 2}
+  - {fileID: 11400000, guid: 6a1269ae41d204d69b7fe1309b3386e9, type: 2}
+  - {fileID: 11400000, guid: 1f3d96275973e4295a8daac78da31c1b, type: 2}
+  - {fileID: 11400000, guid: 5af0763e651bf4adabd8b0abf12b1155, type: 2}
+  quests: []
   encounterCardObjects:
   - {fileID: 11400000, guid: 35aeffb84de5c43c5a68f378f6fac546, type: 2}
   - {fileID: 11400000, guid: 6160d226407ad44808f5bae21e62dcca, type: 2}

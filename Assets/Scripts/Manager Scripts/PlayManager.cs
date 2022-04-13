@@ -13,6 +13,9 @@ public class PlayManager : Singleton<PlayManager>
 
     public Dictionary<Vector3Int, Tile> gameboard = new Dictionary<Vector3Int, Tile>();
 
+    [SerializeField] private List<QuestCard> questDeck;
+    public List<QuestCard> quests = new List<QuestCard>();
+
     [SerializeField] private EncounterCard[] encounterCardObjects;
     public List<EncounterCard> encounterDeck = new List<EncounterCard>();
 
@@ -91,10 +94,10 @@ public class PlayManager : Singleton<PlayManager>
 
     private void NewGameSetup()
     {
-        // Set the Chaos Counter to 1
+        // 1) Set the Chaos Counter to 1
         chaosCounter = 1;
 
-        // Enable Treasure Tokens
+        // 2) Enable Treasure Tokens
         gameboard[new Vector3Int(3, 15, -18)].EnableTreasureToken();
         gameboard[new Vector3Int(5, 9, -14)].EnableTreasureToken();
         gameboard[new Vector3Int(3, 3, -6)].EnableTreasureToken();
@@ -105,6 +108,13 @@ public class PlayManager : Singleton<PlayManager>
         gameboard[new Vector3Int(21, 0, -21)].EnableTreasureToken();
         gameboard[new Vector3Int(15, -1, -14)].EnableTreasureToken();
         gameboard[new Vector3Int(16, -8, -8)].EnableTreasureToken();
+
+        // 3) Deal Quest Cards
+        ShuffleDeck(questDeck);
+        for(int i = 0; i < Mathf.FloorToInt(playerList.Count/2); i++)
+        {
+            quests.Add(questDeck[i]);
+        }
 
         // Add 4 copies of each encounter card to the encounter deck
         foreach (EncounterCard ec in encounterCardObjects)
