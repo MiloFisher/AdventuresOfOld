@@ -16,6 +16,7 @@ public class TransitionStartOfDay : MonoBehaviour
     public TMP_Text closePrompt;
     public float fadeLength = 0.004f;
     public float pulseLength = 0.01f;
+    public float waitTime = 1f;
 
     private bool canClose;
 
@@ -26,13 +27,19 @@ public class TransitionStartOfDay : MonoBehaviour
         StartCoroutine(FadeInSequence());
     }
 
+    public void OnDisable()
+    {
+        // If it is your turn, after displaying "Start of Day", display "Your Turn"
+        if (PlayManager.Instance.isYourTurn)
+            PlayManager.Instance.CallTransition(1);
+    }
+
     public void Close()
     {
         if (canClose)
         {
             StartCoroutine(FadeOutSequence());
         }
-            
     }
 
     IEnumerator FadeInSequence()
@@ -117,6 +124,8 @@ public class TransitionStartOfDay : MonoBehaviour
             SetAlpha(closePrompt, i * 0.01f);
             yield return new WaitForSeconds(fadeLength);
         }
+
+        yield return new WaitForSeconds(waitTime);
 
         gameObject.SetActive(false);
     }

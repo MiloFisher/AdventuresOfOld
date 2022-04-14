@@ -39,6 +39,10 @@ public class PlayManager : Singleton<PlayManager>
 
     public int chaosCounter;
 
+    public int turnMarker;
+
+    public bool isYourTurn;
+
     public GameObject transitions;
 
     void Start()
@@ -194,6 +198,9 @@ public class PlayManager : Singleton<PlayManager>
                     p.SetValue("Weapon", "Simple Wand & Shield");
                     break;
             }
+
+            // Set player positions to starting tile
+            p.SetPosition(new Vector3Int(0, 7, -7));
         }
 
         // 3) Deal Quest Cards (host only)
@@ -256,23 +263,57 @@ public class PlayManager : Singleton<PlayManager>
         turnOrderPlayerList = new List<Player>(playerList);
         ShuffleDeck(turnOrderPlayerList);
         turnOrderPlayerList.Sort((a, b) => b.Speed.Value - a.Speed.Value);
-
         FixedString64Bytes[] arr = new FixedString64Bytes[turnOrderPlayerList.Count];
         for (int i = 0; i < turnOrderPlayerList.Count; i++)
         {
             arr[i] = turnOrderPlayerList[i].UUID.Value;
         }
 
+        // Set turn marker
+        turnMarker = 0;
+
+        // Set turn order player list, turn marker, and play transition for all players
         foreach (Player p in playerList)
         {
             p.SetTurnOrderPlayerListClientRPC(arr);
+            p.SetTurnMarkerClientRPC(turnMarker);
             p.PlayTransitionClientRPC(0); // Transition 0 is Start of Day
         }
+
+        // Start turn of player who goes first
+        turnOrderPlayerList[turnMarker].StartTurnClientRPC();
     }
 
     public void StartTurn()
     {
+        // Set the variable to mark it is this player's turn
+        isYourTurn = true;
+    }
 
+    public void StartBotTurn()
+    {
+
+    }
+
+    public void MovePhase()
+    {
+        // Activate all tiles within the player's move range
+        gameboard[localPlayer.Position.Value].Activate(GetMod(localPlayer.Speed.Value));
+    }
+
+    public void EncounterPhase()
+    {
+        
+    }
+
+    public void MoveToTile(Vector3Int pos)
+    {
+        // Deactivate the selected tiles and move the player to the target position
+        gameboard[localPlayer.Position.Value].Deactivate(GetMod(localPlayer.Speed.Value));
+        localPlayer.SetPosition(pos);
+
+        // Call Encounter Phase transition
+        CallTransition(2);
     }
 
     public void CallTransition(int id)
@@ -293,5 +334,10 @@ public class PlayManager : Singleton<PlayManager>
                 }
             }
         }
+    }
+
+    public int GetMod(int stat)
+    {
+        return Mathf.FloorToInt((stat - 10) * 0.5f);
     }
 }

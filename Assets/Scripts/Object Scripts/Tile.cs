@@ -14,7 +14,7 @@ public class Tile : MonoBehaviour
     void Start()
     {
         GetComponent<Image>().alphaHitTestMinimumThreshold = 0.1f;
-        Deactivate();
+        Deactivate(1);
         DisableTreasureToken();
         if (position.x + position.y + position.z != 0)
             Debug.LogError(gameObject.name + " has an invalid position!");
@@ -38,11 +38,22 @@ public class Tile : MonoBehaviour
         }
     }
 
-    public void Deactivate()
+    public void Deactivate(int range)
     {
         activated = false;
         GetComponent<Image>().enabled = false;
         GetComponent<Button>().interactable = false;
+
+        if (range - 1 > 0)
+        {
+            foreach (Tile t in neighbors)
+            {
+                if (t.activated)
+                {
+                    t.Deactivate(range - 1);
+                }
+            }
+        }
     }
 
     public void EnableTreasureToken()
@@ -58,5 +69,10 @@ public class Tile : MonoBehaviour
     public bool TreasureTokenIsEnabled()
     {
         return treasureToken.activeInHierarchy;
+    }
+
+    public void MovePlayer()
+    {
+        PlayManager.Instance.MoveToTile(position);
     }
 }

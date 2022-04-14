@@ -261,6 +261,27 @@ namespace AdventuresOfOldMultiplayer
                 PlayManager.Instance.SetTurnOrderPlayerList(arr);
             }
         }
+
+        [ClientRpc]
+        public void SetTurnMarkerClientRPC(int marker, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                PlayManager.Instance.turnMarker = marker;
+            }
+        }
+
+        [ClientRpc]
+        public void StartTurnClientRPC(ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner)
+            {
+                if(isBot)
+                    PlayManager.Instance.StartBotTurn();
+                else
+                    PlayManager.Instance.StartTurn();
+            }
+        }
         #endregion
     }
 }
