@@ -51,6 +51,7 @@ namespace AdventuresOfOldMultiplayer
         // Gameplay Data
         public NetworkVariable<Vector3Int> Position = new NetworkVariable<Vector3Int>();
         public NetworkVariable<int> TurnPhase = new NetworkVariable<int>();
+        public NetworkVariable<FixedString64Bytes> Color = new NetworkVariable<FixedString64Bytes>();
 
         public override void OnNetworkSpawn()
         {
@@ -115,36 +116,20 @@ namespace AdventuresOfOldMultiplayer
         public void SetValue(string valueName, string value)
         {
             if (NetworkManager.Singleton.IsServer)
-            {
-                switch (valueName)
-                {
-                    case "Image": Image.Value = value; break;
-                    case "Name": Name.Value = value; break;
-                    case "Race": Race.Value = value; break;
-                    case "Class": Class.Value = value; break;
-                    case "Trait": Trait.Value = value; break;
-                    case "Armor": Armor.Value = value; break;
-                    case "Weapon": Weapon.Value = value; break;
-                    case "Ring1": Ring1.Value = value; break;
-                    case "Ring2": Ring2.Value = value; break;
-                    case "Inventory1": Inventory1.Value = value; break;
-                    case "Inventory2": Inventory2.Value = value; break;
-                    case "Inventory3": Inventory3.Value = value; break;
-                    case "Inventory4": Inventory4.Value = value; break;
-                    case "Inventory5": Inventory5.Value = value; break;
-                    default: Debug.LogError("Unknown Value: \"" + valueName + "\""); break;
-                }
-            }
+                SetStringValue(valueName, value);
             else
-            {
                 SetStringValueServerRPC(valueName, value);
-            }
         }
 
         [ServerRpc]
-        void SetStringValueServerRPC(FixedString64Bytes valueName, FixedString64Bytes value, ServerRpcParams rpcParams = default)
+        private void SetStringValueServerRPC(FixedString64Bytes valueName, FixedString64Bytes value, ServerRpcParams rpcParams = default)
         {
-            switch (valueName+"")
+            SetStringValue(valueName + "", value + "");
+        }
+
+        private void SetStringValue(string valueName, string value)
+        {
+            switch (valueName + "")
             {
                 case "Image": Image.Value = value; break;
                 case "Name": Name.Value = value; break;
@@ -160,6 +145,7 @@ namespace AdventuresOfOldMultiplayer
                 case "Inventory3": Inventory3.Value = value; break;
                 case "Inventory4": Inventory4.Value = value; break;
                 case "Inventory5": Inventory5.Value = value; break;
+                case "Color": Color.Value = value; break;
                 default: Debug.LogError("Unknown Value: \"" + valueName + "\""); break;
             }
         }
@@ -167,34 +153,20 @@ namespace AdventuresOfOldMultiplayer
         public void SetValue(string valueName, int value)
         {
             if (NetworkManager.Singleton.IsServer)
-            {
-                switch (valueName)
-                {
-                    case "Gold": Gold.Value = value; break;
-                    case "Level": Level.Value = value; break;
-                    case "XP": XP.Value = value; break;
-                    case "Strength": Strength.Value = value; break;
-                    case "Dexterity": Dexterity.Value = value; break;
-                    case "Intelligence": Intelligence.Value = value; break;
-                    case "Speed": Speed.Value = value; break;
-                    case "Constitution": Constitution.Value = value; break;
-                    case "Energy": Energy.Value = value; break;
-                    case "Health": Health.Value = value; break;
-                    case "AbilityCharges": AbilityCharges.Value = value; break;
-                    case "LevelUpPoints": LevelUpPoints.Value = value; break;
-                    default: Debug.LogError("Unknown Value: \"" + valueName + "\""); break;
-                }
-            }
+                SetIntValue(valueName, value);
             else
-            {
                 SetIntValueServerRPC(valueName, value);
-            }
         }
 
         [ServerRpc]
-        void SetIntValueServerRPC(FixedString64Bytes valueName, int value, ServerRpcParams rpcParams = default)
+        private void SetIntValueServerRPC(FixedString64Bytes valueName, int value, ServerRpcParams rpcParams = default)
         {
-            switch (valueName + "")
+            SetIntValue(valueName + "", value);
+        }
+
+        private void SetIntValue(string valueName, int value)
+        {
+            switch (valueName)
             {
                 case "Gold": Gold.Value = value; break;
                 case "Level": Level.Value = value; break;
@@ -240,6 +212,23 @@ namespace AdventuresOfOldMultiplayer
         private void SetTurnPhaseServerRPC(int phase, ServerRpcParams rpcParams = default)
         {
             TurnPhase.Value = phase;
+        }
+
+        public void StartTurn()
+        {
+            if (NetworkManager.Singleton.IsServer)
+                PlayManager.Instance.StartTurn();
+            else
+                StartTurnClientRPC();
+        }
+
+        [ClientRpc]
+        public void StartTurnClientRPC(ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner)
+            {
+                PlayManager.Instance.StartTurn();
+            }
         }
         #endregion
     }

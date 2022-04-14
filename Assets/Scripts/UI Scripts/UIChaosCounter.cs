@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class UI_ChaosCounter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class UIChaosCounter : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     public GameObject description;
     public bool isDescription;

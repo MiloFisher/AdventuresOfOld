@@ -10,6 +10,7 @@ public class PlayManager : Singleton<PlayManager>
 {
     public Player localPlayer;
     public List<Player> playerList;
+    public List<Player> turnOrderPlayerList;
 
     public Dictionary<Vector3Int, Tile> gameboard = new Dictionary<Vector3Int, Tile>();
 
@@ -36,6 +37,8 @@ public class PlayManager : Singleton<PlayManager>
     public List<EncounterCard> encounterDeck = new List<EncounterCard>();
 
     public int chaosCounter;
+
+    public GameObject transitions;
 
     void Start()
     {
@@ -162,7 +165,7 @@ public class PlayManager : Singleton<PlayManager>
             for (int i = 0; i < lc.copies; i++) // Add copies depending on amount specified
                 lootDeck.Add(lc);
         }
-        ShuffleDeck(encounterDeck);
+        ShuffleDeck(lootDeck);
         foreach (EncounterCard ec in encounterCardObjects)
         {
             for (int i = 0; i < 4; i++) // Add 4 copies of each encounter card
@@ -203,6 +206,16 @@ public class PlayManager : Singleton<PlayManager>
                     break;
             }
         }
+
+        // Give each player a color
+        string[] colorList = { "red", "blue", "green", "purple", "yellow", "orange" };
+        for(int i = 0; i < playerList.Count; i++)
+        {
+            playerList[i].SetValue("Color", colorList[i]);
+        }
+
+        // Begin Game with Start of Day
+        StartOfDay();
     }
 
     private void LoadGameSetup()
@@ -210,14 +223,28 @@ public class PlayManager : Singleton<PlayManager>
 
     }
 
-    private void ShuffleDeck<CardType>(List<CardType> deck)
+    private void ShuffleDeck<T>(List<T> deck)
     {
         for (int i = 0; i < deck.Count; i++)
         {
             int randomIndex = UnityEngine.Random.Range(i, deck.Count);
-            CardType temp = deck[i];
+            T temp = deck[i];
             deck[i] = deck[randomIndex];
             deck[randomIndex] = temp;
         }
+    }
+
+    public void StartOfDay()
+    {
+        // Calculate turn order player list
+        turnOrderPlayerList = new List<Player>(playerList);
+        ShuffleDeck(turnOrderPlayerList);
+        turnOrderPlayerList.Sort((a, b) => b.Speed.Value - a.Speed.Value);
+        transitions.transform.GetChild(0).gameObject.SetActive(true); // Start of Day transition is transitions child 0
+    }
+
+    public void StartTurn()
+    {
+
     }
 }
