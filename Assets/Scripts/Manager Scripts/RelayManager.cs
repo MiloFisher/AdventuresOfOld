@@ -8,6 +8,8 @@ using Unity.Services.Core.Environments;
 using Unity.Services.Relay;
 using Unity.Services.Relay.Models;
 using UnityEngine;
+using System.Web;
+using System;
 
 public class RelayManager : Singleton<RelayManager>
 {
@@ -51,7 +53,7 @@ public class RelayManager : Singleton<RelayManager>
         JoinCode = relayHostData.JoinCode;
 
         Transport.SetRelayServerData(relayHostData.IPv4Address, relayHostData.Port, relayHostData.AllocationIDBytes, relayHostData.Key, relayHostData.ConnectionData);
-
+  
         return relayHostData;
     }
 
@@ -66,7 +68,15 @@ public class RelayManager : Singleton<RelayManager>
             await AuthenticationService.Instance.SignInAnonymouslyAsync();
         }
 
-        JoinAllocation allocation = await Relay.Instance.JoinAllocationAsync(joinCode);
+        JoinAllocation allocation;
+        try
+        {
+            allocation = await Relay.Instance.JoinAllocationAsync(joinCode);
+        }
+        catch(Exception e)
+        {
+            throw new Exception();
+        }
 
         RelayJoinData relayJoinData = new RelayJoinData
         {

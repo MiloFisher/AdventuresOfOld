@@ -52,6 +52,7 @@ namespace AdventuresOfOldMultiplayer
         public NetworkVariable<Vector3Int> Position = new NetworkVariable<Vector3Int>();
         public NetworkVariable<int> TurnPhase = new NetworkVariable<int>();
         public NetworkVariable<FixedString64Bytes> Color = new NetworkVariable<FixedString64Bytes>();
+        public NetworkVariable<bool> Ready = new NetworkVariable<bool>();
 
         public override void OnNetworkSpawn()
         {
@@ -97,7 +98,7 @@ namespace AdventuresOfOldMultiplayer
         [ClientRpc]
         public void DisconnectClientRPC(ClientRpcParams clientRpcParams = default)
         {
-            if (IsOwner)
+            if (IsOwner && !isBot)
             {
                 LobbyManager.Instance.LeaveLobby();
             }
@@ -193,7 +194,6 @@ namespace AdventuresOfOldMultiplayer
             else
                 SetPositionServerRPC(pos);
         }
-
         [ServerRpc]
         private void SetPositionServerRPC(Vector3Int pos, ServerRpcParams rpcParams = default)
         {
@@ -207,27 +207,58 @@ namespace AdventuresOfOldMultiplayer
             else
                 SetTurnPhaseServerRPC(phase);
         }
-
         [ServerRpc]
         private void SetTurnPhaseServerRPC(int phase, ServerRpcParams rpcParams = default)
         {
             TurnPhase.Value = phase;
         }
 
-        public void StartTurn()
+        public void ReadyUp()
         {
             if (NetworkManager.Singleton.IsServer)
-                PlayManager.Instance.StartTurn();
+                Ready.Value = true;
             else
-                StartTurnClientRPC();
+                ReadyUpServerRPC();
+        }
+        [ServerRpc]
+        private void ReadyUpServerRPC(ServerRpcParams rpcParams = default)
+        {
+            Ready.Value = true;
         }
 
         [ClientRpc]
-        public void StartTurnClientRPC(ClientRpcParams clientRpcParams = default)
+        public void PlayTransitionClientRPC(int id, ClientRpcParams clientRpcParams = default)
         {
-            if (IsOwner)
+            if (IsOwner && !isBot)
             {
-                PlayManager.Instance.StartTurn();
+                PlayManager.Instance.CallTransition(id);
+            }
+        }
+
+        [ClientRpc]
+        public void SetChaosCounterClientRPC(int chaosCounter, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                PlayManager.Instance.chaosCounter = chaosCounter;
+            }
+        }
+
+        [ClientRpc]
+        public void EnableTreasureTokenClientRPC(Vector3Int pos, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                PlayManager.Instance.gameboard[pos].EnableTreasureToken();
+            }
+        }
+
+        [ClientRpc]
+        public void SetTurnOrderPlayerListClientRPC(FixedString64Bytes[] arr, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                PlayManager.Instance.SetTurnOrderPlayerList(arr);
             }
         }
         #endregion

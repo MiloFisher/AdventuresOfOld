@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using Unity.Netcode;
 using System;
+using Unity.Collections;
 using AdventuresOfOldMultiplayer;
 
 public class PlayManager : Singleton<PlayManager>
@@ -61,38 +62,16 @@ public class PlayManager : Singleton<PlayManager>
                 localPlayer = g.GetComponent<Player>();
         }
 
-        // Disable Update() if client is not the host
-        if(!NetworkManager.Singleton.IsHost)
-        {
-            enabled = false;
-            return;
-        }
-
-        // Otherwise, setup game
-        BaseGameSetup();
-        if(PlayerPrefs.GetString("gameType") == "New Game")
-            NewGameSetup();
-        else
-            LoadGameSetup();
-    }
-
-    private void Update()
-    {
-
-    }
-
-    private void BaseGameSetup()
-    {
         // Construct Gameboard dictionary
         GameObject[] tiles = GameObject.FindGameObjectsWithTag("Tile");
-        foreach(GameObject g in tiles)
+        foreach (GameObject g in tiles)
         {
             Tile t = g.GetComponent<Tile>();
             gameboard.Add(t.position, t);
         }
 
         // Construct Item Reference dictionary
-        foreach(LootCard l in equipmentDeck)
+        foreach (LootCard l in equipmentDeck)
         {
             itemReference.Add(l.cardName, l);
         }
@@ -129,56 +108,66 @@ public class PlayManager : Singleton<PlayManager>
             if (gameboard.ContainsKey(t.position + test6)) t.neighbors.Add(gameboard[t.position + test6]);
         }
 
+        // Ready up to let server know player has loaded in
+        localPlayer.ReadyUp();
+
+        // Disable Update() if client is not the host
+        if (!NetworkManager.Singleton.IsHost)
+        {
+            enabled = false;
+            return;
+        }
+
+        // Host needs to ready up any bots playing
+        foreach(Player bot in playerList)
+        {
+            if (bot.isBot)
+                bot.ReadyUp();
+        }    
+
+        // Otherwise, setup game
+        if(PlayerPrefs.GetString("gameType") == "New Game")
+            StartCoroutine(NewGameSetup());
+        else
+            LoadGameSetup();
     }
 
-    private void NewGameSetup()
+    private void Update()
     {
-        // 1) Set the Chaos Counter to 1
-        chaosCounter = 1;
 
-        // 2) Enable Treasure Tokens
-        gameboard[new Vector3Int(3, 15, -18)].EnableTreasureToken();
-        gameboard[new Vector3Int(5, 9, -14)].EnableTreasureToken();
-        gameboard[new Vector3Int(3, 3, -6)].EnableTreasureToken();
-        gameboard[new Vector3Int(8, -4, -4)].EnableTreasureToken();
-        gameboard[new Vector3Int(7, 3, -10)].EnableTreasureToken();
-        gameboard[new Vector3Int(8, 6, -14)].EnableTreasureToken();
-        gameboard[new Vector3Int(16, 9, -25)].EnableTreasureToken();
-        gameboard[new Vector3Int(21, 0, -21)].EnableTreasureToken();
-        gameboard[new Vector3Int(15, -1, -14)].EnableTreasureToken();
-        gameboard[new Vector3Int(16, -8, -8)].EnableTreasureToken();
+    }
 
-        // 3) Deal Quest Cards
-        ShuffleDeck(questDeck);
-        for(int i = 0; i < Mathf.FloorToInt(playerList.Count/2); i++)
-        {
-            quests.Add(questDeck[i]);
-        }
-
-        // 4) Deal Chapter Boss Card
-        ShuffleDeck(chapterBossDeck);
-        chapterBoss = chapterBossDeck[0];
-
-        // 5) Setup Loot and Encounter Decks
-        foreach (LootCard lc in lootCardObjects)
-        {
-            for (int i = 0; i < lc.copies; i++) // Add copies depending on amount specified
-                lootDeck.Add(lc);
-        }
-        ShuffleDeck(lootDeck);
-        foreach (EncounterCard ec in encounterCardObjects)
-        {
-            for (int i = 0; i < 4; i++) // Add 4 copies of each encounter card
-                encounterDeck.Add(ec);
-        }
-        ShuffleDeck(encounterDeck);
-
-        // 6) Miniboss and minion decks set up in BaseGameSetup()
-
-        // 7) Equip players with starting gear
+    IEnumerator NewGameSetup()
+    {
+        // Wait for all players to load in first
+        yield return new WaitUntil(() => {
+            bool allReady = true;
+            foreach (Player p in playerList)
+            {
+                if (!p.Ready.Value)
+                    allReady = false;
+            }
+            return allReady;
+        });
         foreach (Player p in playerList)
         {
-            switch(p.Class.Value+"")
+            // 1) Set the Chaos Counter to 1 for (all players)
+            p.SetChaosCounterClientRPC(1);
+
+            // 2) Enable Treasure Tokens for (all players)
+            p.EnableTreasureTokenClientRPC(new Vector3Int(3, 15, -18));
+            p.EnableTreasureTokenClientRPC(new Vector3Int(5, 9, -14));
+            p.EnableTreasureTokenClientRPC(new Vector3Int(3, 3, -6));
+            p.EnableTreasureTokenClientRPC(new Vector3Int(8, -4, -4));
+            p.EnableTreasureTokenClientRPC(new Vector3Int(7, 3, -10));
+            p.EnableTreasureTokenClientRPC(new Vector3Int(8, 6, -14));
+            p.EnableTreasureTokenClientRPC(new Vector3Int(16, 9, -25));
+            p.EnableTreasureTokenClientRPC(new Vector3Int(21, 0, -21));
+            p.EnableTreasureTokenClientRPC(new Vector3Int(15, -1, -14));
+            p.EnableTreasureTokenClientRPC(new Vector3Int(16, -8, -8));
+
+            // 7) Equip players with starting gear (all players
+            switch (p.Class.Value + "")
             {
                 case "Warrior":
                     p.SetValue("Armor", "Simple Plate Armor");
@@ -207,14 +196,41 @@ public class PlayManager : Singleton<PlayManager>
             }
         }
 
-        // Give each player a color
+        // 3) Deal Quest Cards (host only)
+        ShuffleDeck(questDeck);
+        for(int i = 0; i < Mathf.FloorToInt(playerList.Count/2); i++)
+        {
+            quests.Add(questDeck[i]);
+        }
+
+        // 4) Deal Chapter Boss Card (host only)
+        ShuffleDeck(chapterBossDeck);
+        chapterBoss = chapterBossDeck[0];
+
+        // 5) Setup Loot and Encounter Decks (host only)
+        foreach (LootCard lc in lootCardObjects)
+        {
+            for (int i = 0; i < lc.copies; i++) // Add copies depending on amount specified
+                lootDeck.Add(lc);
+        }
+        ShuffleDeck(lootDeck);
+        foreach (EncounterCard ec in encounterCardObjects)
+        {
+            for (int i = 0; i < 4; i++) // Add 4 copies of each encounter card
+                encounterDeck.Add(ec);
+        }
+        ShuffleDeck(encounterDeck);
+
+        // 6) Miniboss and minion decks already set up
+
+        // Give each player a color (host only)
         string[] colorList = { "red", "blue", "green", "purple", "yellow", "orange" };
         for(int i = 0; i < playerList.Count; i++)
         {
             playerList[i].SetValue("Color", colorList[i]);
         }
 
-        // Begin Game with Start of Day
+        // Begin Game with Start of Day (host only)
         StartOfDay();
     }
 
@@ -240,11 +256,42 @@ public class PlayManager : Singleton<PlayManager>
         turnOrderPlayerList = new List<Player>(playerList);
         ShuffleDeck(turnOrderPlayerList);
         turnOrderPlayerList.Sort((a, b) => b.Speed.Value - a.Speed.Value);
-        transitions.transform.GetChild(0).gameObject.SetActive(true); // Start of Day transition is transitions child 0
+
+        FixedString64Bytes[] arr = new FixedString64Bytes[turnOrderPlayerList.Count];
+        for (int i = 0; i < turnOrderPlayerList.Count; i++)
+        {
+            arr[i] = turnOrderPlayerList[i].UUID.Value;
+        }
+
+        foreach (Player p in playerList)
+        {
+            p.SetTurnOrderPlayerListClientRPC(arr);
+            p.PlayTransitionClientRPC(0); // Transition 0 is Start of Day
+        }
     }
 
     public void StartTurn()
     {
 
+    }
+
+    public void CallTransition(int id)
+    {
+        transitions.transform.GetChild(id).gameObject.SetActive(true);
+    }
+
+    public void SetTurnOrderPlayerList(FixedString64Bytes[] arr)
+    {
+        turnOrderPlayerList = new List<Player>();
+        for(int i = 0; i < arr.Length; i++)
+        {
+            foreach(Player p in playerList)
+            {
+                if(p.UUID.Value == arr[i])
+                {
+                    turnOrderPlayerList.Add(p);
+                }
+            }
+        }
     }
 }

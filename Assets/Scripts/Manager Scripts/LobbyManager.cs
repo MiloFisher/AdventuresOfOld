@@ -113,19 +113,19 @@ namespace AdventuresOfOldMultiplayer
         {
             lobbyType = _lobbyType; // "New Game" or "Load Game"
 
-            StartCoroutine(HostingProcedure());
+            hostingInProgress.SetActive(true);
 
             if (RelayManager.Instance.IsRelayEnabled)
                 await RelayManager.Instance.SetupRelay();
 
-            NetworkManager.Singleton.StartHost();
+            StartCoroutine(HostingProcedure());
         }
 
         IEnumerator HostingProcedure()
         {
-            hostingInProgress.SetActive(true);
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 10; i++)
             {
+                NetworkManager.Singleton.StartHost();
                 yield return new WaitForSeconds(.5f);
                 if (NetworkManager.Singleton.IsHost)
                 {
@@ -143,18 +143,33 @@ namespace AdventuresOfOldMultiplayer
 
         public async void JoinLobby()
         {
-            StartCoroutine(JoiningProcedure());
+            joiningInProgress.SetActive(true);
 
-            if (RelayManager.Instance.IsRelayEnabled && !string.IsNullOrEmpty(joinCode.text))
-                await RelayManager.Instance.JoinRelay(joinCode.text);
+            bool joinedRelay = true;
+            try
+            {
+                if (RelayManager.Instance.IsRelayEnabled && !string.IsNullOrEmpty(joinCode.text))
+                {
+                    await RelayManager.Instance.JoinRelay(joinCode.text);
+                }  
+            }
+            catch(Exception e)
+            {
+                joinedRelay = false;
+                joiningInProgress.SetActive(false);
+                inLobby = false;
+            }
 
-            NetworkManager.Singleton.StartClient();
+            if (joinedRelay)
+            {
+                StartCoroutine(JoiningProcedure());
+                NetworkManager.Singleton.StartClient();
+            }  
         }
 
         IEnumerator JoiningProcedure()
         {
-            joiningInProgress.SetActive(true);
-            for (int i = 0; i < 20; i++)
+            for (int i = 0; i < 10; i++)
             {
                 yield return new WaitForSeconds(.5f);
                 if (NetworkManager.Singleton.IsConnectedClient)
