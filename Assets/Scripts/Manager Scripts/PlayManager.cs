@@ -51,6 +51,14 @@ public class PlayManager : Singleton<PlayManager>
 
     public GameObject[] characterPanels;
 
+    public GameObject characterDisplays;
+    public GameObject characterDisplayMinimizeButton;
+    public float minimizedX = -1600f;
+    public float maximizedX = 518f;
+    public float characterSheetOpenLength = 0.004f;
+    public Player selectedPlayer;
+    public bool characterDisplayOpen;
+
     public Sprite[] portraits;
 
     void Start()
@@ -405,7 +413,7 @@ public class PlayManager : Singleton<PlayManager>
         for (i = 0; i < turnOrderPlayerList.Count; i++)
         {
             characterPanels[i].SetActive(true);
-            characterPanels[i].transform.localPosition = new Vector3(125, 117.5f * (turnOrderPlayerList.Count - (i + 1)) - 117.5f * i, 0);
+            characterPanels[i].transform.localPosition = new Vector3(characterPanels[i].transform.localPosition.x, 117.5f * (turnOrderPlayerList.Count - (i + 1)) - 117.5f * i, 0);
             characterPanels[i].GetComponent<UICharacterPanel>().UpdateCharacterImage(portaitDictionary[turnOrderPlayerList[i].Image.Value]);
             characterPanels[i].GetComponent<UICharacterPanel>().UpdateCharacterName(turnOrderPlayerList[i].Name.Value+"", turnOrderPlayerList[i].Color.Value+"");
         }
@@ -456,5 +464,45 @@ public class PlayManager : Singleton<PlayManager>
             }
             playerPieces[i].transform.localPosition = gameboard[playerList[i].Position.Value].transform.localPosition + new Vector3(0, 2.1f*positionOnTile - 2.1f*(playersOnTile-(positionOnTile+1)), 0);
         }
+    }
+
+    public void SelectPortrait(int id)
+    {
+        selectedPlayer = turnOrderPlayerList[id];
+        characterDisplayMinimizeButton.SetActive(true);
+
+        if(!characterDisplayOpen && characterDisplays.transform.localPosition.x == minimizedX)
+        {
+            characterDisplayOpen = true;
+            StartCoroutine(OpenPlayerSheet());
+        }
+    }
+
+    IEnumerator OpenPlayerSheet()
+    {
+        for(int i = 1; i <= 100; i++)
+        {
+            characterDisplays.transform.localPosition = new Vector3(minimizedX + (maximizedX - minimizedX) * i * 0.01f, 0, 0);
+            yield return new WaitForSeconds(characterSheetOpenLength);
+        }
+    }
+
+    public void DeselectCharacterSheet()
+    {
+        if (characterDisplayOpen && characterDisplays.transform.localPosition.x == maximizedX)
+        {
+            characterDisplayOpen = false;
+            StartCoroutine(ClosePlayerSheet());
+        }
+    }
+
+    IEnumerator ClosePlayerSheet()
+    {
+        for (int i = 99; i >= 0; i--)
+        {
+            characterDisplays.transform.localPosition = new Vector3(minimizedX + (maximizedX - minimizedX) * i * 0.01f, 0, 0);
+            yield return new WaitForSeconds(characterSheetOpenLength);
+        }
+        characterDisplayMinimizeButton.SetActive(false);
     }
 }

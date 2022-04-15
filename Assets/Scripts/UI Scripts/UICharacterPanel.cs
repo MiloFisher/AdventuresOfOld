@@ -6,6 +6,7 @@ using TMPro;
 
 public class UICharacterPanel : MonoBehaviour
 {
+    public int id;
     public Image characterImage;
     public TMP_Text characterName;
     public GameObject healthbar;
@@ -25,5 +26,10 @@ public class UICharacterPanel : MonoBehaviour
     public void UpdateCharacterName(string name, string color)
     {
         characterName.text = "<color=" + color + ">" + name + "</color>";
+    }
+
+    public void ClickPortrait()
+    {
+        PlayManager.Instance.SelectPortrait(id);
     }
 }
