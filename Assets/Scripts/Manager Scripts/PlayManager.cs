@@ -327,13 +327,49 @@ public class PlayManager : Singleton<PlayManager>
     public void EncounterPhase()
     {
         // First Parse tile landed on
+        Vector3Int tilePos = gameboard[localPlayer.Position.Value].position;
 
-        // If empty tile, check failed encounters
-        if(localPlayer.FailedEncounters.Value < 2)
-        {
-            // If empty and not a guarantee, prompt roll for encounter
-            CallEncounterElement(0);
-        }
+        // Check NPC tiles first
+        if (tilePos == new Vector3Int(13, 0, -13))
+            CrazedHermit();
+        else if (tilePos == new Vector3Int(15, -4, -11))
+            DistressedVillager();
+        else if (tilePos == new Vector3Int(7, 13, -20))
+            ForestHag();
+        else if (tilePos == new Vector3Int(10, 8, -18))
+            FourEyedBoy();
+        else if (tilePos == new Vector3Int(5, 7, -12))
+            PabloTheNoob();
+        else if (tilePos == new Vector3Int(1, 1, -2))
+            ShiftyPeddler();
+        else if (tilePos == new Vector3Int(18, 4, -22))
+            SuspiciousHorse();
+        else if (tilePos == new Vector3Int(16, 1, -17))
+            VeteranHunter();
+
+        // Check Location tiles next
+        else if (tilePos == new Vector3Int(14, 3, -17))
+            AbandonedOutpost();
+        else if (tilePos == new Vector3Int(21, -2, -19))
+            AncientSpring();
+        else if (tilePos == new Vector3Int(0, 4, -4))
+            BanditHideout();
+        else if (tilePos == new Vector3Int(11, 11, -22))
+            HowlingCave();
+        else if (tilePos == new Vector3Int(1, 15, -16))
+            OminousClearing();
+        else if (tilePos == new Vector3Int(10, -3, -7))
+            OvergrownTemple();
+        else if (tilePos == new Vector3Int(8, 4, -12))
+            WebbedForest();
+
+        // Check Treasure tile
+        else if (gameboard[localPlayer.Position.Value].TreasureTokenIsEnabled())
+            TreasureTile();
+
+        // Else it's a Default tile
+        else
+            DefaultTile();
     }
 
     public void ProcessEncounterRoll(int roll)
@@ -504,5 +540,95 @@ public class PlayManager : Singleton<PlayManager>
             yield return new WaitForSeconds(characterSheetOpenLength);
         }
         characterDisplayMinimizeButton.SetActive(false);
+    }
+
+    public void DefaultTile()
+    {
+        // If empty tile, check failed encounters
+        if (localPlayer.FailedEncounters.Value < 2)
+        {
+            // If empty and not a guarantee, prompt roll for encounter
+            CallEncounterElement(0);
+        }
+    }
+
+    public void TreasureTile()
+    {
+
+    }
+
+    public void CrazedHermit()
+    {
+
+    }
+
+    public void DistressedVillager()
+    {
+
+    }
+
+    public void ForestHag()
+    {
+
+    }
+
+    public void FourEyedBoy()
+    {
+
+    }
+
+    public void PabloTheNoob()
+    {
+
+    }
+
+    public void ShiftyPeddler()
+    {
+
+    }
+
+    public void SuspiciousHorse()
+    {
+
+    }
+
+    public void VeteranHunter()
+    {
+
+    }
+
+    public void AbandonedOutpost()
+    {
+
+    }
+
+    public void AncientSpring()
+    {
+
+    }
+
+    public void BanditHideout()
+    {
+
+    }
+
+    public void HowlingCave()
+    {
+
+    }
+
+    public void OminousClearing()
+    {
+
+    }
+
+    public void OvergrownTemple()
+    {
+
+    }
+
+    public void WebbedForest()
+    {
+
     }
 }
