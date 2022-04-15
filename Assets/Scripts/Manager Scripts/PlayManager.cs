@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
+using UnityEngine.UI;
 using Unity.Netcode;
 using System;
 using Unity.Collections;
@@ -44,6 +44,8 @@ public class PlayManager : Singleton<PlayManager>
     public bool isYourTurn;
 
     public GameObject transitions;
+
+    public GameObject[] playerPieces;
 
     void Start()
     {
@@ -272,9 +274,11 @@ public class PlayManager : Singleton<PlayManager>
         // Set turn marker
         turnMarker = 0;
 
-        // Set turn order player list, turn marker, and play transition for all players
+        // Setup and draw player pieces, set turn order player list, set turn marker, and play transition for all players
         foreach (Player p in playerList)
         {
+            p.SetupPlayerPiecesClientRPC();
+            p.DrawPlayerPiecesClientRPC();
             p.SetTurnOrderPlayerListClientRPC(arr);
             p.SetTurnMarkerClientRPC(turnMarker);
             p.PlayTransitionClientRPC(0); // Transition 0 is Start of Day
@@ -312,6 +316,10 @@ public class PlayManager : Singleton<PlayManager>
         gameboard[localPlayer.Position.Value].Deactivate(GetMod(localPlayer.Speed.Value));
         localPlayer.SetPosition(pos);
 
+        // Update player pieces for all players
+        foreach(Player p in playerList)
+            p.DrawPlayerPiecesClientRPC();
+
         // Call Encounter Phase transition
         CallTransition(2);
     }
@@ -339,5 +347,54 @@ public class PlayManager : Singleton<PlayManager>
     public int GetMod(int stat)
     {
         return Mathf.FloorToInt((stat - 10) * 0.5f);
+    }
+
+    public void SetupPlayerPieces()
+    {
+        int i;
+        for(i = 0; i < playerList.Count; i++)
+        {
+            playerPieces[i].SetActive(true);
+            playerPieces[i].GetComponent<Image>().color = ColorLookUp(playerList[i].Color.Value+"");
+        }
+        for(; i < 6; i++)
+        {
+            playerPieces[i].SetActive(false);
+        }
+    }
+
+    public Color ColorLookUp(string color)
+    {
+        switch(color)
+        {
+            case "red": return Color.red;
+            case "blue": return Color.blue;
+            case "green": return Color.green;
+            case "purple": return new Color(160,0,255);
+            case "yellow": return Color.yellow;
+            case "orange": return new Color(255,160,0);
+            default: return Color.black;
+        }
+    }
+
+    public void DrawPlayerPieces()
+    {
+        int playersOnTile;
+        int positionOnTile;
+        for(int i = 0; i < playerList.Count; i++)
+        {
+            playersOnTile = 0;
+            positionOnTile = 0;
+            for(int j = 0; j < playerList.Count; j++)
+            {
+                if (playerList[i].Position.Value == playerList[j].Position.Value)
+                {
+                    if (i == j)
+                        positionOnTile = playersOnTile;
+                    playersOnTile++;
+                }  
+            }
+            playerPieces[i].transform.localPosition = gameboard[playerList[i].Position.Value].transform.localPosition + new Vector3(0, 2.1f*positionOnTile - 2.1f*(playersOnTile-(positionOnTile+1)), 0);
+        }
     }
 }
