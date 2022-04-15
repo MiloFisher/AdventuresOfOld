@@ -47,6 +47,7 @@ namespace AdventuresOfOldMultiplayer
 
         // Additional Character Data
         public NetworkVariable<int> LevelUpPoints = new NetworkVariable<int>();
+        public NetworkVariable<int> FailedEncounters = new NetworkVariable<int>();
 
         // Gameplay Data
         public NetworkVariable<Vector3Int> Position = new NetworkVariable<Vector3Int>();
@@ -181,6 +182,7 @@ namespace AdventuresOfOldMultiplayer
                 case "Health": Health.Value = value; break;
                 case "AbilityCharges": AbilityCharges.Value = value; break;
                 case "LevelUpPoints": LevelUpPoints.Value = value; break;
+                case "FailedEncounters": FailedEncounters.Value = value; break;
                 default: Debug.LogError("Unknown Value: \"" + valueName + "\""); break;
             }
         }

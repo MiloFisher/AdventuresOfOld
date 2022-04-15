@@ -45,6 +45,8 @@ public class PlayManager : Singleton<PlayManager>
 
     public GameObject transitions;
 
+    public GameObject encounterElements;
+
     public GameObject[] playerPieces;
 
     void Start()
@@ -233,7 +235,7 @@ public class PlayManager : Singleton<PlayManager>
         // 6) Miniboss and minion decks already set up
 
         // Give each player a color (host only)
-        string[] colorList = { "red", "blue", "green", "purple", "yellow", "orange" };
+        string[] colorList = { "red", "blue", "green", "yellow", "purple", "orange" };
         for(int i = 0; i < playerList.Count; i++)
         {
             playerList[i].SetValue("Color", colorList[i]);
@@ -307,7 +309,19 @@ public class PlayManager : Singleton<PlayManager>
 
     public void EncounterPhase()
     {
-        
+        // First Parse tile landed on
+
+        // If empty tile, check failed encounters
+        if(localPlayer.FailedEncounters.Value < 2)
+        {
+            // If empty and not a guarantee, prompt roll for encounter
+            CallEncounterElement(0);
+        }
+    }
+
+    public void ProcessEncounterRoll(int roll)
+    {
+
     }
 
     public void MoveToTile(Vector3Int pos)
@@ -328,6 +342,11 @@ public class PlayManager : Singleton<PlayManager>
     public void CallTransition(int id)
     {
         transitions.transform.GetChild(id).gameObject.SetActive(true);
+    }
+
+    public void CallEncounterElement(int id)
+    {
+        encounterElements.transform.GetChild(id).gameObject.SetActive(true);
     }
 
     public void SetTurnOrderPlayerList(FixedString64Bytes[] arr)
