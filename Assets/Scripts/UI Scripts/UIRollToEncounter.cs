@@ -19,6 +19,8 @@ public class UIRollToEncounter : MonoBehaviour
     public float rollLength = 0.01f;
     public float rollDisplayTime = 1f;
     public float waitTime = 0.5f;
+    public GameObject successText;
+    public GameObject failureText;
 
     private RectTransform rt;
     private bool opened;
@@ -64,6 +66,8 @@ public class UIRollToEncounter : MonoBehaviour
         transform.localScale = new Vector3(startScale, startScale, 1);
         rt.sizeDelta = new Vector2(startWidth, constHeight);
         rollButton.SetActive(true);
+        successText.SetActive(false);
+        failureText.SetActive(false);
     }
 
     public void RollDice()
@@ -88,6 +92,12 @@ public class UIRollToEncounter : MonoBehaviour
 
         // End on rolled value face
         rollDisplay.sprite = diceFaces[roll - 1];
+
+        // Display success or failure
+        if (roll % 2 == 0)
+            successText.SetActive(true);
+        else
+            failureText.SetActive(true);
 
         yield return new WaitForSeconds(rollDisplayTime);
 
