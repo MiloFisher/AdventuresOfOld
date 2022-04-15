@@ -302,6 +302,24 @@ namespace AdventuresOfOldMultiplayer
                 PlayManager.Instance.DrawPlayerPieces();
             }
         }
+
+        [ClientRpc]
+        public void SetupCharacterPanelsClientRPC(ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                PlayManager.Instance.SetupCharacterPanels();
+            }
+        }
+
+        [ClientRpc]
+        public void UpdateCharacterPanelsClientRPC(ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                PlayManager.Instance.UpdateCharacterPanels();
+            }
+        }
         #endregion
     }
 }

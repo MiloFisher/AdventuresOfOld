@@ -49,6 +49,10 @@ public class PlayManager : Singleton<PlayManager>
 
     public GameObject[] playerPieces;
 
+    public GameObject[] characterPanels;
+
+    public Sprite[] portraits;
+
     void Start()
     {
         // Populates the player list
@@ -276,13 +280,18 @@ public class PlayManager : Singleton<PlayManager>
         // Set turn marker
         turnMarker = 0;
 
-        // Setup and draw player pieces, set turn order player list, set turn marker, and play transition for all players
         foreach (Player p in playerList)
         {
+            // Setup and draw player pieces
             p.SetupPlayerPiecesClientRPC();
             p.DrawPlayerPiecesClientRPC();
+            // Set turn order player list and turn marker
             p.SetTurnOrderPlayerListClientRPC(arr);
             p.SetTurnMarkerClientRPC(turnMarker);
+            // Setup and update character panels
+            p.SetupCharacterPanelsClientRPC();
+            p.UpdateCharacterPanelsClientRPC();
+            // Play transition for all players
             p.PlayTransitionClientRPC(0); // Transition 0 is Start of Day
         }
 
@@ -380,6 +389,37 @@ public class PlayManager : Singleton<PlayManager>
         for(; i < 6; i++)
         {
             playerPieces[i].SetActive(false);
+        }
+    }
+
+    public void SetupCharacterPanels()
+    {
+        // Set up portrait dictionary
+        Dictionary<FixedString64Bytes, Sprite> portaitDictionary = new Dictionary<FixedString64Bytes, Sprite>();
+        foreach(Sprite s in portraits)
+        {
+            portaitDictionary.Add(s.name, s);
+        }
+
+        int i;
+        for (i = 0; i < turnOrderPlayerList.Count; i++)
+        {
+            characterPanels[i].SetActive(true);
+            characterPanels[i].transform.localPosition = new Vector3(125, 117.5f * (turnOrderPlayerList.Count - (i + 1)) - 117.5f * i, 0);
+            characterPanels[i].GetComponent<UICharacterPanel>().UpdateCharacterImage(portaitDictionary[turnOrderPlayerList[i].Image.Value]);
+            characterPanels[i].GetComponent<UICharacterPanel>().UpdateCharacterName(turnOrderPlayerList[i].Name.Value+"", turnOrderPlayerList[i].Color.Value+"");
+        }
+        for (; i < 6; i++)
+        {
+            characterPanels[i].SetActive(false);
+        }
+    }
+
+    public void UpdateCharacterPanels()
+    {
+        for(int i = 0; i < turnOrderPlayerList.Count; i++)
+        {
+            characterPanels[i].GetComponent<UICharacterPanel>().UpdateHealthbar(turnOrderPlayerList[i].Health.Value, 2 * turnOrderPlayerList[i].Constitution.Value);
         }
     }
 

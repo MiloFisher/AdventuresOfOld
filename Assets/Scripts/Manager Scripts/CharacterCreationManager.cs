@@ -35,9 +35,11 @@ public class CharacterCreationManager : MonoBehaviour
         localPlayer.SetValue("Speed", 20);
         localPlayer.SetValue("Constitution", 15);
         localPlayer.SetValue("Energy", 15);
+        localPlayer.SetValue("Health", localPlayer.Constitution.Value * 2);
+        localPlayer.SetValue("Image", "portrait_human");
 
         // If host, generate random characters for bots
-        if(NetworkManager.Singleton.IsHost)
+        if (NetworkManager.Singleton.IsHost)
         {
             foreach (GameObject g in players)
             {
@@ -57,6 +59,8 @@ public class CharacterCreationManager : MonoBehaviour
                     p.SetValue("Speed", 10);
                     p.SetValue("Constitution", 10);
                     p.SetValue("Energy", 10);
+                    p.SetValue("Health", p.Constitution.Value);
+                    p.SetValue("Image", "portrait_human");
                 }
             }
         }
