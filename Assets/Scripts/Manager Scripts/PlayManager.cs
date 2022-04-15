@@ -313,7 +313,8 @@ public class PlayManager : Singleton<PlayManager>
     public void MoveToTile(Vector3Int pos)
     {
         // Deactivate the selected tiles and move the player to the target position
-        gameboard[localPlayer.Position.Value].Deactivate(GetMod(localPlayer.Speed.Value));
+        foreach(KeyValuePair<Vector3Int, Tile> t in gameboard)
+            t.Value.Deactivate();
         localPlayer.SetPosition(pos);
 
         // Update player pieces for all players

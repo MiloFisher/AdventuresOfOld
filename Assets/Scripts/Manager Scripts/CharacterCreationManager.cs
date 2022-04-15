@@ -32,7 +32,7 @@ public class CharacterCreationManager : MonoBehaviour
         localPlayer.SetValue("Strength", 15);
         localPlayer.SetValue("Dexterity", 15);
         localPlayer.SetValue("Intelligence", 15);
-        localPlayer.SetValue("Speed", 24);
+        localPlayer.SetValue("Speed", 20);
         localPlayer.SetValue("Constitution", 15);
         localPlayer.SetValue("Energy", 15);
 
