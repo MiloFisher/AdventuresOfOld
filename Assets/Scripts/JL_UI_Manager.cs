@@ -15,6 +15,7 @@ public class JL_UI_Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     void Start() {
         asyncSprite = Addressables.LoadAssetAsync<Sprite>("Assets/Game_Resources/UI/scroll_button.png");
         asyncSpriteSelected = Addressables.LoadAssetAsync<Sprite>("Assets/Game_Resources/UI/scroll_button_selected.png");
+
     }
 
     public void OnPointerDown(PointerEventData eventData) {
