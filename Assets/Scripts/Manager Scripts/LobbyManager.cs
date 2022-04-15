@@ -213,7 +213,7 @@ namespace AdventuresOfOldMultiplayer
             GameObject p = GetOrderedPlayers()[0];
             PlayerPrefs.SetString("gameType", lobbyType);
             if (lobbyType == "New Game")
-                p.GetComponent<Player>().ChangeScene("Core Game"); //p.GetComponent<Player>().ChangeScene("Character Creation");
+                p.GetComponent<Player>().ChangeScene("Character Creation");
             else if (lobbyType == "Load Game")
                 p.GetComponent<Player>().ChangeScene("Core Game");
             else

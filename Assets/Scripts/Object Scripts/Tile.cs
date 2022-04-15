@@ -26,14 +26,11 @@ public class Tile : MonoBehaviour
         GetComponent<Image>().enabled = true;
         GetComponent<Button>().interactable = true;
 
-        if(range - 1 > 0)
+        if(range > 0)
         {
             foreach (Tile t in neighbors)
             {
-                if (!t.activated)
-                {
-                    t.Activate(range - 1);
-                }
+                t.Activate(range - 1);
             }
         }
     }
@@ -44,14 +41,11 @@ public class Tile : MonoBehaviour
         GetComponent<Image>().enabled = false;
         GetComponent<Button>().interactable = false;
 
-        if (range - 1 > 0)
+        if (range > 0)
         {
             foreach (Tile t in neighbors)
             {
-                if (t.activated)
-                {
-                    t.Deactivate(range - 1);
-                }
+                t.Deactivate(range - 1);
             }
         }
     }

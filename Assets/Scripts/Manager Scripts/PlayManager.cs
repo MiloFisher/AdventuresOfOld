@@ -370,9 +370,9 @@ public class PlayManager : Singleton<PlayManager>
             case "red": return Color.red;
             case "blue": return Color.blue;
             case "green": return Color.green;
-            case "purple": return new Color(160,0,255);
+            case "purple": return new Color(0.627f,0,1);
             case "yellow": return Color.yellow;
-            case "orange": return new Color(255,160,0);
+            case "orange": return new Color(1,0.627f,0);
             default: return Color.black;
         }
     }
