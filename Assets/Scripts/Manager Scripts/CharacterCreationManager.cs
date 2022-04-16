@@ -3,10 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using AdventuresOfOldMultiplayer;
 using Unity.Netcode;
+using UnityEngine.UI;
+using TMPro;
 
 public class CharacterCreationManager : MonoBehaviour
 {
     Player localPlayer;
+    private GameObject canvas;
+    public TMP_FontAsset font;
 
     public class Stats {
         private int str = 0;
@@ -162,17 +166,50 @@ public class CharacterCreationManager : MonoBehaviour
         
     }
 
-    //Testing
-    public Race human = new Race("Human", new Stats(10,10,10,18,10,12), "cx", "cx");
-    //End testing
+    //Default races
+    //order: str, dex, int, spd, con, eng
+    List<Race> default_races = new List<Race>() {
+        new Race("Human", new Stats(10,10,10,18,10,12), "", ""),
+        new Race("High Elf", new Stats(7,11,12,18,8,14), "", ""),
+        new Race("Night Elf", new Stats(9,12,9,18,10,12), "", ""),
+        new Race("Dwarf", new Stats(12,10,8,16,12,12), "", ""),
+        new Race("Centaur", new Stats(8,13,9,20,8,12), "", ""),
+        new Race("Leonin", new Stats(12,12,6,18,10,12), "", ""),
+        new Race("Aasimar", new Stats(11,8,11,18,8,14), "", ""),
+        //xd
+        new Race("Dragon Amongst Men", new Stats(99,99,99,99,99,99), "Do not refuse a toast just to drink a forfeit.", "Peerless")
+    };
+
+    void ButtonBuilder(string name, Transform objectToSetTo) {
+        GameObject racebutton = new GameObject(name, typeof(RectTransform));
+        //racebutton.AddComponent<RawImage>();
+        racebutton.AddComponent<TextMeshProUGUI>();
+        racebutton.GetComponent<TextMeshProUGUI>().text = name;
+        racebutton.GetComponent<TextMeshProUGUI>().font = font;
+        racebutton.GetComponent<TextMeshProUGUI>().fontSize = 72;
+        racebutton.GetComponent<TextMeshProUGUI>().enableAutoSizing = true;
+        racebutton.GetComponent<TextMeshProUGUI>().color = new Color32(56,56,56,255);
+        racebutton.AddComponent<Button>();
+        ColorBlock buttoncolors = new ColorBlock();
+        buttoncolors.colorMultiplier = 5;
+        buttoncolors.normalColor = new Color32(0,0,0,255);
+        buttoncolors.highlightedColor = new Color32(255,0,0,255);
+        buttoncolors.pressedColor = new Color32(255,253,255,255);
+        buttoncolors.selectedColor = new Color32(59,255,0,255);
+        buttoncolors.disabledColor = new Color32(200,200,200,128);
+        racebutton.GetComponent<Button>().colors = buttoncolors;
+        racebutton.transform.SetParent(objectToSetTo, false);
+    }
 
     // Start is called before the first frame update
     void Start()
-    {
-        Debug.Log(human.get_name());
-        Debug.Log(human.get_desc());
-        Debug.Log(human.get_stats());
-        Debug.Log(human.get_unique_ability());
+    {   
+        //Scrollable container to spawn the buttons in
+        canvas = GameObject.Find("ClassTextContainer");
+        foreach(Race race in default_races) {
+            Debug.Log("Bing chilling");
+            ButtonBuilder(race.get_name(), canvas.transform);
+        }
 
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 
