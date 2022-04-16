@@ -7,9 +7,173 @@ using Unity.Netcode;
 public class CharacterCreationManager : MonoBehaviour
 {
     Player localPlayer;
+
+    public class Stats {
+        private int str = 0;
+        private int dex = 0;
+        private int inte = 0;
+        private int spd = 0;
+        private int con = 0;
+        private int eng = 0;
+
+        public Stats(int str, int dex, int inte, int spd, int con, int eng) {
+            this.str = str;
+            this.dex = dex;
+            this.inte = inte;
+            this.spd = spd;
+            this.con = con;
+            this.eng =  eng;
+        }
+
+        public int get_str() {return str;}
+        public int get_dex() {return dex;}
+        public int get_inte() {return inte;}
+        public int get_spd() {return spd;}
+        public int get_con() {return con;}
+        public int get_eng() {return eng;}
+        public override string ToString() {
+            return ("Strength: " + str
+                    + "\nDexterity: " + dex
+                    + "\n Intelligence: " + inte
+                    + "\n Speed: " + spd
+                    + "\n Constitution: " + con
+                    + "\n Energy: " + eng);
+        }
+        public void set_str(int str) {this.str = str;}
+        public void set_dex(int dex) {this.dex = dex;}
+        public void set_inte(int inte) {this.inte = inte;}
+        public void set_spd(int spd) {this.spd = spd;}
+        public void set_con(int con) {this.con = con;}
+        public void set_eng(int eng) {this.eng = eng;}
+    }
+
+    //Race class to store race data - Allows for additional class adding if ever needed 
+    public class Race {
+        private Stats stats;
+        private string name;
+        private string desc;
+        private string unique_ability;
+
+        private const string HUMAN_DESC = 
+        @"Relative to other species, Humans have a very short lifespan, 
+        however, despite this they have a reputation for being one of 
+        the most adaptable species.  Humans have been known to produce 
+        heroes of all kinds, including master magic users, legendary 
+        fighters, and skilled adventurers.";
+        private const string HIGH_ELF_DESC = 
+        @"Elves in general are known for their grace and mastery that 
+        they develop over their extensive lifetimes.  
+        High Elves are no exception, however, they are also known for 
+        their magical aptitude due to the great energy and intelligence 
+        they possess.  Some of the most iconic and powerful magical 
+        casters of the current age have been of High Elf descent.";
+        private const string NIGHT_ELF_DESC =
+        @"Night Elves came about long ago when a group of Ancient Elves made
+        a pact with the Midnight Forest.  This pact changed the Elves, altering
+        the skin to become shades of blues and purples, elongating their ears,
+        and growing their connection to nature.  Due to this pact, however, 
+        the other Elves cast out the newly formed Night Elves, forcing them 
+        to leave their homeland forever.  With no place to call home, Night Elves 
+        began living in solitude, still bitter over their ancestral banishment 
+        from the elven homeland.";
+        private const string DWARF_DESC = 
+        @"Dwarves are known across the land for their short stature 
+        and even shorter tempers.  Despite these features, Dwarves 
+        are renowned master craftsmen, miners, and warriors.  
+        What Dwarves lack in mobility, they make up for in sturdiness.  
+        The ancient Dwarven Sentinels were second to none in their 
+        defensive skill, with some even considering it to be impenetrable.";
+        private const string CENTAUR_DESC = 
+        @"A breed of ancient defenders of the Midnight Forest, Centaurs are half-man
+        , half-horse creatures that live well beyond the influence of the realms of mankind.
+        With incredible speed and dexterity to match, the Centaur Wardens of the forest
+        are a highly regarded, and highly feared order of rangers.  
+        While Centaurs historically have kept to themselves, as the spread of Chaos
+        encroaches on their home, Centaurs have begun allying themselves with other 
+        races with hopes to curb the spread of the ever growing Chaos.";
+        private const string LEONIN_DESC = 
+        @"The proud race of the Leonin have warred throughout the Sand Plains
+         for as long as history recalls.  Largely divided as a race, 
+         the Leonin have formed various Dynasty Tribes that constantly 
+         make war with each other over control of the Sand Plains.  
+         For many, war has become a way of life, and these Leonin seem 
+         to lack knowledge of anything beyond combat prowess and their unwavering pride.";
+        private const string AASIMAR_DESC = 
+        @"Aasimar are said to be descendants of the Angels, however, this may have been 
+        a rumor started by Humans who viewed their pale skin and radiant eyes as otherworldly.  
+        While the origin of the Aasimar is widely unknown, this uncommon race is speculated to
+        have a connection to holy magic.  While this may be a result of the Angel descendant views,
+        it is undeniable that there lies a power within the Aasimar bloodline.";
+
+        private Dictionary<string, string> race_default_desc = 
+            new Dictionary<string, string>(){
+                                                {"human", HUMAN_DESC},
+                                                {"high elf", HIGH_ELF_DESC},
+                                                {"night elf", NIGHT_ELF_DESC},
+                                                {"dwarf", DWARF_DESC},
+                                                {"centaur", CENTAUR_DESC},
+                                                {"leonin", LEONIN_DESC},
+                                                {"aasimar", AASIMAR_DESC}
+                                            };
+
+        private Dictionary<string, string> race_default_unique_ability =
+            new Dictionary<string, string>(){
+                                                {"human", "Adaptable"},
+                                                {"high elf", "Elven Knowledge"},
+                                                {"night elf", "Lone Wolf"},
+                                                {"dwarf", "Dwarven Defense"},
+                                                {"centaur", "Horseback Riding"},
+                                                {"leonin", "Battle Roar"},
+                                                {"aasimar", "Heaven's Paragon"}
+                                            };
+
+        public Race(string name, Stats stats, string desc, string unique_ability) {
+            this.name = name;
+            this.stats = stats;
+
+            if(race_default_desc.ContainsKey(name.ToLower())) {
+                this.desc = race_default_desc[name.ToLower()];
+            }
+            else {
+                this.desc = desc;
+            }
+
+            if(race_default_unique_ability.ContainsKey(name.ToLower())) {
+                this.unique_ability = race_default_unique_ability[name.ToLower()];
+            }
+            else {
+                this.unique_ability = unique_ability;
+            }
+        }
+        
+
+        public Stats get_stats() {
+            return stats;
+        }
+        public string get_name() {
+            return name;
+        }
+        public string get_desc() {
+            return desc;
+        }
+        public string get_unique_ability() {
+            return unique_ability;
+        }
+        
+    }
+
+    //Testing
+    public Race human = new Race("Human", new Stats(10,10,10,18,10,12), "cx", "cx");
+    //End testing
+
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Log(human.get_name());
+        Debug.Log(human.get_desc());
+        Debug.Log(human.get_stats());
+        Debug.Log(human.get_unique_ability());
+
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 
         // Gets local player
@@ -67,8 +231,9 @@ public class CharacterCreationManager : MonoBehaviour
 
         // Leave scene
         if (NetworkManager.Singleton.IsServer)
-        {
-            localPlayer.ChangeScene("Core Game");
+        {   
+            Debug.Log("Stay here for now");
+            //localPlayer.ChangeScene("Core Game");
         }
     }
 }
