@@ -47,6 +47,8 @@ public class PlayManager : Singleton<PlayManager>
 
     public GameObject encounterElements;
 
+    public GameObject endOfDayElements;
+
     public GameObject[] playerPieces;
 
     public GameObject[] characterPanels;
@@ -290,6 +292,8 @@ public class PlayManager : Singleton<PlayManager>
 
         foreach (Player p in playerList)
         {
+            // Reset ready up on players
+            p.Unready();
             // Setup and draw player pieces
             p.SetupPlayerPiecesClientRPC();
             p.DrawPlayerPiecesClientRPC();
@@ -307,6 +311,12 @@ public class PlayManager : Singleton<PlayManager>
         turnOrderPlayerList[turnMarker].StartTurnClientRPC();
     }
 
+    public void EndOfDay()
+    {
+        // Call Choose Activity prompt which is element 0
+        CallEndOfDayElement(0);
+    }
+
     public void StartTurn()
     {
         // Set the variable to mark it is this player's turn
@@ -315,7 +325,49 @@ public class PlayManager : Singleton<PlayManager>
 
     public void StartBotTurn()
     {
+        EndBotTurn();
+    }
 
+    public void EndTurn()
+    {
+        // Deactivate variable marking your turn
+        isYourTurn = false;
+
+        // Increment turn marker for all players
+        turnMarker++;
+        foreach (Player p in playerList)
+            p.SetTurnMarkerClientRPC(turnMarker);
+
+        // Start next players turn or transition to end of day if turn marker is out of bounds
+        if(turnMarker < turnOrderPlayerList.Count)
+            turnOrderPlayerList[turnMarker].StartTurnClientRPC();
+        else
+        {
+            foreach (Player p in playerList)
+            {
+                if(p.isBot)
+                    p.EndOfDayClientRPC(); // Call end of day for bots
+                else
+                    p.PlayTransitionClientRPC(3); // Transition 3 is End of Day
+            }
+        }
+    }
+
+    public void EndBotTurn()
+    {
+        // Increment turn marker for all players
+        turnMarker++;
+        foreach (Player p in playerList)
+            p.SetTurnMarkerClientRPC(turnMarker);
+
+        // Start next players turn or transition to end of day if turn marker is out of bounds
+        if (turnMarker < turnOrderPlayerList.Count)
+            turnOrderPlayerList[turnMarker].StartTurnClientRPC();
+        else
+        {
+            foreach (Player p in playerList)
+                p.EndOfDayClientRPC();
+        }
     }
 
     public void MovePhase()
@@ -374,7 +426,10 @@ public class PlayManager : Singleton<PlayManager>
 
     public void ProcessEncounterRoll(int roll)
     {
-
+        if (roll % 2 == 0)
+            GetEncounter();
+        else
+            EndTurn();
     }
 
     public void MoveToTile(Vector3Int pos)
@@ -400,6 +455,11 @@ public class PlayManager : Singleton<PlayManager>
     public void CallEncounterElement(int id)
     {
         encounterElements.transform.GetChild(id).gameObject.SetActive(true);
+    }
+
+    public void CallEndOfDayElement(int id)
+    {
+        endOfDayElements.transform.GetChild(id).gameObject.SetActive(true);
     }
 
     public void SetTurnOrderPlayerList(FixedString64Bytes[] arr)
@@ -542,93 +602,98 @@ public class PlayManager : Singleton<PlayManager>
         characterDisplayMinimizeButton.SetActive(false);
     }
 
+    public void GetEncounter()
+    {
+        // Fill later
+        EndTurn();
+    }
+
     public void DefaultTile()
     {
-        // If empty tile, check failed encounters
-        if (localPlayer.FailedEncounters.Value < 2)
-        {
-            // If empty and not a guarantee, prompt roll for encounter
+        // Either give an encounter if they have 2 fails, otherswise activated prompt to roll for encounter
+        if (localPlayer.FailedEncounters.Value == 2)
+            GetEncounter();
+        else
             CallEncounterElement(0);
-        }
     }
 
     public void TreasureTile()
     {
-
+        DefaultTile(); // Temporary
     }
 
     public void CrazedHermit()
     {
-
+        DefaultTile(); // Temporary
     }
 
     public void DistressedVillager()
     {
-
+        DefaultTile(); // Temporary
     }
 
     public void ForestHag()
     {
-
+        DefaultTile(); // Temporary
     }
 
     public void FourEyedBoy()
     {
-
+        DefaultTile(); // Temporary
     }
 
     public void PabloTheNoob()
     {
-
+        DefaultTile(); // Temporary
     }
 
     public void ShiftyPeddler()
     {
-
+        DefaultTile(); // Temporary
     }
 
     public void SuspiciousHorse()
     {
-
+        DefaultTile(); // Temporary
     }
 
     public void VeteranHunter()
     {
-
+        DefaultTile(); // Temporary
     }
 
     public void AbandonedOutpost()
     {
-
+        DefaultTile(); // Temporary
     }
 
     public void AncientSpring()
     {
-
+        DefaultTile(); // Temporary
     }
 
     public void BanditHideout()
     {
-
+        DefaultTile(); // Temporary
     }
 
     public void HowlingCave()
     {
-
+        DefaultTile(); // Temporary
     }
 
     public void OminousClearing()
     {
-
+        DefaultTile(); // Temporary
     }
 
     public void OvergrownTemple()
     {
-
+        DefaultTile(); // Temporary
     }
 
     public void WebbedForest()
     {
-
+        DefaultTile(); // Temporary
     }
 }

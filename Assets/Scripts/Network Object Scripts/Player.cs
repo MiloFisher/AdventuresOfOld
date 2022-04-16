@@ -54,6 +54,7 @@ namespace AdventuresOfOldMultiplayer
         public NetworkVariable<int> TurnPhase = new NetworkVariable<int>();
         public NetworkVariable<FixedString64Bytes> Color = new NetworkVariable<FixedString64Bytes>();
         public NetworkVariable<bool> Ready = new NetworkVariable<bool>();
+        public NetworkVariable<int> EndOfDayActivity = new NetworkVariable<int>();
 
         public override void OnNetworkSpawn()
         {
@@ -183,6 +184,7 @@ namespace AdventuresOfOldMultiplayer
                 case "AbilityCharges": AbilityCharges.Value = value; break;
                 case "LevelUpPoints": LevelUpPoints.Value = value; break;
                 case "FailedEncounters": FailedEncounters.Value = value; break;
+                case "EndOfDayActivity": EndOfDayActivity.Value = value; break;
                 default: Debug.LogError("Unknown Value: \"" + valueName + "\""); break;
             }
         }
@@ -226,6 +228,19 @@ namespace AdventuresOfOldMultiplayer
         private void ReadyUpServerRPC(ServerRpcParams rpcParams = default)
         {
             Ready.Value = true;
+        }
+
+        public void Unready()
+        {
+            if (NetworkManager.Singleton.IsServer)
+                Ready.Value = false;
+            else
+                UnreadyServerRPC();
+        }
+        [ServerRpc]
+        private void UnreadyServerRPC(ServerRpcParams rpcParams = default)
+        {
+            Ready.Value = false;
         }
 
         [ClientRpc]
@@ -318,6 +333,22 @@ namespace AdventuresOfOldMultiplayer
             if (IsOwner && !isBot)
             {
                 PlayManager.Instance.UpdateCharacterPanels();
+            }
+        }
+
+        [ClientRpc]
+        public void EndOfDayClientRPC(ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner)
+            {
+                if (isBot)
+                {
+                    // Put actual logic here later
+                    EndOfDayActivity.Value = 0;
+                    ReadyUp();
+                }
+                else
+                    PlayTransitionClientRPC(3);
             }
         }
         #endregion

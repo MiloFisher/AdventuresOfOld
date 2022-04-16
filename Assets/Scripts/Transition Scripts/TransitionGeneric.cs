@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public enum EndEffect { START_MOVEMENT_PHASE, START_ENCOUNTER_PHASE };
+public enum EndEffect { START_MOVEMENT_PHASE, START_ENCOUNTER_PHASE, START_END_OF_DAY };
 
 public class TransitionGeneric : MonoBehaviour
 {
@@ -30,6 +30,9 @@ public class TransitionGeneric : MonoBehaviour
                 break;
             case EndEffect.START_ENCOUNTER_PHASE:
                 PlayManager.Instance.EncounterPhase();
+                break;
+            case EndEffect.START_END_OF_DAY:
+                PlayManager.Instance.EndOfDay();
                 break;
         }
     }

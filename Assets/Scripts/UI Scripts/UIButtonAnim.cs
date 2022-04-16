@@ -41,4 +41,11 @@ public class UIButtonAnim : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         rt.sizeDelta = new Vector2(defaultWidth, defaultHeight);
         transform.GetChild(0).localScale = new Vector3(defaultChildScale, defaultChildScale, 1);
     }
+
+    private void OnDisable()
+    {
+        image.sprite = defaultSprite;
+        rt.sizeDelta = new Vector2(defaultWidth, defaultHeight);
+        transform.GetChild(0).localScale = new Vector3(defaultChildScale, defaultChildScale, 1);
+    }
 }
