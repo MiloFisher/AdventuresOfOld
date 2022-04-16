@@ -6,8 +6,9 @@ using UnityEngine.SceneManagement;
 public class JLPauseMenu : MonoBehaviour
 {
     public GameObject pauseCanvas;
-    public GameObject pauseMenu;
-    public GameObject optionMenu;
+    public GameObject[] pauseMenus;
+
+    private int currentID;
 
     // Start is called before the first frame update
     void Start()
@@ -21,39 +22,33 @@ public class JLPauseMenu : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape)) {
             if (!pauseCanvas.activeSelf) {
                 pauseCanvas.SetActive(!pauseCanvas.activeSelf);
-                pauseMenu.SetActive(!pauseMenu.activeSelf); // Flip-Flop switcheroo
+                swapMenus(0);
                 Time.timeScale = 0;
             }
             else {
-                backButton();
+                resumeButton();
             }
         }
     }
 
-    public void resumeButton() {
-        if (pauseMenu.activeSelf) {
-            pauseCanvas.SetActive(!pauseMenu.activeSelf);
-            pauseMenu.SetActive(!pauseMenu.activeSelf); // Flip-Flop switcheroo
-            Time.timeScale = 1;
-        }
+    public void swapMenus(int id)
+    {
+        if (id >= pauseMenus.Length || id < 0)
+            return;
+        foreach (GameObject g in pauseMenus)
+            g.SetActive(false);
+        pauseMenus[id].SetActive(true);
+        currentID = id;
     }
 
-    public void optionButton() {
-        pauseMenu.SetActive(!pauseMenu.activeSelf); // Flip-Flop switcheroo
-        optionMenu.SetActive(!optionMenu.activeSelf); // Flip-Flop switcheroo x2
+    public void resumeButton() {
+        pauseCanvas.SetActive(!pauseCanvas.activeSelf);
+        pauseMenus[currentID].SetActive(false);
+        Time.timeScale = 1;
     }
 
     public void quitButton() {
         SceneManager.LoadScene("JLMainMenu", LoadSceneMode.Single);
-    }
-
-    public void backButton() { // Umbrella function that should work no matter where the back button is
-        if (pauseMenu.activeSelf) {
-            resumeButton();
-        }
-        else if (optionMenu.activeSelf) {
-            optionButton();
-        }
     }
 
     public void resolutionChange(int resNumber) { // Set resNumber with Button function in Unity Editor Scene
