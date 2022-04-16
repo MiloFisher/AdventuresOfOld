@@ -216,6 +216,9 @@ public class PlayManager : Singleton<PlayManager>
                     p.SetValue("Weapon", "Simple Wand & Shield");
                     break;
             }
+            // Set visual display for gear
+            p.SetGearClientRPC();
+            p.UpdateGearClientRPC();
 
             // Set player positions to starting tile
             p.SetPosition(new Vector3Int(0, 7, -7));
@@ -509,7 +512,7 @@ public class PlayManager : Singleton<PlayManager>
         for (i = 0; i < turnOrderPlayerList.Count; i++)
         {
             characterPanels[i].SetActive(true);
-            characterPanels[i].transform.localPosition = new Vector3(characterPanels[i].transform.localPosition.x, 117.5f * (turnOrderPlayerList.Count - (i + 1)) - 117.5f * i, 0);
+            characterPanels[i].transform.localPosition = new Vector3(characterPanels[i].transform.localPosition.x, 117.5f * (turnOrderPlayerList.Count - 2 * i - 1), 0);
             characterPanels[i].GetComponent<UICharacterPanel>().UpdateCharacterImage(portaitDictionary[turnOrderPlayerList[i].Image.Value]);
             characterPanels[i].GetComponent<UICharacterPanel>().UpdateCharacterName(turnOrderPlayerList[i].Name.Value+"", turnOrderPlayerList[i].Color.Value+"");
         }

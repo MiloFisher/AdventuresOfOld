@@ -37,6 +37,15 @@ public class CharacterCreationManager : MonoBehaviour
         localPlayer.SetValue("Energy", 15);
         localPlayer.SetValue("Health", localPlayer.Constitution.Value * 2);
         localPlayer.SetValue("Image", "portrait_human");
+        localPlayer.SetValue("Weapon", "empty");
+        localPlayer.SetValue("Armor", "empty");
+        localPlayer.SetValue("Ring1", "empty");
+        localPlayer.SetValue("Ring2", "empty");
+        localPlayer.SetValue("Inventory1", "empty");
+        localPlayer.SetValue("Inventory2", "empty");
+        localPlayer.SetValue("Inventory3", "empty");
+        localPlayer.SetValue("Inventory4", "empty");
+        localPlayer.SetValue("Inventory5", "empty");
 
         // If host, generate random characters for bots
         if (NetworkManager.Singleton.IsHost)
@@ -61,6 +70,14 @@ public class CharacterCreationManager : MonoBehaviour
                     p.SetValue("Energy", 10);
                     p.SetValue("Health", p.Constitution.Value);
                     p.SetValue("Image", "portrait_human");
+                    p.SetValue("Armor", "empty");
+                    p.SetValue("Ring1", "empty");
+                    p.SetValue("Ring2", "empty");
+                    p.SetValue("Inventory1", "empty");
+                    p.SetValue("Inventory2", "empty");
+                    p.SetValue("Inventory3", "empty");
+                    p.SetValue("Inventory4", "empty");
+                    p.SetValue("Inventory5", "empty");
                 }
             }
         }
