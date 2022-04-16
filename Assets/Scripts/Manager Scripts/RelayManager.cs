@@ -73,7 +73,7 @@ public class RelayManager : Singleton<RelayManager>
         {
             allocation = await Relay.Instance.JoinAllocationAsync(joinCode);
         }
-        catch(Exception e)
+        catch(Exception)
         {
             throw new Exception();
         }

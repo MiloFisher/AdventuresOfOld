@@ -153,7 +153,7 @@ namespace AdventuresOfOldMultiplayer
                     await RelayManager.Instance.JoinRelay(joinCode.text);
                 }  
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 joinedRelay = false;
                 joiningInProgress.SetActive(false);
