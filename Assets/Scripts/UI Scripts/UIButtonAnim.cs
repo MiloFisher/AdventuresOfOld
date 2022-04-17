@@ -25,27 +25,31 @@ public class UIButtonAnim : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         defaultWidth = rt.sizeDelta.x;
         defaultHeight = rt.sizeDelta.y;
         image.alphaHitTestMinimumThreshold = 0.1f;
-        defaultChildScale = transform.GetChild(0).localScale.x;
+        if(transform.childCount > 0)
+            defaultChildScale = transform.GetChild(0).localScale.x;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         image.sprite = selectedSprite;
         rt.sizeDelta = new Vector2(scaledWidth,scaledHeight);
-        transform.GetChild(0).localScale = new Vector3(childScale, childScale, 1);
+        if (transform.childCount > 0)
+            transform.GetChild(0).localScale = new Vector3(childScale, childScale, 1);
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         image.sprite = defaultSprite;
         rt.sizeDelta = new Vector2(defaultWidth, defaultHeight);
-        transform.GetChild(0).localScale = new Vector3(defaultChildScale, defaultChildScale, 1);
+        if (transform.childCount > 0)
+            transform.GetChild(0).localScale = new Vector3(defaultChildScale, defaultChildScale, 1);
     }
 
     private void OnDisable()
     {
         image.sprite = defaultSprite;
         rt.sizeDelta = new Vector2(defaultWidth, defaultHeight);
-        transform.GetChild(0).localScale = new Vector3(defaultChildScale, defaultChildScale, 1);
+        if (transform.childCount > 0)
+            transform.GetChild(0).localScale = new Vector3(defaultChildScale, defaultChildScale, 1);
     }
 }
