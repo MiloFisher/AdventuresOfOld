@@ -9,4 +9,9 @@ public class UILootCard : MonoBehaviour
         if (!InventoryManager.Instance.maximized)
             InventoryManager.Instance.MaximizeInventory();
     }
+
+    public void SetVisuals(string cardName)
+    {
+
+    }
 }

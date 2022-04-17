@@ -58,6 +58,7 @@ public class InventoryManager : Singleton<InventoryManager>
         {
             if (newGear[i] != emptyValue)
             {
+                cards[i].GetComponent<UILootCard>().SetVisuals(newGear[i]);
                 newGearPos[i] = newActiveCards;
                 newActiveCards++;
                 if(gearPos[i] == -1)
