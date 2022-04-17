@@ -24,9 +24,25 @@ public class LootManager : Singleton<LootManager>
 
     public void DrawCard(int amount)
     {
-        if(amount > 0)
+        if(amount > 0 && !lootBanner.activeInHierarchy)
         {
             StartCoroutine(AnimateOpening(amount));
+        }
+    }
+
+    public void AddCardToInventory(GameObject card)
+    {
+        if (InventoryManager.Instance.AddDrawnCardToInventory(card))
+        {
+            Debug.Log("Successfully added Card to Inventory!");
+            displayCards.Remove(card);
+            Destroy(card);
+            if(displayCards.Count == 0)
+                StartCoroutine(AnimateClosing());
+        }
+        else
+        {
+            Debug.Log("Inventory is full!");
         }
     }
 
@@ -108,12 +124,11 @@ public class LootManager : Singleton<LootManager>
 
         GameObject card = Instantiate(cardPrefab, travelCard.transform.position, Quaternion.identity, transform.parent);
         card.GetComponent<UILootCard>().ActivateCardButton(false);
+        card.GetComponent<UILootCard>().ActivateCollectCardButton(true);
         displayCards.Add(card);
         Destroy(travelCard);
 
         if (current < amount - 1)
-            StartCoroutine(AnimateCardDraw(current + 1, amount));
-        else
-            StartCoroutine(AnimateClosing());
+            StartCoroutine(AnimateCardDraw(current + 1, amount));            
     }
 }

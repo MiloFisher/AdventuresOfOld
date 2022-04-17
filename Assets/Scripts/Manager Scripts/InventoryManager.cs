@@ -76,6 +76,94 @@ public class InventoryManager : Singleton<InventoryManager>
         StartCoroutine(AnimateCorrectionalMovement(newActiveCards, newGearPos, newGear));
     }
 
+    public bool AddDrawnCardToInventory(GameObject cardToAdd)
+    {
+        int emptyCount = 0;
+        bool[] emptySpaces = new bool[5];
+        for(int i = 0; i < 5; i++)
+        {
+            if(gear[i + 4] == emptyValue)
+            {
+                emptySpaces[i] = true;
+                emptyCount++;
+            }
+        }
+        if (emptyCount == 0)
+            return false;
+
+        for (int i = 0; i < 5; i++)
+        {
+            if (emptySpaces[i])
+            {
+                //PlayManager.Instance.localPlayer.SetValue("Inventory" + (i + 1), cardToAdd.GetComponent<UILootCard>().cardName);
+                StartCoroutine(AnimateAddDrawnCard(i + 4, cardToAdd));
+                break;
+            }
+        }
+
+        return true;
+    }
+
+    IEnumerator AnimateAddDrawnCard(int id, GameObject card)
+    {
+        inAnimation = true;
+
+        string[] newGear = new string[9];
+        gear.CopyTo(newGear, 0);
+        newGear[id] = card.GetComponent<UILootCard>().cardName;
+
+        int newActiveCards = 0;
+        int[] newGearPos = new int[9];
+        for (int i = 0; i < 9; i++)
+        {
+            if (newGear[i] != emptyValue)
+            {
+                cards[i].GetComponent<UILootCard>().SetVisuals(newGear[i]);
+                newGearPos[i] = newActiveCards;
+                newActiveCards++;
+            }
+            else
+            {
+                newGearPos[i] = -1;
+            }
+        }
+        cards[id].SetActive(true);
+        SetAlpha(cards[id], 1);
+
+        float cardStartX = card.transform.localPosition.x;
+        float cardStartY = card.transform.localPosition.y - transform.localPosition.y;
+
+        float gap = maximized ? maximizedGap : minimizedGap;
+        float y = maximized ? maximizedY : minimizedY;
+        // Animate moving to new positions for all cards
+        for (int i = 1; i <= 100; i++)
+        {
+            for (int j = 0; j < 9; j++)
+            {
+                float startPos = gap * (2 * gearPos[j] + 1 - activeCards);
+                float endPos = gap * (2 * newGearPos[j] + 1 - newActiveCards);
+                // Move from one position to another
+                if (gearPos[j] > -1 && newGearPos[j] > -1)
+                {
+                    cards[j].transform.localPosition = new Vector3(startPos + (endPos - startPos) * i * 0.01f, y, 0);
+                }
+                // Insert drawn card
+                else if (gearPos[j] == -1 && newGearPos[j] > -1)
+                {
+                    float distX = endPos - cardStartX;
+                    float distY = y - cardStartY;
+                    float yVal = distY * 0.01f - 1;
+                    float xVal = Mathf.Log10(1 + Mathf.Abs(yVal));
+                    cards[j].transform.localPosition = new Vector3(cardStartX + Mathf.Log10(1 + Mathf.Abs(yVal * i * 0.01f)) / xVal * distX, cardStartY + (y - cardStartY) * i * 0.01f, 0);
+                }
+            }
+            yield return new WaitForSeconds(movementTimeLength);
+        }
+
+        SetGear(newGear);
+        inAnimation = false;
+    }
+
     public void MaximizeInventory()
     {
         if (inAnimation || maximized)
