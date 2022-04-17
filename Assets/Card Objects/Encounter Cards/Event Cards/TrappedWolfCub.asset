@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TrappedWolfCub
   m_EditorClassIdentifier: 
   cardName: Trapped Wolf Cub
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: 1829f26b8ad965e48a896f4403e9c00f, type: 3}
   flavorText: You stumble across a wolf cub caught in a hunter's trap, it looks at
     you and pleads for help.
   xp: 3

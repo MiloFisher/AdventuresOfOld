@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BanditWeebLord
   m_EditorClassIdentifier: 
   cardName: Badnit Weeb Lord
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: 6d7780d6c48fa1748bd186b935c2e001, type: 3}
   flavorText: Searching for his discord kitten!
   type: 2
   health: 58

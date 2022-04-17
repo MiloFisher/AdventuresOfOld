@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ItsATrap
   m_EditorClassIdentifier: 
   cardName: It's a Trap!
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: dced6660bbb3606409a5bbe94eeb6b7b, type: 3}
   flavorText: "You\u2019re walking across a certain forest path when suddenly the
     ground falls beneath you, revealing spikes at the bottom \u2026 classic."
   xp: 6

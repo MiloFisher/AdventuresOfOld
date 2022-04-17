@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TrailOfCandy
   m_EditorClassIdentifier: 
   cardName: Trail of Candy
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: 0af82afc78d191e418b16aa294f860df, type: 3}
   flavorText: "A suspicious pile of candy follows a barely visibly forest path. The
     candy\u2019s appearance seems out of this world!"
   xp: 3

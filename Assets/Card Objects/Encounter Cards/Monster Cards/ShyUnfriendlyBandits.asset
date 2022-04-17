@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ShyUnfriendlyBandits
   m_EditorClassIdentifier: 
   cardName: Shy Unfriendly Bandits
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: dcc585137e7c6294cae0f9c8a8d3c846, type: 3}
   flavorText: "Give them your loot but don\u2019t talk to them!"
   type: 0
   health: 14

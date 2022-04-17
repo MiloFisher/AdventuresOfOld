@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SpookySpider
   m_EditorClassIdentifier: 
   cardName: SpookySpider
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: c815af453afa36548855e67ed1a69c3f, type: 3}
   flavorText: "If you hate spiders, you\u2019ll hate this mini-boss even more!"
   type: 2
   health: 55

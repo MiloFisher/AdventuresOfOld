@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: EnchantedLake
   m_EditorClassIdentifier: 
   cardName: Enchanted Lake
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: c9de239b16a6d3e47beb271b109cac76, type: 3}
   flavorText: "You come across a body of water that seems to glimmer with mystical
     energy \u2026 or maybe that\u2019s just the sunlight."
   xp: 4

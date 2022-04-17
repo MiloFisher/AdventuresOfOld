@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: AbandonedStatue
   m_EditorClassIdentifier: 
   cardName: Abandoned Statue
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: 16046f8fb81b48d449da0ff991c22aff, type: 3}
   flavorText: "You come across a statue toppled over on the side of the road, it\u2019s
     bowl of offerings reveal a couple of gold pieces \u2026 you wouldn\u2019t steal
     from the Church would you?"

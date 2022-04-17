@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RagingDiscordKitten
   m_EditorClassIdentifier: 
   cardName: Raging Discord Kitten
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: f1570df5ca0384e46b8ede45c24ec9d1, type: 3}
   flavorText: Kitten is vewy angy.
   type: 2
   health: 56

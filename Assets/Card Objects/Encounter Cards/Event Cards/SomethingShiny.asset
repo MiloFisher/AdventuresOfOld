@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SomethingShiny
   m_EditorClassIdentifier: 
   cardName: Something Shiny
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: e03ed3e31d1b2de4dbb3738619d6ffcd, type: 3}
   flavorText: "Your eye catches something shimmering in the bushes, you check upon
     it. Afterall, what\u2019s the worst that could happen?"
   xp: 4

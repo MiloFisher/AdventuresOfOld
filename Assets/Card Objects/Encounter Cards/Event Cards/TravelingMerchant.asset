@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TravelingMerchant
   m_EditorClassIdentifier: 
   cardName: Traveling Merchant
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: 6e52672bd97ab894faf3a73212a8be5f, type: 3}
   flavorText: A cloaked merchant approaches you and begins showing you their wares
     saying, "What're you buying?"
   xp: 6

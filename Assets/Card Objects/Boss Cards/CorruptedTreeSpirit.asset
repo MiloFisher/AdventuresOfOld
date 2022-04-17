@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CorruptedTreeSpirit
   m_EditorClassIdentifier: 
   cardName: Corrupted Tree Spirit
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: bc447a39d5098484184db6a1a490b455, type: 3}
   flavorText: An old forgotten forest god, surrendered to the Chaos
   type: 3
   health: 140

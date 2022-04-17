@@ -13,10 +13,8 @@ MonoBehaviour:
   m_Name: BeefyChadBandits
   m_EditorClassIdentifier: 
   cardName: Beefy Chad Bandits
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: c22600c9ddd3c5a47855182b0c7a2052, type: 3}
   flavorText: They keep calling each other Sigmas!
-  xp: 6
-  gold: 20
   type: 1
   health: 22
   attack: 11

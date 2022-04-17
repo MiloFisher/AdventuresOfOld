@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GiantSpider
   m_EditorClassIdentifier: 
   cardName: Giant Spider
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: 1a1d5ec18093bae428f24735d20fa564, type: 3}
   flavorText: Who could believe Charlotte ate Wilbur!
   type: 1
   health: 19

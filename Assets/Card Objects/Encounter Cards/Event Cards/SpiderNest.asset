@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SpiderNest
   m_EditorClassIdentifier: 
   cardName: Spider Nest
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: 8bbad494b4520b24d8d58a2aad166ad2, type: 3}
   flavorText: You stumble across a large swath of trees riddled with Spider Eggs!
     What will you do?
   xp: 4

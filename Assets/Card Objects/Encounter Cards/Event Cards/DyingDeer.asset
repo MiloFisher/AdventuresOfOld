@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DyingDeer
   m_EditorClassIdentifier: 
   cardName: Dying Deer
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: f770963f8deebfd44aa83a6029507d97, type: 3}
   flavorText: "A dying deer lies in the grass, its child is staring at it. This scene
     looks oddly familiar\u2026"
   xp: 4

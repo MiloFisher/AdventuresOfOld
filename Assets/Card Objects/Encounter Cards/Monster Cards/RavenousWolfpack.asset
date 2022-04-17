@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RavenousWolfpack
   m_EditorClassIdentifier: 
   cardName: Ravenous Wolfpack
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: d7b83d53f14bb0a4ab90a495aae6f439, type: 3}
   flavorText: Not many things are more dangerous than a hungry wolfpack.
   type: 1
   health: 20

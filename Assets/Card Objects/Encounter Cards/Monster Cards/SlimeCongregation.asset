@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SlimeCongregation
   m_EditorClassIdentifier: 
   cardName: Slime Congregation
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: a048aac784405954fa1f94e0e06cb368, type: 3}
   flavorText: Hungry Slime do-do-do-do-do!
   type: 1
   health: 23

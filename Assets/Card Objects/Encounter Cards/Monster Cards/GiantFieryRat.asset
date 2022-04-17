@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GiantFieryRat
   m_EditorClassIdentifier: 
   cardName: Giant Fiery Rat
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: 1c65af4c35ca60249915fae16a89853a, type: 3}
   flavorText: "Its personality is just so\u2026 so fiery!"
   type: 1
   health: 24

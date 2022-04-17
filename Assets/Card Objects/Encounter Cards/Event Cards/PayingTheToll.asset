@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PayingTheToll
   m_EditorClassIdentifier: 
   cardName: Paying the Toll
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: fd86b1bd5c7fef4448c39d41dee57b34, type: 3}
   flavorText: "You travel along the forest path when suddenly, you\u2019re jumped
     by mysterious figures demanding payment to continue across."
   xp: 6

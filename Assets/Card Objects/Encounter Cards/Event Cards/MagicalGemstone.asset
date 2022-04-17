@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MagicalGemstone
   m_EditorClassIdentifier: 
   cardName: Magical Gemstone
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: 6f245f1ba73c901449e234c6ff82be6b, type: 3}
   flavorText: You spot a mysterious gem hidden in the hole of a tree trunk, right
     next to the ashes of an incinerated squirrel.
   xp: 4

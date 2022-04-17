@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FairySpirit
   m_EditorClassIdentifier: 
   cardName: FairySpirit
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: 643682ee46a22194ab21a7caa62b873f, type: 3}
   flavorText: "She\u2019s searching for a boy who never ages\u2026"
   xp: 2
   optionNames:

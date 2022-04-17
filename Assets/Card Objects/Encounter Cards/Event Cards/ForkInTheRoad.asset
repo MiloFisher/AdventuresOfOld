@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ForkInTheRoad
   m_EditorClassIdentifier: 
   cardName: Fork in the Road
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: a3ae2963b319f7142b1068c91e75b855, type: 3}
   flavorText: You come across a fork in the road, take the fork and choose which
     path to take.
   xp: -999
