@@ -12,6 +12,7 @@ public class CharacterCreationManager : MonoBehaviour
     private GameObject canvas;
     public TMP_FontAsset font;
     public GameObject MenuManager;
+    public GameObject stat_container;
     public GameObject race_selected_text;
     public GameObject race_details_text;
     public GameObject race_stats_text;
@@ -22,7 +23,9 @@ public class CharacterCreationManager : MonoBehaviour
     public GameObject class_spd_text;
     public GameObject class_con_text;
     public GameObject class_eng_text;
+    public GameObject chosen_class_text;
     private Race player_race;
+    private string chosen_class_name;
 
     //Beginning of class creations for orgaization
     //Stat class contains all categories of stats and a way to print them
@@ -284,27 +287,9 @@ public class CharacterCreationManager : MonoBehaviour
         racebutton.GetComponent<Button>().onClick.AddListener(() => SetRaceDetails(race));
     }
 
-    void SetClassDetails(Race race) {
-        //Updating text for next confirmation scene
-        race_selected_text.GetComponent<TextMeshProUGUI>().text = race.get_name();
-        race_details_text.GetComponent<TextMeshProUGUI>().text = race.get_desc();
-        race_stats_text.GetComponent<TextMeshProUGUI>().text = race.get_stats().ToString();
-        race_trait_text.GetComponent<TextMeshProUGUI>().text = race.get_unique_ability() + ":\n" + race.get_unique_ability_desc();
-        
-        //Store for local player
-        localPlayer.SetValue("Race", race.get_name());
-        localPlayer.SetValue("Trait", race.get_unique_ability());
-        localPlayer.SetValue("Strength", race.get_stats().get_str());
-        localPlayer.SetValue("Dexterity", race.get_stats().get_dex());
-        localPlayer.SetValue("Intelligence", race.get_stats().get_inte());
-        localPlayer.SetValue("Speed", race.get_stats().get_spd());
-        localPlayer.SetValue("Constitution", race.get_stats().get_con());
-        localPlayer.SetValue("Energy", race.get_stats().get_eng());
-        localPlayer.SetValue("Health", localPlayer.Constitution.Value * 2);
-    }
-
     //Confirm button for race sets up the information for the gui in the next scene
     public void ConfirmRace() {
+        stat_container.SetActive(true);
         class_str_text.GetComponent<TextMeshProUGUI>().SetText("STR: " + player_race.get_stats().get_str());
         class_dex_text.GetComponent<TextMeshProUGUI>().SetText("DEX: " + player_race.get_stats().get_dex());
         class_int_text.GetComponent<TextMeshProUGUI>().SetText("INT: " + player_race.get_stats().get_inte());
@@ -313,8 +298,15 @@ public class CharacterCreationManager : MonoBehaviour
         class_eng_text.GetComponent<TextMeshProUGUI>().SetText("ENG: " + player_race.get_stats().get_eng());
     }
 
+    public void BackToRace() {
+        stat_container.SetActive(false);
+    }
+
     //See changes to player stats befpre they confirm
     public void PreviewStat(string classname) {
+        chosen_class_name = classname;
+        chosen_class_text.GetComponent<TextMeshProUGUI>().text = classname;
+        //localPlayer.SetValue("Class", classname);
         int strtoadd = 0;
         int dextoadd = 0;
         int inttoadd = 0;
@@ -382,11 +374,58 @@ public class CharacterCreationManager : MonoBehaviour
         }
         
         class_str_text.GetComponent<TextMeshProUGUI>().SetText("STR: " + (player_race.get_stats().get_str() + strtoadd));
+        //localPlayer.SetValue("Strength", player_race.get_stats().get_str() + strtoadd);
+        if(strtoadd > 0) {
+            class_str_text.GetComponent<TextMeshProUGUI>().color = new Color32(175, 255, 0, 255);
+        }
+        else {
+            class_str_text.GetComponent<TextMeshProUGUI>().color = new Color32(0, 0, 0, 255);
+        }
+
         class_dex_text.GetComponent<TextMeshProUGUI>().SetText("DEX: " + (player_race.get_stats().get_dex() + dextoadd));
+        //localPlayer.SetValue("Dexterity", player_race.get_stats().get_dex() + dextoadd);
+        if(dextoadd > 0) {
+            class_dex_text.GetComponent<TextMeshProUGUI>().color = new Color32(175, 255, 0, 255);
+        }
+        else {
+            class_dex_text.GetComponent<TextMeshProUGUI>().color = new Color32(0, 0, 0, 255);
+        }
+
         class_int_text.GetComponent<TextMeshProUGUI>().SetText("INT: " + (player_race.get_stats().get_inte() + inttoadd));
+        //localPlayer.SetValue("Intellegence", player_race.get_stats().get_inte() + inttoadd);
+        if(inttoadd > 0) {
+            class_int_text.GetComponent<TextMeshProUGUI>().color = new Color32(175, 255, 0, 255);
+        }
+        else {
+            class_int_text.GetComponent<TextMeshProUGUI>().color = new Color32(0, 0, 0, 255);
+        }
+
         class_spd_text.GetComponent<TextMeshProUGUI>().SetText("SPD: " + (player_race.get_stats().get_spd() + spdtoadd));
+        //localPlayer.SetValue("Speed", player_race.get_stats().get_spd() + spdtoadd);
+        if(spdtoadd > 0) {
+            class_spd_text.GetComponent<TextMeshProUGUI>().color = new Color32(175, 255, 0, 255);
+        }
+        else {
+            class_spd_text.GetComponent<TextMeshProUGUI>().color = new Color32(0, 0, 0, 255);
+        }
+
         class_con_text.GetComponent<TextMeshProUGUI>().SetText("CON: " + (player_race.get_stats().get_con() + contoadd));
+        //localPlayer.SetValue("Constitution", player_race.get_stats().get_con() + contoadd);
+        if(contoadd > 0) {
+            class_con_text.GetComponent<TextMeshProUGUI>().color = new Color32(175, 255, 0, 255);
+        }
+        else {
+            class_con_text.GetComponent<TextMeshProUGUI>().color = new Color32(0, 0, 0, 255);
+        }
+
         class_eng_text.GetComponent<TextMeshProUGUI>().SetText("ENG: " + (player_race.get_stats().get_eng() + engtoadd));
+        //localPlayer.SetValue("Energy", player_race.get_stats().get_eng() + engtoadd);
+        if(engtoadd > 0) {
+            class_eng_text.GetComponent<TextMeshProUGUI>().color = new Color32(175, 255, 0, 255);
+        }
+        else {
+            class_eng_text.GetComponent<TextMeshProUGUI>().color = new Color32(0, 0, 0, 255);
+        }
     }
 
     // Start is called before the first frame update
