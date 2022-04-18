@@ -226,16 +226,6 @@ public class PlayManager : Singleton<PlayManager>
             p.SetPosition(new Vector3Int(0, 7, -7));
         }
 
-        // Wait to allow for armor values to update on players
-        yield return new WaitForSeconds(1);
-
-        foreach(Player p in playerList)
-        {
-            // Set visual display for gear
-            p.SetGearClientRPC();
-            p.UpdateGearClientRPC();
-        }
-
         // 3) Deal Quest Cards (host only)
         ShuffleDeck(questDeck);
         for(int i = 0; i < Mathf.FloorToInt(playerList.Count/2); i++)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using AdventuresOfOldMultiplayer;
 
 public class InventoryManager : Singleton<InventoryManager>
 {
@@ -22,7 +23,45 @@ public class InventoryManager : Singleton<InventoryManager>
     private string emptyValue = "empty";
     private bool inAnimation;
 
-    public void SetGear(string[] g)
+    private void Start()
+    {
+        SetGear(new string[] { emptyValue, emptyValue, emptyValue, emptyValue, emptyValue, emptyValue, emptyValue, emptyValue, emptyValue });
+    }
+
+    private void Update()
+    {
+        if(!inAnimation && GearChanged())
+        {
+            Player p = PlayManager.Instance.localPlayer;
+            UpdateGear(new string[] { p.Weapon.Value + "", p.Armor.Value + "", p.Ring1.Value + "", p.Ring2.Value + "", p.Inventory1.Value + "", p.Inventory2.Value + "", p.Inventory3.Value + "", p.Inventory4.Value + "", p.Inventory5.Value + ""});
+        }
+    }
+
+    private bool GearChanged()
+    {
+        Player p = PlayManager.Instance.localPlayer;
+        if (gear[0] != p.Weapon.Value)
+            return true;
+        if (gear[1] != p.Armor.Value)
+            return true;
+        if (gear[2] != p.Ring1.Value)
+            return true;
+        if (gear[3] != p.Ring2.Value)
+            return true;
+        if (gear[4] != p.Inventory1.Value)
+            return true;
+        if (gear[5] != p.Inventory2.Value)
+            return true;
+        if (gear[6] != p.Inventory3.Value)
+            return true;
+        if (gear[7] != p.Inventory4.Value)
+            return true;
+        if (gear[8] != p.Inventory5.Value)
+            return true;
+        return false;
+    }
+
+    private void SetGear(string[] g)
     {
         activeCards = 0;
         for(int i = 0; i < 9; i++)
@@ -95,7 +134,7 @@ public class InventoryManager : Singleton<InventoryManager>
         {
             if (emptySpaces[i])
             {
-                //PlayManager.Instance.localPlayer.SetValue("Inventory" + (i + 1), cardToAdd.GetComponent<UILootCard>().cardName);
+                PlayManager.Instance.localPlayer.SetValue("Inventory" + (i + 1), cardToAdd.GetComponent<UILootCard>().cardName);
                 StartCoroutine(AnimateAddDrawnCard(i + 4, cardToAdd));
                 break;
             }

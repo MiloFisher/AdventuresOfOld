@@ -401,24 +401,6 @@ namespace AdventuresOfOldMultiplayer
         }
 
         [ClientRpc]
-        public void SetGearClientRPC(ClientRpcParams clientRpcParams = default)
-        {
-            if (IsOwner && !isBot)
-            {
-                InventoryManager.Instance.SetGear(new string[]{ Weapon.Value+"", Armor.Value+"", Ring1.Value+"", Ring2.Value+"", Inventory1.Value+"", Inventory2.Value + "", Inventory3.Value + "", Inventory4.Value + "", Inventory5.Value + "", });
-            }
-        }
-
-        [ClientRpc]
-        public void UpdateGearClientRPC(ClientRpcParams clientRpcParams = default)
-        {
-            if (IsOwner && !isBot)
-            {
-                InventoryManager.Instance.UpdateGear(new string[] { Weapon.Value + "", Armor.Value + "", Ring1.Value + "", Ring2.Value + "", Inventory1.Value + "", Inventory2.Value + "", Inventory3.Value + "", Inventory4.Value + "", Inventory5.Value + "", });
-            }
-        }
-
-        [ClientRpc]
         public void CloseLoadingScreenClientRPC(ClientRpcParams clientRpcParams = default)
         {
             if (IsOwner && !isBot)
