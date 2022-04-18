@@ -580,7 +580,7 @@ public class PlayManager : Singleton<PlayManager>
         selectedPlayer = turnOrderPlayerList[id];
         characterDisplayMinimizeButton.SetActive(true);
 
-        if(!characterDisplayOpen && characterDisplays.transform.localPosition.x == minimizedX)
+        if(!characterDisplayOpen)
         {
             characterDisplayOpen = true;
             StartCoroutine(OpenPlayerSheet());
@@ -598,7 +598,7 @@ public class PlayManager : Singleton<PlayManager>
 
     public void DeselectCharacterSheet()
     {
-        if (characterDisplayOpen && characterDisplays.transform.localPosition.x == maximizedX)
+        if (characterDisplayOpen)
         {
             characterDisplayOpen = false;
             StartCoroutine(ClosePlayerSheet());
