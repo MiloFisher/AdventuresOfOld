@@ -279,6 +279,23 @@ namespace AdventuresOfOldMultiplayer
             }
         }
 
+        public void UpdateTurnMarker(int marker)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.SetTurnMarkerClientRPC(marker);
+            }
+            else
+                UpdateTurnMarkerServerRPC(marker);
+        }
+        [ServerRpc]
+        private void UpdateTurnMarkerServerRPC(int marker)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.SetTurnMarkerClientRPC(marker);
+        }
+
         [ClientRpc]
         public void SetTurnMarkerClientRPC(int marker, ClientRpcParams clientRpcParams = default)
         {
@@ -286,6 +303,21 @@ namespace AdventuresOfOldMultiplayer
             {
                 PlayManager.Instance.turnMarker = marker;
             }
+        }
+
+        public void StartNextPlayerTurn(int turnMarker)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                PlayManager.Instance.turnOrderPlayerList[turnMarker].StartTurnClientRPC();
+            }
+            else
+                StartNextPlayerTurnServerRPC(turnMarker);
+        }
+        [ServerRpc]
+        private void StartNextPlayerTurnServerRPC(int turnMarker)
+        {
+            PlayManager.Instance.turnOrderPlayerList[turnMarker].StartTurnClientRPC();
         }
 
         [ClientRpc]
@@ -310,15 +342,6 @@ namespace AdventuresOfOldMultiplayer
         }
 
         [ClientRpc]
-        public void DrawPlayerPiecesClientRPC(ClientRpcParams clientRpcParams = default)
-        {
-            if (IsOwner && !isBot)
-            {
-                PlayManager.Instance.DrawPlayerPieces();
-            }
-        }
-
-        [ClientRpc]
         public void SetupCharacterPanelsClientRPC(ClientRpcParams clientRpcParams = default)
         {
             if (IsOwner && !isBot)
@@ -336,8 +359,35 @@ namespace AdventuresOfOldMultiplayer
             }
         }
 
+        public void EndDayForPlayers()
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.isBot)
+                        p.BotEndOfDayClientRPC(); // Call end of day for bots
+                    else
+                        p.PlayTransitionClientRPC(3); // Transition 3 is End of Day
+                }
+            }
+            else
+                EndDayForPlayersServerRPC();
+        }
+        [ServerRpc]
+        private void EndDayForPlayersServerRPC()
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+            {
+                if (p.isBot)
+                    p.BotEndOfDayClientRPC(); // Call end of day for bots
+                else
+                    p.PlayTransitionClientRPC(3); // Transition 3 is End of Day
+            }
+        }
+
         [ClientRpc]
-        public void EndOfDayClientRPC(ClientRpcParams clientRpcParams = default)
+        public void BotEndOfDayClientRPC(ClientRpcParams clientRpcParams = default)
         {
             if (IsOwner)
             {
@@ -347,8 +397,6 @@ namespace AdventuresOfOldMultiplayer
                     EndOfDayActivity.Value = 0;
                     ReadyUp();
                 }
-                else
-                    PlayTransitionClientRPC(3);
             }
         }
 
@@ -367,6 +415,15 @@ namespace AdventuresOfOldMultiplayer
             if (IsOwner && !isBot)
             {
                 InventoryManager.Instance.UpdateGear(new string[] { Weapon.Value + "", Armor.Value + "", Ring1.Value + "", Ring2.Value + "", Inventory1.Value + "", Inventory2.Value + "", Inventory3.Value + "", Inventory4.Value + "", Inventory5.Value + "", });
+            }
+        }
+
+        [ClientRpc]
+        public void CloseLoadingScreenClientRPC(ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                PlayManager.Instance.CloseLoadingScreen();
             }
         }
         #endregion

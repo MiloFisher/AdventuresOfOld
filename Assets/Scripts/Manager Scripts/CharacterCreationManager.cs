@@ -35,7 +35,7 @@ public class CharacterCreationManager : MonoBehaviour
         localPlayer.SetValue("Speed", 20);
         localPlayer.SetValue("Constitution", 15);
         localPlayer.SetValue("Energy", 15);
-        localPlayer.SetValue("Health", localPlayer.Constitution.Value * 2);
+        localPlayer.SetValue("Health", 30);
         localPlayer.SetValue("Image", "portrait_human");
         localPlayer.SetValue("Weapon", "empty");
         localPlayer.SetValue("Armor", "empty");
@@ -68,7 +68,7 @@ public class CharacterCreationManager : MonoBehaviour
                     p.SetValue("Speed", 10);
                     p.SetValue("Constitution", 10);
                     p.SetValue("Energy", 10);
-                    p.SetValue("Health", p.Constitution.Value);
+                    p.SetValue("Health", 10);
                     p.SetValue("Image", "portrait_human");
                     p.SetValue("Armor", "empty");
                     p.SetValue("Ring1", "empty");

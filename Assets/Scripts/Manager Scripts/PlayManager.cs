@@ -63,8 +63,13 @@ public class PlayManager : Singleton<PlayManager>
 
     public Sprite[] portraits;
 
+    public GameObject loadingScreen;
+
     void Start()
     {
+        // Activate loadingScreen
+        loadingScreen.SetActive(true);
+
         // Populates the player list
         GameObject[] p = GameObject.FindGameObjectsWithTag("Player");
 
@@ -133,10 +138,9 @@ public class PlayManager : Singleton<PlayManager>
         // Ready up to let server know player has loaded in
         localPlayer.ReadyUp();
 
-        // Disable Update() if client is not the host
+        // Stop here if client is not the host
         if (!NetworkManager.Singleton.IsHost)
         {
-            enabled = false;
             return;
         }
 
@@ -156,7 +160,8 @@ public class PlayManager : Singleton<PlayManager>
 
     private void Update()
     {
-
+        if(!loadingScreen.activeInHierarchy)
+            DrawPlayerPieces();
     }
 
     IEnumerator NewGameSetup()
@@ -216,12 +221,19 @@ public class PlayManager : Singleton<PlayManager>
                     p.SetValue("Weapon", "Simple Wand & Shield");
                     break;
             }
-            // Set visual display for gear
-            p.SetGearClientRPC();
-            p.UpdateGearClientRPC();
 
             // Set player positions to starting tile
             p.SetPosition(new Vector3Int(0, 7, -7));
+        }
+
+        // Wait to allow for armor values to update on players
+        yield return new WaitForSeconds(1);
+
+        foreach(Player p in playerList)
+        {
+            // Set visual display for gear
+            p.SetGearClientRPC();
+            p.UpdateGearClientRPC();
         }
 
         // 3) Deal Quest Cards (host only)
@@ -258,6 +270,8 @@ public class PlayManager : Singleton<PlayManager>
             playerList[i].SetValue("Color", colorList[i]);
         }
 
+        yield return new WaitForSeconds(1);
+
         // Begin Game with Start of Day (host only)
         StartOfDay();
     }
@@ -278,6 +292,7 @@ public class PlayManager : Singleton<PlayManager>
         }
     }
 
+    // (Host Only)
     public void StartOfDay()
     {
         // Calculate turn order player list
@@ -295,11 +310,13 @@ public class PlayManager : Singleton<PlayManager>
 
         foreach (Player p in playerList)
         {
+            // Close loading screen for all players
+            p.CloseLoadingScreenClientRPC();
             // Reset ready up on players
             p.Unready();
             // Setup and draw player pieces
             p.SetupPlayerPiecesClientRPC();
-            p.DrawPlayerPiecesClientRPC();
+            //p.DrawPlayerPiecesClientRPC();
             // Set turn order player list and turn marker
             p.SetTurnOrderPlayerListClientRPC(arr);
             p.SetTurnMarkerClientRPC(turnMarker);
@@ -324,6 +341,8 @@ public class PlayManager : Singleton<PlayManager>
     {
         // Set the variable to mark it is this player's turn
         isYourTurn = true;
+        if(!transitions.transform.GetChild(0).gameObject.activeInHierarchy)
+            CallTransition(1);
     }
 
     public void StartBotTurn()
@@ -338,39 +357,26 @@ public class PlayManager : Singleton<PlayManager>
 
         // Increment turn marker for all players
         turnMarker++;
-        foreach (Player p in playerList)
-            p.SetTurnMarkerClientRPC(turnMarker);
+        localPlayer.UpdateTurnMarker(turnMarker);
 
         // Start next players turn or transition to end of day if turn marker is out of bounds
-        if(turnMarker < turnOrderPlayerList.Count)
-            turnOrderPlayerList[turnMarker].StartTurnClientRPC();
+        if (turnMarker < turnOrderPlayerList.Count)
+            localPlayer.StartNextPlayerTurn(turnMarker);
         else
-        {
-            foreach (Player p in playerList)
-            {
-                if(p.isBot)
-                    p.EndOfDayClientRPC(); // Call end of day for bots
-                else
-                    p.PlayTransitionClientRPC(3); // Transition 3 is End of Day
-            }
-        }
+            localPlayer.EndDayForPlayers();
     }
 
     public void EndBotTurn()
     {
         // Increment turn marker for all players
         turnMarker++;
-        foreach (Player p in playerList)
-            p.SetTurnMarkerClientRPC(turnMarker);
+        localPlayer.UpdateTurnMarker(turnMarker);
 
         // Start next players turn or transition to end of day if turn marker is out of bounds
         if (turnMarker < turnOrderPlayerList.Count)
-            turnOrderPlayerList[turnMarker].StartTurnClientRPC();
+            localPlayer.StartNextPlayerTurn(turnMarker);
         else
-        {
-            foreach (Player p in playerList)
-                p.EndOfDayClientRPC();
-        }
+            localPlayer.EndDayForPlayers();
     }
 
     public void MovePhase()
@@ -435,6 +441,11 @@ public class PlayManager : Singleton<PlayManager>
             EndTurn();
     }
 
+    public void CloseLoadingScreen()
+    {
+        loadingScreen.SetActive(false);
+    }
+
     public void MoveToTile(Vector3Int pos)
     {
         // Deactivate the selected tiles and move the player to the target position
@@ -443,8 +454,7 @@ public class PlayManager : Singleton<PlayManager>
         localPlayer.SetPosition(pos);
 
         // Update player pieces for all players
-        foreach(Player p in playerList)
-            p.DrawPlayerPiecesClientRPC();
+        //localPlayer.UpdatePlayerPieces();
 
         // Call Encounter Phase transition
         CallTransition(2);
