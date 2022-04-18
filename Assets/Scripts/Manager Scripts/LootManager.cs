@@ -19,8 +19,13 @@ public class LootManager : Singleton<LootManager>
     public float bannerEndScale;
     public float bannerGrowingLength = 0.004f;
     public float bannerOpeningLength = 0.004f;
-
+    public List<string> cardsToDraw = new List<string>();
     private List<GameObject> displayCards = new List<GameObject>();
+
+    public void AddLootCardToDraw(string cardName)
+    {
+        cardsToDraw.Add(cardName);
+    }
 
     public void DrawCard(int amount)
     {
@@ -98,6 +103,7 @@ public class LootManager : Singleton<LootManager>
     IEnumerator AnimateCardDraw(int current, int amount)
     {
         GameObject travelCard = Instantiate(cardPrefab, transform.parent);
+        travelCard.GetComponent<UILootCard>().SetVisuals(cardsToDraw[current]);
         travelCard.GetComponent<UILootCard>().ActivateCardButton(false);
         travelCard.GetComponent<UILootCard>().ActivateCardBack(true);
 
@@ -123,12 +129,15 @@ public class LootManager : Singleton<LootManager>
         }
 
         GameObject card = Instantiate(cardPrefab, travelCard.transform.position, Quaternion.identity, transform.parent);
+        card.GetComponent<UILootCard>().SetVisuals(cardsToDraw[current]);
         card.GetComponent<UILootCard>().ActivateCardButton(false);
         card.GetComponent<UILootCard>().ActivateCollectCardButton(true);
         displayCards.Add(card);
         Destroy(travelCard);
 
         if (current < amount - 1)
-            StartCoroutine(AnimateCardDraw(current + 1, amount));            
+            StartCoroutine(AnimateCardDraw(current + 1, amount));
+        else
+            cardsToDraw.Clear();
     }
 }

@@ -605,9 +605,17 @@ public class PlayManager : Singleton<PlayManager>
         characterDisplayMinimizeButton.SetActive(false);
     }
 
+    public string DrawFromLootDeck()
+    {
+        string cardName = lootDeck[0].cardName;
+        lootDeck.RemoveAt(0);
+        return cardName;
+    }
+
     public void GetEncounter()
     {
         // Fill later
+        localPlayer.DrawLootCards(2, localPlayer.UUID.Value);
         EndTurn();
     }
 

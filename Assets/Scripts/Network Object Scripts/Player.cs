@@ -290,7 +290,7 @@ namespace AdventuresOfOldMultiplayer
                 UpdateTurnMarkerServerRPC(marker);
         }
         [ServerRpc]
-        private void UpdateTurnMarkerServerRPC(int marker)
+        private void UpdateTurnMarkerServerRPC(int marker, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
                 p.SetTurnMarkerClientRPC(marker);
@@ -315,7 +315,7 @@ namespace AdventuresOfOldMultiplayer
                 StartNextPlayerTurnServerRPC(turnMarker);
         }
         [ServerRpc]
-        private void StartNextPlayerTurnServerRPC(int turnMarker)
+        private void StartNextPlayerTurnServerRPC(int turnMarker, ServerRpcParams rpcParams = default)
         {
             PlayManager.Instance.turnOrderPlayerList[turnMarker].StartTurnClientRPC();
         }
@@ -375,7 +375,7 @@ namespace AdventuresOfOldMultiplayer
                 EndDayForPlayersServerRPC();
         }
         [ServerRpc]
-        private void EndDayForPlayersServerRPC()
+        private void EndDayForPlayersServerRPC(ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
             {
@@ -408,6 +408,54 @@ namespace AdventuresOfOldMultiplayer
                 PlayManager.Instance.CloseLoadingScreen();
             }
         }
+
+        public void DrawLootCards(int amount, FixedString64Bytes uuid)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach(Player p in PlayManager.Instance.playerList)
+                {
+                    if(p.UUID.Value == uuid)
+                    {
+                        for (int i = 0; i < amount; i++)
+                            p.AddLootCardsToDrawClientRPC(PlayManager.Instance.DrawFromLootDeck());
+                        p.DrawLootCardsClientRPC(amount);
+                    }
+                }
+            }
+            else
+                DrawLootCardsServerRPC(amount, uuid);
+        }
+        [ServerRpc]
+        private void DrawLootCardsServerRPC(int amount, FixedString64Bytes uuid, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+            {
+                if (p.UUID.Value == uuid)
+                {
+                    for (int i = 0; i < amount; i++)
+                        p.AddLootCardsToDrawClientRPC(PlayManager.Instance.DrawFromLootDeck());
+                    p.DrawLootCardsClientRPC(amount);
+                }
+            }
+        }
+        [ClientRpc]
+        private void AddLootCardsToDrawClientRPC(FixedString64Bytes cardName, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                LootManager.Instance.AddLootCardToDraw(cardName+"");
+            }
+        }
+        [ClientRpc]
+        private void DrawLootCardsClientRPC(int amount, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                LootManager.Instance.DrawCard(amount);
+            }
+        }
+
         #endregion
     }
 }
