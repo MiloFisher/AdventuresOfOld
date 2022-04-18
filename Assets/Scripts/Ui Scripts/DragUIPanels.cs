@@ -6,10 +6,11 @@ using UnityEngine.EventSystems;
 public class DragUIPanels : EventTrigger
 {
     private bool dragMe;
+
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
