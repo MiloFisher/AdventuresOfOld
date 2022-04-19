@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using AdventuresOfOldMultiplayer;
 
 public class EncounterManager : Singleton<EncounterManager>
 {
@@ -25,6 +26,7 @@ public class EncounterManager : Singleton<EncounterManager>
     public List<string> cardsToDraw = new List<string>();
     private List<GameObject> displayCards = new List<GameObject>();
     private bool endTurnAfter;
+    private bool isYourTurn;
 
     public void CompleteEncounter(bool _endTurnAfter)
     {
@@ -37,12 +39,13 @@ public class EncounterManager : Singleton<EncounterManager>
         cardsToDraw.Add(cardName);
     }
 
-    public void DrawCard(int amount, bool animateOpening)
+    public void DrawCard(int amount, bool animateOpening, bool _isYourTurn, string uuid)
     {
         if (amount > 0)
         {
+            isYourTurn = _isYourTurn;
             if(animateOpening)
-                StartCoroutine(AnimateOpening(amount));
+                StartCoroutine(AnimateOpening(amount, uuid));
             else
                 StartCoroutine(AnimateCardDraw(0, amount));
         }
@@ -54,12 +57,23 @@ public class EncounterManager : Singleton<EncounterManager>
             g.GetComponent<UIEncounterCard>().SetButtonActive(false);
     }
 
-    IEnumerator AnimateOpening(int amount)
+    IEnumerator AnimateOpening(int amount, string uuid)
     {
         // First setup banner
         encounterBanner.SetActive(true);
         encounterBanner.GetComponent<RectTransform>().sizeDelta = new Vector2(bannerStartWidth, bannerConstHeight);
         encounterBanner.transform.localScale = new Vector3(bannerStartScale, bannerStartScale, 1);
+
+        if (isYourTurn)
+            encounterBanner.GetComponentInChildren<TMP_Text>().text = "Your Encounter";
+        else
+        {
+            foreach(Player p in PlayManager.Instance.playerList)
+            {
+                if(p.UUID.Value == uuid)
+                    encounterBanner.GetComponentInChildren<TMP_Text>().text = p.Name.Value + "\'s Encounter";
+            }
+        }
 
         // Then grow the object
         float dif = bannerEndScale - bannerStartScale;
@@ -137,7 +151,7 @@ public class EncounterManager : Singleton<EncounterManager>
         GameObject card = Instantiate(cardPrefab, travelCard.transform.position, Quaternion.identity, transform.parent);
         card.GetComponent<UIEncounterCard>().SetVisuals(cardsToDraw[current]);
         card.GetComponent<UIEncounterCard>().ActivateCardButton(false);
-        card.GetComponent<UIEncounterCard>().ActivateOptionCardButton(true);
+        card.GetComponent<UIEncounterCard>().ActivateOptionCardButton(isYourTurn);
         card.transform.localScale = travelCard.transform.localScale;
         displayCards.Add(card);
         Destroy(travelCard);
@@ -164,12 +178,12 @@ public class EncounterManager : Singleton<EncounterManager>
         StartCoroutine(AnimateClosing());
     }
 
-    public void ForkInTheRoadHelper()
+    public void ForkInTheRoadHelper(bool drawMoreCards)
     {
-        StartCoroutine(AnimateForkInTheRoad());
+        StartCoroutine(AnimateForkInTheRoad(drawMoreCards));
     }
 
-    IEnumerator AnimateForkInTheRoad()
+    IEnumerator AnimateForkInTheRoad(bool drawMoreCards)
     {
         for (int i = 99; i >= 0; i--)
         {
@@ -182,7 +196,8 @@ public class EncounterManager : Singleton<EncounterManager>
             Destroy(displayCards[i]);
         displayCards.Clear();
 
-        PlayManager.Instance.localPlayer.DrawEncounterCards(2, PlayManager.Instance.localPlayer.UUID.Value, false);
+        if(drawMoreCards)
+            PlayManager.Instance.localPlayer.DrawEncounterCards(2, PlayManager.Instance.localPlayer.UUID.Value, false);
     }
 
     private void SetAlpha(GameObject card, float a)

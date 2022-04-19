@@ -60,7 +60,7 @@ public class UIEncounterCard : MonoBehaviour
 
         ActivateOptionCardButton(false);
 
-        EncounterManager.Instance.CompleteEncounter(true);
+        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
     }
 
     public void ChooseOption(int id)

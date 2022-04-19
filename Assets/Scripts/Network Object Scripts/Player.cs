@@ -1,5 +1,6 @@
 using UnityEngine.SceneManagement;
 using Unity.Collections;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -460,14 +461,14 @@ namespace AdventuresOfOldMultiplayer
         {
             if (NetworkManager.Singleton.IsServer)
             {
+                List<string> cards = new List<string>();
+                for(int i = 0; i < amount; i++)
+                    cards.Add(PlayManager.Instance.DrawFromEncounterDeck());
                 foreach (Player p in PlayManager.Instance.playerList)
                 {
-                    if (p.UUID.Value == uuid)
-                    {
-                        for (int i = 0; i < amount; i++)
-                            p.AddEncounterCardsToDrawClientRPC(PlayManager.Instance.DrawFromEncounterDeck());
-                        p.DrawEncounterCardsClientRPC(amount, animateOpening);
-                    }
+                    for (int i = 0; i < amount; i++)
+                        p.AddEncounterCardsToDrawClientRPC(cards[i]);
+                    p.DrawEncounterCardsClientRPC(amount, animateOpening, p.UUID.Value == uuid, uuid);
                 }
             }
             else
@@ -476,14 +477,14 @@ namespace AdventuresOfOldMultiplayer
         [ServerRpc]
         private void DrawEncounterCardsServerRPC(int amount, FixedString64Bytes uuid, bool animateOpening, ServerRpcParams rpcParams = default)
         {
+            List<string> cards = new List<string>();
+            for (int i = 0; i < amount; i++)
+                cards.Add(PlayManager.Instance.DrawFromEncounterDeck());
             foreach (Player p in PlayManager.Instance.playerList)
             {
-                if (p.UUID.Value == uuid)
-                {
-                    for (int i = 0; i < amount; i++)
-                        p.AddEncounterCardsToDrawClientRPC(PlayManager.Instance.DrawFromEncounterDeck());
-                    p.DrawEncounterCardsClientRPC(amount, animateOpening);
-                }
+                for (int i = 0; i < amount; i++)
+                    p.AddEncounterCardsToDrawClientRPC(cards[i]);
+                p.DrawEncounterCardsClientRPC(amount, animateOpening, p.UUID.Value == uuid, uuid);
             }
         }
         [ClientRpc]
@@ -495,11 +496,81 @@ namespace AdventuresOfOldMultiplayer
             }
         }
         [ClientRpc]
-        private void DrawEncounterCardsClientRPC(int amount, bool animateOpening, ClientRpcParams clientRpcParams = default)
+        private void DrawEncounterCardsClientRPC(int amount, bool animateOpening, bool isYourTurn, FixedString64Bytes uuid, ClientRpcParams clientRpcParams = default)
         {
             if (IsOwner && !isBot)
             {
-                EncounterManager.Instance.DrawCard(amount, animateOpening);
+                EncounterManager.Instance.DrawCard(amount, animateOpening, isYourTurn, uuid + "");
+            }
+        }
+
+        public void CompleteEncounter(bool endTurnAfter, FixedString64Bytes uuid)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value == uuid)
+                        p.CompleteEncounterClientRPC(endTurnAfter);
+                    else
+                        p.CompleteEncounterClientRPC(false);
+                }
+            }
+            else
+                CompleteEncounterServerRPC(endTurnAfter, uuid);
+        }
+        [ServerRpc]
+        private void CompleteEncounterServerRPC(bool endTurnAfter, FixedString64Bytes uuid, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+            {
+                if (p.UUID.Value == uuid)
+                    p.CompleteEncounterClientRPC(endTurnAfter);
+                else
+                    p.CompleteEncounterClientRPC(false);
+            }
+        }
+        [ClientRpc]
+        private void CompleteEncounterClientRPC(bool endTurnAfter, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                EncounterManager.Instance.CompleteEncounter(endTurnAfter);
+            }
+        }
+
+        public void ForkInTheRoadHelper(FixedString64Bytes uuid)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value == uuid)
+                        p.ForkInTheRoadHelperClientRPC(true);
+                    else
+                        p.ForkInTheRoadHelperClientRPC(false);
+                }
+            }
+            else
+                ForkInTheRoadHelperServerRPC(uuid);
+        }
+        [ServerRpc]
+        private void ForkInTheRoadHelperServerRPC(FixedString64Bytes uuid, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+            {
+                if (p.UUID.Value == uuid)
+                    p.ForkInTheRoadHelperClientRPC(true);
+                else
+                    p.ForkInTheRoadHelperClientRPC(false);
+            }
+        }
+        [ClientRpc]
+        private void ForkInTheRoadHelperClientRPC(bool drawMoreCards, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                EncounterManager.Instance.ForkInTheRoadHelper(drawMoreCards);
             }
         }
         #endregion
