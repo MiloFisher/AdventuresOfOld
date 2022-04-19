@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class EncounterManager : Singleton<EncounterManager>
 {
@@ -11,6 +13,7 @@ public class EncounterManager : Singleton<EncounterManager>
     public float endY = 0;
     public float gap = 150;
     public float travelLength = 0.004f;
+    public float fadeLength = 0.004f;
     public GameObject encounterBanner;
     public float bannerStartWidth;
     public float bannerEndWidth;
@@ -21,6 +24,11 @@ public class EncounterManager : Singleton<EncounterManager>
     public float bannerOpeningLength = 0.004f;
     public List<string> cardsToDraw = new List<string>();
     private List<GameObject> displayCards = new List<GameObject>();
+
+    public void CompleteEncounter()
+    {
+        StartCoroutine(AnimateCardFade());
+    }
 
     public void AddEncounterCardToDraw(string cardName)
     {
@@ -82,6 +90,8 @@ public class EncounterManager : Singleton<EncounterManager>
 
         // Finally deactivate banner
         encounterBanner.SetActive(false);
+
+        PlayManager.Instance.EndTurn();
     }
 
     IEnumerator AnimateCardDraw(int current, int amount)
@@ -115,7 +125,7 @@ public class EncounterManager : Singleton<EncounterManager>
         GameObject card = Instantiate(cardPrefab, travelCard.transform.position, Quaternion.identity, transform.parent);
         card.GetComponent<UIEncounterCard>().SetVisuals(cardsToDraw[current]);
         card.GetComponent<UIEncounterCard>().ActivateCardButton(false);
-        card.GetComponent<UIEncounterCard>().ActivateCollectCardButton(true);
+        card.GetComponent<UIEncounterCard>().ActivateOptionCardButton(true);
         card.transform.localScale = travelCard.transform.localScale;
         displayCards.Add(card);
         Destroy(travelCard);
@@ -124,5 +134,32 @@ public class EncounterManager : Singleton<EncounterManager>
             StartCoroutine(AnimateCardDraw(current + 1, amount));
         else
             cardsToDraw.Clear();
+    }
+
+    IEnumerator AnimateCardFade()
+    {
+        for(int i = 99; i >= 0; i--)
+        {
+            foreach (GameObject g in displayCards)
+                SetAlpha(g, i * 0.01f);
+            yield return new WaitForSeconds(fadeLength);
+        }
+
+        for (int i = 0; i < displayCards.Count; i++)
+            Destroy(displayCards[i]);
+        displayCards.Clear();
+
+        StartCoroutine(AnimateClosing());
+    }
+
+    private void SetAlpha(GameObject card, float a)
+    {
+        // Set transparency of all card features here
+        Image[] images = card.GetComponentsInChildren<Image>();
+        TMP_Text[] texts = card.GetComponentsInChildren<TMP_Text>();
+        foreach(Image img in images)
+            img.color = new Color(img.color.r, img.color.g, img.color.b, a);
+        foreach(TMP_Text txt in texts)
+            txt.color = new Color(txt.color.r, txt.color.g, txt.color.b, a);
     }
 }

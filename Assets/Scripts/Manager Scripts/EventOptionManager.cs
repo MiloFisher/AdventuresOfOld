@@ -5,6 +5,7 @@ public class EventOptionManager : Singleton<EventOptionManager>
     public void CallOption(string objectName, int id)
     {
         Invoke(objectName + "_Option_" + id, 0);
+        EncounterManager.Instance.CompleteEncounter();
     }
 
     #region Fork in the Road

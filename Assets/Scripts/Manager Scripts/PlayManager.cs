@@ -637,7 +637,7 @@ public class PlayManager : Singleton<PlayManager>
         ResetEncounterFails();
         // Fill later
         localPlayer.DrawEncounterCards(1, localPlayer.UUID.Value);
-        EndTurn();
+        // EndTurn();
     }
 
     public void DefaultTile()
