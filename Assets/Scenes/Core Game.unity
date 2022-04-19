@@ -6074,6 +6074,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 0362483b1e5c54618a5ac53388f8ca35, type: 3}
   - {fileID: 21300000, guid: fc3e0ccfa079a47a48ccd83d885a5516, type: 3}
   loadingScreen: {fileID: 1366110076}
+  testingCard: {fileID: 11400000, guid: ca739ad1a283447e1b608abdfb350a99, type: 2}
 --- !u!1 &339524316
 GameObject:
   m_ObjectHideFlags: 0
@@ -17606,6 +17607,7 @@ MonoBehaviour:
   endY: 0
   gap: 300
   travelLength: 0.004
+  fadeLength: 0.004
   encounterBanner: {fileID: 339524316}
   bannerStartWidth: 120
   bannerEndWidth: 700

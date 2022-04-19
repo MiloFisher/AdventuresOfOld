@@ -24,9 +24,11 @@ public class EncounterManager : Singleton<EncounterManager>
     public float bannerOpeningLength = 0.004f;
     public List<string> cardsToDraw = new List<string>();
     private List<GameObject> displayCards = new List<GameObject>();
+    private bool endTurnAfter;
 
-    public void CompleteEncounter()
+    public void CompleteEncounter(bool _endTurnAfter)
     {
+        endTurnAfter = _endTurnAfter;
         StartCoroutine(AnimateCardFade());
     }
 
@@ -35,12 +37,21 @@ public class EncounterManager : Singleton<EncounterManager>
         cardsToDraw.Add(cardName);
     }
 
-    public void DrawCard(int amount)
+    public void DrawCard(int amount, bool animateOpening)
     {
         if (amount > 0)
         {
-            StartCoroutine(AnimateOpening(amount));
+            if(animateOpening)
+                StartCoroutine(AnimateOpening(amount));
+            else
+                StartCoroutine(AnimateCardDraw(0, amount));
         }
+    }
+
+    public void DisableCardButtons()
+    {
+        foreach (GameObject g in displayCards)
+            g.GetComponent<UIEncounterCard>().SetButtonActive(false);
     }
 
     IEnumerator AnimateOpening(int amount)
@@ -91,7 +102,8 @@ public class EncounterManager : Singleton<EncounterManager>
         // Finally deactivate banner
         encounterBanner.SetActive(false);
 
-        PlayManager.Instance.EndTurn();
+        if(endTurnAfter)
+            PlayManager.Instance.EndTurn();
     }
 
     IEnumerator AnimateCardDraw(int current, int amount)
@@ -150,6 +162,27 @@ public class EncounterManager : Singleton<EncounterManager>
         displayCards.Clear();
 
         StartCoroutine(AnimateClosing());
+    }
+
+    public void ForkInTheRoadHelper()
+    {
+        StartCoroutine(AnimateForkInTheRoad());
+    }
+
+    IEnumerator AnimateForkInTheRoad()
+    {
+        for (int i = 99; i >= 0; i--)
+        {
+            foreach (GameObject g in displayCards)
+                SetAlpha(g, i * 0.01f);
+            yield return new WaitForSeconds(fadeLength);
+        }
+
+        for (int i = 0; i < displayCards.Count; i++)
+            Destroy(displayCards[i]);
+        displayCards.Clear();
+
+        PlayManager.Instance.localPlayer.DrawEncounterCards(2, PlayManager.Instance.localPlayer.UUID.Value, false);
     }
 
     private void SetAlpha(GameObject card, float a)

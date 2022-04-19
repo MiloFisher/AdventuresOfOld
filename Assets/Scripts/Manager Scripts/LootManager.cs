@@ -21,16 +21,18 @@ public class LootManager : Singleton<LootManager>
     public float bannerOpeningLength = 0.004f;
     public List<string> cardsToDraw = new List<string>();
     private List<GameObject> displayCards = new List<GameObject>();
+    private bool endTurnAfter;
 
     public void AddLootCardToDraw(string cardName)
     {
         cardsToDraw.Add(cardName);
     }
 
-    public void DrawCard(int amount)
+    public void DrawCard(int amount, bool _endTurnAfter)
     {
         if(amount > 0 && !lootBanner.activeInHierarchy)
         {
+            endTurnAfter = _endTurnAfter;
             StartCoroutine(AnimateOpening(amount));
         }
     }
@@ -98,6 +100,9 @@ public class LootManager : Singleton<LootManager>
 
         // Finally deactivate banner
         lootBanner.SetActive(false);
+
+        if(endTurnAfter)
+            PlayManager.Instance.EndTurn();
     }
 
     IEnumerator AnimateCardDraw(int current, int amount)

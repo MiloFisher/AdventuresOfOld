@@ -19,8 +19,8 @@ MonoBehaviour:
   xp: 3
   optionNames:
   - '<Animalkin> Soothe & Release the Cub:'
-  - Free the Cub
-  - Kill the Cub
+  - 'Free the Cub:'
+  - 'Kill the Cub:'
   optionDescriptions:
   - +1 Loot Card, +2 XP
   - Make a DEX Roll (9).  On a success, -1 Chaos

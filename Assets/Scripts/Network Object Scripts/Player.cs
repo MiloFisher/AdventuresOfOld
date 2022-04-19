@@ -409,7 +409,7 @@ namespace AdventuresOfOldMultiplayer
             }
         }
 
-        public void DrawLootCards(int amount, FixedString64Bytes uuid)
+        public void DrawLootCards(int amount, FixedString64Bytes uuid, bool endTurnAfter)
         {
             if (NetworkManager.Singleton.IsServer)
             {
@@ -419,15 +419,15 @@ namespace AdventuresOfOldMultiplayer
                     {
                         for (int i = 0; i < amount; i++)
                             p.AddLootCardsToDrawClientRPC(PlayManager.Instance.DrawFromLootDeck());
-                        p.DrawLootCardsClientRPC(amount);
+                        p.DrawLootCardsClientRPC(amount, endTurnAfter);
                     }
                 }
             }
             else
-                DrawLootCardsServerRPC(amount, uuid);
+                DrawLootCardsServerRPC(amount, uuid, endTurnAfter);
         }
         [ServerRpc]
-        private void DrawLootCardsServerRPC(int amount, FixedString64Bytes uuid, ServerRpcParams rpcParams = default)
+        private void DrawLootCardsServerRPC(int amount, FixedString64Bytes uuid, bool endTurnAfter, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
             {
@@ -435,7 +435,7 @@ namespace AdventuresOfOldMultiplayer
                 {
                     for (int i = 0; i < amount; i++)
                         p.AddLootCardsToDrawClientRPC(PlayManager.Instance.DrawFromLootDeck());
-                    p.DrawLootCardsClientRPC(amount);
+                    p.DrawLootCardsClientRPC(amount, endTurnAfter);
                 }
             }
         }
@@ -448,15 +448,15 @@ namespace AdventuresOfOldMultiplayer
             }
         }
         [ClientRpc]
-        private void DrawLootCardsClientRPC(int amount, ClientRpcParams clientRpcParams = default)
+        private void DrawLootCardsClientRPC(int amount, bool endTurnAfter, ClientRpcParams clientRpcParams = default)
         {
             if (IsOwner && !isBot)
             {
-                LootManager.Instance.DrawCard(amount);
+                LootManager.Instance.DrawCard(amount, endTurnAfter);
             }
         }
 
-        public void DrawEncounterCards(int amount, FixedString64Bytes uuid)
+        public void DrawEncounterCards(int amount, FixedString64Bytes uuid, bool animateOpening)
         {
             if (NetworkManager.Singleton.IsServer)
             {
@@ -466,15 +466,15 @@ namespace AdventuresOfOldMultiplayer
                     {
                         for (int i = 0; i < amount; i++)
                             p.AddEncounterCardsToDrawClientRPC(PlayManager.Instance.DrawFromEncounterDeck());
-                        p.DrawEncounterCardsClientRPC(amount);
+                        p.DrawEncounterCardsClientRPC(amount, animateOpening);
                     }
                 }
             }
             else
-                DrawEncounterCardsServerRPC(amount, uuid);
+                DrawEncounterCardsServerRPC(amount, uuid, animateOpening);
         }
         [ServerRpc]
-        private void DrawEncounterCardsServerRPC(int amount, FixedString64Bytes uuid, ServerRpcParams rpcParams = default)
+        private void DrawEncounterCardsServerRPC(int amount, FixedString64Bytes uuid, bool animateOpening, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
             {
@@ -482,7 +482,7 @@ namespace AdventuresOfOldMultiplayer
                 {
                     for (int i = 0; i < amount; i++)
                         p.AddEncounterCardsToDrawClientRPC(PlayManager.Instance.DrawFromEncounterDeck());
-                    p.DrawEncounterCardsClientRPC(amount);
+                    p.DrawEncounterCardsClientRPC(amount, animateOpening);
                 }
             }
         }
@@ -495,11 +495,11 @@ namespace AdventuresOfOldMultiplayer
             }
         }
         [ClientRpc]
-        private void DrawEncounterCardsClientRPC(int amount, ClientRpcParams clientRpcParams = default)
+        private void DrawEncounterCardsClientRPC(int amount, bool animateOpening, ClientRpcParams clientRpcParams = default)
         {
             if (IsOwner && !isBot)
             {
-                EncounterManager.Instance.DrawCard(amount);
+                EncounterManager.Instance.DrawCard(amount, animateOpening);
             }
         }
         #endregion

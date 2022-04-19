@@ -67,6 +67,8 @@ public class PlayManager : Singleton<PlayManager>
 
     public GameObject loadingScreen;
 
+    public EncounterCard testingCard;
+
     void Start()
     {
         // Activate loadingScreen
@@ -258,6 +260,9 @@ public class PlayManager : Singleton<PlayManager>
                 encounterDeck.Add(ec);
         }
         ShuffleDeck(encounterDeck);
+
+        // *** Testing Only ***
+        encounterDeck[0] = testingCard;
 
         // 6) Miniboss and minion decks already set up
 
@@ -636,7 +641,8 @@ public class PlayManager : Singleton<PlayManager>
     {
         ResetEncounterFails();
         // Fill later
-        localPlayer.DrawEncounterCards(1, localPlayer.UUID.Value);
+        localPlayer.DrawEncounterCards(1, localPlayer.UUID.Value, true);
+        //localPlayer.DrawTreasure(Cards(1, localPlayer.UUID.Value, false);
         // EndTurn();
     }
 

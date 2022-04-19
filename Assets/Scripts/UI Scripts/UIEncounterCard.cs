@@ -54,13 +54,13 @@ public class UIEncounterCard : MonoBehaviour
         if (!actionButtonActive)
             return;
 
-        actionButtonActive = false;
+        EncounterManager.Instance.DisableCardButtons();
 
         MonsterCard m = PlayManager.Instance.encounterReference[cardName] as MonsterCard;
 
         ActivateOptionCardButton(false);
 
-        EncounterManager.Instance.CompleteEncounter();
+        EncounterManager.Instance.CompleteEncounter(true);
     }
 
     public void ChooseOption(int id)
@@ -68,7 +68,7 @@ public class UIEncounterCard : MonoBehaviour
         if (!actionButtonActive)
             return;
 
-        actionButtonActive = false;
+        EncounterManager.Instance.DisableCardButtons();
 
         EventCard e = PlayManager.Instance.encounterReference[cardName] as EventCard;
         e.OptionEffect(id);
@@ -164,7 +164,10 @@ public class UIEncounterCard : MonoBehaviour
                 eventOptionButtons.Add(optionButton);
                 eventOptions.text += "\n\n<b>" + e.optionNames[i] + "</b>\n" + e.optionDescriptions[i];
             }
-            eventXP.text = e.xp + "";
+            if (e.xp < 0)
+                eventXP.text = "0";
+            else
+                eventXP.text = e.xp + "";
         }
     }
 
@@ -184,6 +187,11 @@ public class UIEncounterCard : MonoBehaviour
             StartCoroutine(FadeInButton());
         else
             StartCoroutine(FadeOutButton());
+    }
+
+    public void SetButtonActive(bool active)
+    {
+        actionButtonActive = active;
     }
 
     IEnumerator FadeInButton()

@@ -5,13 +5,12 @@ public class EventOptionManager : Singleton<EventOptionManager>
     public void CallOption(string objectName, int id)
     {
         Invoke(objectName + "_Option_" + id, 0);
-        EncounterManager.Instance.CompleteEncounter();
     }
 
     #region Fork in the Road
     private void ForkInTheRoad_Option_0()
     {
-        // requirement + effect here...
+        EncounterManager.Instance.ForkInTheRoadHelper();
     }
     #endregion
 
@@ -19,16 +18,19 @@ public class EventOptionManager : Singleton<EventOptionManager>
     private void TrappedWolfCub_Option_0()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
 
     private void TrappedWolfCub_Option_1()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
 
     private void TrappedWolfCub_Option_2()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
     #endregion
 
@@ -36,16 +38,19 @@ public class EventOptionManager : Singleton<EventOptionManager>
     private void TrailOfCandy_Option_0()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
 
     private void TrailOfCandy_Option_1()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
 
     private void TrailOfCandy_Option_2()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
     #endregion
 
@@ -53,11 +58,13 @@ public class EventOptionManager : Singleton<EventOptionManager>
     private void MagicalGemstone_Option_0()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
 
     private void MagicalGemstone_Option_1()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
     #endregion
 
@@ -65,16 +72,19 @@ public class EventOptionManager : Singleton<EventOptionManager>
     private void EnchantedLake_Option_0()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
 
     private void EnchantedLake_Option_1()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
 
     private void EnchantedLake_Option_2()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
     #endregion
 
@@ -82,11 +92,13 @@ public class EventOptionManager : Singleton<EventOptionManager>
     private void AbandonedStatue_Option_0()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
 
     private void AbandonedStatue_Option_1()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
     #endregion
 
@@ -94,16 +106,19 @@ public class EventOptionManager : Singleton<EventOptionManager>
     private void TravelingMerchant_Option_0()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
 
     private void TravelingMerchant_Option_1()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
 
     private void TravelingMerchant_Option_2()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
     #endregion
 
@@ -111,11 +126,13 @@ public class EventOptionManager : Singleton<EventOptionManager>
     private void PayingTheToll_Option_0()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
 
     private void PayingTheToll_Option_1()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
     #endregion
 
@@ -123,11 +140,13 @@ public class EventOptionManager : Singleton<EventOptionManager>
     private void ItsATrap_Option_0()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
 
     private void ItsATrap_Option_1()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
     #endregion
 
@@ -135,16 +154,19 @@ public class EventOptionManager : Singleton<EventOptionManager>
     private void SomethingShiny_Option_0()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
 
     private void SomethingShiny_Option_1()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
 
     private void SomethingShiny_Option_2()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
     #endregion
 
@@ -152,16 +174,19 @@ public class EventOptionManager : Singleton<EventOptionManager>
     private void SpiderNest_Option_0()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
 
     private void SpiderNest_Option_1()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
 
     private void SpiderNest_Option_2()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
     #endregion
 
@@ -169,16 +194,19 @@ public class EventOptionManager : Singleton<EventOptionManager>
     private void MysteriousMushroom_Option_0()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
 
     private void MysteriousMushroom_Option_1()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
 
     private void MysteriousMushroom_Option_2()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
     #endregion
 
@@ -186,11 +214,13 @@ public class EventOptionManager : Singleton<EventOptionManager>
     private void WellFromHell_Option_0()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
 
     private void WellFromHell_Option_1()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
     #endregion
 
@@ -198,16 +228,19 @@ public class EventOptionManager : Singleton<EventOptionManager>
     private void DyingDeer_Option_0()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
 
     private void DyingDeer_Option_1()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
 
     private void DyingDeer_Option_2()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
     #endregion
 
@@ -215,16 +248,19 @@ public class EventOptionManager : Singleton<EventOptionManager>
     private void FairySpirit_Option_0()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
 
     private void FairySpirit_Option_1()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
 
     private void FairySpirit_Option_2()
     {
         // requirement + effect here...
+        EncounterManager.Instance.CompleteEncounter(true);
     }
     #endregion
 }
