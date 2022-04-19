@@ -17,6 +17,8 @@ public class PlayManager : Singleton<PlayManager>
 
     public Dictionary<string, LootCard> itemReference = new Dictionary<string, LootCard>();
 
+    public Dictionary<string, EncounterCard> encounterReference = new Dictionary<string, EncounterCard>();
+
     [SerializeField] private List<QuestCard> questDeck;
     public List<QuestCard> quests = new List<QuestCard>();
 
@@ -105,6 +107,12 @@ public class PlayManager : Singleton<PlayManager>
         foreach (LootCard l in lootCardObjects)
         {
             itemReference.Add(l.cardName, l);
+        }
+
+        // Construct Encounter Reference dictionary
+        foreach (EncounterCard e in encounterCardObjects)
+        {
+            encounterReference.Add(e.cardName, e);
         }
 
         // Construct Miniboss and Minion dictionaries
@@ -428,7 +436,10 @@ public class PlayManager : Singleton<PlayManager>
         if (roll % 2 == 0)
             GetEncounter();
         else
+        {
+            localPlayer.SetValue("FailedEncounters", localPlayer.FailedEncounters.Value + 1);
             EndTurn();
+        }
     }
 
     public void CloseLoadingScreen()
@@ -442,9 +453,6 @@ public class PlayManager : Singleton<PlayManager>
         foreach(KeyValuePair<Vector3Int, Tile> t in gameboard)
             t.Value.Deactivate();
         localPlayer.SetPosition(pos);
-
-        // Update player pieces for all players
-        //localPlayer.UpdatePlayerPieces();
 
         // Call Encounter Phase transition
         CallTransition(2);
@@ -612,10 +620,23 @@ public class PlayManager : Singleton<PlayManager>
         return cardName;
     }
 
+    public string DrawFromEncounterDeck()
+    {
+        string cardName = encounterDeck[0].cardName;
+        encounterDeck.RemoveAt(0);
+        return cardName;
+    }
+
+    public void ResetEncounterFails()
+    {
+        localPlayer.SetValue("FailedEncounters", 0);
+    }
+
     public void GetEncounter()
     {
+        ResetEncounterFails();
         // Fill later
-        localPlayer.DrawLootCards(2, localPlayer.UUID.Value);
+        localPlayer.DrawEncounterCards(1, localPlayer.UUID.Value);
         EndTurn();
     }
 

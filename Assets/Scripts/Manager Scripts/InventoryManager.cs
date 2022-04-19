@@ -40,6 +40,8 @@ public class InventoryManager : Singleton<InventoryManager>
     private bool GearChanged()
     {
         Player p = PlayManager.Instance.localPlayer;
+        if (p == null)
+            return false;
         if (gear[0] != p.Weapon.Value)
             return true;
         if (gear[1] != p.Armor.Value)

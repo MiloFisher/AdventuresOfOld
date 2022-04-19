@@ -456,6 +456,52 @@ namespace AdventuresOfOldMultiplayer
             }
         }
 
+        public void DrawEncounterCards(int amount, FixedString64Bytes uuid)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value == uuid)
+                    {
+                        for (int i = 0; i < amount; i++)
+                            p.AddEncounterCardsToDrawClientRPC(PlayManager.Instance.DrawFromEncounterDeck());
+                        p.DrawEncounterCardsClientRPC(amount);
+                    }
+                }
+            }
+            else
+                DrawEncounterCardsServerRPC(amount, uuid);
+        }
+        [ServerRpc]
+        private void DrawEncounterCardsServerRPC(int amount, FixedString64Bytes uuid, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+            {
+                if (p.UUID.Value == uuid)
+                {
+                    for (int i = 0; i < amount; i++)
+                        p.AddEncounterCardsToDrawClientRPC(PlayManager.Instance.DrawFromEncounterDeck());
+                    p.DrawEncounterCardsClientRPC(amount);
+                }
+            }
+        }
+        [ClientRpc]
+        private void AddEncounterCardsToDrawClientRPC(FixedString64Bytes cardName, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                EncounterManager.Instance.AddEncounterCardToDraw(cardName + "");
+            }
+        }
+        [ClientRpc]
+        private void DrawEncounterCardsClientRPC(int amount, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                EncounterManager.Instance.DrawCard(amount);
+            }
+        }
         #endregion
     }
 }
