@@ -43,4 +43,22 @@ public class Stats {
     public void set_spd(int spd) {this.spd = spd;}
     public void set_con(int con) {this.con = con;}
     public void set_eng(int eng) {this.eng = eng;}
+    public bool strisgreen() {
+        return (str > 0);
+    }
+    public bool dexisgreen() {
+        return (dex > 0);
+    }
+    public bool inteisgreen() {
+        return (inte > 0);
+    }
+    public bool spdisgreen() {
+        return (spd > 0);
+    }
+    public bool conisgreen() {
+        return (con > 0);
+    }
+    public bool engisgreen() {
+        return (eng > 0);
+    }
 }
