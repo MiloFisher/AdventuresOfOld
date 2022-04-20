@@ -40,7 +40,7 @@ public class EventOptions : ScriptableObject
                 break;
             case 2:
                 p.CompleteEncounter(false, p.UUID.Value);
-                PlayManager.Instance.IncreaseChaos(1);
+                p.IncreaseChaos(1);
                 xp += 2;
                 p.DrawLootCards(1, p.UUID.Value, true);
                 p.GainXP(xp);
@@ -102,6 +102,7 @@ public class EventOptions : ScriptableObject
         }
     }
 
+    // Needs Discard Card implementation still...
     public void EnchantedLake(int option)
     {
         EventCard e = PlayManager.Instance.encounterReference["Enchanted Lake"] as EventCard;
@@ -158,25 +159,28 @@ public class EventOptions : ScriptableObject
         }
     }
 
-    #region Abandoned Statue
-    public void AbandonedStatue_Option_0()
+    public void AbandonedStatue(int option)
     {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
+        EventCard e = PlayManager.Instance.encounterReference["Abandoned Statue"] as EventCard;
+        Player p = PlayManager.Instance.localPlayer;
+        int xp = e.xp;
+        switch (option)
+        {
+            case 0:
+                p.RestoreHealth(999);
+                break;
+            case 1:
+                p.GainGold(80);
+                p.IncreaseChaos(1);
+                break;
+            case 2:
+                xp += 4;
+                p.IncreaseChaos(2); 
+                break;
+        }
+        p.CompleteEncounter(true, p.UUID.Value);
+        p.GainXP(xp);
     }
-
-    public void AbandonedStatue_Option_1()
-    {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
-    }
-
-    public void AbandonedStatue_Option_2()
-    {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
-    }
-    #endregion
 
     #region Traveling Merchant
     public void TravelingMerchant_Option_0()

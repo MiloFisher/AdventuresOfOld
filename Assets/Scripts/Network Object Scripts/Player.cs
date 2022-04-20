@@ -587,6 +587,19 @@ namespace AdventuresOfOldMultiplayer
             XP.Value += PlayManager.Instance.XPModifier() + amount;
         }
 
+        public void GainGold(int amount)
+        {
+            if (NetworkManager.Singleton.IsServer)
+                Gold.Value += amount;
+            else
+                GainGoldServerRPC(amount);
+        }
+        [ServerRpc]
+        private void GainGoldServerRPC(int amount, ServerRpcParams rpcParams = default)
+        {
+            Gold.Value += amount;
+        }
+
         public void TakeDamage(int amount)
         {
             if (NetworkManager.Singleton.IsServer)
@@ -675,6 +688,56 @@ namespace AdventuresOfOldMultiplayer
             AbilityCharges.Value -= amount;
             if (AbilityCharges.Value < 0)
                 AbilityCharges.Value = 0;
+        }
+
+        public void IncreaseChaos(int amount)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.IncreaseChaosClientRPC(amount);
+            }
+            else
+                IncreaseChaosServerRPC(amount);
+        }
+        [ServerRpc]
+        private void IncreaseChaosServerRPC(int amount, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.IncreaseChaosClientRPC(amount);
+        }
+        [ClientRpc]
+        private void IncreaseChaosClientRPC(int amount, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                PlayManager.Instance.IncreaseChaos(amount);
+            }
+        }
+
+        public void ReduceChaos(int amount)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.ReduceChaosClientRPC(amount);
+            }
+            else
+                ReduceChaosServerRPC(amount);
+        }
+        [ServerRpc]
+        private void ReduceChaosServerRPC(int amount, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.ReduceChaosClientRPC(amount);
+        }
+        [ClientRpc]
+        private void ReduceChaosClientRPC(int amount, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                PlayManager.Instance.ReduceChaos(amount);
+            }
         }
         #endregion
     }

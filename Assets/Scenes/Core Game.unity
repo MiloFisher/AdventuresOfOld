@@ -6571,7 +6571,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 0362483b1e5c54618a5ac53388f8ca35, type: 3}
   - {fileID: 21300000, guid: fc3e0ccfa079a47a48ccd83d885a5516, type: 3}
   loadingScreen: {fileID: 1366110076}
-  testingCard: {fileID: 11400000, guid: cf8eb11f45eb34102b40f5c64125a0ca, type: 2}
+  testingCard: {fileID: 11400000, guid: f7f4935bde5614201abccb8e8de72e9b, type: 2}
 --- !u!1 &339524316
 GameObject:
   m_ObjectHideFlags: 0
@@ -33726,6 +33726,7 @@ MonoBehaviour:
   movementTimeLength: 0.004
   maximized: 0
   forcedMaximize: 0
+  emptyValue: empty
 --- !u!1 &1551285669
 GameObject:
   m_ObjectHideFlags: 0
