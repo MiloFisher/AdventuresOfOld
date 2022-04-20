@@ -182,165 +182,184 @@ public class EventOptions : ScriptableObject
         p.GainXP(xp);
     }
 
-    #region Traveling Merchant
-    public void TravelingMerchant_Option_0()
+    // Left off here: vvv
+    public void TravelingMerchant(int option)
     {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
+        EventCard e = PlayManager.Instance.encounterReference["Traveling Merchant"] as EventCard;
+        Player p = PlayManager.Instance.localPlayer;
+        int xp = e.xp;
+        switch (option)
+        {
+            case 0:
+
+                break;
+            case 1:
+
+                break;
+            case 2:
+
+                break;
+        }
+        p.CompleteEncounter(true, p.UUID.Value);
+        p.GainXP(xp);
     }
 
-    public void TravelingMerchant_Option_1()
+    public void PayingTheToll(int option)
     {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
+        EventCard e = PlayManager.Instance.encounterReference["Paying the Toll"] as EventCard;
+        Player p = PlayManager.Instance.localPlayer;
+        int xp = e.xp;
+        switch (option)
+        {
+            case 0:
+
+                break;
+            case 1:
+
+                break;
+        }
+        p.CompleteEncounter(true, p.UUID.Value);
+        p.GainXP(xp);
     }
 
-    public void TravelingMerchant_Option_2()
+    public void ItsATrap(int option)
     {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
-    }
-    #endregion
+        EventCard e = PlayManager.Instance.encounterReference["It's a Trap!"] as EventCard;
+        Player p = PlayManager.Instance.localPlayer;
+        int xp = e.xp;
+        switch (option)
+        {
+            case 0:
 
-    #region Paying the Toll
-    public void PayingTheToll_Option_0()
-    {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
-    }
+                break;
+            case 1:
 
-    public void PayingTheToll_Option_1()
-    {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
-    }
-    #endregion
-
-    #region It's a Trap!
-    public void ItsATrap_Option_0()
-    {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
+                break;
+        }
+        p.CompleteEncounter(true, p.UUID.Value);
+        p.GainXP(xp);
     }
 
-    public void ItsATrap_Option_1()
+    public void SomethingShiny(int option)
     {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
-    }
-    #endregion
+        EventCard e = PlayManager.Instance.encounterReference["Something Shiny"] as EventCard;
+        Player p = PlayManager.Instance.localPlayer;
+        int xp = e.xp;
+        switch (option)
+        {
+            case 0:
 
-    #region Something Shiny
-    public void SomethingShiny_Option_0()
-    {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
-    }
+                break;
+            case 1:
 
-    public void SomethingShiny_Option_1()
-    {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
-    }
+                break;
+            case 2:
 
-    public void SomethingShiny_Option_2()
-    {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
-    }
-    #endregion
-
-    #region Spider Nest
-    public void SpiderNest_Option_0()
-    {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
+                break;
+        }
+        p.CompleteEncounter(true, p.UUID.Value);
+        p.GainXP(xp);
     }
 
-    public void SpiderNest_Option_1()
+    public void SpiderNest(int option)
     {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
+        EventCard e = PlayManager.Instance.encounterReference["Spider Nest"] as EventCard;
+        Player p = PlayManager.Instance.localPlayer;
+        int xp = e.xp;
+        switch (option)
+        {
+            case 0:
+
+                break;
+            case 1:
+
+                break;
+            case 2:
+
+                break;
+        }
+        p.CompleteEncounter(true, p.UUID.Value);
+        p.GainXP(xp);
     }
 
-    public void SpiderNest_Option_2()
+    public void MysteriousMushroom(int option)
     {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
-    }
-    #endregion
+        EventCard e = PlayManager.Instance.encounterReference["Mysterious Mushroom"] as EventCard;
+        Player p = PlayManager.Instance.localPlayer;
+        int xp = e.xp;
+        switch (option)
+        {
+            case 0:
 
-    #region Mysterious Mushroom
-    public void MysteriousMushroom_Option_0()
-    {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
-    }
+                break;
+            case 1:
 
-    public void MysteriousMushroom_Option_1()
-    {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
-    }
+                break;
+            case 2:
 
-    public void MysteriousMushroom_Option_2()
-    {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
-    }
-    #endregion
-
-    #region Well from Hell!
-    public void WellFromHell_Option_0()
-    {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
+                break;
+        }
+        p.CompleteEncounter(true, p.UUID.Value);
+        p.GainXP(xp);
     }
 
-    public void WellFromHell_Option_1()
+    public void WellFromHell(int option)
     {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
-    }
-    #endregion
+        EventCard e = PlayManager.Instance.encounterReference["Well from Hell!"] as EventCard;
+        Player p = PlayManager.Instance.localPlayer;
+        int xp = e.xp;
+        switch (option)
+        {
+            case 0:
 
-    #region Dying Deer
-    public void DyingDeer_Option_0()
-    {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
-    }
+                break;
+            case 1:
 
-    public void DyingDeer_Option_1()
-    {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
+                break;
+        }
+        p.CompleteEncounter(true, p.UUID.Value);
+        p.GainXP(xp);
     }
 
-    public void DyingDeer_Option_2()
+    public void DyingDeer(int option)
     {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
-    }
-    #endregion
+        EventCard e = PlayManager.Instance.encounterReference["Dying Deer"] as EventCard;
+        Player p = PlayManager.Instance.localPlayer;
+        int xp = e.xp;
+        switch (option)
+        {
+            case 0:
 
-    #region Fairy Spirit
-    public void FairySpirit_Option_0()
-    {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
+                break;
+            case 1:
+
+                break;
+            case 2:
+
+                break;
+        }
+        p.CompleteEncounter(true, p.UUID.Value);
+        p.GainXP(xp);
     }
 
-    public void FairySpirit_Option_1()
+    public void FairySpirit(int option)
     {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
-    }
+        EventCard e = PlayManager.Instance.encounterReference["Fairy Spirit"] as EventCard;
+        Player p = PlayManager.Instance.localPlayer;
+        int xp = e.xp;
+        switch (option)
+        {
+            case 0:
 
-    public void FairySpirit_Option_2()
-    {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
+                break;
+            case 1:
+
+                break;
+            case 2:
+
+                break;
+        }
+        p.CompleteEncounter(true, p.UUID.Value);
+        p.GainXP(xp);
     }
-    #endregion
 }
