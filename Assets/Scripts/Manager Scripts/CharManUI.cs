@@ -10,6 +10,7 @@ public class CharManUI : MonoBehaviour
 {
     public TMP_FontAsset font;
     public GameObject MenuManager;
+    public GameObject SceneHeader;
     public GameObject stat_container;
     public GameObject race_selected_text;
     public GameObject race_details_text;
@@ -41,6 +42,29 @@ public class CharManUI : MonoBehaviour
     public GameObject ability_type_text;
     public GameObject ability_level_text;
     public GameObject ability_desc_panel;
+    public GameObject trait_details_container;
+    public GameObject trait_details_text;
+    public GameObject fleet_footed_text;
+    public GameObject healthy_text;
+    public GameObject mystical_text;
+    public GameObject berserk_text;
+    public GameObject generalist_text;
+    public GameObject highborn_text;
+    public GameObject holy_text;
+    public GameObject musclehead_text;
+    public GameObject bookworm_text;
+    public GameObject delicate_text;
+    public GameObject final_str;
+    public GameObject final_dex;
+    public GameObject final_int;
+    public GameObject final_spd;
+    public GameObject final_con;
+    public GameObject final_eng;
+    public GameObject class_confirm_button;
+    public GameObject trait_confirm_button;
+    public GameObject inputname;
+    public bool gamestart = false;
+
 
     private CreatedChar createdchar = new CreatedChar();
 
@@ -113,6 +137,7 @@ public class CharManUI : MonoBehaviour
     }
 
     public void ConfirmRace() {
+        SceneHeader.GetComponent<TextMeshProUGUI>().SetText("Class Selection");
         stat_container.SetActive(true);
         class_str_text.GetComponent<TextMeshProUGUI>().SetText("STR: " + createdchar.getChosen_race().get_stats().get_str());
         class_dex_text.GetComponent<TextMeshProUGUI>().SetText("DEX: " + createdchar.getChosen_race().get_stats().get_dex());
@@ -125,9 +150,11 @@ public class CharManUI : MonoBehaviour
     public void BackToRace() {
         stat_container.SetActive(false);
         chosen_class_image.SetActive(false);
+        SceneHeader.GetComponent<TextMeshProUGUI>().SetText("Race Selection");
     }
 
     public void ConfirmClass() {
+        SceneHeader.GetComponent<TextMeshProUGUI>().SetText("View Abilities");
         Color32 black = new Color32(0, 0, 0, 255);
         //Set the color back to black so it is no longer highlighted green from preview
         class_str_text.GetComponent<TextMeshProUGUI>().color = black;
@@ -165,6 +192,44 @@ public class CharManUI : MonoBehaviour
         class_eng_text.GetComponent<TextMeshProUGUI>().SetText("ENG: " + 
             createdchar.getChosen_race().get_stats().get_eng());
         ability_desc_panel.SetActive(false);
+        class_confirm_button.SetActive(false);
+        SceneHeader.GetComponent<TextMeshProUGUI>().SetText("Class Selection");
+    }
+
+    public void ConfirmTrait() {
+        Color32 black = new Color32(0, 0, 0, 255);
+        class_str_text.GetComponent<TextMeshProUGUI>().color = black;
+        class_dex_text.GetComponent<TextMeshProUGUI>().color = black;
+        class_int_text.GetComponent<TextMeshProUGUI>().color = black;
+        class_spd_text.GetComponent<TextMeshProUGUI>().color = black;
+        class_con_text.GetComponent<TextMeshProUGUI>().color = black;
+        class_eng_text.GetComponent<TextMeshProUGUI>().color = black;
+        stat_container.SetActive(false);
+        SceneHeader.GetComponent<TextMeshProUGUI>().SetText(createdchar.getChosen_trait().getName() + " "
+        + createdchar.getChosen_race().get_name() + " " + createdchar.getChosen_class().getName());
+        final_str.GetComponent<TextMeshProUGUI>().SetText(""+createdchar.getStr());
+        final_dex.GetComponent<TextMeshProUGUI>().SetText(""+createdchar.getDex());
+        final_int.GetComponent<TextMeshProUGUI>().SetText(""+createdchar.getInte());
+        final_spd.GetComponent<TextMeshProUGUI>().SetText(""+createdchar.getSpd());
+        final_con.GetComponent<TextMeshProUGUI>().SetText(""+createdchar.getCon());
+        final_eng.GetComponent<TextMeshProUGUI>().SetText(""+createdchar.getEng());
+    }
+    public void BackToTrait() {
+        BackToClass();
+        Color32 black = new Color32(0, 0, 0, 255);
+        class_str_text.GetComponent<TextMeshProUGUI>().color = black;
+        class_dex_text.GetComponent<TextMeshProUGUI>().color = black;
+        class_int_text.GetComponent<TextMeshProUGUI>().color = black;
+        class_spd_text.GetComponent<TextMeshProUGUI>().color = black;
+        class_con_text.GetComponent<TextMeshProUGUI>().color = black;
+        class_eng_text.GetComponent<TextMeshProUGUI>().color = black;
+        trait_details_container.SetActive(false);
+        trait_confirm_button.SetActive(false);
+        SceneHeader.GetComponent<TextMeshProUGUI>().SetText("View Abilities");
+    }
+
+    public void ViewedTraits() {
+        SceneHeader.GetComponent<TextMeshProUGUI>().SetText("Trait Selection");
     }
 
     public void PreviewAbility(int abilitynum) {
@@ -178,6 +243,7 @@ public class CharManUI : MonoBehaviour
     //See changes to player stats before they confirm
     public void PreviewStat(string classname) {
         createdchar.setChosen_class(new Class(classname));
+        class_confirm_button.SetActive(true);
         
         class_str_text.GetComponent<TextMeshProUGUI>().SetText("STR: " + (createdchar.getChosen_race().get_stats().get_str() + 
         createdchar.getChosen_class().get_stats().get_str()));
@@ -232,6 +298,87 @@ public class CharManUI : MonoBehaviour
         else {
             class_eng_text.GetComponent<TextMeshProUGUI>().color = new Color32(0, 0, 0, 255);
         }
+    }
+
+    public void previewTrait(string traitname) {
+        createdchar.setChosen_trait(new Trait(traitname));
+        trait_details_container.SetActive(true);
+        trait_confirm_button.SetActive(true);
+        trait_details_text.GetComponent<TextMeshProUGUI>().SetText(createdchar.getChosen_trait().getDesc());
+        Color32 green = new Color32(175, 255, 0, 255);
+        Color32 black = new Color32(0, 0, 0, 255);
+        Color32 red = new Color32(255, 0, 0, 255);
+
+        class_str_text.GetComponent<TextMeshProUGUI>().SetText("STR:" + createdchar.getStr());
+        if(createdchar.getChosen_trait().get_stats().strisgreen()) {
+            class_str_text.GetComponent<TextMeshProUGUI>().color = green;
+        }
+        else if(createdchar.getChosen_trait().get_stats().get_str() < 0) {
+            class_str_text.GetComponent<TextMeshProUGUI>().color = red;
+        }
+        else {
+            class_str_text.GetComponent<TextMeshProUGUI>().color = black;
+        }
+
+        class_dex_text.GetComponent<TextMeshProUGUI>().SetText("DEX:" + createdchar.getDex());
+        if(createdchar.getChosen_trait().get_stats().dexisgreen()) {
+            class_dex_text.GetComponent<TextMeshProUGUI>().color = green;
+        }
+        else if(createdchar.getChosen_trait().get_stats().get_dex() < 0) {
+            class_dex_text.GetComponent<TextMeshProUGUI>().color = red;
+        }
+        else {
+            class_dex_text.GetComponent<TextMeshProUGUI>().color = black;
+        }
+
+        class_int_text.GetComponent<TextMeshProUGUI>().SetText("INT:" + createdchar.getInte());
+        if(createdchar.getChosen_trait().get_stats().inteisgreen()) {
+            class_int_text.GetComponent<TextMeshProUGUI>().color = green;
+        }
+        else if(createdchar.getChosen_trait().get_stats().get_inte() < 0) {
+            class_int_text.GetComponent<TextMeshProUGUI>().color = red;
+        }
+        else {
+            class_int_text.GetComponent<TextMeshProUGUI>().color = black;
+        }
+
+        class_spd_text.GetComponent<TextMeshProUGUI>().SetText("SPD:" + createdchar.getSpd());
+        if(createdchar.getChosen_trait().get_stats().spdisgreen()) {
+            class_spd_text.GetComponent<TextMeshProUGUI>().color = green;
+        }
+        else if(createdchar.getChosen_trait().get_stats().get_spd() < 0) {
+            class_spd_text.GetComponent<TextMeshProUGUI>().color = red;
+        }
+        else {
+            class_spd_text.GetComponent<TextMeshProUGUI>().color = black;
+        }
+
+        class_con_text.GetComponent<TextMeshProUGUI>().SetText("CON:" + createdchar.getCon());
+        if(createdchar.getChosen_trait().get_stats().conisgreen()) {
+            class_con_text.GetComponent<TextMeshProUGUI>().color = green;
+        }
+        else if(createdchar.getChosen_trait().get_stats().get_con() < 0) {
+            class_con_text.GetComponent<TextMeshProUGUI>().color = red;
+        }
+        else {
+            class_con_text.GetComponent<TextMeshProUGUI>().color = black;
+        }
+
+        class_eng_text.GetComponent<TextMeshProUGUI>().SetText("ENG:" + createdchar.getEng());
+        if(createdchar.getChosen_trait().get_stats().engisgreen()) {
+            class_eng_text.GetComponent<TextMeshProUGUI>().color = green;
+        }
+        else if(createdchar.getChosen_trait().get_stats().get_eng() < 0) {
+            class_eng_text.GetComponent<TextMeshProUGUI>().color = red;
+        }
+        else {
+            class_eng_text.GetComponent<TextMeshProUGUI>().color = black;
+        }
+    }
+
+    public void setCharName() {
+        createdchar.setName(inputname.GetComponent<TextMeshProUGUI>().text);
+        gamestart = true;
     }
 
     public CreatedChar getChar() {

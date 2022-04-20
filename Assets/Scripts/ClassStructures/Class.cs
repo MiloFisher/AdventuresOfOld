@@ -125,7 +125,7 @@ public class Class {
             class_weapon = "Simple Magic Staff";
             break;
             case "necromancer":
-            abilities.Add(new Ability("Siphone Life"));
+            abilities.Add(new Ability("Siphon Life"));
             abilities.Add(new Ability("Necrotic Blast"));
             abilities.Add(new Ability("Raise Undead"));
             abilities.Add(new Ability("Blood Sacrifice"));

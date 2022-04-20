@@ -14,6 +14,14 @@ public class Stats {
     private int con = 0;
     private int eng = 0;
 
+    public Stats() {
+        str = 0;
+        dex = 0;
+        inte = 0;
+        spd = 0;
+        con = 0;
+        eng = 0;
+    }
     public Stats(int str, int dex, int inte, int spd, int con, int eng) {
         this.str = str;
         this.dex = dex;

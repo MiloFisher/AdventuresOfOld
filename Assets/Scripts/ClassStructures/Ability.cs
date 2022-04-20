@@ -62,7 +62,7 @@ public class Ability {
         {"Siphon Life", new default_ability_content(1, "Passive", 0, "Whenever you deal damage, recover Health equal to half of the Damage dealt (rounded down).")},
         {"Necrotic Blast", new default_ability_content(1, "Attack", 1, "Make an Attack Roll.  On a success, deal your Damage + your INT Mod + your Armor.  On a failure, your Armor is reduced by half (rounded up) this turn.")},
         {"Raise Undead", new default_ability_content(2, "Utility", 2, "Summon an Undead Minion to aid you in combat.  (Usable once per combat)")},
-        {"Blood Sacriface", new default_ability_content(3, "Utility", 1, "Take true Damage equal to 2x the Chaos Tier, then gain +2 Power for your next Attack Roll.")},
+        {"Blood Sacrifice", new default_ability_content(3, "Utility", 1, "Take true Damage equal to 2x the Chaos Tier, then gain +2 Power for your next Attack Roll.")},
         {"Eternal Servitude", new default_ability_content(4, "Passive", 0, "Whenever your Undead Minion dies in combat, you may spend 1 Ability Charge to revive it with 1 Health.")},
         {"Mass Resurrection", new default_ability_content(5, "Utility", 3, "Revive all fallen allies in combat with you.")}
     };

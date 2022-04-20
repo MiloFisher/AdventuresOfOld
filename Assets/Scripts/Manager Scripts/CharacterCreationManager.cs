@@ -11,6 +11,7 @@ public class CharacterCreationManager : MonoBehaviour
     Player localPlayer;
     [SerializeField] private GameObject UIMan;
     private GameObject canvas;
+    private GameObject title;
 
     //Creating Race Class for each default race
     //order: str, dex, int, spd, con, eng
@@ -26,16 +27,8 @@ public class CharacterCreationManager : MonoBehaviour
         new Race("Dragon Amongst Men", new Stats(99,99,99,99,99,99), "Do not refuse a toast just to drink a forfeit.", "Peerless")
     };
 
-    // Start is called before the first frame update
-    void Start()
-    {   
-        //Scrollable container to spawn the buttons in
-        canvas = GameObject.Find("RaceTextContainer");
 
-        foreach(Race race in default_races) {
-            UIMan.GetComponent<CharManUI>().RaceButtonBuilder(race, canvas.transform);
-        }
-
+    void setupLocalCharacter() {
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
 
         // Gets local player
@@ -47,22 +40,28 @@ public class CharacterCreationManager : MonoBehaviour
             }
         }
 
+        CreatedChar player = UIMan.GetComponent<CharManUI>().getChar();
         // Set Variable
-        localPlayer.SetValue("Name", localPlayer.Username.Value + "");
-        localPlayer.SetValue("Race", "Human");
-        localPlayer.SetValue("Class", "Warrior");
-        localPlayer.SetValue("Trait", "Highborn");
-        localPlayer.SetValue("Gold", 10);
+        localPlayer.SetValue("Name", player.getName());
+        localPlayer.SetValue("Race", player.getChosen_race().get_name());
+        localPlayer.SetValue("Class", player.getChosen_class().getName());
+        localPlayer.SetValue("Trait", player.getChosen_trait().getName());
+        if (player.getChosen_trait().getName() == "Highborn") {
+            localPlayer.SetValue("Gold", 100);
+        }
+        else {
+            localPlayer.SetValue("Gold", 10);
+        }
         localPlayer.SetValue("Level", 1);
         localPlayer.SetValue("XP", 0);
-        localPlayer.SetValue("Strength", 15);
-        localPlayer.SetValue("Dexterity", 15);
-        localPlayer.SetValue("Intelligence", 15);
-        localPlayer.SetValue("Speed", 20);
-        localPlayer.SetValue("Constitution", 15);
-        localPlayer.SetValue("Energy", 15);
+        localPlayer.SetValue("Strength", player.getStr());
+        localPlayer.SetValue("Dexterity", player.getDex());
+        localPlayer.SetValue("Intelligence", player.getInte());
+        localPlayer.SetValue("Speed", player.getSpd());
+        localPlayer.SetValue("Constitution", player.getCon());
+        localPlayer.SetValue("Energy", player.getEng());
         localPlayer.SetValue("Health", localPlayer.Constitution.Value * 2);
-        localPlayer.SetValue("Image", "portrait_human");
+        localPlayer.SetValue("Image", player.getImage());
 
         // If host, generate random characters for bots
         if (NetworkManager.Singleton.IsHost)
@@ -94,8 +93,31 @@ public class CharacterCreationManager : MonoBehaviour
         // Leave scene
         if (NetworkManager.Singleton.IsServer)
         {   
-            Debug.Log("Stay here for now");
-            //localPlayer.ChangeScene("Core Game");
+            localPlayer.ChangeScene("Core Game");
+        }
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {   
+        //Setting up beginning screen
+        title = GameObject.Find("Title_TXT");
+        title.GetComponent<TextMeshProUGUI>().SetText("Race Selection");
+        UIMan.GetComponent<CharManUI>().gamestart = false;
+
+
+        //Scrollable container to spawn the buttons in
+        canvas = GameObject.Find("RaceTextContainer");
+
+        foreach(Race race in default_races) {
+            UIMan.GetComponent<CharManUI>().RaceButtonBuilder(race, canvas.transform);
+        }
+
+    }
+
+    void Update() {
+        if (UIMan.GetComponent<CharManUI>().gamestart) {
+            setupLocalCharacter();
         }
     }
 }

@@ -8,6 +8,7 @@ using TMPro;
 
 //Class to store all information needed to be set
 public class CreatedChar {
+
     private string image;
     private Race chosen_race;
     private Class chosen_class;
@@ -28,6 +29,17 @@ public class CreatedChar {
     private string ring1;
     private string ring2;
 
+    private string name;
+
+    public string getName()
+    {
+        return this.name;
+    }
+
+    public void setName(string name)
+    {
+        this.name = name;
+    }
     public string getImage()
     {
         return this.image;
@@ -100,7 +112,9 @@ public class CreatedChar {
 
     public int getStr()
     {
-        return this.str;
+        return chosen_race.get_stats().get_str()
+                + chosen_class.get_stats().get_str()
+                + chosen_trait.get_stats().get_str();
     }
 
     public void setStr(int str)
@@ -110,7 +124,9 @@ public class CreatedChar {
 
     public int getDex()
     {
-        return this.dex;
+        return chosen_race.get_stats().get_dex()
+                + chosen_class.get_stats().get_dex()
+                + chosen_trait.get_stats().get_dex();
     }
 
     public void setDex(int dex)
@@ -120,7 +136,9 @@ public class CreatedChar {
 
     public int getInte()
     {
-        return this.inte;
+        return chosen_race.get_stats().get_inte()
+                + chosen_class.get_stats().get_inte()
+                + chosen_trait.get_stats().get_inte();
     }
 
     public void setInte(int inte)
@@ -130,7 +148,9 @@ public class CreatedChar {
 
     public int getSpd()
     {
-        return this.spd;
+        return chosen_race.get_stats().get_spd()
+                + chosen_class.get_stats().get_spd()
+                + chosen_trait.get_stats().get_spd();
     }
 
     public void setSpd(int spd)
@@ -140,7 +160,9 @@ public class CreatedChar {
 
     public int getCon()
     {
-        return this.con;
+        return chosen_race.get_stats().get_con()
+                + chosen_class.get_stats().get_con()
+                + chosen_trait.get_stats().get_con();
     }
 
     public void setCon(int con)
@@ -150,7 +172,9 @@ public class CreatedChar {
 
     public int getEng()
     {
-        return this.eng;
+        return chosen_race.get_stats().get_eng()
+                + chosen_class.get_stats().get_eng()
+                + chosen_trait.get_stats().get_eng();
     }
 
     public void setEng(int eng)
