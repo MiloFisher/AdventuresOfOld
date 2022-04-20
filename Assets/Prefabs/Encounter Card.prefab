@@ -2735,6 +2735,8 @@ MonoBehaviour:
   eventXP: {fileID: 96829575937932721}
   eventOptionButton: {fileID: 6219756814664707330}
   eventOptionButtons: []
+  eventOptionActiveColor: {r: 0, g: 0.6862745, b: 1, a: 1}
+  eventOptionInactiveColor: {r: 0, g: 0.41568628, b: 0.6039216, a: 1}
   monsterComponents: {fileID: 3184498020113528247}
   monsterImage: {fileID: 2159348593194895042}
   monsterCardFace: {fileID: 3831609476115411663}
@@ -3819,7 +3821,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.7254902, b: 1, a: 1}
+  m_Color: {r: 0, g: 0.41435444, b: 0.6037736, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

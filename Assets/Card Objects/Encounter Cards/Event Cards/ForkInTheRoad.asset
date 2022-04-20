@@ -27,8 +27,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: 4189731bc5aed4a49a5d9f50f651357f, type: 2}
         m_TargetAssemblyTypeName: EventOptions, Assembly-CSharp
-        m_MethodName: ForkInTheRoad_Option_0
-        m_Mode: 1
+        m_MethodName: ForkInTheRoad
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

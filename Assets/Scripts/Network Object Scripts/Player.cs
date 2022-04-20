@@ -586,6 +586,96 @@ namespace AdventuresOfOldMultiplayer
         {
             XP.Value += PlayManager.Instance.XPModifier() + amount;
         }
+
+        public void TakeDamage(int amount)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                int damage = amount;
+                if(PlayManager.Instance.itemReference.ContainsKey(Armor.Value + ""))
+                {
+                    ArmorCard armorCard = PlayManager.Instance.itemReference[Armor.Value + ""] as ArmorCard;
+                    damage -= armorCard.armor;
+                }
+                if (damage > 0)
+                    Health.Value -= damage;
+            }
+            else
+                TakeDamageServerRPC(amount);
+        }
+        [ServerRpc]
+        private void TakeDamageServerRPC(int amount, ServerRpcParams rpcParams = default)
+        {
+            int damage = amount;
+            if (PlayManager.Instance.itemReference.ContainsKey(Armor.Value + ""))
+            {
+                ArmorCard armorCard = PlayManager.Instance.itemReference[Armor.Value + ""] as ArmorCard;
+                damage -= armorCard.armor;
+            }
+            if (damage > 0)
+                Health.Value -= damage;
+        }
+
+        public void RestoreAbilityCharges(int amount)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                AbilityCharges.Value += amount;
+                int cap = PlayManager.Instance.GetMod(Energy.Value) + Level.Value;
+                if (AbilityCharges.Value > cap)
+                    AbilityCharges.Value = cap;
+            }
+            else
+                RestoreAbilityChargesServerRPC(amount);
+        }
+        [ServerRpc]
+        private void RestoreAbilityChargesServerRPC(int amount, ServerRpcParams rpcParams = default)
+        {
+            AbilityCharges.Value += amount;
+            int cap = PlayManager.Instance.GetMod(Energy.Value) + Level.Value;
+            if (AbilityCharges.Value > cap)
+                AbilityCharges.Value = cap;
+        }
+
+        public void RestoreHealth(int amount)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                Health.Value += amount;
+                int cap = 2 * Constitution.Value;
+                if (Health.Value > cap)
+                    Health.Value = cap;
+            }
+            else
+                RestoreRestoreHealthServerRPC(amount);
+        }
+        [ServerRpc]
+        private void RestoreRestoreHealthServerRPC(int amount, ServerRpcParams rpcParams = default)
+        {
+            Health.Value += amount;
+            int cap = 2 * Constitution.Value;
+            if (Health.Value > cap)
+                Health.Value = cap;
+        }
+
+        public void LoseAbilityCharges(int amount)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                AbilityCharges.Value -= amount;
+                if (AbilityCharges.Value < 0)
+                    AbilityCharges.Value = 0;
+            }
+            else
+                LoseAbilityChargesServerRPC(amount);
+        }
+        [ServerRpc]
+        private void LoseAbilityChargesServerRPC(int amount, ServerRpcParams rpcParams = default)
+        {
+            AbilityCharges.Value -= amount;
+            if (AbilityCharges.Value < 0)
+                AbilityCharges.Value = 0;
+        }
         #endregion
     }
 }

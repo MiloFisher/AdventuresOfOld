@@ -23,6 +23,8 @@ public class UIEncounterCard : MonoBehaviour
     public TMP_Text eventXP;
     public GameObject eventOptionButton;
     public List<GameObject> eventOptionButtons = new List<GameObject>();
+    public Color eventOptionActiveColor;
+    public Color eventOptionInactiveColor;
 
     [Header("Monster Card Components")]
     public GameObject monsterComponents;
@@ -101,21 +103,21 @@ public class UIEncounterCard : MonoBehaviour
                     monsterGold.gameObject.SetActive(true);
                     monsterXP.gameObject.SetActive(true);
                     monsterGold.text = "10";
-                    monsterXP.text = "3";
+                    monsterXP.text = 3 + PlayManager.Instance.XPModifier() + "";
                     break;
                 case MonsterType.ELITE:
                     monsterCardFace.sprite = monsterCardFaces[1];
                     monsterGold.gameObject.SetActive(true);
                     monsterXP.gameObject.SetActive(true);
                     monsterGold.text = "20";
-                    monsterXP.text = "6";
+                    monsterXP.text = 6 + PlayManager.Instance.XPModifier() + "";
                     break;
                 case MonsterType.MINIBOSS:
                     monsterCardFace.sprite = monsterCardFaces[2];
                     monsterGold.gameObject.SetActive(true);
                     monsterXP.gameObject.SetActive(true);
                     monsterGold.text = "20";
-                    monsterXP.text = "6";
+                    monsterXP.text = 6 + PlayManager.Instance.XPModifier() + "";
                     break;
                 case MonsterType.BOSS:
                     monsterCardFace.sprite = monsterCardFaces[3];
@@ -159,12 +161,19 @@ public class UIEncounterCard : MonoBehaviour
             if (e.xp < 0)
                 eventXP.text = "0";
             else
-                eventXP.text = e.xp + "";
+                eventXP.text = e.xp + PlayManager.Instance.XPModifier() + "";
 
             for(int i = 0; i < e.optionRequirements.Length; i++)
             {
                 if (!RequirementMet(e.optionRequirements[i]))
+                {
                     eventOptionButtons[i].GetComponent<Button>().enabled = false;
+                    eventOptionButtons[i].GetComponent<Image>().color = eventOptionInactiveColor;
+                }
+                else
+                {
+                    eventOptionButtons[i].GetComponent<Image>().color = eventOptionActiveColor;
+                }
             }
         }
     }
@@ -237,23 +246,23 @@ public class UIEncounterCard : MonoBehaviour
     private bool RequirementMet(OptionRequirement o)
     {
         Player p = PlayManager.Instance.localPlayer;
-        switch (o)
+        return o switch
         {
-            case OptionRequirement.NONE: return true;
-            case OptionRequirement.ANGELKIN_OR_HOLY: return PlayManager.Instance.Angelkin(p) || PlayManager.Instance.Holy(p);
-            case OptionRequirement.ANIMALKIN: return PlayManager.Instance.Animalkin(p);
-            case OptionRequirement.BERSERK: return PlayManager.Instance.Berserk(p);
-            case OptionRequirement.CHAOS_TIER_1_TO_3: return PlayManager.Instance.ChaosTier() <= 3;
-            case OptionRequirement.CHAOS_TIER_4_TO_6: return PlayManager.Instance.ChaosTier() >= 4;
-            case OptionRequirement.DWARF_OR_HIGHBORN: return PlayManager.Instance.Dwarf(p) || PlayManager.Instance.Highborn(p);
-            case OptionRequirement.ELVEN: return PlayManager.Instance.Elven(p);
-            case OptionRequirement.FLEET_FOOTED: return PlayManager.Instance.FleetFooted(p);
-            case OptionRequirement.HAS_TORCH: return false; // IMPLEMENT LATER
-            case OptionRequirement.LEONIN: return PlayManager.Instance.Leonin(p);
-            case OptionRequirement.LOOTER: return PlayManager.Instance.Looter(p);
-            case OptionRequirement.MYSTICAL: return PlayManager.Instance.Mystical(p);
-            case OptionRequirement.POWERFUL: return PlayManager.Instance.Powerful(p);
-        }
-        return false;
+            OptionRequirement.NONE => true,
+            OptionRequirement.ANGELKIN_OR_HOLY => PlayManager.Instance.Angelkin(p) || PlayManager.Instance.Holy(p),
+            OptionRequirement.ANIMALKIN => PlayManager.Instance.Animalkin(p),
+            OptionRequirement.BERSERK => PlayManager.Instance.Berserk(p),
+            OptionRequirement.CHAOS_TIER_1_TO_3 => PlayManager.Instance.ChaosTier() <= 3,
+            OptionRequirement.CHAOS_TIER_4_TO_6 => PlayManager.Instance.ChaosTier() >= 4,
+            OptionRequirement.DWARF_OR_HIGHBORN => PlayManager.Instance.Dwarf(p) || PlayManager.Instance.Highborn(p),
+            OptionRequirement.ELVEN => PlayManager.Instance.Elven(p),
+            OptionRequirement.FLEET_FOOTED => PlayManager.Instance.FleetFooted(p),
+            OptionRequirement.HAS_TORCH => PlayManager.Instance.HasTorch(p),
+            OptionRequirement.LEONIN => PlayManager.Instance.Leonin(p),
+            OptionRequirement.LOOTER => PlayManager.Instance.Looter(p),
+            OptionRequirement.MYSTICAL => PlayManager.Instance.Mystical(p),
+            OptionRequirement.POWERFUL => PlayManager.Instance.Powerful(p),
+            _ => false
+        };
     }
 }

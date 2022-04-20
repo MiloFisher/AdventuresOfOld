@@ -31,6 +31,8 @@ public class UIButtonAnim : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        if (!GetComponent<Button>().enabled)
+            return;
         image.sprite = selectedSprite;
         rt.sizeDelta = new Vector2(scaledWidth,scaledHeight);
         if (transform.childCount > 0)
@@ -39,6 +41,8 @@ public class UIButtonAnim : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        if (!GetComponent<Button>().enabled)
+            return;
         image.sprite = defaultSprite;
         rt.sizeDelta = new Vector2(defaultWidth, defaultHeight);
         if (transform.childCount > 0)

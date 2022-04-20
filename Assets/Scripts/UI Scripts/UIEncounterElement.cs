@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class UIRollToEncounter : MonoBehaviour
+public enum EncounterElementType { ROLL_TO_ENCOUNTER, EAT_THE_CANDY };
+
+public class UIEncounterElement : MonoBehaviour
 {
+    public EncounterElementType type;
     public float startWidth;
     public float endWidth;
     public float constHeight;
@@ -21,9 +24,9 @@ public class UIRollToEncounter : MonoBehaviour
     public GameObject successText;
     public GameObject failureText;
 
-    private RectTransform rt;
-    private bool opened;
-    private int roll = 0;
+    protected RectTransform rt;
+    protected bool opened;
+    protected int roll = 0;
 
     private void OnEnable()
     {
@@ -33,14 +36,29 @@ public class UIRollToEncounter : MonoBehaviour
 
     private void OnDisable()
     {
-        PlayManager.Instance.ProcessEncounterRoll(roll);
+        switch(type)
+        {
+            case EncounterElementType.ROLL_TO_ENCOUNTER:
+                PlayManager.Instance.ProcessEncounterRoll(roll);
+                break;
+            case EncounterElementType.EAT_THE_CANDY:
+                EventCard e = PlayManager.Instance.encounterReference["Trail of Candy"] as EventCard;
+                int xp = e.xp;
+                if (roll % 2 == 0)
+                    xp += 4;
+                else
+                    PlayManager.Instance.localPlayer.TakeDamage(8);
+                PlayManager.Instance.localPlayer.GainXP(xp);
+                PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
+                break;
+        }
     }
 
-    IEnumerator AnimateOpening()
+    protected IEnumerator AnimateOpening()
     {
         // First grow the object
         float dif = endScale - startScale;
-        for(int i = 1; i <= 100; i++)
+        for (int i = 1; i <= 100; i++)
         {
             transform.localScale = new Vector3(startScale + dif * i * 0.01f, startScale + dif * i * 0.01f, 1);
             yield return new WaitForSeconds(growingLength);
@@ -58,17 +76,6 @@ public class UIRollToEncounter : MonoBehaviour
         opened = true;
     }
 
-    public void ResetSize()
-    {
-        opened = false;
-        rt = GetComponent<RectTransform>();
-        transform.localScale = new Vector3(startScale, startScale, 1);
-        rt.sizeDelta = new Vector2(startWidth, constHeight);
-        rollButton.SetActive(true);
-        successText.SetActive(false);
-        failureText.SetActive(false);
-    }
-
     public void RollDice()
     {
         // Return if the scroll hasn't opened yet
@@ -80,7 +87,18 @@ public class UIRollToEncounter : MonoBehaviour
         StartCoroutine(AnimateDiceRoll(roll));
     }
 
-    IEnumerator AnimateDiceRoll(int roll)
+    public void ResetSize()
+    {
+        opened = false;
+        rt = GetComponent<RectTransform>();
+        transform.localScale = new Vector3(startScale, startScale, 1);
+        rt.sizeDelta = new Vector2(startWidth, constHeight);
+        rollButton.SetActive(true);
+        successText.SetActive(false);
+        failureText.SetActive(false);
+    }
+
+    protected IEnumerator AnimateDiceRoll(int roll)
     {
         // Flash through random dice faces
         int rollTimes = Random.Range(80, 121);
@@ -94,10 +112,21 @@ public class UIRollToEncounter : MonoBehaviour
         rollDisplay.sprite = diceFaces[roll - 1];
 
         // Display success or failure
-        if (roll % 2 == 0)
-            successText.SetActive(true);
-        else
-            failureText.SetActive(true);
+        switch (type)
+        {
+            case EncounterElementType.ROLL_TO_ENCOUNTER:
+                if (roll % 2 == 0)
+                    successText.SetActive(true);
+                else
+                    failureText.SetActive(true);
+                break;
+            case EncounterElementType.EAT_THE_CANDY:
+                if (roll % 2 == 0)
+                    successText.SetActive(true);
+                else
+                    failureText.SetActive(true);
+                break;
+        }
 
         yield return new WaitForSeconds(rollDisplayTime);
 
@@ -105,7 +134,7 @@ public class UIRollToEncounter : MonoBehaviour
         StartCoroutine(AnimateClosing());
     }
 
-    IEnumerator AnimateClosing()
+    protected IEnumerator AnimateClosing()
     {
         // First close the scroll
         float dif = endWidth - startWidth;

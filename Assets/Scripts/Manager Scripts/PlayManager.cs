@@ -857,5 +857,9 @@ public class PlayManager : Singleton<PlayManager>
     {
         return p.Trait.Value == "Powerful";
     }
+    public bool HasTorch(Player p)
+    {
+        return p.Inventory1.Value == "Torch" || p.Inventory2.Value == "Torch" || p.Inventory3.Value == "Torch" || p.Inventory4.Value == "Torch" || p.Inventory5.Value == "Torch";
+    }
     #endregion
 }
