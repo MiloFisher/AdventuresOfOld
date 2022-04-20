@@ -231,6 +231,11 @@ public class PlayManager : Singleton<PlayManager>
                     p.SetValue("Weapon", "Simple Wand & Shield");
                     break;
             }
+            p.SetValue("Inventory1", InventoryManager.Instance.emptyValue);
+            p.SetValue("Inventory2", InventoryManager.Instance.emptyValue);
+            p.SetValue("Inventory3", InventoryManager.Instance.emptyValue);
+            p.SetValue("Inventory4", InventoryManager.Instance.emptyValue);
+            p.SetValue("Inventory5", InventoryManager.Instance.emptyValue);
 
             // Set player positions to starting tile
             p.SetPosition(new Vector3Int(0, 7, -7));
@@ -805,6 +810,29 @@ public class PlayManager : Singleton<PlayManager>
     public int FetchStatRollResult()
     {
         return encounterElements.transform.GetChild(1).GetComponent<UIStatRoll>().success;
+    }
+    #endregion
+
+    #region Choice
+    public void ChoiceListener(Action<int> Response)
+    {
+        StartCoroutine(WaitForChoice(Response));
+    }
+
+    IEnumerator WaitForChoice(Action<int> Response)
+    {
+        yield return new WaitUntil(() => FetchChoiceResult() != 0);
+        Response(FetchChoiceResult());
+    }
+
+    public void MakeChoice(string choice1, string choice2, bool condition1, bool condition2)
+    {
+        encounterElements.transform.GetChild(3).GetComponent<UIChoice>().MakeChoice(choice1, choice2, condition1, condition2);
+    }
+
+    public int FetchChoiceResult()
+    {
+        return encounterElements.transform.GetChild(3).GetComponent<UIChoice>().choice;
     }
     #endregion
 

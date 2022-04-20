@@ -102,25 +102,61 @@ public class EventOptions : ScriptableObject
         }
     }
 
-    #region Enchanted Lake
-    public void EnchantedLake_Option_0()
+    public void EnchantedLake(int option)
     {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
+        EventCard e = PlayManager.Instance.encounterReference["Enchanted Lake"] as EventCard;
+        Player p = PlayManager.Instance.localPlayer;
+        int xp = e.xp;
+        switch (option)
+        {
+            case 0:
+                PlayManager.Instance.MakeChoice("+2 Loot Cards", "+4 XP", true, true);
+                PlayManager.Instance.ChoiceListener((a) => {
+                    if (a == 1)
+                    {
+                        p.DrawLootCards(2, p.UUID.Value, true);
+                        p.CompleteEncounter(false, p.UUID.Value);
+                    }
+                    else
+                    {
+                        xp += 4;
+                        p.CompleteEncounter(true, p.UUID.Value);
+                    }
+                    p.GainXP(xp);
+                });
+                break;
+            case 1:
+                PlayManager.Instance.MakeChoice("Health +10 Health", "+2 XP", true, true);
+                PlayManager.Instance.ChoiceListener((a) => {
+                    if (a == 1)
+                    {
+                        p.RestoreHealth(10);
+                    }
+                    else
+                    {
+                        xp += 2; 
+                    }
+                    p.CompleteEncounter(true, p.UUID.Value);
+                    p.GainXP(xp);
+                });
+                break;
+            case 2:
+                PlayManager.Instance.MakeChoice("Take 15 Damage", "Discard 1 Card", true, InventoryManager.Instance.HasCardInInventory(p));
+                PlayManager.Instance.ChoiceListener((a) => {
+                    if (a == 1)
+                    {
+                        p.TakeDamage(15);
+                    }
+                    else
+                    {
+                        // Discard 1 card
+                    }
+                    p.CompleteEncounter(true, p.UUID.Value);
+                    p.GainXP(xp);
+                });
+                break;
+        }
     }
-
-    public void EnchantedLake_Option_1()
-    {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
-    }
-
-    public void EnchantedLake_Option_2()
-    {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
-    }
-    #endregion
 
     #region Abandoned Statue
     public void AbandonedStatue_Option_0()

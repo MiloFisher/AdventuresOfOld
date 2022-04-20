@@ -16,11 +16,12 @@ public class InventoryManager : Singleton<InventoryManager>
     public float auxiliaryCardY;
     public float movementTimeLength = 0.004f;
     public bool maximized;
+    public bool forcedMaximize;
 
     private string[] gear = new string[9];
     private int[] gearPos = new int[9];
     private int activeCards;
-    private string emptyValue = "empty";
+    public string emptyValue = "empty";
     private bool inAnimation;
 
     private void Start()
@@ -216,7 +217,7 @@ public class InventoryManager : Singleton<InventoryManager>
 
     public void MinimizeInventory()
     {
-        if (inAnimation || !maximized)
+        if (inAnimation || !maximized || forcedMaximize)
             return;
         maximized = false;
         minimizeButton.SetActive(false);
@@ -298,5 +299,10 @@ public class InventoryManager : Singleton<InventoryManager>
             else if (txt)
                 txt.color = new Color(txt.color.r, txt.color.g, txt.color.b, a);
         }
+    }
+
+    public bool HasCardInInventory(Player p)
+    {
+        return !(p.Inventory1.Value == emptyValue && p.Inventory2.Value == emptyValue && p.Inventory3.Value == emptyValue && p.Inventory4.Value == emptyValue && p.Inventory5.Value == emptyValue);
     }
 }
