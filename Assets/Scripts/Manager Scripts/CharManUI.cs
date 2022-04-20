@@ -30,6 +30,18 @@ public class CharManUI : MonoBehaviour
     public Sprite leonin_image;
     public Sprite human_image;
     public Sprite night_elf_image;
+    public GameObject ability1_text;
+    public GameObject ability2_text;
+    public GameObject ability3_text;
+    public GameObject ability4_text;
+    public GameObject ability5_text;
+    public GameObject ability6_text;
+    public GameObject ability_desc_text;
+    public GameObject ability_cost_text;
+    public GameObject ability_type_text;
+    public GameObject ability_level_text;
+    public GameObject ability_desc_panel;
+
     private CreatedChar createdchar = new CreatedChar();
 
     public void RaceButtonBuilder(Race race, Transform objectToSetTo) {
@@ -117,12 +129,26 @@ public class CharManUI : MonoBehaviour
 
     public void ConfirmClass() {
         Color32 black = new Color32(0, 0, 0, 255);
+        //Set the color back to black so it is no longer highlighted green from preview
         class_str_text.GetComponent<TextMeshProUGUI>().color = black;
         class_dex_text.GetComponent<TextMeshProUGUI>().color = black;
         class_int_text.GetComponent<TextMeshProUGUI>().color = black;
         class_spd_text.GetComponent<TextMeshProUGUI>().color = black;
         class_con_text.GetComponent<TextMeshProUGUI>().color = black;
         class_eng_text.GetComponent<TextMeshProUGUI>().color = black;
+        
+        chosen_class_text.GetComponent<TextMeshProUGUI>().text = createdchar.getChosen_class().getName();
+        ability1_text.GetComponent<TextMeshProUGUI>().SetText(createdchar.getChosen_class().getAbilities()[0].getName());
+        
+        ability2_text.GetComponent<TextMeshProUGUI>().SetText(createdchar.getChosen_class().getAbilities()[1].getName());
+
+        ability3_text.GetComponent<TextMeshProUGUI>().SetText(createdchar.getChosen_class().getAbilities()[2].getName());
+       
+        ability4_text.GetComponent<TextMeshProUGUI>().SetText(createdchar.getChosen_class().getAbilities()[3].getName());
+
+        ability5_text.GetComponent<TextMeshProUGUI>().SetText(createdchar.getChosen_class().getAbilities()[4].getName());
+
+        ability6_text.GetComponent<TextMeshProUGUI>().SetText(createdchar.getChosen_class().getAbilities()[5].getName());
     }
 
     public void BackToClass() {
@@ -138,12 +164,20 @@ public class CharManUI : MonoBehaviour
             createdchar.getChosen_race().get_stats().get_con());
         class_eng_text.GetComponent<TextMeshProUGUI>().SetText("ENG: " + 
             createdchar.getChosen_race().get_stats().get_eng());
+        ability_desc_panel.SetActive(false);
+    }
+
+    public void PreviewAbility(int abilitynum) {
+        ability_desc_text.GetComponent<TextMeshProUGUI>().SetText(createdchar.getChosen_class().getAbilities()[abilitynum].getDesc());
+        ability_cost_text.GetComponent<TextMeshProUGUI>().SetText("Ability cost: " + createdchar.getChosen_class().getAbilities()[abilitynum].getCost());
+        ability_type_text.GetComponent<TextMeshProUGUI>().SetText("Ability type: " + createdchar.getChosen_class().getAbilities()[abilitynum].getType());
+        ability_level_text.GetComponent<TextMeshProUGUI>().SetText("Ability level: " + createdchar.getChosen_class().getAbilities()[abilitynum].getLevel());
+        ability_desc_panel.SetActive(true);
     }
 
     //See changes to player stats before they confirm
     public void PreviewStat(string classname) {
         createdchar.setChosen_class(new Class(classname));
-        chosen_class_text.GetComponent<TextMeshProUGUI>().text = classname;
         
         class_str_text.GetComponent<TextMeshProUGUI>().SetText("STR: " + (createdchar.getChosen_race().get_stats().get_str() + 
         createdchar.getChosen_class().get_stats().get_str()));
@@ -198,6 +232,10 @@ public class CharManUI : MonoBehaviour
         else {
             class_eng_text.GetComponent<TextMeshProUGUI>().color = new Color32(0, 0, 0, 255);
         }
+    }
+
+    public CreatedChar getChar() {
+        return createdchar;
     }
 
 }
