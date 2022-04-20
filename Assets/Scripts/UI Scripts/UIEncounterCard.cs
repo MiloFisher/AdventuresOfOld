@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using AdventuresOfOldMultiplayer;
 
 public class UIEncounterCard : MonoBehaviour
 {
@@ -63,16 +64,12 @@ public class UIEncounterCard : MonoBehaviour
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
     }
 
-    public void ChooseOption(int id)
+    public void ChooseOption()
     {
         if (!actionButtonActive)
             return;
 
         EncounterManager.Instance.DisableCardButtons();
-
-        EventCard e = PlayManager.Instance.encounterReference[cardName] as EventCard;
-        e.OptionEffect(id);
-
         ActivateOptionCardButton(false);
     }
 
@@ -145,21 +142,16 @@ public class UIEncounterCard : MonoBehaviour
             eventOptionButtons.Clear();
             GameObject optionButton = Instantiate(eventOptionButton, eventOptionButton.transform.position, Quaternion.identity, eventOptionButton.transform.parent);
             optionButton.GetComponentInChildren<TMP_Text>().text = e.optionNames[0].Substring(0, e.optionNames[0].Length - 1);
-            optionButton.GetComponent<Button>().onClick.AddListener(delegate { ChooseOption(0); });
+            optionButton.GetComponent<Button>().onClick = e.OptionEffects[0];
+            optionButton.GetComponent<Button>().onClick.AddListener(delegate { ChooseOption(); });
             eventOptionButtons.Add(optionButton);
             eventOptions.text = "<b>" + e.optionNames[0] + "</b>\n" + e.optionDescriptions[0];
             for (int i = 1; i < e.optionNames.Length; i++)
             {
                 optionButton = Instantiate(eventOptionButton, eventOptionButton.transform.position, Quaternion.identity, eventOptionButton.transform.parent);
                 optionButton.GetComponentInChildren<TMP_Text>().text = e.optionNames[i].Substring(0, e.optionNames[i].Length - 1);
-                switch(i)
-                {
-                    case 1: optionButton.GetComponent<Button>().onClick.AddListener(delegate { ChooseOption(1); }); break;
-                    case 2: optionButton.GetComponent<Button>().onClick.AddListener(delegate { ChooseOption(2); }); break;
-                    case 3: optionButton.GetComponent<Button>().onClick.AddListener(delegate { ChooseOption(3); }); break;
-                    case 4: optionButton.GetComponent<Button>().onClick.AddListener(delegate { ChooseOption(4); }); break;
-                    default: optionButton.GetComponent<Button>().onClick.AddListener(delegate { ChooseOption(0); }); break;
-                }
+                optionButton.GetComponent<Button>().onClick = e.OptionEffects[i];
+                optionButton.GetComponent<Button>().onClick.AddListener(delegate { ChooseOption(); });
                 optionButton.transform.localPosition += new Vector3(0, -55 * i, 0);
                 eventOptionButtons.Add(optionButton);
                 eventOptions.text += "\n\n<b>" + e.optionNames[i] + "</b>\n" + e.optionDescriptions[i];
@@ -168,6 +160,12 @@ public class UIEncounterCard : MonoBehaviour
                 eventXP.text = "0";
             else
                 eventXP.text = e.xp + "";
+
+            for(int i = 0; i < e.optionRequirements.Length; i++)
+            {
+                if (!RequirementMet(e.optionRequirements[i]))
+                    eventOptionButtons[i].GetComponent<Button>().enabled = false;
+            }
         }
     }
 
@@ -234,5 +232,28 @@ public class UIEncounterCard : MonoBehaviour
         TMP_Text t = g.GetComponentInChildren<TMP_Text>();
         i.color = new Color(i.color.r, i.color.g, i.color.b, a);
         t.color = new Color(t.color.r, t.color.g, t.color.b, a);
+    }
+
+    private bool RequirementMet(OptionRequirement o)
+    {
+        Player p = PlayManager.Instance.localPlayer;
+        switch (o)
+        {
+            case OptionRequirement.NONE: return true;
+            case OptionRequirement.ANGELKIN_OR_HOLY: return PlayManager.Instance.Angelkin(p) || PlayManager.Instance.Holy(p);
+            case OptionRequirement.ANIMALKIN: return PlayManager.Instance.Animalkin(p);
+            case OptionRequirement.BERSERK: return PlayManager.Instance.Berserk(p);
+            case OptionRequirement.CHAOS_TIER_1_TO_3: return PlayManager.Instance.ChaosTier() <= 3;
+            case OptionRequirement.CHAOS_TIER_4_TO_6: return PlayManager.Instance.ChaosTier() >= 4;
+            case OptionRequirement.DWARF_OR_HIGHBORN: return PlayManager.Instance.Dwarf(p) || PlayManager.Instance.Highborn(p);
+            case OptionRequirement.ELVEN: return PlayManager.Instance.Elven(p);
+            case OptionRequirement.FLEET_FOOTED: return PlayManager.Instance.FleetFooted(p);
+            case OptionRequirement.HAS_TORCH: return false; // IMPLEMENT LATER
+            case OptionRequirement.LEONIN: return PlayManager.Instance.Leonin(p);
+            case OptionRequirement.LOOTER: return PlayManager.Instance.Looter(p);
+            case OptionRequirement.MYSTICAL: return PlayManager.Instance.Mystical(p);
+            case OptionRequirement.POWERFUL: return PlayManager.Instance.Powerful(p);
+        }
+        return false;
     }
 }

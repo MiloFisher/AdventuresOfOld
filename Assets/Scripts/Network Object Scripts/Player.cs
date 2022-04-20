@@ -573,6 +573,19 @@ namespace AdventuresOfOldMultiplayer
                 EncounterManager.Instance.ForkInTheRoadHelper(drawMoreCards);
             }
         }
+
+        public void GainXP(int amount)
+        {
+            if (NetworkManager.Singleton.IsServer)
+                XP.Value += PlayManager.Instance.XPModifier() + amount;
+            else
+                GainXPServerRPC(amount);
+        }
+        [ServerRpc]
+        private void GainXPServerRPC(int amount, ServerRpcParams rpcParams = default)
+        {
+            XP.Value += PlayManager.Instance.XPModifier() + amount;
+        }
         #endregion
     }
 }

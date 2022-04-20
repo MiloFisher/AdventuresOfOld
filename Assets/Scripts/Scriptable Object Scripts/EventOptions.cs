@@ -1,53 +1,60 @@
 using UnityEngine;
+using AdventuresOfOldMultiplayer;
+using System.Collections;
 
-public class EventOptionManager : Singleton<EventOptionManager>
+[CreateAssetMenu(fileName = "Event Options", menuName = "Event Options")]
+public class EventOptions : ScriptableObject
 {
-    public void CallOption(string objectName, int id)
-    {
-        Invoke(objectName + "_Option_" + id, 0);
-    }
-
     #region Fork in the Road
-    private void ForkInTheRoad_Option_0()
+    public void ForkInTheRoad_Option_0()
     {
         PlayManager.Instance.localPlayer.ForkInTheRoadHelper(PlayManager.Instance.localPlayer.UUID.Value);
     }
     #endregion
 
     #region Trapped Wolf Cub
-    private void TrappedWolfCub_Option_0()
+    public void TrappedWolfCub_Option_0()
     {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
+        Player p = PlayManager.Instance.localPlayer;
+        p.CompleteEncounter(false, p.UUID.Value);
+        p.GainXP(2);
+        p.DrawLootCards(1, p.UUID.Value, true);
     }
 
-    private void TrappedWolfCub_Option_1()
+    public void TrappedWolfCub_Option_1()
     {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
+        PlayManager.Instance.MakeStatRoll("DEX", 9);
+        PlayManager.Instance.StatRollListener((a) => {
+            if (a == 1)
+                PlayManager.Instance.ReduceChaos(1);
+            PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
+        });
     }
 
-    private void TrappedWolfCub_Option_2()
+    public void TrappedWolfCub_Option_2()
     {
-        // requirement + effect here...
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
+        Player p = PlayManager.Instance.localPlayer;
+        p.CompleteEncounter(false, p.UUID.Value);
+        PlayManager.Instance.IncreaseChaos(1);
+        p.GainXP(2);
+        p.DrawLootCards(1, p.UUID.Value, true);
     }
     #endregion
 
     #region Trail of Candy
-    private void TrailOfCandy_Option_0()
+    public void TrailOfCandy_Option_0()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
     }
 
-    private void TrailOfCandy_Option_1()
+    public void TrailOfCandy_Option_1()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
     }
 
-    private void TrailOfCandy_Option_2()
+    public void TrailOfCandy_Option_2()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
@@ -55,13 +62,13 @@ public class EventOptionManager : Singleton<EventOptionManager>
     #endregion
 
     #region Magical Gemstone
-    private void MagicalGemstone_Option_0()
+    public void MagicalGemstone_Option_0()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
     }
 
-    private void MagicalGemstone_Option_1()
+    public void MagicalGemstone_Option_1()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
@@ -69,19 +76,19 @@ public class EventOptionManager : Singleton<EventOptionManager>
     #endregion
 
     #region Enchanted Lake
-    private void EnchantedLake_Option_0()
+    public void EnchantedLake_Option_0()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
     }
 
-    private void EnchantedLake_Option_1()
+    public void EnchantedLake_Option_1()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
     }
 
-    private void EnchantedLake_Option_2()
+    public void EnchantedLake_Option_2()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
@@ -89,13 +96,19 @@ public class EventOptionManager : Singleton<EventOptionManager>
     #endregion
 
     #region Abandoned Statue
-    private void AbandonedStatue_Option_0()
+    public void AbandonedStatue_Option_0()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
     }
 
-    private void AbandonedStatue_Option_1()
+    public void AbandonedStatue_Option_1()
+    {
+        // requirement + effect here...
+        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
+    }
+
+    public void AbandonedStatue_Option_2()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
@@ -103,19 +116,19 @@ public class EventOptionManager : Singleton<EventOptionManager>
     #endregion
 
     #region Traveling Merchant
-    private void TravelingMerchant_Option_0()
+    public void TravelingMerchant_Option_0()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
     }
 
-    private void TravelingMerchant_Option_1()
+    public void TravelingMerchant_Option_1()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
     }
 
-    private void TravelingMerchant_Option_2()
+    public void TravelingMerchant_Option_2()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
@@ -123,13 +136,13 @@ public class EventOptionManager : Singleton<EventOptionManager>
     #endregion
 
     #region Paying the Toll
-    private void PayingTheToll_Option_0()
+    public void PayingTheToll_Option_0()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
     }
 
-    private void PayingTheToll_Option_1()
+    public void PayingTheToll_Option_1()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
@@ -137,13 +150,13 @@ public class EventOptionManager : Singleton<EventOptionManager>
     #endregion
 
     #region It's a Trap!
-    private void ItsATrap_Option_0()
+    public void ItsATrap_Option_0()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
     }
 
-    private void ItsATrap_Option_1()
+    public void ItsATrap_Option_1()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
@@ -151,19 +164,19 @@ public class EventOptionManager : Singleton<EventOptionManager>
     #endregion
 
     #region Something Shiny
-    private void SomethingShiny_Option_0()
+    public void SomethingShiny_Option_0()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
     }
 
-    private void SomethingShiny_Option_1()
+    public void SomethingShiny_Option_1()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
     }
 
-    private void SomethingShiny_Option_2()
+    public void SomethingShiny_Option_2()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
@@ -171,19 +184,19 @@ public class EventOptionManager : Singleton<EventOptionManager>
     #endregion
 
     #region Spider Nest
-    private void SpiderNest_Option_0()
+    public void SpiderNest_Option_0()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
     }
 
-    private void SpiderNest_Option_1()
+    public void SpiderNest_Option_1()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
     }
 
-    private void SpiderNest_Option_2()
+    public void SpiderNest_Option_2()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
@@ -191,19 +204,19 @@ public class EventOptionManager : Singleton<EventOptionManager>
     #endregion
 
     #region Mysterious Mushroom
-    private void MysteriousMushroom_Option_0()
+    public void MysteriousMushroom_Option_0()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
     }
 
-    private void MysteriousMushroom_Option_1()
+    public void MysteriousMushroom_Option_1()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
     }
 
-    private void MysteriousMushroom_Option_2()
+    public void MysteriousMushroom_Option_2()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
@@ -211,13 +224,13 @@ public class EventOptionManager : Singleton<EventOptionManager>
     #endregion
 
     #region Well from Hell!
-    private void WellFromHell_Option_0()
+    public void WellFromHell_Option_0()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
     }
 
-    private void WellFromHell_Option_1()
+    public void WellFromHell_Option_1()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
@@ -225,19 +238,19 @@ public class EventOptionManager : Singleton<EventOptionManager>
     #endregion
 
     #region Dying Deer
-    private void DyingDeer_Option_0()
+    public void DyingDeer_Option_0()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
     }
 
-    private void DyingDeer_Option_1()
+    public void DyingDeer_Option_1()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
     }
 
-    private void DyingDeer_Option_2()
+    public void DyingDeer_Option_2()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
@@ -245,19 +258,19 @@ public class EventOptionManager : Singleton<EventOptionManager>
     #endregion
 
     #region Fairy Spirit
-    private void FairySpirit_Option_0()
+    public void FairySpirit_Option_0()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
     }
 
-    private void FairySpirit_Option_1()
+    public void FairySpirit_Option_1()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
     }
 
-    private void FairySpirit_Option_2()
+    public void FairySpirit_Option_2()
     {
         // requirement + effect here...
         PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);

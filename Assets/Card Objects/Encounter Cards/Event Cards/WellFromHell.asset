@@ -23,3 +23,33 @@ MonoBehaviour:
   - Restore all missing Ability Charges, +1 Chaos
   - Make an ENG Roll (10).  On a success, gain +2 XP.  On a failure, lose Ability
     Charges equal to the <b>Chaos Tier</b>
+  optionRequirements: 0000000000000000
+  OptionEffects:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 4189731bc5aed4a49a5d9f50f651357f, type: 2}
+        m_TargetAssemblyTypeName: EventOptions, Assembly-CSharp
+        m_MethodName: WellFromHell_Option_0
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 11400000, guid: 4189731bc5aed4a49a5d9f50f651357f, type: 2}
+        m_TargetAssemblyTypeName: EventOptions, Assembly-CSharp
+        m_MethodName: WellFromHell_Option_1
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

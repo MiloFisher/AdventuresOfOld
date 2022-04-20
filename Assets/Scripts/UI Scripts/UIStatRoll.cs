@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
-public class UIRollToEncounter : MonoBehaviour
+public class UIStatRoll : MonoBehaviour
 {
     public float startWidth;
     public float endWidth;
@@ -13,17 +14,33 @@ public class UIRollToEncounter : MonoBehaviour
     public float growingLength = 0.004f;
     public float openingLength = 0.004f;
     public Sprite[] diceFaces;
-    public Image rollDisplay;
+    public Image rollDisplay1;
+    public Image rollDisplay2;
     public GameObject rollButton;
+    public TMP_Text title;
     public float rollLength = 0.01f;
     public float rollDisplayTime = 1f;
     public float waitTime = 0.5f;
     public GameObject successText;
     public GameObject failureText;
+    public int success;
 
+    private int hiddenSuccess;
     private RectTransform rt;
     private bool opened;
-    private int roll = 0;
+    private int roll1 = 0;
+    private int roll2 = 0;
+
+    private string statRollType;
+    private int statRollValue;
+
+    public void MakeStatRoll(string _statRollType, int _statRollValue)
+    {
+        success = 0;
+        statRollType = _statRollType;
+        statRollValue = _statRollValue;
+        gameObject.SetActive(true);
+    }
 
     private void OnEnable()
     {
@@ -33,14 +50,17 @@ public class UIRollToEncounter : MonoBehaviour
 
     private void OnDisable()
     {
-        PlayManager.Instance.ProcessEncounterRoll(roll);
+        success = hiddenSuccess;
     }
 
     IEnumerator AnimateOpening()
     {
-        // First grow the object
+        // Set title
+        title.text = statRollType + " Roll (" + statRollValue + ")";
+
+        // Then grow the object
         float dif = endScale - startScale;
-        for(int i = 1; i <= 100; i++)
+        for (int i = 1; i <= 100; i++)
         {
             transform.localScale = new Vector3(startScale + dif * i * 0.01f, startScale + dif * i * 0.01f, 1);
             yield return new WaitForSeconds(growingLength);
@@ -60,6 +80,7 @@ public class UIRollToEncounter : MonoBehaviour
 
     public void ResetSize()
     {
+        hiddenSuccess = 0;
         opened = false;
         rt = GetComponent<RectTransform>();
         transform.localScale = new Vector3(startScale, startScale, 1);
@@ -76,28 +97,47 @@ public class UIRollToEncounter : MonoBehaviour
             return;
 
         rollButton.SetActive(false);
-        roll = Random.Range(1, 7);
-        StartCoroutine(AnimateDiceRoll(roll));
+        roll1 = Random.Range(1, 7);
+        roll2 = Random.Range(1, 7);
+        StartCoroutine(AnimateDiceRoll());
     }
 
-    IEnumerator AnimateDiceRoll(int roll)
+    IEnumerator AnimateDiceRoll()
     {
         // Flash through random dice faces
         int rollTimes = Random.Range(80, 121);
         for (int i = 0; i < rollTimes; i++)
         {
-            rollDisplay.sprite = diceFaces[Random.Range(0, 6)];
+            rollDisplay1.sprite = diceFaces[Random.Range(0, 6)];
+            rollDisplay2.sprite = diceFaces[Random.Range(0, 6)];
             yield return new WaitForSeconds(rollLength);
         }
 
-        // End on rolled value face
-        rollDisplay.sprite = diceFaces[roll - 1];
+        // End dice 1 first
+        rollDisplay1.sprite = diceFaces[roll1 - 1];
+
+        // Keep rolling dice 2
+        rollTimes = Random.Range(20, 60);
+        for (int i = 0; i < rollTimes; i++)
+        {
+            rollDisplay2.sprite = diceFaces[Random.Range(0, 6)];
+            yield return new WaitForSeconds(rollLength);
+        }
+
+        // End dice 2
+        rollDisplay2.sprite = diceFaces[roll2 - 1];
 
         // Display success or failure
-        if (roll % 2 == 0)
+        if (roll1 + roll2 + PlayManager.Instance.GetStatModFromType(statRollType) >= statRollValue)
+        {
             successText.SetActive(true);
+            hiddenSuccess = 1;
+        }
         else
+        {
             failureText.SetActive(true);
+            hiddenSuccess = -1;
+        }
 
         yield return new WaitForSeconds(rollDisplayTime);
 

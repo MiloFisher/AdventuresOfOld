@@ -78,7 +78,7 @@ public class PlayManager : Singleton<PlayManager>
         GameObject[] p = GameObject.FindGameObjectsWithTag("Player");
 
         // Exits game if no players found
-        if(p.Length == 0)
+        if (p.Length == 0)
         {
             Debug.LogError("No players found! Did you mean to load this scene directly?");
             return;
@@ -155,14 +155,14 @@ public class PlayManager : Singleton<PlayManager>
         }
 
         // Host needs to ready up any bots playing
-        foreach(Player bot in playerList)
+        foreach (Player bot in playerList)
         {
             if (bot.isBot)
                 bot.ReadyUp();
-        }    
+        }
 
         // Otherwise, setup game
-        if(PlayerPrefs.GetString("gameType") == "New Game")
+        if (PlayerPrefs.GetString("gameType") == "New Game")
             StartCoroutine(NewGameSetup());
         else
             LoadGameSetup();
@@ -170,7 +170,7 @@ public class PlayManager : Singleton<PlayManager>
 
     private void Update()
     {
-        if(!loadingScreen.activeInHierarchy)
+        if (!loadingScreen.activeInHierarchy)
             DrawPlayerPieces();
     }
 
@@ -238,7 +238,7 @@ public class PlayManager : Singleton<PlayManager>
 
         // 3) Deal Quest Cards (host only)
         ShuffleDeck(questDeck);
-        for(int i = 0; i < Mathf.FloorToInt(playerList.Count/2); i++)
+        for (int i = 0; i < Mathf.FloorToInt(playerList.Count / 2); i++)
         {
             quests.Add(questDeck[i]);
         }
@@ -268,7 +268,7 @@ public class PlayManager : Singleton<PlayManager>
 
         // Give each player a color (host only)
         string[] colorList = { "red", "blue", "green", "yellow", "purple", "orange" };
-        for(int i = 0; i < playerList.Count; i++)
+        for (int i = 0; i < playerList.Count; i++)
         {
             playerList[i].SetValue("Color", colorList[i]);
         }
@@ -344,7 +344,7 @@ public class PlayManager : Singleton<PlayManager>
     {
         // Set the variable to mark it is this player's turn
         isYourTurn = true;
-        if(!transitions.transform.GetChild(0).gameObject.activeInHierarchy)
+        if (!transitions.transform.GetChild(0).gameObject.activeInHierarchy)
             CallTransition(1);
     }
 
@@ -455,7 +455,7 @@ public class PlayManager : Singleton<PlayManager>
     public void MoveToTile(Vector3Int pos)
     {
         // Deactivate the selected tiles and move the player to the target position
-        foreach(KeyValuePair<Vector3Int, Tile> t in gameboard)
+        foreach (KeyValuePair<Vector3Int, Tile> t in gameboard)
             t.Value.Deactivate();
         localPlayer.SetPosition(pos);
 
@@ -481,11 +481,11 @@ public class PlayManager : Singleton<PlayManager>
     public void SetTurnOrderPlayerList(FixedString64Bytes[] arr)
     {
         turnOrderPlayerList = new List<Player>();
-        for(int i = 0; i < arr.Length; i++)
+        for (int i = 0; i < arr.Length; i++)
         {
-            foreach(Player p in playerList)
+            foreach (Player p in playerList)
             {
-                if(p.UUID.Value == arr[i])
+                if (p.UUID.Value == arr[i])
                 {
                     turnOrderPlayerList.Add(p);
                 }
@@ -501,12 +501,12 @@ public class PlayManager : Singleton<PlayManager>
     public void SetupPlayerPieces()
     {
         int i;
-        for(i = 0; i < playerList.Count; i++)
+        for (i = 0; i < playerList.Count; i++)
         {
             playerPieces[i].SetActive(true);
-            playerPieces[i].GetComponent<Image>().color = ColorLookUp(playerList[i].Color.Value+"");
+            playerPieces[i].GetComponent<Image>().color = ColorLookUp(playerList[i].Color.Value + "");
         }
-        for(; i < 6; i++)
+        for (; i < 6; i++)
         {
             playerPieces[i].SetActive(false);
         }
@@ -516,7 +516,7 @@ public class PlayManager : Singleton<PlayManager>
     {
         // Set up portrait dictionary
         Dictionary<FixedString64Bytes, Sprite> portaitDictionary = new Dictionary<FixedString64Bytes, Sprite>();
-        foreach(Sprite s in portraits)
+        foreach (Sprite s in portraits)
         {
             portaitDictionary.Add(s.name, s);
         }
@@ -527,7 +527,7 @@ public class PlayManager : Singleton<PlayManager>
             characterPanels[i].SetActive(true);
             characterPanels[i].transform.localPosition = new Vector3(characterPanels[i].transform.localPosition.x, 117.5f * (turnOrderPlayerList.Count - 2 * i - 1), 0);
             characterPanels[i].GetComponent<UICharacterPanel>().UpdateCharacterImage(portaitDictionary[turnOrderPlayerList[i].Image.Value]);
-            characterPanels[i].GetComponent<UICharacterPanel>().UpdateCharacterName(turnOrderPlayerList[i].Name.Value+"", turnOrderPlayerList[i].Color.Value+"");
+            characterPanels[i].GetComponent<UICharacterPanel>().UpdateCharacterName(turnOrderPlayerList[i].Name.Value + "", turnOrderPlayerList[i].Color.Value + "");
         }
         for (; i < 6; i++)
         {
@@ -537,7 +537,7 @@ public class PlayManager : Singleton<PlayManager>
 
     public void UpdateCharacterPanels()
     {
-        for(int i = 0; i < turnOrderPlayerList.Count; i++)
+        for (int i = 0; i < turnOrderPlayerList.Count; i++)
         {
             characterPanels[i].GetComponent<UICharacterPanel>().UpdateHealthbar(turnOrderPlayerList[i].Health.Value, 2 * turnOrderPlayerList[i].Constitution.Value);
         }
@@ -545,14 +545,14 @@ public class PlayManager : Singleton<PlayManager>
 
     public Color ColorLookUp(string color)
     {
-        switch(color)
+        switch (color)
         {
             case "red": return Color.red;
             case "blue": return Color.blue;
             case "green": return Color.green;
-            case "purple": return new Color(0.627f,0,1);
+            case "purple": return new Color(0.627f, 0, 1);
             case "yellow": return Color.yellow;
-            case "orange": return new Color(1,0.627f,0);
+            case "orange": return new Color(1, 0.627f, 0);
             default: return Color.black;
         }
     }
@@ -561,20 +561,20 @@ public class PlayManager : Singleton<PlayManager>
     {
         int playersOnTile;
         int positionOnTile;
-        for(int i = 0; i < playerList.Count; i++)
+        for (int i = 0; i < playerList.Count; i++)
         {
             playersOnTile = 0;
             positionOnTile = 0;
-            for(int j = 0; j < playerList.Count; j++)
+            for (int j = 0; j < playerList.Count; j++)
             {
                 if (playerList[i].Position.Value == playerList[j].Position.Value)
                 {
                     if (i == j)
                         positionOnTile = playersOnTile;
                     playersOnTile++;
-                }  
+                }
             }
-            playerPieces[i].transform.localPosition = gameboard[playerList[i].Position.Value].transform.localPosition + new Vector3(0, 2.1f*positionOnTile - 2.1f*(playersOnTile-(positionOnTile+1)), 0);
+            playerPieces[i].transform.localPosition = gameboard[playerList[i].Position.Value].transform.localPosition + new Vector3(0, 2.1f * positionOnTile - 2.1f * (playersOnTile - (positionOnTile + 1)), 0);
         }
     }
 
@@ -583,7 +583,7 @@ public class PlayManager : Singleton<PlayManager>
         selectedPlayer = turnOrderPlayerList[id];
         characterDisplayMinimizeButton.SetActive(true);
 
-        if(!characterDisplayOpen)
+        if (!characterDisplayOpen)
         {
             characterDisplayOpen = true;
             StartCoroutine(OpenPlayerSheet());
@@ -592,7 +592,7 @@ public class PlayManager : Singleton<PlayManager>
 
     IEnumerator OpenPlayerSheet()
     {
-        for(int i = 1; i <= 100; i++)
+        for (int i = 1; i <= 100; i++)
         {
             characterDisplays.transform.localPosition = new Vector3(minimizedX + (maximizedX - minimizedX) * i * 0.01f, 0, 0);
             yield return new WaitForSeconds(characterSheetOpenLength);
@@ -616,6 +616,20 @@ public class PlayManager : Singleton<PlayManager>
             yield return new WaitForSeconds(characterSheetOpenLength);
         }
         characterDisplayMinimizeButton.SetActive(false);
+    }
+
+    public int GetStatModFromType(string statRollType)
+    {
+        switch (statRollType)
+        {
+            case "STR": return GetMod(localPlayer.Strength.Value);
+            case "DEX": return GetMod(localPlayer.Dexterity.Value);
+            case "INT": return GetMod(localPlayer.Intelligence.Value);
+            case "SPD": return GetMod(localPlayer.Speed.Value);
+            case "CON": return GetMod(localPlayer.Constitution.Value);
+            case "ENG": return GetMod(localPlayer.Energy.Value);
+            default: Debug.LogError("Unknown Stat Roll Type: " + statRollType); return 0;
+        }
     }
 
     public string DrawFromLootDeck()
@@ -642,7 +656,7 @@ public class PlayManager : Singleton<PlayManager>
         ResetEncounterFails();
         // Fill later
         localPlayer.DrawEncounterCards(1, localPlayer.UUID.Value, true);
-        //localPlayer.DrawTreasure(Cards(1, localPlayer.UUID.Value, false);
+
         // EndTurn();
     }
 
@@ -734,4 +748,114 @@ public class PlayManager : Singleton<PlayManager>
     {
         DefaultTile(); // Temporary
     }
+
+    #region Chaos Counter Functions
+    public int XPModifier()
+    {
+        return 2 * Mathf.FloorToInt((chaosCounter - 1) / 4);
+    }
+
+    public void ReduceChaos(int amount)
+    {
+        if (chaosCounter > 4 && chaosCounter - amount <= 4)
+            return;
+        if (chaosCounter > 8 && chaosCounter - amount <= 8)
+            return;
+        if (chaosCounter > 12 && chaosCounter - amount <= 12)
+            return;
+        if (chaosCounter > 16 && chaosCounter - amount <= 16)
+            return;
+        if (chaosCounter > 20 && chaosCounter - amount <= 20)
+            return;
+        chaosCounter -= amount;
+        if (chaosCounter < 1)
+            chaosCounter = 1;
+    }
+
+    public void IncreaseChaos(int amount)
+    {
+        chaosCounter += amount;
+        if (chaosCounter > 21)
+            chaosCounter = 21;
+    }
+
+    public int ChaosTier()
+    {
+        return 1 + Mathf.FloorToInt((chaosCounter - 1) / 4);
+    }
+    #endregion
+
+    #region Stat Roll
+    public void StatRollListener(Action<int> Response)
+    {
+        StartCoroutine(WaitForStatRoll(Response));
+    }
+
+    IEnumerator WaitForStatRoll(Action<int> Response)
+    {
+        yield return new WaitUntil(() => FetchStatRollResult() != 0);
+        Response(FetchStatRollResult());
+    }
+
+    public void MakeStatRoll(string statRollType, int statRollValue)
+    {
+        encounterElements.transform.GetChild(1).GetComponent<UIStatRoll>().MakeStatRoll(statRollType, statRollValue);
+    }
+
+    public int FetchStatRollResult()
+    {
+        return encounterElements.transform.GetChild(1).GetComponent<UIStatRoll>().success;
+    }
+    #endregion
+
+    #region Option Requirements
+    public bool Angelkin(Player p)
+    {
+        return p.Race.Value == "Aasimar";
+    }
+    public bool Animalkin(Player p)
+    {
+        return p.Race.Value == "Centaur" || Leonin(p);
+    }
+    public bool Berserk(Player p)
+    {
+        return p.Trait.Value == "Berserk";
+    }
+    public bool Dwarf(Player p)
+    {
+        return p.Race.Value == "Dwarf";
+    }
+    public bool Elven(Player p)
+    {
+        return p.Race.Value == "High Elf" || p.Race.Value == "Night Elf";
+    }
+    public bool FleetFooted(Player p)
+    {
+        return p.Trait.Value == "Fleet-Footed";
+    }
+    public bool Highborn(Player p)
+    {
+        return p.Trait.Value == "Highborn";
+    }
+    public bool Holy(Player p)
+    {
+        return p.Trait.Value == "Holy";
+    }
+    public bool Leonin(Player p)
+    {
+        return p.Race.Value == "Leonin";
+    }
+    public bool Looter(Player p)
+    {
+        return p.Trait.Value == "Looter";
+    }
+    public bool Mystical(Player p)
+    {
+        return p.Trait.Value == "Mystical";
+    }
+    public bool Powerful(Player p)
+    {
+        return p.Trait.Value == "Powerful";
+    }
+    #endregion
 }
