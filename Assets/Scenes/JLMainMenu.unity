@@ -3355,8 +3355,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: AdventuresOfOld.ProfileManager, Assembly-CSharp
+      - m_Target: {fileID: 2127967947}
+        m_TargetAssemblyTypeName: AdventuresOfOldMultiplayer.ProfileManager, Assembly-CSharp
         m_MethodName: ChangeUsername
         m_Mode: 1
         m_Arguments:
