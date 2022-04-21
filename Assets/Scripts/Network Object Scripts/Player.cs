@@ -612,6 +612,8 @@ namespace AdventuresOfOldMultiplayer
                 }
                 if (damage > 0)
                     Health.Value -= damage;
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.UpdateCharacterPanelsClientRPC();
             }
             else
                 TakeDamageServerRPC(amount);
@@ -627,6 +629,8 @@ namespace AdventuresOfOldMultiplayer
             }
             if (damage > 0)
                 Health.Value -= damage;
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.UpdateCharacterPanelsClientRPC();
         }
 
         public void RestoreAbilityCharges(int amount)
@@ -658,6 +662,8 @@ namespace AdventuresOfOldMultiplayer
                 int cap = 2 * Constitution.Value;
                 if (Health.Value > cap)
                     Health.Value = cap;
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.UpdateCharacterPanelsClientRPC();
             }
             else
                 RestoreRestoreHealthServerRPC(amount);
@@ -669,6 +675,8 @@ namespace AdventuresOfOldMultiplayer
             int cap = 2 * Constitution.Value;
             if (Health.Value > cap)
                 Health.Value = cap;
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.UpdateCharacterPanelsClientRPC();
         }
 
         public void LoseAbilityCharges(int amount)

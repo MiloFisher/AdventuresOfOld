@@ -32,8 +32,8 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: 4189731bc5aed4a49a5d9f50f651357f, type: 2}
         m_TargetAssemblyTypeName: EventOptions, Assembly-CSharp
-        m_MethodName: SomethingShiny_Option_0
-        m_Mode: 1
+        m_MethodName: SomethingShiny
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -46,12 +46,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: 4189731bc5aed4a49a5d9f50f651357f, type: 2}
         m_TargetAssemblyTypeName: EventOptions, Assembly-CSharp
-        m_MethodName: SomethingShiny_Option_1
-        m_Mode: 1
+        m_MethodName: SomethingShiny
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -60,12 +60,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 11400000, guid: 4189731bc5aed4a49a5d9f50f651357f, type: 2}
         m_TargetAssemblyTypeName: EventOptions, Assembly-CSharp
-        m_MethodName: SomethingShiny_Option_2
-        m_Mode: 1
+        m_MethodName: SomethingShiny
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 2
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0

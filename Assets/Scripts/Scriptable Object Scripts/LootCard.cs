@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public enum Rarity { COMMON, UNCOMMON, RARE, LEGENDARY }
+public enum Rarity { COMMON, UNCOMMON, RARE, EPIC, LEGENDARY }
 
 public class LootCard : ScriptableObject
 {
