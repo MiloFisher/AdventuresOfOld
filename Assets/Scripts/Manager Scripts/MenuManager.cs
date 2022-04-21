@@ -3,8 +3,6 @@ using UnityEngine;
 public class MenuManager : Singleton<MenuManager>
 {
     public GameObject[] menuScenes;
-    public AudioSource audioSource;
-    public AudioClip buttonSelected;
 
     private void Awake()
     {

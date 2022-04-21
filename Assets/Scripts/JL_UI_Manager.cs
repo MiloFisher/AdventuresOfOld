@@ -32,6 +32,14 @@ public class JL_UI_Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         if (this.name == "Profile_BUTTON" || this.name == "SaveProfile_BUTTON") {
             //spriteScale(status);
         }
+        else if (this.name == "ReturnToMenu_BUTTON") {
+            if (status == 0) {
+                this.GetComponent<Image>().transform.localScale = new Vector2(2, 2);
+            }
+            else if (status == 1) {
+                this.GetComponent<Image>().transform.localScale = new Vector2((float)2.2, (float)2.2);
+            }
+        }
         else {
             if (status == 0) {
             this.GetComponent<Image>().sprite = button;
