@@ -20,5 +20,11 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Core Game.unity
     guid: 360118703c17f4e89a37d7bd15d01d70
+  - enabled: 1
+    path: Assets/Scenes/JLFailureMenu.unity
+    guid: bad1358edb6ba9a42b799586cdda69db
+  - enabled: 1
+    path: Assets/Scenes/Credits.unity
+    guid: 3f807a7173a316a4e8836a3b0729306c
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: cd80da648132f894aa6619ce68d4becf, type: 2}
