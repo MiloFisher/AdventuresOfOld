@@ -324,6 +324,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cardName: 
+  slot: 0
   collectCardButton: {fileID: 8563919317234852744}
   cardButton: {fileID: 2358335792050505164}
   cardBack: {fileID: 1845187416894654709}
@@ -662,7 +663,7 @@ MonoBehaviour:
       - m_Target: {fileID: -6015188243248513078}
         m_TargetAssemblyTypeName: UILootCard, Assembly-CSharp
         m_MethodName: ClickCard
-        m_Mode: 3
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine

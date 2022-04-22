@@ -69,6 +69,10 @@ public class PlayManager : Singleton<PlayManager>
 
     public EncounterCard testingCard;
 
+    public bool startOrEndOfDay;
+
+    public bool inStore;
+
     void Start()
     {
         // Activate loadingScreen
@@ -337,6 +341,7 @@ public class PlayManager : Singleton<PlayManager>
     public void EndOfDay()
     {
         // Call Choose Activity prompt which is element 0
+        startOrEndOfDay = true;
         CallEndOfDayElement(0);
     }
 
@@ -466,6 +471,7 @@ public class PlayManager : Singleton<PlayManager>
     public void CallTransition(int id)
     {
         transitions.transform.GetChild(id).gameObject.SetActive(true);
+        InventoryManager.Instance.HideOptions();
     }
 
     public void CallEncounterElement(int id)
@@ -883,6 +889,18 @@ public class PlayManager : Singleton<PlayManager>
     public bool HasTorch(Player p)
     {
         return p.Inventory1.Value == "Torch" || p.Inventory2.Value == "Torch" || p.Inventory3.Value == "Torch" || p.Inventory4.Value == "Torch" || p.Inventory5.Value == "Torch";
+    }
+    public bool IsStartOrEndOfDay()
+    {
+        return startOrEndOfDay;
+    }
+    public bool IsInStore()
+    {
+        return inStore;
+    }
+    public bool HasAllyInStore()
+    {
+        return true;
     }
     #endregion
 }

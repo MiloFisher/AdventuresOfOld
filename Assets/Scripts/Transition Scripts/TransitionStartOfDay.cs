@@ -25,6 +25,8 @@ public class TransitionStartOfDay : MonoBehaviour
         canClose = false;
         ResetFade();
         StartCoroutine(FadeInSequence());
+
+        PlayManager.Instance.startOrEndOfDay = true;
     }
 
     public void OnDisable()
@@ -32,6 +34,8 @@ public class TransitionStartOfDay : MonoBehaviour
         // If it is your turn, after displaying "Start of Day", display "Your Turn"
         if (PlayManager.Instance.isYourTurn)
             PlayManager.Instance.CallTransition(1);
+
+        PlayManager.Instance.startOrEndOfDay = false;
     }
 
     public void Close()

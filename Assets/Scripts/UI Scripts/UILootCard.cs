@@ -8,6 +8,7 @@ public class UILootCard : MonoBehaviour
 {
     [Header("General Components")]
     public string cardName;
+    public int slot;
     public GameObject collectCardButton;
     public GameObject cardButton;
     public GameObject cardBack;
@@ -34,10 +35,12 @@ public class UILootCard : MonoBehaviour
 
     private bool collectButtonActive;
 
-    public void ClickCard(int id)
+    public void ClickCard()
     {
         if (!InventoryManager.Instance.maximized)
             InventoryManager.Instance.MaximizeInventory();
+        else
+            InventoryManager.Instance.ShowOptions(slot);
     }
 
     public void AddCardToHand()

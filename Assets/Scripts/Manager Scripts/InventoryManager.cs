@@ -17,12 +17,14 @@ public class InventoryManager : Singleton<InventoryManager>
     public float movementTimeLength = 0.004f;
     public bool maximized;
     public bool forcedMaximize;
+    public GameObject lootCardOptions;
 
     private string[] gear = new string[9];
     private int[] gearPos = new int[9];
     private int activeCards;
-    public string emptyValue = "empty";
-    private bool inAnimation;
+    [HideInInspector] public string emptyValue = "empty";
+    public bool inAnimation;
+    private int selectedID = -1;
 
     private void Start()
     {
@@ -222,6 +224,28 @@ public class InventoryManager : Singleton<InventoryManager>
         maximized = false;
         minimizeButton.SetActive(false);
         StartCoroutine(AnimateMinMaxMovement());
+    }
+
+    public void ShowOptions(int id)
+    {
+        selectedID = id;
+        lootCardOptions.GetComponent<UILootOptions>().Display(cards[id].GetComponent<UILootCard>(), id);
+        lootCardOptions.transform.localPosition = cards[id].transform.localPosition;
+    }
+
+    public void HideOptions()
+    {
+        if(selectedID != -1)
+        {
+            lootCardOptions.SetActive(false);
+            cards[selectedID].GetComponentInChildren<UILootSelection>().HideSelection();
+            selectedID = -1;
+        }
+    }
+
+    public bool IsShowingOptions()
+    {
+        return lootCardOptions.activeInHierarchy;
     }
 
     IEnumerator AnimateCorrectionalMovement(int newActiveCards, int[] newGearPos, string[] newGear)
