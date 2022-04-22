@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Fine Sword & Shield
   rarity: 1
+  image: {fileID: 21300000, guid: c9de21b5c2282b54c906b4c08149a5d0, type: 3}
   copies: 4
   itemType: Sword/Shield
   effectDescription: +4 Damage, +2 Armor
