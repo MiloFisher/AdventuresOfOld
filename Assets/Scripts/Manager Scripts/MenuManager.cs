@@ -1,5 +1,5 @@
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class MenuManager : Singleton<MenuManager>
 {
     public GameObject[] menuScenes;
@@ -25,6 +25,10 @@ public class MenuManager : Singleton<MenuManager>
         else if (resNumber == 2560) {
             Screen.SetResolution(2560, 1440, true);
         }
+    }
+
+    public void creditsScene() {
+        SceneManager.LoadScene("Credits");
     }
 
     public void CloseApplication()
