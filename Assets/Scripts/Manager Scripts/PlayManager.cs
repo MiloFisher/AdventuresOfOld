@@ -231,13 +231,6 @@ public class PlayManager : Singleton<PlayManager>
                     p.SetValue("Weapon", "Simple Wand & Shield");
                     break;
             }
-            p.SetValue("Ring1", InventoryManager.Instance.emptyValue);
-            p.SetValue("Ring2", InventoryManager.Instance.emptyValue);
-            p.SetValue("Inventory1", InventoryManager.Instance.emptyValue);
-            p.SetValue("Inventory2", InventoryManager.Instance.emptyValue);
-            p.SetValue("Inventory3", InventoryManager.Instance.emptyValue);
-            p.SetValue("Inventory4", InventoryManager.Instance.emptyValue);
-            p.SetValue("Inventory5", InventoryManager.Instance.emptyValue);
 
             // Set player positions to starting tile
             p.SetPosition(new Vector3Int(0, 7, -7));

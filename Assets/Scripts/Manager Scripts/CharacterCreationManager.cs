@@ -13,6 +13,8 @@ public class CharacterCreationManager : MonoBehaviour
     private GameObject canvas;
     private GameObject title;
 
+    private string emptyValue = "empty";
+
     //Creating Race Class for each default race
     //order: str, dex, int, spd, con, eng
     List<Race> default_races = new List<Race>() {
@@ -62,6 +64,16 @@ public class CharacterCreationManager : MonoBehaviour
         localPlayer.SetValue("Energy", player.getEng());
         localPlayer.SetValue("Health", localPlayer.Constitution.Value * 2);
         localPlayer.SetValue("Image", player.getImage());
+        // Set gear to empty
+        localPlayer.SetValue("Weapon", emptyValue);
+        localPlayer.SetValue("Armor", emptyValue);
+        localPlayer.SetValue("Ring1", emptyValue);
+        localPlayer.SetValue("Ring2", emptyValue);
+        localPlayer.SetValue("Inventory1", emptyValue);
+        localPlayer.SetValue("Inventory2", emptyValue);
+        localPlayer.SetValue("Inventory3", emptyValue);
+        localPlayer.SetValue("Inventory4", emptyValue);
+        localPlayer.SetValue("Inventory5", emptyValue);
 
         // If host, generate random characters for bots
         if (NetworkManager.Singleton.IsHost)
@@ -86,6 +98,16 @@ public class CharacterCreationManager : MonoBehaviour
                     p.SetValue("Energy", 10);
                     p.SetValue("Health", p.Constitution.Value);
                     p.SetValue("Image", "portrait_human");
+                    // Set gear to empty
+                    p.SetValue("Weapon", emptyValue);
+                    p.SetValue("Armor", emptyValue);
+                    p.SetValue("Ring1", emptyValue);
+                    p.SetValue("Ring2", emptyValue);
+                    p.SetValue("Inventory1", emptyValue);
+                    p.SetValue("Inventory2", emptyValue);
+                    p.SetValue("Inventory3", emptyValue);
+                    p.SetValue("Inventory4", emptyValue);
+                    p.SetValue("Inventory5", emptyValue);
                 }
             }
         }
