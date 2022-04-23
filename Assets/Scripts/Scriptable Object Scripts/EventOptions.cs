@@ -271,14 +271,20 @@ public class EventOptions : ScriptableObject
         switch (option)
         {
             case 0:
-
+                xp += 2;
+                p.CompleteEncounter(true, p.UUID.Value);
+                p.GainXP(xp);
                 break;
             case 1:
-
+                PlayManager.Instance.MakeStatRoll("DEX", 11);
+                PlayManager.Instance.StatRollListener((a) => {
+                    if (a == -1)
+                        p.TakeDamage(10);
+                    p.CompleteEncounter(true, p.UUID.Value);
+                    p.GainXP(xp);
+                });
                 break;
         }
-        p.CompleteEncounter(true, p.UUID.Value);
-        p.GainXP(xp);
     }
 
     public void SomethingShiny(int option)
