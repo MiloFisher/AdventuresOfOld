@@ -410,14 +410,23 @@ public class EventOptions : ScriptableObject
         switch (option)
         {
             case 0:
-
+                p.RestoreAbilityCharges(999);
+                p.IncreaseChaos(1);
+                p.CompleteEncounter(true, p.UUID.Value);
+                p.GainXP(xp);
                 break;
             case 1:
-
+                PlayManager.Instance.MakeStatRoll("ENG", 10);
+                PlayManager.Instance.StatRollListener((a) => {
+                    if (a == 1)
+                        xp += 2;
+                    else
+                        p.LoseAbilityCharges(PlayManager.Instance.ChaosTier());
+                    p.CompleteEncounter(true, p.UUID.Value);
+                    p.GainXP(xp);
+                });
                 break;
         }
-        p.CompleteEncounter(true, p.UUID.Value);
-        p.GainXP(xp);
     }
 
     public void DyingDeer(int option)
@@ -428,17 +437,23 @@ public class EventOptions : ScriptableObject
         switch (option)
         {
             case 0:
-
+                p.RestoreHealth(10);
+                p.DrawLootCards(2, p.UUID.Value, true);
+                p.CompleteEncounter(false, p.UUID.Value);
+                p.GainXP(xp);
                 break;
             case 1:
-
+                p.GainGold(30);
+                p.DrawLootCards(1, p.UUID.Value, true);
+                p.IncreaseChaos(1);
+                p.CompleteEncounter(false, p.UUID.Value);
+                p.GainXP(xp);
                 break;
             case 2:
-
+                p.CompleteEncounter(true, p.UUID.Value);
+                p.GainXP(xp);
                 break;
         }
-        p.CompleteEncounter(true, p.UUID.Value);
-        p.GainXP(xp);
     }
 
     public void FairySpirit(int option)
