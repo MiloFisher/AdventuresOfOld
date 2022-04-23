@@ -18,6 +18,7 @@ public class InventoryManager : Singleton<InventoryManager>
     public bool maximized;
     public bool forcedMaximize;
     public GameObject lootCardOptions;
+    public GameObject forcedDiscard;
 
     private string[] gear = new string[9];
     private int[] gearPos = new int[9];
@@ -335,6 +336,11 @@ public class InventoryManager : Singleton<InventoryManager>
         return p.Inventory1.Value == emptyValue || p.Inventory2.Value == emptyValue || p.Inventory3.Value == emptyValue || p.Inventory4.Value == emptyValue || p.Inventory5.Value == emptyValue;
     }
 
+    public string[] GetGear()
+    {
+        return gear;
+    }
+
     public void Use()
     {
 
@@ -458,6 +464,8 @@ public class InventoryManager : Singleton<InventoryManager>
                 PlayManager.Instance.localPlayer.SetValue("Inventory5", emptyValue);
                 break;
         }
+        if (forcedDiscard.activeInHierarchy)
+            forcedDiscard.GetComponent<UIForcedDiscard>().DiscardComplete();
     }
 
     public void Trade()

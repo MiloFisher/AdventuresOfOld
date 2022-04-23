@@ -351,6 +351,9 @@ public class PlayManager : Singleton<PlayManager>
         isYourTurn = true;
         if (!transitions.transform.GetChild(0).gameObject.activeInHierarchy)
             CallTransition(1);
+
+        // *** Testing code only ***
+        localPlayer.DrawLootCards(2, localPlayer.UUID.Value, false);
     }
 
     public void StartBotTurn()
@@ -834,6 +837,29 @@ public class PlayManager : Singleton<PlayManager>
     public int FetchChoiceResult()
     {
         return encounterElements.transform.GetChild(3).GetComponent<UIChoice>().choice;
+    }
+    #endregion
+
+    #region Forced Discard
+    public void ForcedDiscardListener(Action Response)
+    {
+        StartCoroutine(WaitForForcedDiscard(Response));
+    }
+
+    IEnumerator WaitForForcedDiscard(Action Response)
+    {
+        yield return new WaitUntil(() => FetchForcedDiscardResult());
+        Response();
+    }
+
+    public void ForceDiscard()
+    {
+        CallEncounterElement(4);
+    }
+
+    public bool FetchForcedDiscardResult()
+    {
+        return encounterElements.transform.GetChild(4).GetComponent<UIForcedDiscard>().completed;
     }
     #endregion
 

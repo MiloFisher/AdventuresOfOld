@@ -102,7 +102,6 @@ public class EventOptions : ScriptableObject
         }
     }
 
-    // Needs Discard Card implementation still...
     public void EnchantedLake(int option)
     {
         EventCard e = PlayManager.Instance.encounterReference["Enchanted Lake"] as EventCard;
@@ -147,13 +146,17 @@ public class EventOptions : ScriptableObject
                     if (a == 1)
                     {
                         p.TakeDamage(15);
+                        p.CompleteEncounter(true, p.UUID.Value);
+                        p.GainXP(xp);
                     }
                     else
                     {
-                        // Discard 1 card
+                        PlayManager.Instance.ForceDiscard();
+                        PlayManager.Instance.ForcedDiscardListener(() => {
+                            p.CompleteEncounter(true, p.UUID.Value);
+                            p.GainXP(xp);
+                        });
                     }
-                    p.CompleteEncounter(true, p.UUID.Value);
-                    p.GainXP(xp);
                 });
                 break;
         }
