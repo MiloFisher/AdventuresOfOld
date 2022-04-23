@@ -123,6 +123,8 @@ public class LootManager : Singleton<LootManager>
 
     IEnumerator AnimateClosing()
     {
+        discardCardsButton.SetActive(false);
+
         // First close the scroll
         float dif = bannerEndWidth - bannerStartWidth;
         for (int i = 99; i >= 0; i--)

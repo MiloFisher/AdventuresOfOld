@@ -333,17 +333,39 @@ public class EventOptions : ScriptableObject
         switch (option)
         {
             case 0:
-
+                xp += 2;
+                p.DrawLootCards(1, p.UUID.Value, true);
+                p.CompleteEncounter(false, p.UUID.Value);
+                p.GainXP(xp);
                 break;
             case 1:
-
+                xp += 2;
+                p.ReduceChaos(1);
+                if (p.Inventory1.Value == "Torch")
+                    p.SetValue("Inventory1", InventoryManager.Instance.emptyValue);
+                else if (p.Inventory2.Value == "Torch")
+                    p.SetValue("Inventory2", InventoryManager.Instance.emptyValue);
+                else if (p.Inventory3.Value == "Torch")
+                    p.SetValue("Inventory3", InventoryManager.Instance.emptyValue);
+                else if (p.Inventory4.Value == "Torch")
+                    p.SetValue("Inventory4", InventoryManager.Instance.emptyValue);
+                else if (p.Inventory5.Value == "Torch")
+                    p.SetValue("Inventory5", InventoryManager.Instance.emptyValue);
+                p.CompleteEncounter(true, p.UUID.Value);
+                p.GainXP(xp);
                 break;
             case 2:
-
+                PlayManager.Instance.MakeStatRoll("SPD", 9);
+                PlayManager.Instance.StatRollListener((a) => {
+                    if (a == -1)
+                    {
+                        p.IncreaseChaos(1);
+                    }
+                    p.CompleteEncounter(true, p.UUID.Value);
+                    p.GainXP(xp);
+                });
                 break;
         }
-        p.CompleteEncounter(true, p.UUID.Value);
-        p.GainXP(xp);
     }
 
     public void MysteriousMushroom(int option)
