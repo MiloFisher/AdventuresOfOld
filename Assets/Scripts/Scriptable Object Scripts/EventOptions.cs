@@ -376,17 +376,30 @@ public class EventOptions : ScriptableObject
         switch (option)
         {
             case 0:
-
+                p.RestoreAbilityCharges(2);
+                xp += 2;
+                p.CompleteEncounter(true, p.UUID.Value);
+                p.GainXP(xp);
                 break;
             case 1:
-
+                PlayManager.Instance.MakeStatRoll("CON", 9);
+                PlayManager.Instance.StatRollListener((a) => {
+                    if (a == 1)
+                    {
+                        xp += 4;
+                        p.RestoreHealth(5);
+                    }
+                    else
+                        p.TakeDamage(10);
+                    p.CompleteEncounter(true, p.UUID.Value);
+                    p.GainXP(xp);
+                });
                 break;
             case 2:
-
+                p.CompleteEncounter(true, p.UUID.Value);
+                p.GainXP(xp);
                 break;
         }
-        p.CompleteEncounter(true, p.UUID.Value);
-        p.GainXP(xp);
     }
 
     public void WellFromHell(int option)
