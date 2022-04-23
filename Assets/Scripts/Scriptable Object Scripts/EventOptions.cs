@@ -141,7 +141,7 @@ public class EventOptions : ScriptableObject
                 });
                 break;
             case 2:
-                PlayManager.Instance.MakeChoice("Take 15 Damage", "Discard 1 Card", true, InventoryManager.Instance.HasCardInInventory(p));
+                PlayManager.Instance.MakeChoice("Take 15 Damage", "Discard a Card", true, InventoryManager.Instance.HasCardInInventory(p));
                 PlayManager.Instance.ChoiceListener((a) => {
                     if (a == 1)
                     {
@@ -215,14 +215,52 @@ public class EventOptions : ScriptableObject
         switch (option)
         {
             case 0:
-
+                PlayManager.Instance.MakeStatRoll("STR", 11);
+                PlayManager.Instance.StatRollListener((a) => {
+                    if (a == 1)
+                        xp += 2;
+                    else
+                    {
+                        if(InventoryManager.Instance.HasCardInInventory(p))
+                        {
+                            PlayManager.Instance.ForceDiscard();
+                            PlayManager.Instance.ForcedDiscardListener(() => {
+                                p.LoseGold(20);
+                                p.TakeDamage(10);
+                                p.CompleteEncounter(true, p.UUID.Value);
+                                p.GainXP(xp);
+                            });
+                        }
+                        else
+                        {
+                            p.LoseGold(20);
+                            p.TakeDamage(10);
+                            p.CompleteEncounter(true, p.UUID.Value);
+                            p.GainXP(xp);
+                        }
+                    }
+                });
                 break;
             case 1:
-
+                PlayManager.Instance.MakeChoice("-20 Gold", "Discard a Card", true, InventoryManager.Instance.HasCardInInventory(p));
+                PlayManager.Instance.ChoiceListener((a) => {
+                    if (a == 1)
+                    {
+                        p.LoseGold(20);
+                        p.CompleteEncounter(true, p.UUID.Value);
+                        p.GainXP(xp);
+                    }
+                    else
+                    {
+                        PlayManager.Instance.ForceDiscard();
+                        PlayManager.Instance.ForcedDiscardListener(() => {
+                            p.CompleteEncounter(true, p.UUID.Value);
+                            p.GainXP(xp);
+                        });
+                    }
+                });
                 break;
         }
-        p.CompleteEncounter(true, p.UUID.Value);
-        p.GainXP(xp);
     }
 
     public void ItsATrap(int option)

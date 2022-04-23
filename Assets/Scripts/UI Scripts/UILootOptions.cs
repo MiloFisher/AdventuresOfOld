@@ -29,8 +29,19 @@ public class UILootOptions : MonoBehaviour
         if(l.GetType() == typeof(ConsumableCard))
         {
             useButton.GetComponentInChildren<TMP_Text>().text = useOption;
-            useButton.GetComponent<Button>().enabled = true;
-            useButton.GetComponent<Image>().color = enabledColor;
+
+            // If forced maximize is active, disable using cards
+            if(InventoryManager.Instance.forcedMaximize)
+            {
+                useButton.GetComponent<Button>().enabled = false;
+                useButton.GetComponent<Image>().color = disabledColor;
+            }
+            // Otherwise enable use
+            else
+            {
+                useButton.GetComponent<Button>().enabled = true;
+                useButton.GetComponent<Image>().color = enabledColor;
+            }
         }
         // If card is a Weapon, Ring, or Armor, first option is either "Equip" or "Unequip"
         else

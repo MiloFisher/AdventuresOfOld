@@ -600,6 +600,25 @@ namespace AdventuresOfOldMultiplayer
             Gold.Value += amount;
         }
 
+        public void LoseGold(int amount)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                Gold.Value -= amount;
+                if (Gold.Value < 0)
+                    Gold.Value = 0;
+            }
+            else
+                LoseGoldServerRPC(amount);
+        }
+        [ServerRpc]
+        private void LoseGoldServerRPC(int amount, ServerRpcParams rpcParams = default)
+        {
+            Gold.Value -= amount;
+            if (Gold.Value < 0)
+                Gold.Value = 0;
+        }
+
         public void TakeDamage(int amount)
         {
             if (NetworkManager.Singleton.IsServer)

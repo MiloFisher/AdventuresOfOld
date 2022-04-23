@@ -224,7 +224,7 @@ public class CreatedChar {
 
     public string getRing1()
     {
-        return "";
+        return "empty";
     }
 
     public void setRing1(string ring1)
@@ -234,7 +234,7 @@ public class CreatedChar {
 
     public string getRing2()
     {
-        return "";
+        return "empty";
     }
 
     public void setRing2(string ring2)

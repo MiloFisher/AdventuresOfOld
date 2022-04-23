@@ -16,6 +16,10 @@ public class UIChoice : MonoBehaviour
     public float fadeLength = 0.004f;
     public GameObject choiceButton1;
     public GameObject choiceButton2;
+    public Color enabledColor;
+    public Color disabledColor;
+    public Color textEnabledColor;
+    public Color textDisabledColor;
     public float waitTime = 0.5f;
     public int choice;
 
@@ -78,7 +82,11 @@ public class UIChoice : MonoBehaviour
         choiceButton1.SetActive(true);
         choiceButton2.SetActive(true);
         choiceButton1.GetComponent<Button>().enabled = condition1;
+        choiceButton1.GetComponent<Image>().color = condition1 ? enabledColor : disabledColor;
+        choiceButton1.GetComponentInChildren<TMP_Text>().color = condition1 ? textEnabledColor : textDisabledColor;
         choiceButton2.GetComponent<Button>().enabled = condition2;
+        choiceButton2.GetComponent<Image>().color = condition2 ? enabledColor : disabledColor;
+        choiceButton2.GetComponentInChildren<TMP_Text>().color = condition2 ? textEnabledColor : textDisabledColor;
     }
 
     public void ChooseOption(int option)

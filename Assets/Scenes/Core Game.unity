@@ -6719,7 +6719,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 0362483b1e5c54618a5ac53388f8ca35, type: 3}
   - {fileID: 21300000, guid: fc3e0ccfa079a47a48ccd83d885a5516, type: 3}
   loadingScreen: {fileID: 1366110076}
-  testingCard: {fileID: 11400000, guid: f7f4935bde5614201abccb8e8de72e9b, type: 2}
+  testingCard: {fileID: 11400000, guid: 4324ad1cee4974223a8ceb2d1806790e, type: 2}
   startOrEndOfDay: 0
   inStore: 0
 --- !u!1 &339524316
@@ -9139,7 +9139,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4292598747
-  m_fontColor: {r: 0.8584906, g: 0.8584906, b: 0.8584906, a: 1}
+  m_fontColor: {r: 0.85882354, g: 0.85882354, b: 0.85882354, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -38896,6 +38896,7 @@ MonoBehaviour:
   bannerEndScale: 1
   bannerGrowingLength: 0.004
   bannerOpeningLength: 0.004
+  fadeLength: 0.004
   cardsToDraw: []
   discardCardsButton: {fileID: 1744109180}
 --- !u!1 &1744109180
@@ -40971,6 +40972,10 @@ MonoBehaviour:
   fadeLength: 0.004
   choiceButton1: {fileID: 11759286}
   choiceButton2: {fileID: 1122128637}
+  enabledColor: {r: 0, g: 0.6862745, b: 1, a: 1}
+  disabledColor: {r: 0, g: 0.41568628, b: 0.6039216, a: 1}
+  textEnabledColor: {r: 0.85882354, g: 0.85882354, b: 0.85882354, a: 1}
+  textDisabledColor: {r: 0.45490196, g: 0.45490196, b: 0.45490196, a: 1}
   waitTime: 0.5
   choice: 0
 --- !u!1001 &1874601279
