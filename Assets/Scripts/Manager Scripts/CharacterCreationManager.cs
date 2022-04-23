@@ -65,10 +65,10 @@ public class CharacterCreationManager : MonoBehaviour
         localPlayer.SetValue("Health", localPlayer.Constitution.Value * 2);
         localPlayer.SetValue("Image", player.getImage());
         // Set gear to empty
-        localPlayer.SetValue("Weapon", emptyValue);
-        localPlayer.SetValue("Armor", emptyValue);
-        localPlayer.SetValue("Ring1", emptyValue);
-        localPlayer.SetValue("Ring2", emptyValue);
+        localPlayer.SetValue("Weapon", player.getWeapon());
+        localPlayer.SetValue("Armor", player.getArmor());
+        localPlayer.SetValue("Ring1", player.getRing1());
+        localPlayer.SetValue("Ring2", player.getRing2());
         localPlayer.SetValue("Inventory1", emptyValue);
         localPlayer.SetValue("Inventory2", emptyValue);
         localPlayer.SetValue("Inventory3", emptyValue);

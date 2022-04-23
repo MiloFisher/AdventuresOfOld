@@ -82,7 +82,7 @@ public class CreatedChar {
 
     public int getGold()
     {
-        return this.gold;
+        return 10;
     }
 
     public void setGold(int gold)
@@ -92,7 +92,7 @@ public class CreatedChar {
 
     public int getLevel()
     {
-        return this.level;
+        return 1;
     }
 
     public void setLevel(int level)
@@ -102,7 +102,7 @@ public class CreatedChar {
 
     public int getXp()
     {
-        return this.xp;
+        return 0;
     }
 
     public void setXp(int xp)
@@ -184,7 +184,7 @@ public class CreatedChar {
 
     public int getHealth()
     {
-        return this.health;
+        return getCon() * 2;
     }
 
     public void setHealth(int health)
@@ -204,7 +204,7 @@ public class CreatedChar {
 
     public string getArmor()
     {
-        return this.armor;
+        return getChosen_class().getClass_armor();
     }
 
     public void setArmor(string armor)
@@ -214,7 +214,7 @@ public class CreatedChar {
 
     public string getWeapon()
     {
-        return this.weapon;
+        return getChosen_class().getClass_weapon();
     }
 
     public void setWeapon(string weapon)
@@ -224,7 +224,7 @@ public class CreatedChar {
 
     public string getRing1()
     {
-        return this.ring1;
+        return "";
     }
 
     public void setRing1(string ring1)
@@ -234,7 +234,7 @@ public class CreatedChar {
 
     public string getRing2()
     {
-        return this.ring2;
+        return "";
     }
 
     public void setRing2(string ring2)
