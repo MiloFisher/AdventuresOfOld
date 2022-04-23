@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
 
 public class LootManager : Singleton<LootManager>
 {
@@ -19,7 +21,9 @@ public class LootManager : Singleton<LootManager>
     public float bannerEndScale;
     public float bannerGrowingLength = 0.004f;
     public float bannerOpeningLength = 0.004f;
+    public float fadeLength = 0.004f;
     public List<string> cardsToDraw = new List<string>();
+    public GameObject discardCardsButton;
     private List<GameObject> displayCards = new List<GameObject>();
     private bool endTurnAfter;
 
@@ -51,6 +55,43 @@ public class LootManager : Singleton<LootManager>
         {
             Debug.Log("Inventory is full!");
         }
+    }
+
+    public void DiscardRemaining()
+    {
+        discardCardsButton.SetActive(false);
+        StartCoroutine(FadeRemainingCards());
+    }
+
+    IEnumerator FadeRemainingCards()
+    {
+        // First disable collect buttons
+        foreach (GameObject g in displayCards)
+        {
+            g.GetComponent<UILootCard>().ActivateCollectCardButton(false);
+        }
+
+        // Next fade out cards
+        for (int i = 99; i >= 0; i--)
+        {
+            foreach(GameObject g in displayCards)
+            {
+                SetAlpha(g, i * 0.01f);
+            }
+            yield return new WaitForSeconds(fadeLength);
+        }
+
+        // Then destroy cards
+        for (int i = 0; i < displayCards.Count; i++)
+        {
+            GameObject card = displayCards[i];
+            displayCards.Remove(card);
+            Destroy(card);
+            i--;
+        }
+
+        // Start closing
+        StartCoroutine(AnimateClosing());
     }
 
     IEnumerator AnimateOpening(int amount)
@@ -143,6 +184,23 @@ public class LootManager : Singleton<LootManager>
         if (current < amount - 1)
             StartCoroutine(AnimateCardDraw(current + 1, amount));
         else
+        {
             cardsToDraw.Clear();
+            discardCardsButton.SetActive(true);
+        }  
+    }
+
+    private void SetAlpha(GameObject card, float a)
+    {
+        // Set transparency of all card features here
+        Image[] images = card.GetComponentsInChildren<Image>();
+        TMP_Text[] texts = card.GetComponentsInChildren<TMP_Text>();
+        foreach (Image img in images)
+        {
+            if (!img.GetComponent<Button>())
+                img.color = new Color(img.color.r, img.color.g, img.color.b, a);
+        }
+        foreach (TMP_Text txt in texts)
+            txt.color = new Color(txt.color.r, txt.color.g, txt.color.b, a);
     }
 }

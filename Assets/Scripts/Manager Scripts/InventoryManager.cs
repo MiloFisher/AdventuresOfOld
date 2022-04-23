@@ -326,6 +326,11 @@ public class InventoryManager : Singleton<InventoryManager>
             txt.color = new Color(txt.color.r, txt.color.g, txt.color.b, a);
     }
 
+    public bool InventoryIsFull(Player p)
+    {
+        return p.Inventory1.Value != emptyValue && p.Inventory2.Value != emptyValue && p.Inventory3.Value != emptyValue && p.Inventory4.Value != emptyValue && p.Inventory5.Value != emptyValue;
+    }
+
     public bool HasCardInInventory(Player p)
     {
         return !(p.Inventory1.Value == emptyValue && p.Inventory2.Value == emptyValue && p.Inventory3.Value == emptyValue && p.Inventory4.Value == emptyValue && p.Inventory5.Value == emptyValue);

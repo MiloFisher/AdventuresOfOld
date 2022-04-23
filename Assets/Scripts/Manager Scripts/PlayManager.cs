@@ -351,9 +351,6 @@ public class PlayManager : Singleton<PlayManager>
         isYourTurn = true;
         if (!transitions.transform.GetChild(0).gameObject.activeInHierarchy)
             CallTransition(1);
-
-        // *** Testing code only ***
-        localPlayer.DrawLootCards(2, localPlayer.UUID.Value, false);
     }
 
     public void StartBotTurn()
