@@ -860,6 +860,52 @@ public class PlayManager : Singleton<PlayManager>
     }
     #endregion
 
+    #region Discard Many
+    public void DiscardManyListener(Action<int> Response)
+    {
+        StartCoroutine(WaitForDiscardMany(Response));
+    }
+
+    IEnumerator WaitForDiscardMany(Action<int> Response)
+    {
+        yield return new WaitUntil(() => FetchDiscardManyResult() != -1);
+        Response(FetchDiscardManyResult());
+    }
+
+    public void DiscardManyCards()
+    {
+        CallEncounterElement(5);
+    }
+
+    public int FetchDiscardManyResult()
+    {
+        return encounterElements.transform.GetChild(5).GetComponent<UIDiscardManyCards>().discarded;
+    }
+    #endregion
+
+    #region Gamble
+    public void GambleListener(Action<int> Response)
+    {
+        StartCoroutine(WaitForGamble(Response));
+    }
+
+    IEnumerator WaitForGamble(Action<int> Response)
+    {
+        yield return new WaitUntil(() => FetchGambleResult() != 0);
+        Response(FetchGambleResult());
+    }
+
+    public void MakeGamble()
+    {
+        encounterElements.transform.GetChild(6).GetComponent<UIGamble>().MakeGamble();
+    }
+
+    public int FetchGambleResult()
+    {
+        return encounterElements.transform.GetChild(6).GetComponent<UIGamble>().success;
+    }
+    #endregion
+
     #region Option Requirements
     public bool Angelkin(Player p)
     {

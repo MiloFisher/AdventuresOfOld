@@ -194,17 +194,60 @@ public class EventOptions : ScriptableObject
         switch (option)
         {
             case 0:
-
+                PlayManager.Instance.DiscardManyCards();
+                PlayManager.Instance.DiscardManyListener((a) => {
+                    if(a == 0)
+                    {
+                        p.CompleteEncounter(true, p.UUID.Value);
+                        p.GainXP(xp);
+                    }
+                    else
+                    {
+                        p.DrawLootCards(a, p.UUID.Value, true);
+                        p.CompleteEncounter(false, p.UUID.Value);
+                        p.GainXP(xp);
+                    } 
+                });
                 break;
             case 1:
-
+                PlayManager.Instance.MakeGamble();
+                PlayManager.Instance.GambleListener((a) => {
+                    if(a == 1)
+                    {
+                        p.DrawLootCards(2, p.UUID.Value, true);
+                        p.GainGold(20);
+                        p.CompleteEncounter(false, p.UUID.Value);
+                        p.GainXP(xp);
+                    }
+                    else
+                    {
+                        PlayManager.Instance.MakeChoice("-20 Gold", "Discard a Card", true, InventoryManager.Instance.HasCardInInventory(p));
+                        PlayManager.Instance.ChoiceListener((a) => {
+                            if(a == 1)
+                            {
+                                p.LoseGold(20);
+                                p.CompleteEncounter(true, p.UUID.Value);
+                                p.GainXP(xp);
+                            }
+                            else
+                            {
+                                PlayManager.Instance.ForceDiscard();
+                                PlayManager.Instance.ForcedDiscardListener(() => {
+                                    p.CompleteEncounter(true, p.UUID.Value);
+                                    p.GainXP(xp);
+                                });
+                            }
+                        });
+                    }
+                });
                 break;
             case 2:
-
+                p.GainGold(50);
+                p.IncreaseChaos(1);
+                p.CompleteEncounter(true, p.UUID.Value);
+                p.GainXP(xp);
                 break;
         }
-        p.CompleteEncounter(true, p.UUID.Value);
-        p.GainXP(xp);
     }
 
     public void PayingTheToll(int option)

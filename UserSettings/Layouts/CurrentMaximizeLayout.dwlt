@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 22840
+  controlID: 23074
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -141,7 +141,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 22841
+  controlID: 23075
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -166,7 +166,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 22842
+  controlID: 23076
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -442,9 +442,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 892.0625, y: 742.56415, z: -181.19818}
+    m_Target: {x: 871.80286, y: 502.8286, z: -190.843}
     speed: 2
-    m_Value: {x: 892.0625, y: 742.56415, z: -181.19818}
+    m_Value: {x: 871.80286, y: 502.8286, z: -190.843}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -495,9 +495,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 433.64062
+    m_Target: 731.5921
     speed: 2
-    m_Value: 433.64062
+    m_Value: 731.5921
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -607,9 +607,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 
+      m_SelectedIDs: de750000
       m_LastClickedID: 0
-      m_ExpandedIDs: 904dfcff1867fcff026cfcfff274fcffce8efcffa891fcffa8aafcff06eefcffe8f2fcff8e0cfdff724cfdff5051fdffdc5bfdff9a76fdff449dfdffc8a0fdff6aadfdffd8b1fdff8eb6fdff58b7fdff3abafdff300ffeffba61feff667cfeff7ab3feff3c2cffff2c31ffff6e56ffff268affff3aadfffff2ccffffd4d1ffff2cfbfffff4ffffff02690000c06e00001e0f0100d0120100081501006621010050270100942a01007e30010010630100c066010002690100a68701002e90010048d201005ad201003ad80100c4f60100caf60100d61c0200ae1e0200066e0200306e0200167002001e750200d4760200ba780200649402008e94020030b1020016b3020052b902000cf30200f2f40200
+      m_ExpandedIDs: ccbbf7ff0cd7f7ff3405f8ff4e2af8ff7a3df8fff256f8ffbc96f8ffbaaff8ffb6e0f8ffb4f9f8ff321bf9fff433f9ffb24cf9ffae65f9ffd282f9ffb087f9ffb0a0f9ffa6c4f9ffa6ddf9ffb4fff9ffba18faff583afaff5a53faff0875faffda97faff9eb4faff08b5fbff70cefbff904dfcff1867fcff026cfcfff274fcffce8efcffa891fcffa8aafcff06eefcffe8f2fcff8e0cfdff724cfdff5051fdffdc5bfdff9a76fdff449dfdffc8a0fdff6aadfdffd8b1fdff8eb6fdff58b7fdff3abafdff300ffeffba61feff667cfeff7ab3feff3c2cffff2c31ffff6e56ffff268affff3aadfffff2ccffffd4d1ffff2cfbfffff4ffffff02690000c06e00001e0f0100d0120100081501006621010050270100942a01007e30010010630100c066010002690100a68701002e90010048d201005ad201003ad80100c4f60100caf60100d61c0200ae1e0200066e0200306e0200167002001e750200d4760200ba780200649402008e94020030b1020016b3020052b902000cf30200f2f4020094650300be6503002c6e0300766e0300ac760300ae1b040006da0400eadf0400aa5c0500d45c05009c5d0500c0650500
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -625,7 +625,7 @@ MonoBehaviour:
         m_IsRenaming: 0
         m_OriginalEventType: 11
         m_IsRenamingFilename: 0
-        m_ClientGUIView: {fileID: 8}
+        m_ClientGUIView: {fileID: 0}
       m_SearchString: 
     m_ExpandedScenes: []
     m_CurrenRootInstanceID: 0
@@ -701,21 +701,21 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Prefabs
+    - Assets/Scenes
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Prefabs
+  - Assets/Scenes
   m_LastFoldersGridSize: -1
   m_LastProjectPath: /Users/milo/Documents/GitHub/Adventures of Old 2022
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 157.88501}
-    m_SelectedIDs: bc750000
-    m_LastClickedID: 30140
+    scrollPos: {x: 0, y: 210}
+    m_SelectedIDs: be750000
+    m_LastClickedID: 30142
     m_ExpandedIDs: 000000007e7500008075000082750000847500008675000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -769,9 +769,9 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 
-    m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 0
+    m_SelectedInstanceIDs: de750000
+    m_LastClickedInstanceID: 30174
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000
     m_RenameOverlay:
       m_UserAcceptedRename: 0

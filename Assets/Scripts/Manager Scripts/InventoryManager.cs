@@ -19,6 +19,7 @@ public class InventoryManager : Singleton<InventoryManager>
     public bool forcedMaximize;
     public GameObject lootCardOptions;
     public GameObject forcedDiscard;
+    public GameObject discardMany;
 
     private string[] gear = new string[9];
     private int[] gearPos = new int[9];
@@ -471,6 +472,8 @@ public class InventoryManager : Singleton<InventoryManager>
         }
         if (forcedDiscard.activeInHierarchy)
             forcedDiscard.GetComponent<UIForcedDiscard>().DiscardComplete();
+        if (discardMany.activeInHierarchy)
+            discardMany.GetComponent<UIDiscardManyCards>().CardDiscarded();
     }
 
     public void Trade()
