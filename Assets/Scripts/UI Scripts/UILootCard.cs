@@ -39,8 +39,6 @@ public class UILootCard : MonoBehaviour
     {
         if (!InventoryManager.Instance.maximized)
             InventoryManager.Instance.MaximizeInventory();
-        else
-            InventoryManager.Instance.ShowOptions(slot);
     }
 
     public void AddCardToHand()

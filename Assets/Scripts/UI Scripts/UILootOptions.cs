@@ -13,12 +13,12 @@ public class UILootOptions : MonoBehaviour
     public Color disabledColor;
     public float fadeLength = 0.004f;
 
-    private string useOption = "Use";
-    private string equipOption = "Equip";
-    private string unequipOption = "Unequip";
-    private string discardOption = "Discard";
-    private string tradeOption = "Trade";
-    private string sellOption = "Sell";
+    private const string useOption = "Use";
+    private const string equipOption = "Equip";
+    private const string unequipOption = "Unequip";
+    private const string discardOption = "Discard";
+    private const string tradeOption = "Trade";
+    private const string sellOption = "Sell";
 
     public void Display(UILootCard card, int slot)
     {
@@ -45,8 +45,44 @@ public class UILootOptions : MonoBehaviour
             // If it is the start or end of the day, enable Equipping and Unequipping
             if(PlayManager.Instance.IsStartOrEndOfDay())
             {
-                useButton.GetComponent<Button>().enabled = true;
-                useButton.GetComponent<Image>().color = enabledColor;
+                // If equip is selected, check to see if can use item
+                if(slot > 3)
+                {
+                    // If it is a weapon player can use, enable
+                    if(l.GetType() == typeof(WeaponCard) && PlayManager.Instance.CanUseWeapon(PlayManager.Instance.localPlayer, l as WeaponCard))
+                    {
+                        useButton.GetComponent<Button>().enabled = true;
+                        useButton.GetComponent<Image>().color = enabledColor;
+                    }
+                    // Else if it is armor the player can use, enable
+                    else if (l.GetType() == typeof(ArmorCard) && PlayManager.Instance.CanUseArmor(PlayManager.Instance.localPlayer, l as ArmorCard))
+                    {
+                        useButton.GetComponent<Button>().enabled = true;
+                        useButton.GetComponent<Image>().color = enabledColor;
+                    }
+                    // Otherwise disable
+                    else
+                    {
+                        useButton.GetComponent<Button>().enabled = false;
+                        useButton.GetComponent<Image>().color = disabledColor;
+                    }
+                }
+                // If unequip is selected, check to see if there is space in inventory
+                else
+                {
+                    // If there is space, enable
+                    if(InventoryManager.Instance.HasSpaceInventory(PlayManager.Instance.localPlayer))
+                    {
+                        useButton.GetComponent<Button>().enabled = true;
+                        useButton.GetComponent<Image>().color = enabledColor;
+                    }
+                    // Otherwise, disable
+                    else
+                    {
+                        useButton.GetComponent<Button>().enabled = false;
+                        useButton.GetComponent<Image>().color = disabledColor;
+                    }
+                }
             }
             // Otherwise, disable Equipping and Unequipping
             else
@@ -93,11 +129,35 @@ public class UILootOptions : MonoBehaviour
 
     public void ChooseOption(int id)
     {
+        string option;
         if(id == 0)
-            Debug.Log("Selected: " + useButton.GetComponentInChildren<TMP_Text>().text);
+           option = useButton.GetComponentInChildren<TMP_Text>().text;
         else if (id == 1)
-            Debug.Log("Selected: " + discardButton.GetComponentInChildren<TMP_Text>().text);
-        else if (id == 2)
-            Debug.Log("Selected: " + sellButton.GetComponentInChildren<TMP_Text>().text);
+            option = discardButton.GetComponentInChildren<TMP_Text>().text;
+        else
+            option = sellButton.GetComponentInChildren<TMP_Text>().text;
+
+        switch(option)
+        {
+            case useOption:
+                InventoryManager.Instance.Use();
+                break;
+            case equipOption:
+                InventoryManager.Instance.Equip();
+                break;
+            case unequipOption:
+                InventoryManager.Instance.Unequip();
+                break;
+            case discardOption:
+                InventoryManager.Instance.Discard();
+                break;
+            case tradeOption:
+                InventoryManager.Instance.Trade();
+                break;
+            case sellOption:
+                InventoryManager.Instance.Sell();
+                break;
+        }
+        InventoryManager.Instance.HideOptions();
     }
 }

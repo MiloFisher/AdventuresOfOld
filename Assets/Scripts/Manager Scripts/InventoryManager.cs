@@ -314,19 +314,159 @@ public class InventoryManager : Singleton<InventoryManager>
     private void SetAlpha(GameObject card, float a)
     {
         // Set transparency of all card features here
-        for(int i = 0; i < card.transform.childCount; i++)
+        Image[] images = card.GetComponentsInChildren<Image>();
+        TMP_Text[] texts = card.GetComponentsInChildren<TMP_Text>();
+        foreach (Image img in images)
         {
-            Image img = card.transform.GetChild(0).GetComponent<Image>();
-            TMP_Text txt = card.transform.GetChild(0).GetComponent<TMP_Text>();
-            if (img)
+            if(!img.GetComponent<Button>())
                 img.color = new Color(img.color.r, img.color.g, img.color.b, a);
-            else if (txt)
-                txt.color = new Color(txt.color.r, txt.color.g, txt.color.b, a);
         }
+        foreach (TMP_Text txt in texts)
+            txt.color = new Color(txt.color.r, txt.color.g, txt.color.b, a);
     }
 
     public bool HasCardInInventory(Player p)
     {
         return !(p.Inventory1.Value == emptyValue && p.Inventory2.Value == emptyValue && p.Inventory3.Value == emptyValue && p.Inventory4.Value == emptyValue && p.Inventory5.Value == emptyValue);
+    }
+
+    public bool HasSpaceInventory(Player p)
+    {
+        return p.Inventory1.Value == emptyValue || p.Inventory2.Value == emptyValue || p.Inventory3.Value == emptyValue || p.Inventory4.Value == emptyValue || p.Inventory5.Value == emptyValue;
+    }
+
+    public void Use()
+    {
+
+    }
+
+    public void Equip()
+    {
+        string cardName = cards[selectedID].GetComponent<UILootCard>().cardName;
+        LootCard l = PlayManager.Instance.itemReference[cardName];
+        if(l.GetType() == typeof(WeaponCard))
+        {
+            string weapon = PlayManager.Instance.localPlayer.Weapon.Value + "";
+            PlayManager.Instance.localPlayer.SetValue("Weapon", cardName);
+            PlayManager.Instance.localPlayer.SetValue("Inventory" + (selectedID - 3), weapon);
+        }
+        else if (l.GetType() == typeof(ArmorCard))
+        {
+            string armor = PlayManager.Instance.localPlayer.Armor.Value + "";
+            PlayManager.Instance.localPlayer.SetValue("Armor", cardName);
+            PlayManager.Instance.localPlayer.SetValue("Inventory" + (selectedID - 3), armor);
+        }
+        else if (l.GetType() == typeof(RingCard))
+        {
+            if(PlayManager.Instance.localPlayer.Ring1.Value == emptyValue)
+            {
+                string ring1 = PlayManager.Instance.localPlayer.Ring1.Value + "";
+                PlayManager.Instance.localPlayer.SetValue("Ring1", cardName);
+                PlayManager.Instance.localPlayer.SetValue("Inventory" + (selectedID - 3), ring1);
+            }
+            else if (PlayManager.Instance.localPlayer.Ring2.Value == emptyValue)
+            {
+                string ring2 = PlayManager.Instance.localPlayer.Ring2.Value + "";
+                PlayManager.Instance.localPlayer.SetValue("Ring2", cardName);
+                PlayManager.Instance.localPlayer.SetValue("Inventory" + (selectedID - 3), ring2);
+            }
+            else
+            {
+                string ring1 = PlayManager.Instance.localPlayer.Ring1.Value + "";
+                PlayManager.Instance.localPlayer.SetValue("Ring1", PlayManager.Instance.localPlayer.Ring2.Value + "");
+                PlayManager.Instance.localPlayer.SetValue("Ring2", cardName);
+                PlayManager.Instance.localPlayer.SetValue("Inventory" + (selectedID - 3), ring1);
+            }
+        }
+    }
+
+    public void Unequip()
+    {
+        string equipment = cards[selectedID].GetComponent<UILootCard>().cardName;
+        string location = "";
+        switch (selectedID)
+        {
+            case 0:
+                location = "Weapon";
+                break;
+            case 1:
+                location = "Armor";
+                break;
+            case 2:
+                location = "Ring1";
+                break;
+            case 3:
+                location = "Ring2";
+                break;
+        }
+        if (PlayManager.Instance.localPlayer.Inventory1.Value == emptyValue)
+        {
+            PlayManager.Instance.localPlayer.SetValue(location, emptyValue);
+            PlayManager.Instance.localPlayer.SetValue("Inventory1", equipment);
+        }
+        else if (PlayManager.Instance.localPlayer.Inventory2.Value == emptyValue)
+        {
+            PlayManager.Instance.localPlayer.SetValue(location, emptyValue);
+            PlayManager.Instance.localPlayer.SetValue("Inventory2", equipment);
+        }
+        else if (PlayManager.Instance.localPlayer.Inventory3.Value == emptyValue)
+        {
+            PlayManager.Instance.localPlayer.SetValue(location, emptyValue);
+            PlayManager.Instance.localPlayer.SetValue("Inventory3", equipment);
+        }
+        else if (PlayManager.Instance.localPlayer.Inventory4.Value == emptyValue)
+        {
+            PlayManager.Instance.localPlayer.SetValue(location, emptyValue);
+            PlayManager.Instance.localPlayer.SetValue("Inventory4", equipment);
+        }
+        else if (PlayManager.Instance.localPlayer.Inventory5.Value == emptyValue)
+        {
+            PlayManager.Instance.localPlayer.SetValue(location, emptyValue);
+            PlayManager.Instance.localPlayer.SetValue("Inventory5", equipment);
+        }
+    }
+
+    public void Discard()
+    {
+        switch (selectedID)
+        {
+            case 0:
+                PlayManager.Instance.localPlayer.SetValue("Weapon", emptyValue);
+                break;
+            case 1:
+                PlayManager.Instance.localPlayer.SetValue("Armor", emptyValue);
+                break;
+            case 2:
+                PlayManager.Instance.localPlayer.SetValue("Ring1", emptyValue);
+                break;
+            case 3:
+                PlayManager.Instance.localPlayer.SetValue("Ring2", emptyValue);
+                break;
+            case 4:
+                PlayManager.Instance.localPlayer.SetValue("Inventory1", emptyValue);
+                break;
+            case 5:
+                PlayManager.Instance.localPlayer.SetValue("Inventory2", emptyValue);
+                break;
+            case 6:
+                PlayManager.Instance.localPlayer.SetValue("Inventory3", emptyValue);
+                break;
+            case 7:
+                PlayManager.Instance.localPlayer.SetValue("Inventory4", emptyValue);
+                break;
+            case 8:
+                PlayManager.Instance.localPlayer.SetValue("Inventory5", emptyValue);
+                break;
+        }
+    }
+
+    public void Trade()
+    {
+
+    }
+
+    public void Sell()
+    {
+
     }
 }

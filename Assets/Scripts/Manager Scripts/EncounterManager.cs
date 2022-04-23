@@ -205,9 +205,12 @@ public class EncounterManager : Singleton<EncounterManager>
         // Set transparency of all card features here
         Image[] images = card.GetComponentsInChildren<Image>();
         TMP_Text[] texts = card.GetComponentsInChildren<TMP_Text>();
-        foreach(Image img in images)
-            img.color = new Color(img.color.r, img.color.g, img.color.b, a);
-        foreach(TMP_Text txt in texts)
+        foreach (Image img in images)
+        {
+            if (!img.GetComponent<Button>())
+                img.color = new Color(img.color.r, img.color.g, img.color.b, a);
+        }
+        foreach (TMP_Text txt in texts)
             txt.color = new Color(txt.color.r, txt.color.g, txt.color.b, a);
     }
 }

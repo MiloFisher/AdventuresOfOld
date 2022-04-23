@@ -902,5 +902,31 @@ public class PlayManager : Singleton<PlayManager>
     {
         return true;
     }
+    public bool CanUseWeapon(Player p, WeaponCard w)
+    {
+        return (p.Class.Value + "") switch
+        {
+            "Warrior" => w.attackType == "Physical / STR",
+            "Paladin" => w.attackType == "Physical / STR",
+            "Ranger" => w.attackType == "Physical / DEX",
+            "Rogue" => w.attackType == "Physical / DEX",
+            "Sorcerer" => w.attackType == "Magical / INT",
+            "Necromancer" => w.attackType == "Magical / INT",
+            _ => false,
+        };
+    }
+    public bool CanUseArmor(Player p, ArmorCard a)
+    {
+        return (p.Class.Value + "") switch
+        {
+            "Warrior" => true,
+            "Paladin" => true,
+            "Ranger" => a.itemType == "Medium Armor" || a.itemType == "Light Armor",
+            "Rogue" => a.itemType == "Medium Armor" || a.itemType == "Light Armor",
+            "Sorcerer" => a.itemType == "Light Armor",
+            "Necromancer" => a.itemType == "Light Armor",
+            _ => false,
+        };
+    }
     #endregion
 }
