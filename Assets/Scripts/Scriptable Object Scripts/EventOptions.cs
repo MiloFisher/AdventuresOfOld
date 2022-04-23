@@ -295,17 +295,34 @@ public class EventOptions : ScriptableObject
         switch (option)
         {
             case 0:
-
+                p.GainGold(40);
+                p.DrawLootCards(1, p.UUID.Value, true);
+                p.CompleteEncounter(false, p.UUID.Value);
+                p.GainXP(xp);
                 break;
             case 1:
-
+                PlayManager.Instance.MakeStatRoll("INT", 10);
+                PlayManager.Instance.StatRollListener((a) => {
+                    if (a == 1)
+                    {
+                        p.GainGold(40);
+                        p.DrawLootCards(1, p.UUID.Value, true);
+                        p.CompleteEncounter(false, p.UUID.Value);
+                        p.GainXP(xp);
+                    }
+                    else
+                    {
+                        p.IncreaseChaos(1);
+                        p.CompleteEncounter(true, p.UUID.Value);
+                        p.GainXP(xp);
+                    }
+                });
                 break;
             case 2:
-
+                p.CompleteEncounter(true, p.UUID.Value);
+                p.GainXP(xp);
                 break;
         }
-        p.CompleteEncounter(true, p.UUID.Value);
-        p.GainXP(xp);
     }
 
     public void SpiderNest(int option)

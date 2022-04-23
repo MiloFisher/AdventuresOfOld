@@ -6719,7 +6719,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 0362483b1e5c54618a5ac53388f8ca35, type: 3}
   - {fileID: 21300000, guid: fc3e0ccfa079a47a48ccd83d885a5516, type: 3}
   loadingScreen: {fileID: 1366110076}
-  testingCard: {fileID: 11400000, guid: ffe6e2536308f4e6ea31e206ec95eb8c, type: 2}
+  testingCard: {fileID: 11400000, guid: 7a884386f715b477aa2a1687a6616189, type: 2}
   startOrEndOfDay: 0
   inStore: 0
 --- !u!1 &339524316
