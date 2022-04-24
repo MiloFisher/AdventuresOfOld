@@ -185,7 +185,6 @@ public class EventOptions : ScriptableObject
         p.GainXP(xp);
     }
 
-    // Left off here: vvv
     public void TravelingMerchant(int option)
     {
         EventCard e = PlayManager.Instance.encounterReference["Traveling Merchant"] as EventCard;

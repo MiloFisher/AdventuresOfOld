@@ -259,6 +259,7 @@ namespace AdventuresOfOldMultiplayer
             if (IsOwner && !isBot)
             {
                 PlayManager.Instance.chaosCounter = chaosCounter;
+                PlayManager.Instance.UpdateChaosMarker();
             }
         }
 

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using Unity.Netcode;
 using System;
 using Unity.Collections;
+using TMPro;
 using AdventuresOfOldMultiplayer;
 
 public class PlayManager : Singleton<PlayManager>
@@ -38,6 +39,8 @@ public class PlayManager : Singleton<PlayManager>
 
     [SerializeField] private EncounterCard[] encounterCardObjects;
     public List<EncounterCard> encounterDeck = new List<EncounterCard>();
+
+    public GameObject chaosMarker;
 
     public int chaosCounter;
 
@@ -776,6 +779,7 @@ public class PlayManager : Singleton<PlayManager>
         chaosCounter -= amount;
         if (chaosCounter < 1)
             chaosCounter = 1;
+        UpdateChaosMarker();
     }
 
     public void IncreaseChaos(int amount)
@@ -783,11 +787,26 @@ public class PlayManager : Singleton<PlayManager>
         chaosCounter += amount;
         if (chaosCounter > 21)
             chaosCounter = 21;
+        UpdateChaosMarker();
     }
 
     public int ChaosTier()
     {
         return 1 + Mathf.FloorToInt((chaosCounter - 1) / 4);
+    }
+
+    public void UpdateChaosMarker()
+    {
+        if(chaosCounter < 21)
+        {
+            chaosMarker.GetComponentInChildren<TMP_Text>().text = chaosCounter + "";
+            chaosMarker.transform.localPosition = new Vector3(-979 + 85.1052632f * (chaosCounter - 1), 0, 0);
+        }
+        else
+        {
+            chaosMarker.GetComponentInChildren<TMP_Text>().text = "x";
+            chaosMarker.transform.localPosition = new Vector3(-979 + 85.1052632f * (chaosCounter - 1), 0, 0);
+        }
     }
     #endregion
 
