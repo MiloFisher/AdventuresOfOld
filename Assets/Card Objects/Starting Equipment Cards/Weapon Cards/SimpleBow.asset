@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Simple Bow
   rarity: 0
+  image: {fileID: 21300000, guid: 0bfb440c256201b45b85525e983c9210, type: 3}
   copies: 6
   itemType: 2H Bow
   effectDescription: '+5 Damage, Ranged: Can assist from 1 extra tile away'
