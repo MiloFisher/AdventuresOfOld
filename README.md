@@ -10,7 +10,7 @@ Banned Bandits Team:
 - 2D Artist: Emily Wen
 - 2D Artist: Julian Cady
 
-<img alt="Adventures of Old" src="https://github.com/MiloFisher/AdventuresOfOld/blob/main/Assets/Game_Resources/UI/Background%205%20(clearing).png" width="600px">
+<img alt="Adventures of Old" src="https://github.com/MiloFisher/AdventuresOfOld/blob/main/Assets/Game_Resources/UI/gameCover.png" width="600px">
 
 Adventures of Old is an online multiplayer co-op game developed using the Unity Engine. Bringing a new approach to old-school role playing games, AoO was made by a team of 7 within a 6-month development period.
 
