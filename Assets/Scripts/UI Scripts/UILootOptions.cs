@@ -59,8 +59,14 @@ public class UILootOptions : MonoBehaviour
                 // If equip is selected, check to see if can use item
                 if(slot > 3)
                 {
-                    // If it is a weapon player can use, enable
-                    if(l.GetType() == typeof(WeaponCard) && PlayManager.Instance.CanUseWeapon(PlayManager.Instance.localPlayer, l as WeaponCard))
+                    // If it is a ring, enable
+                    if (l.GetType() == typeof(RingCard))
+                    {
+                        useButton.GetComponent<Button>().enabled = true;
+                        useButton.GetComponent<Image>().color = enabledColor;
+                    }
+                    // Else if it is a weapon player can use, enable
+                    else if(l.GetType() == typeof(WeaponCard) && PlayManager.Instance.CanUseWeapon(PlayManager.Instance.localPlayer, l as WeaponCard))
                     {
                         useButton.GetComponent<Button>().enabled = true;
                         useButton.GetComponent<Image>().color = enabledColor;
