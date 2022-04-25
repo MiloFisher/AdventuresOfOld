@@ -43,7 +43,7 @@ public class UICharacterSheet : MonoBehaviour
             return;
 
         portrait.sprite = PlayManager.Instance.portaitDictionary[p.Image.Value];
-        characterName.text = p.Name.Value + "";
+        characterName.text = "<color=" + p.Color.Value + ">" + p.Name.Value + "</color>";
         characterDescription.text = p.Trait.Value + " " + p.Race.Value + " " + p.Class.Value;
 
         healthBarText.text = PlayManager.Instance.GetHealth(p) + " / " + PlayManager.Instance.GetMaxHealth(p);
@@ -55,11 +55,11 @@ public class UICharacterSheet : MonoBehaviour
         currentLevel.text = PlayManager.Instance.GetLevel(p) + "";
         nextLevel.text = PlayManager.Instance.GetLevel(p) == 5 ? "MAX" : PlayManager.Instance.GetLevel(p) + 1 + "";
 
-        attack.text = PlayManager.Instance.GetAttack(p) + "";
-        armor.text = PlayManager.Instance.GetArmor(p) + "";
-        physicalPower.text = PlayManager.Instance.GetPhysicalPower(p) + "";
-        magicalPower.text = PlayManager.Instance.GetMagicalPower(p) + "";
-        gold.text = PlayManager.Instance.GetGold(p) + "";
+        attack.text = ": " + PlayManager.Instance.GetAttack(p);
+        armor.text = ": " + PlayManager.Instance.GetArmor(p);
+        physicalPower.text = ": " + PlayManager.Instance.GetPhysicalPower(p);
+        magicalPower.text = ": " + PlayManager.Instance.GetMagicalPower(p);
+        gold.text = ": " + PlayManager.Instance.GetGold(p);
 
         strength.text = PlayManager.Instance.GetStrength(p) + "";
         strengthMod.text = PlayManager.Instance.GetMod(PlayManager.Instance.GetStrength(p)) + "";

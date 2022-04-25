@@ -1239,7 +1239,7 @@ RectTransform:
   - {fileID: 320204411}
   - {fileID: 280224329}
   m_Father: {fileID: 99781470}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -2352,11 +2352,11 @@ RectTransform:
   - {fileID: 1624703258}
   - {fileID: 350058827}
   - {fileID: 629772401}
-  - {fileID: 954272615}
   - {fileID: 34041051}
   - {fileID: 610259867}
   - {fileID: 1540073937}
   - {fileID: 1543901715}
+  - {fileID: 954272615}
   - {fileID: 1310851225}
   - {fileID: 767983631}
   m_Father: {fileID: 0}
@@ -13520,7 +13520,7 @@ RectTransform:
   m_Children:
   - {fileID: 747132005}
   m_Father: {fileID: 99781470}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -23008,7 +23008,7 @@ RectTransform:
   - {fileID: 1231318155}
   - {fileID: 1463560954}
   m_Father: {fileID: 99781470}
-  m_RootOrder: 4
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
@@ -39620,7 +39620,7 @@ RectTransform:
   - {fileID: 1917199658}
   - {fileID: 2069818755}
   m_Father: {fileID: 99781470}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -39786,7 +39786,7 @@ RectTransform:
   - {fileID: 1542341973}
   - {fileID: 1055429598}
   m_Father: {fileID: 99781470}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -44047,8 +44047,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 80
-  m_fontSizeBase: 80
+  m_fontSize: 70
+  m_fontSizeBase: 70
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -44768,6 +44768,7 @@ MonoBehaviour:
   gap: 150
   travelLength: 0.004
   lootBanner: {fileID: 460391356}
+  lootBannerText: {fileID: 1709711597}
   bannerStartWidth: 120
   bannerEndWidth: 700
   bannerConstHeight: 130
@@ -44778,6 +44779,7 @@ MonoBehaviour:
   fadeLength: 0.004
   cardsToDraw: []
   discardCardsButton: {fileID: 1744109180}
+  treasureTile: 0
 --- !u!1 &1744109180
 GameObject:
   m_ObjectHideFlags: 0

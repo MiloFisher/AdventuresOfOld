@@ -662,10 +662,7 @@ public class PlayManager : Singleton<PlayManager>
     public void GetEncounter()
     {
         ResetEncounterFails();
-        // Fill later
         localPlayer.DrawEncounterCards(1, localPlayer.UUID.Value, true);
-
-        // EndTurn();
     }
 
     public void DefaultTile()
@@ -679,7 +676,9 @@ public class PlayManager : Singleton<PlayManager>
 
     public void TreasureTile()
     {
-        DefaultTile(); // Temporary
+        LootManager.Instance.treasureTile = true;
+        localPlayer.DrawLootCards(3, localPlayer.UUID.Value, true);
+        gameboard[localPlayer.Position.Value].DisableTreasureToken();
     }
 
     public void CrazedHermit()

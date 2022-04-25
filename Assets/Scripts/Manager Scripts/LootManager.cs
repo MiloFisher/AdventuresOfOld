@@ -14,6 +14,7 @@ public class LootManager : Singleton<LootManager>
     public float gap = 150;
     public float travelLength = 0.004f;
     public GameObject lootBanner;
+    public TMP_Text lootBannerText;
     public float bannerStartWidth;
     public float bannerEndWidth;
     public float bannerConstHeight;
@@ -24,6 +25,7 @@ public class LootManager : Singleton<LootManager>
     public float fadeLength = 0.004f;
     public List<string> cardsToDraw = new List<string>();
     public GameObject discardCardsButton;
+    public bool treasureTile;
     private List<GameObject> displayCards = new List<GameObject>();
     private bool endTurnAfter;
 
@@ -50,6 +52,8 @@ public class LootManager : Singleton<LootManager>
             Destroy(card);
             if(displayCards.Count == 0)
                 StartCoroutine(AnimateClosing());
+            else if(treasureTile)
+                DiscardRemaining();
         }
         else
         {
@@ -98,6 +102,7 @@ public class LootManager : Singleton<LootManager>
     {
         // First setup banner
         lootBanner.SetActive(true);
+        lootBannerText.text = treasureTile ? "Choose a Card" : "Drawn Cards";
         lootBanner.GetComponent<RectTransform>().sizeDelta = new Vector2(bannerStartWidth, bannerConstHeight);
         lootBanner.transform.localScale = new Vector3(bannerStartScale, bannerStartScale, 1);
 
@@ -143,8 +148,9 @@ public class LootManager : Singleton<LootManager>
 
         // Finally deactivate banner
         lootBanner.SetActive(false);
+        treasureTile = false;
 
-        if(endTurnAfter)
+        if (endTurnAfter)
             PlayManager.Instance.EndTurn();
     }
 
