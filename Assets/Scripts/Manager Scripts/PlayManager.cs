@@ -32,6 +32,8 @@ public class PlayManager : Singleton<PlayManager>
     [SerializeField] private MonsterCard[] minionObjects;
     public Dictionary<string, MonsterCard> minionDeck = new Dictionary<string, MonsterCard>();
 
+    public Dictionary<FixedString64Bytes, Sprite> portaitDictionary = new Dictionary<FixedString64Bytes, Sprite>();
+
     public List<LootCard> equipmentDeck;
 
     [SerializeField] private LootCard[] lootCardObjects;
@@ -132,6 +134,12 @@ public class PlayManager : Singleton<PlayManager>
         foreach (MonsterCard m in minionObjects)
         {
             minionDeck.Add(m.cardName, m);
+        }
+
+        // Set up portrait dictionary
+        foreach (Sprite s in portraits)
+        {
+            portaitDictionary.Add(s.name, s);
         }
 
         // Run tests to find neighbors for each tile
@@ -238,6 +246,9 @@ public class PlayManager : Singleton<PlayManager>
                     p.SetValue("Weapon", "Simple Wand & Shield");
                     break;
             }
+
+            // Fill all of their ability charges
+            p.RestoreAbilityCharges(999);
 
             // Set player positions to starting tile
             p.SetPosition(new Vector3Int(0, 7, -7));
@@ -393,7 +404,7 @@ public class PlayManager : Singleton<PlayManager>
     public void MovePhase()
     {
         // Activate all tiles within the player's move range
-        gameboard[localPlayer.Position.Value].Activate(GetMod(localPlayer.Speed.Value));
+        gameboard[localPlayer.Position.Value].Activate(GetMod(GetSpeed(localPlayer)));
     }
 
     public void EncounterPhase()
@@ -502,11 +513,6 @@ public class PlayManager : Singleton<PlayManager>
         }
     }
 
-    public int GetMod(int stat)
-    {
-        return Mathf.FloorToInt((stat - 10) * 0.5f);
-    }
-
     public void SetupPlayerPieces()
     {
         int i;
@@ -523,13 +529,6 @@ public class PlayManager : Singleton<PlayManager>
 
     public void SetupCharacterPanels()
     {
-        // Set up portrait dictionary
-        Dictionary<FixedString64Bytes, Sprite> portaitDictionary = new Dictionary<FixedString64Bytes, Sprite>();
-        foreach (Sprite s in portraits)
-        {
-            portaitDictionary.Add(s.name, s);
-        }
-
         int i;
         for (i = 0; i < turnOrderPlayerList.Count; i++)
         {
@@ -631,12 +630,12 @@ public class PlayManager : Singleton<PlayManager>
     {
         switch (statRollType)
         {
-            case "STR": return GetMod(localPlayer.Strength.Value);
-            case "DEX": return GetMod(localPlayer.Dexterity.Value);
-            case "INT": return GetMod(localPlayer.Intelligence.Value);
-            case "SPD": return GetMod(localPlayer.Speed.Value);
-            case "CON": return GetMod(localPlayer.Constitution.Value);
-            case "ENG": return GetMod(localPlayer.Energy.Value);
+            case "STR": return GetMod(GetStrength(localPlayer));
+            case "DEX": return GetMod(GetDexterity(localPlayer));
+            case "INT": return GetMod(GetIntelligence(localPlayer));
+            case "SPD": return GetMod(GetSpeed(localPlayer));
+            case "CON": return GetMod(GetConstitution(localPlayer));
+            case "ENG": return GetMod(GetEnergy(localPlayer));
             default: Debug.LogError("Unknown Stat Roll Type: " + statRollType); return 0;
         }
     }
@@ -1015,6 +1014,170 @@ public class PlayManager : Singleton<PlayManager>
             "Necromancer" => a.itemType == "Light Armor",
             _ => false,
         };
+    }
+    public bool IsPhysicalBased(Player p)
+    {
+        return (p.Class.Value + "") switch
+        {
+            "Warrior" => true,
+            "Paladin" => true,
+            "Ranger" => true,
+            "Rogue" => true,
+            "Sorcerer" => false,
+            "Necromancer" => false,
+            _ => false,
+        };
+    }
+    public bool IsMagicalBased(Player p)
+    {
+        return (p.Class.Value + "") switch
+        {
+            "Warrior" => false,
+            "Paladin" => false,
+            "Ranger" => false,
+            "Rogue" => false,
+            "Sorcerer" => true,
+            "Necromancer" => true,
+            _ => false,
+        };
+    }
+    #endregion
+
+    #region Calculate Stats
+    public int GetMod(int stat)
+    {
+        return Mathf.FloorToInt((stat - 10) * 0.5f);
+    }
+
+    public int GetHealth(Player p)
+    {
+        return p.Health.Value;
+    }
+    public int GetMaxHealth(Player p)
+    {
+        return 2 * GetConstitution(p);
+    }
+    public int GetAbilityCharges(Player p)
+    {
+        return p.AbilityCharges.Value;
+    }
+    public int GetMaxAbilityCharges(Player p)
+    {
+        return 2 * GetMod(GetEnergy(p)) + p.Level.Value;
+    }
+    public int GetXP(Player p)
+    {
+        return p.XP.Value;
+    }
+    public int GetNeededXP(Player p)
+    {
+        return 5 + 5 * p.Level.Value;
+    }
+
+    public int GetStrength(Player p)
+    {
+        int x = p.Strength.Value;
+        if (itemReference.ContainsKey(p.Ring1.Value + ""))
+            x += (itemReference[p.Ring1.Value + ""] as RingCard).strength;
+        if (itemReference.ContainsKey(p.Ring2.Value + ""))
+            x += (itemReference[p.Ring2.Value + ""] as RingCard).strength;
+        return x;
+    }
+    public int GetDexterity(Player p)
+    {
+        int x = p.Dexterity.Value;
+        if (itemReference.ContainsKey(p.Ring1.Value + ""))
+            x += (itemReference[p.Ring1.Value + ""] as RingCard).dexterity;
+        if (itemReference.ContainsKey(p.Ring2.Value + ""))
+            x += (itemReference[p.Ring2.Value + ""] as RingCard).dexterity;
+        return x;
+    }
+    public int GetIntelligence(Player p)
+    {
+        int x = p.Intelligence.Value;
+        if (itemReference.ContainsKey(p.Ring1.Value + ""))
+            x += (itemReference[p.Ring1.Value + ""] as RingCard).intelligence;
+        if (itemReference.ContainsKey(p.Ring2.Value + ""))
+            x += (itemReference[p.Ring2.Value + ""] as RingCard).intelligence;
+        return x;
+    }
+    public int GetSpeed(Player p)
+    {
+        int x = p.Speed.Value;
+        if (itemReference.ContainsKey(p.Ring1.Value + ""))
+            x += (itemReference[p.Ring1.Value + ""] as RingCard).speed;
+        if (itemReference.ContainsKey(p.Ring2.Value + ""))
+            x += (itemReference[p.Ring2.Value + ""] as RingCard).speed;
+        if (itemReference.ContainsKey(p.Armor.Value + ""))
+            x += (itemReference[p.Armor.Value + ""] as ArmorCard).speed;
+        return x;
+    }
+    public int GetConstitution(Player p)
+    {
+        int x = p.Constitution.Value;
+        if (itemReference.ContainsKey(p.Ring1.Value + ""))
+            x += (itemReference[p.Ring1.Value + ""] as RingCard).constitution;
+        if (itemReference.ContainsKey(p.Ring2.Value + ""))
+            x += (itemReference[p.Ring2.Value + ""] as RingCard).constitution;
+        return x;
+    }
+    public int GetEnergy(Player p)
+    {
+        int x = p.Energy.Value;
+        if (itemReference.ContainsKey(p.Ring1.Value + ""))
+            x += (itemReference[p.Ring1.Value + ""] as RingCard).energy;
+        if (itemReference.ContainsKey(p.Ring2.Value + ""))
+            x += (itemReference[p.Ring2.Value + ""] as RingCard).energy;
+        if (itemReference.ContainsKey(p.Armor.Value + ""))
+            x += (itemReference[p.Armor.Value + ""] as ArmorCard).energy;
+        return x;
+    }
+
+    public int GetAttack(Player p)
+    {
+        int x = 0;
+        if (itemReference.ContainsKey(p.Weapon.Value + ""))
+            x += (itemReference[p.Weapon.Value + ""] as WeaponCard).damage;
+        return x;
+    }
+    public int GetArmor(Player p)
+    {
+        int x = 0;
+        if (itemReference.ContainsKey(p.Weapon.Value + ""))
+            x += (itemReference[p.Weapon.Value + ""] as WeaponCard).armor;
+        if (itemReference.ContainsKey(p.Armor.Value + ""))
+            x += (itemReference[p.Armor.Value + ""] as ArmorCard).armor;
+        return x;
+    }
+    public int GetPhysicalPower(Player p)
+    {
+        if (IsMagicalBased(p))
+            return 0;
+        int x = p.Level.Value;
+        if (itemReference.ContainsKey(p.Ring1.Value + ""))
+            x += (itemReference[p.Ring1.Value + ""] as RingCard).physicalPower;
+        if (itemReference.ContainsKey(p.Ring2.Value + ""))
+            x += (itemReference[p.Ring2.Value + ""] as RingCard).physicalPower;
+        return x;
+    }
+    public int GetMagicalPower(Player p)
+    {
+        if (IsPhysicalBased(p))
+            return 0;
+        int x = p.Level.Value;
+        if (itemReference.ContainsKey(p.Ring1.Value + ""))
+            x += (itemReference[p.Ring1.Value + ""] as RingCard).magicalPower;
+        if (itemReference.ContainsKey(p.Ring2.Value + ""))
+            x += (itemReference[p.Ring2.Value + ""] as RingCard).magicalPower;
+        return x;
+    }
+    public int GetLevel(Player p)
+    {
+        return p.Level.Value;
+    }
+    public int GetGold(Player p)
+    {
+        return p.Gold.Value;
     }
     #endregion
 }

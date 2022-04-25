@@ -622,31 +622,22 @@ namespace AdventuresOfOldMultiplayer
 
         public void TakeDamage(int amount)
         {
+            int armor = PlayManager.Instance.GetArmor(this);
             if (NetworkManager.Singleton.IsServer)
             {
-                int damage = amount;
-                if(PlayManager.Instance.itemReference.ContainsKey(Armor.Value + ""))
-                {
-                    ArmorCard armorCard = PlayManager.Instance.itemReference[Armor.Value + ""] as ArmorCard;
-                    damage -= armorCard.armor;
-                }
+                int damage = amount - armor;
                 if (damage > 0)
                     Health.Value -= damage;
                 foreach (Player p in PlayManager.Instance.playerList)
                     p.UpdateCharacterPanelsClientRPC();
             }
             else
-                TakeDamageServerRPC(amount);
+                TakeDamageServerRPC(amount, armor);
         }
         [ServerRpc]
-        private void TakeDamageServerRPC(int amount, ServerRpcParams rpcParams = default)
+        private void TakeDamageServerRPC(int amount, int armor, ServerRpcParams rpcParams = default)
         {
-            int damage = amount;
-            if (PlayManager.Instance.itemReference.ContainsKey(Armor.Value + ""))
-            {
-                ArmorCard armorCard = PlayManager.Instance.itemReference[Armor.Value + ""] as ArmorCard;
-                damage -= armorCard.armor;
-            }
+            int damage = amount - armor;
             if (damage > 0)
                 Health.Value -= damage;
             foreach (Player p in PlayManager.Instance.playerList)
@@ -655,44 +646,42 @@ namespace AdventuresOfOldMultiplayer
 
         public void RestoreAbilityCharges(int amount)
         {
+            int cap = PlayManager.Instance.GetMaxAbilityCharges(this);
             if (NetworkManager.Singleton.IsServer)
             {
                 AbilityCharges.Value += amount;
-                int cap = PlayManager.Instance.GetMod(Energy.Value) + Level.Value;
                 if (AbilityCharges.Value > cap)
                     AbilityCharges.Value = cap;
             }
             else
-                RestoreAbilityChargesServerRPC(amount);
+                RestoreAbilityChargesServerRPC(amount, cap);
         }
         [ServerRpc]
-        private void RestoreAbilityChargesServerRPC(int amount, ServerRpcParams rpcParams = default)
+        private void RestoreAbilityChargesServerRPC(int amount, int cap, ServerRpcParams rpcParams = default)
         {
             AbilityCharges.Value += amount;
-            int cap = PlayManager.Instance.GetMod(Energy.Value) + Level.Value;
             if (AbilityCharges.Value > cap)
                 AbilityCharges.Value = cap;
         }
 
         public void RestoreHealth(int amount)
         {
+            int cap = PlayManager.Instance.GetMaxHealth(this);
             if (NetworkManager.Singleton.IsServer)
             {
                 Health.Value += amount;
-                int cap = 2 * Constitution.Value;
                 if (Health.Value > cap)
                     Health.Value = cap;
                 foreach (Player p in PlayManager.Instance.playerList)
                     p.UpdateCharacterPanelsClientRPC();
             }
             else
-                RestoreRestoreHealthServerRPC(amount);
+                RestoreRestoreHealthServerRPC(amount, cap);
         }
         [ServerRpc]
-        private void RestoreRestoreHealthServerRPC(int amount, ServerRpcParams rpcParams = default)
+        private void RestoreRestoreHealthServerRPC(int amount, int cap, ServerRpcParams rpcParams = default)
         {
             Health.Value += amount;
-            int cap = 2 * Constitution.Value;
             if (Health.Value > cap)
                 Health.Value = cap;
             foreach (Player p in PlayManager.Instance.playerList)
