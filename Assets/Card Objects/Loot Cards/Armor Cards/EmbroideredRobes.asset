@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Embroidered Robes
   rarity: 2
+  image: {fileID: 21300000, guid: ee1b42c5bfb24134bbf74e223445029a, type: 3}
   copies: 2
   itemType: Light Armor
   effectDescription: +3 Armor, +2 Energy (ENG)

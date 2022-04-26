@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Simple Plate Armor
   rarity: 0
+  image: {fileID: 21300000, guid: 238566a5b7c9fc24199f10e498d14a84, type: 3}
   copies: 6
   itemType: Heavy Armor
   effectDescription: +3 Armor, -2 Speed (SPD)
