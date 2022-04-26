@@ -58,6 +58,8 @@ public class PlayManager : Singleton<PlayManager>
 
     public GameObject endOfDayElements;
 
+    public GameObject notifications;
+
     public GameObject[] playerPieces;
 
     public GameObject[] characterPanels;
@@ -514,6 +516,11 @@ public class PlayManager : Singleton<PlayManager>
         endOfDayElements.transform.GetChild(id).gameObject.SetActive(true);
     }
 
+    public void CallNotification(int id)
+    {
+        notifications.transform.GetChild(id).gameObject.SetActive(true);
+    }
+
     public void SetTurnOrderPlayerList(FixedString64Bytes[] arr)
     {
         turnOrderPlayerList = new List<Player>();
@@ -668,9 +675,9 @@ public class PlayManager : Singleton<PlayManager>
         questDisplay.GetComponent<UIQuestDisplay>().SetupQuests();
     }
 
-    public void LevelUp(Player p)
+    public void LevelUp()
     {
-
+        CallNotification(0);
     }
 
     public string DrawFromLootDeck()

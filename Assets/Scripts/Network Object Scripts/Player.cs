@@ -580,7 +580,7 @@ namespace AdventuresOfOldMultiplayer
                     LevelUpPoints.Value += 3;
                     if (Level.Value == 5)
                         XP.Value = PlayManager.Instance.GetNeededXP(this);
-                    PlayManager.Instance.LevelUp(this);
+                    PlayManager.Instance.LevelUp();
                 }
             }
             else
@@ -599,7 +599,7 @@ namespace AdventuresOfOldMultiplayer
                 LevelUpPoints.Value += 3;
                 if (Level.Value == 5)
                     XP.Value = PlayManager.Instance.GetNeededXP(this);
-                PlayManager.Instance.LevelUp(this);
+                PlayManager.Instance.LevelUp();
             }
         }
 
