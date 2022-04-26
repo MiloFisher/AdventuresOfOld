@@ -20,7 +20,7 @@ public class Trait {
         }
     }
     private Dictionary<string, default_trait> default_trait_desc = new Dictionary<string, default_trait>() {
-        {"Fleet-footed", new default_trait("Gain +2 Speed (SPD).", new Stats(0,0,0,2,0,0))},
+        {"Fleet-Footed", new default_trait("Gain +2 Speed (SPD).", new Stats(0,0,0,2,0,0))},
         {"Healthy", new default_trait("Gain +2 Constitution (CON).", new Stats(0,0,0,0,2,0))},
         {"Mystical", new default_trait("Gain +2 Energy (ENG).", new Stats(0,0,0,0,0,2))},
         {"Berserk", new default_trait("Whenever you take damage in combat, increase your Damage by +2 for this combat only.", new Stats())},

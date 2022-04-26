@@ -12545,8 +12545,6 @@ MonoBehaviour:
   - {fileID: 132142699}
   - {fileID: 822782763}
   - {fileID: 1171043814}
-  audioSource: {fileID: 0}
-  buttonSelected: {fileID: 0}
 --- !u!4 &1655309230
 Transform:
   m_ObjectHideFlags: 0
@@ -13570,7 +13568,7 @@ GameObject:
   - component: {fileID: 1806473827}
   - component: {fileID: 1806473826}
   m_Layer: 0
-  m_Name: Fleet-footed
+  m_Name: Fleet-Footed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -13672,7 +13670,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Fleet-footed
+  m_text: 'Fleet-Footed
 
 '
   m_isRightToLeft: 0

@@ -668,6 +668,11 @@ public class PlayManager : Singleton<PlayManager>
         questDisplay.GetComponent<UIQuestDisplay>().SetupQuests();
     }
 
+    public void LevelUp(Player p)
+    {
+
+    }
+
     public string DrawFromLootDeck()
     {
         string cardName = lootDeck[0].cardName;
@@ -1207,6 +1212,10 @@ public class PlayManager : Singleton<PlayManager>
     public int GetGold(Player p)
     {
         return p.Gold.Value;
+    }
+    public int GetLevelUpPoints(Player p)
+    {
+        return p.LevelUpPoints.Value;
     }
     #endregion
 }

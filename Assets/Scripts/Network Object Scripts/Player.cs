@@ -569,14 +569,38 @@ namespace AdventuresOfOldMultiplayer
         public void GainXP(int amount)
         {
             if (NetworkManager.Singleton.IsServer)
+            {
+                if (Level.Value == 5)
+                    return;
                 XP.Value += PlayManager.Instance.XPModifier() + amount;
+                if(XP.Value > PlayManager.Instance.GetNeededXP(this))
+                {
+                    XP.Value -= PlayManager.Instance.GetNeededXP(this);
+                    Level.Value++;
+                    LevelUpPoints.Value += 3;
+                    if (Level.Value == 5)
+                        XP.Value = PlayManager.Instance.GetNeededXP(this);
+                    PlayManager.Instance.LevelUp(this);
+                }
+            }
             else
                 GainXPServerRPC(amount);
         }
         [ServerRpc]
         private void GainXPServerRPC(int amount, ServerRpcParams rpcParams = default)
         {
+            if (Level.Value == 5)
+                return;
             XP.Value += PlayManager.Instance.XPModifier() + amount;
+            if (XP.Value > PlayManager.Instance.GetNeededXP(this))
+            {
+                XP.Value -= PlayManager.Instance.GetNeededXP(this);
+                Level.Value++;
+                LevelUpPoints.Value += 3;
+                if (Level.Value == 5)
+                    XP.Value = PlayManager.Instance.GetNeededXP(this);
+                PlayManager.Instance.LevelUp(this);
+            }
         }
 
         public void GainGold(int amount)
@@ -770,6 +794,35 @@ namespace AdventuresOfOldMultiplayer
             {
                 PlayManager.Instance.UpdateQuests(quests, steps);
             }
+        }
+
+        public void UpdateStats(int temporaryStrength, int temporaryDexterity, int temporaryIntelligence, int temporarySpeed, int temporaryConstitution, int temporaryEnergy)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                Strength.Value += temporaryStrength;
+                Dexterity.Value += temporaryDexterity;
+                Intelligence.Value += temporaryIntelligence;
+                Speed.Value += temporarySpeed;
+                Constitution.Value += temporaryConstitution;
+                Energy.Value += temporaryEnergy;
+
+                LevelUpPoints.Value -= temporaryStrength + temporaryDexterity + temporaryIntelligence + temporarySpeed + temporaryConstitution + temporaryEnergy;
+            }
+            else
+                UpdateStatsServerRPC(temporaryStrength, temporaryDexterity, temporaryIntelligence, temporarySpeed, temporaryConstitution, temporaryEnergy);
+        }
+        [ServerRpc]
+        public void UpdateStatsServerRPC(int temporaryStrength, int temporaryDexterity, int temporaryIntelligence, int temporarySpeed, int temporaryConstitution, int temporaryEnergy, ServerRpcParams rpcParams = default)
+        {
+            Strength.Value += temporaryStrength;
+            Dexterity.Value += temporaryDexterity;
+            Intelligence.Value += temporaryIntelligence;
+            Speed.Value += temporarySpeed;
+            Constitution.Value += temporaryConstitution;
+            Energy.Value += temporaryEnergy;
+
+            LevelUpPoints.Value -= temporaryStrength + temporaryDexterity + temporaryIntelligence + temporarySpeed + temporaryConstitution + temporaryEnergy;
         }
         #endregion
     }
