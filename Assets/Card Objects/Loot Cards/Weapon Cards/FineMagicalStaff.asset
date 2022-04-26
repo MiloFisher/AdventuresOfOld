@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Fine Magical Staff
   rarity: 1
-  image: {fileID: 21300000, guid: 5e81e865817fc1f4ba0f64057cbe6077, type: 3}
+  image: {fileID: 21300000, guid: 7c07d5218bb953247bc1b8f43b542fde, type: 3}
   copies: 4
   itemType: 2H Staff
   effectDescription: '+7 Damage, Ranged: Can assist from 1 extra tile away'

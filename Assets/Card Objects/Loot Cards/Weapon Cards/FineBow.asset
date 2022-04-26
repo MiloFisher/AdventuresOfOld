@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Fine Bow
   rarity: 1
-  image: {fileID: 21300000, guid: 3405a025cc14b0f4195c4e54afa539bb, type: 3}
+  image: {fileID: 21300000, guid: 1a9fee3cab860674ab7b291e19b19274, type: 3}
   copies: 4
   itemType: 2H Bow
   effectDescription: '+7 Damage, Ranged: Can assist from 1 extra tile away'

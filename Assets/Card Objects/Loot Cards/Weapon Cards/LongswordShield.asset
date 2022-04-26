@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Longsword & Shield
   rarity: 2
-  image: {fileID: 21300000, guid: ba6b1c641555455458f02345d5902c1d, type: 3}
+  image: {fileID: 21300000, guid: 3bf739333cb704442b09b58b7d86603e, type: 3}
   copies: 2
   itemType: Sword/Shield
   effectDescription: +5 Damage, +3 Armor

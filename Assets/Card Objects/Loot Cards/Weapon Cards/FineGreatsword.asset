@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Fine Greatsword
   rarity: 1
-  image: {fileID: 21300000, guid: a9d01539e600b5a428b4cc23e4c57bea, type: 3}
+  image: {fileID: 21300000, guid: 1a7b833a19a965d4f9e8d29cd58c010a, type: 3}
   copies: 4
   itemType: 2H Sword
   effectDescription: +8 Damage

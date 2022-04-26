@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Simple Magic Staff
   rarity: 0
-  image: {fileID: 21300000, guid: 5ca2dc3593cdd58439334091ec5133e8, type: 3}
+  image: {fileID: 21300000, guid: e2d626f9dd23d374bb56fc7b069e30bd, type: 3}
   copies: 6
   itemType: 2H Staff
   effectDescription: '+5 Damage, Ranged: Can assist from 1 extra tile away'

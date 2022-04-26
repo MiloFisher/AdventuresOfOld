@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Simple Sword & Shield
   rarity: 0
-  image: {fileID: 21300000, guid: 335204e0da88a614ea6bfe1867a44d9e, type: 3}
+  image: {fileID: 21300000, guid: 0c9c7fe7b683c5a49b743de6f4c61d2e, type: 3}
   copies: 6
   itemType: Sword/Shield
   effectDescription: +3 Damage, +1 Armor
