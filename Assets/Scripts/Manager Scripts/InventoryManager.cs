@@ -372,12 +372,14 @@ public class InventoryManager : Singleton<InventoryManager>
         else if (l.GetType() == typeof(RingCard))
         {
             int con1 = (l as RingCard).constitution;
-            if(p.Ring1.Value == emptyValue)
+            int eng1 = (l as RingCard).energy;
+            if (p.Ring1.Value == emptyValue)
             {
                 string ring1 = p.Ring1.Value + "";
                 p.SetValue("Ring1", cardName);
                 p.SetValue("Inventory" + (selectedID - 3), ring1);
                 p.SetValue("Health", PlayManager.Instance.GetHealth(p) + con1 * 2);
+                p.SetValue("AbilityCharges", PlayManager.Instance.GetAbilityCharges(p) + eng1 / 2);
             }
             else if (p.Ring2.Value == emptyValue)
             {
@@ -385,6 +387,7 @@ public class InventoryManager : Singleton<InventoryManager>
                 p.SetValue("Ring2", cardName);
                 p.SetValue("Inventory" + (selectedID - 3), ring2);
                 p.SetValue("Health", PlayManager.Instance.GetHealth(p) + con1 * 2);
+                p.SetValue("AbilityCharges", PlayManager.Instance.GetAbilityCharges(p) + eng1 / 2);
             }
             else
             {
@@ -395,6 +398,9 @@ public class InventoryManager : Singleton<InventoryManager>
                 int con2 = (PlayManager.Instance.itemReference[ring1] as RingCard).constitution;
                 int newHealth = PlayManager.Instance.GetHealth(p) + (con1 - con2) * 2;
                 p.SetValue("Health", newHealth > 0 ? newHealth : 1);
+                int eng2 = (PlayManager.Instance.itemReference[ring1] as RingCard).energy;
+                int newAbilityCharge = PlayManager.Instance.GetAbilityCharges(p) + (eng1 - eng2) / 2;
+                p.SetValue("AbilityCharges", newAbilityCharge > 0 ? newAbilityCharge : 0);
             }
         }
     }
@@ -405,6 +411,7 @@ public class InventoryManager : Singleton<InventoryManager>
         string equipment = cards[selectedID].GetComponent<UILootCard>().cardName;
         string location = "";
         int con = 0;
+        int eng = 0;
         switch (selectedID)
         {
             case 0:
@@ -416,10 +423,12 @@ public class InventoryManager : Singleton<InventoryManager>
             case 2:
                 location = "Ring1";
                 con = (PlayManager.Instance.itemReference[equipment] as RingCard).constitution;
+                eng = (PlayManager.Instance.itemReference[equipment] as RingCard).energy;
                 break;
             case 3:
                 location = "Ring2";
                 con = (PlayManager.Instance.itemReference[equipment] as RingCard).constitution;
+                eng = (PlayManager.Instance.itemReference[equipment] as RingCard).energy;
                 break;
         }
         if (p.Inventory1.Value == emptyValue)
@@ -449,6 +458,8 @@ public class InventoryManager : Singleton<InventoryManager>
         }
         int newHealth = PlayManager.Instance.GetHealth(p) - con * 2;
         p.SetValue("Health", newHealth > 0 ? newHealth : 1);
+        int newAbilityCharge = PlayManager.Instance.GetAbilityCharges(p) - eng / 2;
+        p.SetValue("AbilityCharges", newAbilityCharge > 0 ? newAbilityCharge : 0);
     }
 
     public void Discard()

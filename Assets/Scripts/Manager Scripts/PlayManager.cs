@@ -1066,7 +1066,7 @@ public class PlayManager : Singleton<PlayManager>
     }
     public int GetMaxAbilityCharges(Player p)
     {
-        return 2 * GetMod(GetEnergy(p)) + p.Level.Value;
+        return GetMod(GetEnergy(p)) + p.Level.Value;
     }
     public int GetXP(Player p)
     {
