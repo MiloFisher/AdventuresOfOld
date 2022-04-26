@@ -20,6 +20,8 @@ public class PlayManager : Singleton<PlayManager>
 
     public Dictionary<string, EncounterCard> encounterReference = new Dictionary<string, EncounterCard>();
 
+    public Dictionary<string, QuestCard> questReference = new Dictionary<string, QuestCard>();
+
     [SerializeField] private List<QuestCard> questDeck;
     public List<QuestCard> quests = new List<QuestCard>();
 
@@ -71,6 +73,8 @@ public class PlayManager : Singleton<PlayManager>
     public Sprite[] portraits;
 
     public GameObject loadingScreen;
+
+    public GameObject questDisplay;
 
     public EncounterCard testingCard;
 
@@ -124,6 +128,12 @@ public class PlayManager : Singleton<PlayManager>
         foreach (EncounterCard e in encounterCardObjects)
         {
             encounterReference.Add(e.cardName, e);
+        }
+
+        // Construct Quest Reference dictionary
+        foreach (QuestCard q in questDeck)
+        {
+            questReference.Add(q.cardName, q);
         }
 
         // Construct Miniboss and Minion dictionaries
@@ -204,8 +214,19 @@ public class PlayManager : Singleton<PlayManager>
             }
             return allReady;
         });
+
+        // 3) Deal Quest Cards (host only)
+        ShuffleDeck(questDeck);
+        for (int i = 0; i < Mathf.FloorToInt(playerList.Count / 2); i++)
+        {
+            quests.Add(questDeck[i]);
+        }
+
         foreach (Player p in playerList)
         {
+            // Update Quest Cards
+            p.UpdateQuests(quests);
+
             // 1) Set the Chaos Counter to 1 for (all players)
             p.SetChaosCounterClientRPC(1);
 
@@ -255,13 +276,6 @@ public class PlayManager : Singleton<PlayManager>
 
             // Set player positions to starting tile
             p.SetPosition(new Vector3Int(0, 7, -7));
-        }
-
-        // 3) Deal Quest Cards (host only)
-        ShuffleDeck(questDeck);
-        for (int i = 0; i < Mathf.FloorToInt(playerList.Count / 2); i++)
-        {
-            quests.Add(questDeck[i]);
         }
 
         // 4) Deal Chapter Boss Card (host only)
@@ -640,6 +654,18 @@ public class PlayManager : Singleton<PlayManager>
             case "ENG": return GetMod(GetEnergy(localPlayer));
             default: Debug.LogError("Unknown Stat Roll Type: " + statRollType); return 0;
         }
+    }
+
+    public void UpdateQuests(FixedString64Bytes[] questNames, int[] questSteps)
+    {
+        quests.Clear();
+        for(int i = 0; i < questNames.Length; i++)
+        {
+            QuestCard q = questReference[questNames[i] + ""];
+            q.questStep = questSteps[i];
+            quests.Add(q);
+        }
+        questDisplay.GetComponent<UIQuestDisplay>().SetupQuests();
     }
 
     public string DrawFromLootDeck()

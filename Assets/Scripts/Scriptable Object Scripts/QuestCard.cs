@@ -4,6 +4,7 @@ using UnityEngine;
 public class QuestCard : ScriptableObject
 {
     public string cardName;
+    public Sprite image;
     public int questStep;
     public string[] objectiveNames;
     public int rewardGold;

@@ -739,6 +739,38 @@ namespace AdventuresOfOldMultiplayer
                 PlayManager.Instance.ReduceChaos(amount);
             }
         }
+
+        public void UpdateQuests(List<QuestCard> q)
+        {
+            FixedString64Bytes[] quests = new FixedString64Bytes[q.Count];
+            int[] steps = new int[q.Count];
+            for(int i = 0; i < q.Count; i++)
+            {
+                quests[i] = q[i].cardName;
+                steps[i] = q[i].questStep;
+            }
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.UpdateQuestsClientRPC(quests, steps);
+            }
+            else
+                UpdateQuestsServerRPC(quests, steps);
+        }
+        [ServerRpc]
+        private void UpdateQuestsServerRPC(FixedString64Bytes[] quests, int[] steps, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.UpdateQuestsClientRPC(quests, steps);
+        }
+        [ClientRpc]
+        private void UpdateQuestsClientRPC(FixedString64Bytes[] quests, int[] steps, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                PlayManager.Instance.UpdateQuests(quests, steps);
+            }
+        }
         #endregion
     }
 }
