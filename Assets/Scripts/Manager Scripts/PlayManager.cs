@@ -186,7 +186,10 @@ public class PlayManager : Singleton<PlayManager>
     private void Update()
     {
         if (!loadingScreen.activeInHierarchy)
+        {
             DrawPlayerPieces();
+            UpdateCharacterPanels();
+        }
     }
 
     IEnumerator NewGameSetup()
@@ -343,7 +346,6 @@ public class PlayManager : Singleton<PlayManager>
             p.SetTurnMarkerClientRPC(turnMarker);
             // Setup and update character panels
             p.SetupCharacterPanelsClientRPC();
-            p.UpdateCharacterPanelsClientRPC();
             // Play transition for all players
             p.PlayTransitionClientRPC(0); // Transition 0 is Start of Day
         }
@@ -547,7 +549,7 @@ public class PlayManager : Singleton<PlayManager>
     {
         for (int i = 0; i < turnOrderPlayerList.Count; i++)
         {
-            characterPanels[i].GetComponent<UICharacterPanel>().UpdateHealthbar(turnOrderPlayerList[i].Health.Value, 2 * turnOrderPlayerList[i].Constitution.Value);
+            characterPanels[i].GetComponent<UICharacterPanel>().UpdateHealthbar(GetHealth(turnOrderPlayerList[i]), GetMaxHealth(turnOrderPlayerList[i]));
         }
     }
 
@@ -678,6 +680,8 @@ public class PlayManager : Singleton<PlayManager>
     {
         LootManager.Instance.treasureTile = true;
         localPlayer.DrawLootCards(3, localPlayer.UUID.Value, true);
+        localPlayer.GainXP(2);
+        ResetEncounterFails();
         gameboard[localPlayer.Position.Value].DisableTreasureToken();
     }
 

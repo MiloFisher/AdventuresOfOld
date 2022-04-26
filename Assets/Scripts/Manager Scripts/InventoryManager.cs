@@ -356,46 +356,55 @@ public class InventoryManager : Singleton<InventoryManager>
     {
         string cardName = cards[selectedID].GetComponent<UILootCard>().cardName;
         LootCard l = PlayManager.Instance.itemReference[cardName];
+        Player p = PlayManager.Instance.localPlayer;
         if(l.GetType() == typeof(WeaponCard))
         {
-            string weapon = PlayManager.Instance.localPlayer.Weapon.Value + "";
-            PlayManager.Instance.localPlayer.SetValue("Weapon", cardName);
-            PlayManager.Instance.localPlayer.SetValue("Inventory" + (selectedID - 3), weapon);
+            string weapon = p.Weapon.Value + "";
+            p.SetValue("Weapon", cardName);
+            p.SetValue("Inventory" + (selectedID - 3), weapon);
         }
         else if (l.GetType() == typeof(ArmorCard))
         {
-            string armor = PlayManager.Instance.localPlayer.Armor.Value + "";
-            PlayManager.Instance.localPlayer.SetValue("Armor", cardName);
-            PlayManager.Instance.localPlayer.SetValue("Inventory" + (selectedID - 3), armor);
+            string armor = p.Armor.Value + "";
+            p.SetValue("Armor", cardName);
+            p.SetValue("Inventory" + (selectedID - 3), armor);
         }
         else if (l.GetType() == typeof(RingCard))
         {
-            if(PlayManager.Instance.localPlayer.Ring1.Value == emptyValue)
+            int con1 = (l as RingCard).constitution;
+            if(p.Ring1.Value == emptyValue)
             {
-                string ring1 = PlayManager.Instance.localPlayer.Ring1.Value + "";
-                PlayManager.Instance.localPlayer.SetValue("Ring1", cardName);
-                PlayManager.Instance.localPlayer.SetValue("Inventory" + (selectedID - 3), ring1);
+                string ring1 = p.Ring1.Value + "";
+                p.SetValue("Ring1", cardName);
+                p.SetValue("Inventory" + (selectedID - 3), ring1);
+                p.SetValue("Health", PlayManager.Instance.GetHealth(p) + con1 * 2);
             }
-            else if (PlayManager.Instance.localPlayer.Ring2.Value == emptyValue)
+            else if (p.Ring2.Value == emptyValue)
             {
-                string ring2 = PlayManager.Instance.localPlayer.Ring2.Value + "";
-                PlayManager.Instance.localPlayer.SetValue("Ring2", cardName);
-                PlayManager.Instance.localPlayer.SetValue("Inventory" + (selectedID - 3), ring2);
+                string ring2 = p.Ring2.Value + "";
+                p.SetValue("Ring2", cardName);
+                p.SetValue("Inventory" + (selectedID - 3), ring2);
+                p.SetValue("Health", PlayManager.Instance.GetHealth(p) + con1 * 2);
             }
             else
             {
-                string ring1 = PlayManager.Instance.localPlayer.Ring1.Value + "";
-                PlayManager.Instance.localPlayer.SetValue("Ring1", PlayManager.Instance.localPlayer.Ring2.Value + "");
-                PlayManager.Instance.localPlayer.SetValue("Ring2", cardName);
-                PlayManager.Instance.localPlayer.SetValue("Inventory" + (selectedID - 3), ring1);
+                string ring1 = p.Ring1.Value + "";
+                p.SetValue("Ring1", p.Ring2.Value + "");
+                p.SetValue("Ring2", cardName);
+                p.SetValue("Inventory" + (selectedID - 3), ring1);
+                int con2 = (PlayManager.Instance.itemReference[ring1] as RingCard).constitution;
+                int newHealth = PlayManager.Instance.GetHealth(p) + (con1 - con2) * 2;
+                p.SetValue("Health", newHealth > 0 ? newHealth : 1);
             }
         }
     }
 
     public void Unequip()
     {
+        Player p = PlayManager.Instance.localPlayer;
         string equipment = cards[selectedID].GetComponent<UILootCard>().cardName;
         string location = "";
+        int con = 0;
         switch (selectedID)
         {
             case 0:
@@ -406,36 +415,40 @@ public class InventoryManager : Singleton<InventoryManager>
                 break;
             case 2:
                 location = "Ring1";
+                con = (PlayManager.Instance.itemReference[equipment] as RingCard).constitution;
                 break;
             case 3:
                 location = "Ring2";
+                con = (PlayManager.Instance.itemReference[equipment] as RingCard).constitution;
                 break;
         }
-        if (PlayManager.Instance.localPlayer.Inventory1.Value == emptyValue)
+        if (p.Inventory1.Value == emptyValue)
         {
-            PlayManager.Instance.localPlayer.SetValue(location, emptyValue);
-            PlayManager.Instance.localPlayer.SetValue("Inventory1", equipment);
+            p.SetValue(location, emptyValue);
+            p.SetValue("Inventory1", equipment);
         }
-        else if (PlayManager.Instance.localPlayer.Inventory2.Value == emptyValue)
+        else if (p.Inventory2.Value == emptyValue)
         {
-            PlayManager.Instance.localPlayer.SetValue(location, emptyValue);
-            PlayManager.Instance.localPlayer.SetValue("Inventory2", equipment);
+            p.SetValue(location, emptyValue);
+            p.SetValue("Inventory2", equipment);
         }
-        else if (PlayManager.Instance.localPlayer.Inventory3.Value == emptyValue)
+        else if (p.Inventory3.Value == emptyValue)
         {
-            PlayManager.Instance.localPlayer.SetValue(location, emptyValue);
-            PlayManager.Instance.localPlayer.SetValue("Inventory3", equipment);
+            p.SetValue(location, emptyValue);
+            p.SetValue("Inventory3", equipment);
         }
-        else if (PlayManager.Instance.localPlayer.Inventory4.Value == emptyValue)
+        else if (p.Inventory4.Value == emptyValue)
         {
-            PlayManager.Instance.localPlayer.SetValue(location, emptyValue);
-            PlayManager.Instance.localPlayer.SetValue("Inventory4", equipment);
+            p.SetValue(location, emptyValue);
+            p.SetValue("Inventory4", equipment);
         }
-        else if (PlayManager.Instance.localPlayer.Inventory5.Value == emptyValue)
+        else if (p.Inventory5.Value == emptyValue)
         {
-            PlayManager.Instance.localPlayer.SetValue(location, emptyValue);
-            PlayManager.Instance.localPlayer.SetValue("Inventory5", equipment);
+            p.SetValue(location, emptyValue);
+            p.SetValue("Inventory5", equipment);
         }
+        int newHealth = PlayManager.Instance.GetHealth(p) - con * 2;
+        p.SetValue("Health", newHealth > 0 ? newHealth : 1);
     }
 
     public void Discard()

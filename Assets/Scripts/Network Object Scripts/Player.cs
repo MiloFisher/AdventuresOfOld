@@ -352,15 +352,6 @@ namespace AdventuresOfOldMultiplayer
             }
         }
 
-        [ClientRpc]
-        public void UpdateCharacterPanelsClientRPC(ClientRpcParams clientRpcParams = default)
-        {
-            if (IsOwner && !isBot)
-            {
-                PlayManager.Instance.UpdateCharacterPanels();
-            }
-        }
-
         public void EndDayForPlayers()
         {
             if (NetworkManager.Singleton.IsServer)
@@ -628,8 +619,6 @@ namespace AdventuresOfOldMultiplayer
                 int damage = amount - armor;
                 if (damage > 0)
                     Health.Value -= damage;
-                foreach (Player p in PlayManager.Instance.playerList)
-                    p.UpdateCharacterPanelsClientRPC();
             }
             else
                 TakeDamageServerRPC(amount, armor);
@@ -640,8 +629,6 @@ namespace AdventuresOfOldMultiplayer
             int damage = amount - armor;
             if (damage > 0)
                 Health.Value -= damage;
-            foreach (Player p in PlayManager.Instance.playerList)
-                p.UpdateCharacterPanelsClientRPC();
         }
 
         public void RestoreAbilityCharges(int amount)
@@ -672,8 +659,6 @@ namespace AdventuresOfOldMultiplayer
                 Health.Value += amount;
                 if (Health.Value > cap)
                     Health.Value = cap;
-                foreach (Player p in PlayManager.Instance.playerList)
-                    p.UpdateCharacterPanelsClientRPC();
             }
             else
                 RestoreRestoreHealthServerRPC(amount, cap);
@@ -684,8 +669,6 @@ namespace AdventuresOfOldMultiplayer
             Health.Value += amount;
             if (Health.Value > cap)
                 Health.Value = cap;
-            foreach (Player p in PlayManager.Instance.playerList)
-                p.UpdateCharacterPanelsClientRPC();
         }
 
         public void LoseAbilityCharges(int amount)
