@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Ring of Intelligence
   rarity: 2
+  image: {fileID: 21300000, guid: 2b8ccdeacd8eede4986dfe1cc27b20aa, type: 3}
   copies: 4
   itemType: Ring
   effectDescription: +2 Intelligence (INT)

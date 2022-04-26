@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Energy Ring
   rarity: 2
+  image: {fileID: 21300000, guid: 1c6ecf7d77d012a448d09f33be9e3d14, type: 3}
   copies: 4
   itemType: Ring
   effectDescription: +2 Energy (ENG)

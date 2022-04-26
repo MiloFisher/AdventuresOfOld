@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Ring of Physical Power
   rarity: 2
+  image: {fileID: 21300000, guid: 6a6ea7cda0badba4ca7d234de706dd76, type: 3}
   copies: 4
   itemType: Ring
   effectDescription: +1 Physical Power
