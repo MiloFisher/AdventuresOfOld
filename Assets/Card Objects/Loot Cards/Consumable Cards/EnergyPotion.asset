@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Energy Potion
   rarity: 0
-  image: {fileID: 21300000, guid: 471ecec05f6ea384e9c80f67b50da599, type: 3}
+  image: {fileID: 21300000, guid: 0ca46e5c9cc35f145aea363108da786d, type: 3}
   copies: 16
   itemType: Consumable
   effectDescription: Recover +2 Ability Charges

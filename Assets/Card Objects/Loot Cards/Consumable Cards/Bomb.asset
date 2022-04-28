@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Bomb
   rarity: 0
-  image: {fileID: 21300000, guid: a7a7e7d02fad26c4592b06b4fd5e2d01, type: 3}
+  image: {fileID: 21300000, guid: 4ea9add7d7d59a84eb0cca2c264097d3, type: 3}
   copies: 14
   itemType: Consumable
   effectDescription: Deal 5 Damage to an Enemy
