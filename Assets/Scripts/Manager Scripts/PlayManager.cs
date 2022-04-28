@@ -519,11 +519,6 @@ public class PlayManager : Singleton<PlayManager>
         endOfDayElements.transform.GetChild(id).gameObject.SetActive(true);
     }
 
-    public void CallNotification(int id)
-    {
-        notifications.transform.GetChild(id).gameObject.SetActive(true);
-    }
-
     public void SetTurnOrderPlayerList(FixedString64Bytes[] arr)
     {
         turnOrderPlayerList = new List<Player>();
@@ -678,9 +673,35 @@ public class PlayManager : Singleton<PlayManager>
         questDisplay.GetComponent<UIQuestDisplay>().SetupQuests();
     }
 
+    public GameObject GetNotification(int id)
+    {
+        return notifications.transform.GetChild(id).gameObject;
+    }
+
+    public void SendNotification(int id, string descriptionText = default, Action OnComplete = default)
+    {
+        GetNotification(id).GetComponent<UINotification>().SendNotification(descriptionText, OnComplete);
+    }
+
+    public void SendNotification(int id, string descriptionText = default, Action<int> OnComplete = default, int parameter = default)
+    {
+        GetNotification(id).GetComponent<UINotification>().SendNotification(descriptionText, OnComplete, parameter);
+    }
+
     public void LevelUp()
     {
-        CallNotification(0);
+        string description = "You have <color=#006A9A><b>" + GetLevelUpPoints(localPlayer) + "</b></color> upgrade points available!";
+        Action<int> action = SelectPortrait;
+        int parameter = 0;
+        for(int i = 0; i < turnOrderPlayerList.Count; i++)
+        {
+            if (turnOrderPlayerList[i].UUID.Value == localPlayer.UUID.Value)
+            {
+                parameter = i;
+                break;
+            }
+        }
+        SendNotification(0, description, action, parameter);
     }
 
     public string DrawFromLootDeck()
@@ -721,7 +742,6 @@ public class PlayManager : Singleton<PlayManager>
     {
         LootManager.Instance.treasureTile = true;
         localPlayer.DrawLootCards(3, localPlayer.UUID.Value, true);
-        localPlayer.GainXP(2);
         ResetEncounterFails();
         gameboard[localPlayer.Position.Value].DisableTreasureToken();
     }

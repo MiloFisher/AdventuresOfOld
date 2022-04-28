@@ -53,7 +53,10 @@ public class LootManager : Singleton<LootManager>
             if(displayCards.Count == 0)
                 StartCoroutine(AnimateClosing());
             else if(treasureTile)
+            {
                 DiscardRemaining();
+                PlayManager.Instance.localPlayer.GainXP(2);
+            }
         }
         else
         {

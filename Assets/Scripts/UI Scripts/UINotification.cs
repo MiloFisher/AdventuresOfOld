@@ -2,8 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using System;
 
-public class UILevelUp : MonoBehaviour
+public class UINotification : MonoBehaviour
 {
     public float startWidth;
     public float endWidth;
@@ -19,11 +20,35 @@ public class UILevelUp : MonoBehaviour
     protected bool opened;
     protected int roll = 0;
 
-    private void OnEnable()
+    private Action OnComplete;
+    private Action<int> OnComplete1;
+    private int parameter1;
+
+    public void SendNotification(string descriptionText = default, Action _OnComplete = default)
     {
-        description.text = "You\'ve reached Level " + PlayManager.Instance.GetLevel(PlayManager.Instance.localPlayer);
+        gameObject.SetActive(true);
+        description.text = descriptionText;
         ResetSize();
+        OnComplete = _OnComplete;
         StartCoroutine(AnimateOpening());
+    }
+
+    public void SendNotification(string descriptionText = default, Action<int> _OnComplete = default, int _parameter = default)
+    {
+        gameObject.SetActive(true);
+        description.text = descriptionText;
+        ResetSize();
+        OnComplete1 = _OnComplete;
+        parameter1 = _parameter;
+        StartCoroutine(AnimateOpening());
+    }
+
+    private void OnDisable()
+    {
+        if(OnComplete != default)
+            OnComplete();
+        if (OnComplete1 != default)
+            OnComplete1(parameter1);
     }
 
     protected IEnumerator AnimateOpening()
