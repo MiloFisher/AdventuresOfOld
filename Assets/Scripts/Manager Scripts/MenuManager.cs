@@ -3,14 +3,17 @@ using UnityEngine.SceneManagement;
 public class MenuManager : Singleton<MenuManager>
 {
     public GameObject[] menuScenes;
+    public AudioSource themePlayer;
+    public AudioSource effectPlayer;
 
     private void Awake()
     {
-        SwapScene(0);
+        //SwapScene(0);
     }
 
     public void SwapScene(int id)
     {
+        effectPlayer.Play();
         if (id >= menuScenes.Length || id < 0)
             return;
         foreach (GameObject g in menuScenes)

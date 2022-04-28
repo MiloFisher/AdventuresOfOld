@@ -14,7 +14,7 @@ public class JL_UI_Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
     public Sprite buttonSelected;
 
     public void OnPointerDown(PointerEventData eventData) {
-        this.GetComponent<AudioSource>().Play();
+        //this.GetComponent<AudioSource>().Play();
         isHighlighted(0);
     }
     
