@@ -21,8 +21,6 @@ public class UINotification : MonoBehaviour
     protected int roll = 0;
 
     private Action OnComplete;
-    private Action<int> OnComplete1;
-    private int parameter1;
 
     public void SendNotification(string descriptionText = default, Action _OnComplete = default)
     {
@@ -33,22 +31,10 @@ public class UINotification : MonoBehaviour
         StartCoroutine(AnimateOpening());
     }
 
-    public void SendNotification(string descriptionText = default, Action<int> _OnComplete = default, int _parameter = default)
-    {
-        gameObject.SetActive(true);
-        description.text = descriptionText;
-        ResetSize();
-        OnComplete1 = _OnComplete;
-        parameter1 = _parameter;
-        StartCoroutine(AnimateOpening());
-    }
-
     private void OnDisable()
     {
         if(OnComplete != default)
             OnComplete();
-        if (OnComplete1 != default)
-            OnComplete1(parameter1);
     }
 
     protected IEnumerator AnimateOpening()

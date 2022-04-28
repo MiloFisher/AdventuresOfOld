@@ -580,7 +580,7 @@ namespace AdventuresOfOldMultiplayer
                     LevelUpPoints.Value += 3;
                     if (Level.Value == 5)
                         XP.Value = PlayManager.Instance.GetNeededXP(this);
-                    PlayManager.Instance.LevelUp();
+                    PlayManager.Instance.LevelUpNotification();
                 }
             }
             else
@@ -599,7 +599,7 @@ namespace AdventuresOfOldMultiplayer
                 LevelUpPoints.Value += 3;
                 if (Level.Value == 5)
                     XP.Value = PlayManager.Instance.GetNeededXP(this);
-                PlayManager.Instance.LevelUp();
+                PlayManager.Instance.LevelUpNotification();
             }
         }
 
@@ -823,6 +823,38 @@ namespace AdventuresOfOldMultiplayer
             Energy.Value += temporaryEnergy;
 
             LevelUpPoints.Value -= temporaryStrength + temporaryDexterity + temporaryIntelligence + temporarySpeed + temporaryConstitution + temporaryEnergy;
+        }
+
+        public void SendCombatNotifications()
+        {
+            FixedString64Bytes uuid = UUID.Value;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if(p.UUID.Value != uuid)
+                        p.SendCombatNotificationsClientRPC();
+                }
+            }
+            else
+                SendCombatNotificationsServerRPC(uuid);
+        }
+        [ServerRpc]
+        private void SendCombatNotificationsServerRPC(FixedString64Bytes uuid, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+            {
+                if (p.UUID.Value != uuid)
+                    p.SendCombatNotificationsClientRPC();
+            }
+        }
+        [ClientRpc]
+        private void SendCombatNotificationsClientRPC(ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                PlayManager.Instance.CombatNotification();
+            }
         }
         #endregion
     }

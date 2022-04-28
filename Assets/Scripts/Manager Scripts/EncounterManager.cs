@@ -34,6 +34,13 @@ public class EncounterManager : Singleton<EncounterManager>
         StartCoroutine(AnimateCardFade());
     }
 
+    public EncounterCard GetEncounter()
+    {
+        if (displayCards.Count == 0)
+            return null;
+        return PlayManager.Instance.encounterReference[displayCards[0].GetComponent<UIEncounterCard>().cardName];
+    }
+
     public void AddEncounterCardToDraw(string cardName)
     {
         cardsToDraw.Add(cardName);

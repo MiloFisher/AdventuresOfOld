@@ -63,7 +63,9 @@ public class UIEncounterCard : MonoBehaviour
 
         ActivateOptionCardButton(false);
 
-        PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
+        PlayManager.Instance.localPlayer.SendCombatNotifications();
+
+        // Other combat functionality here...
     }
 
     public void ChooseOption()

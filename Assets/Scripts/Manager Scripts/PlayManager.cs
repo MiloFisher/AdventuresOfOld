@@ -683,25 +683,47 @@ public class PlayManager : Singleton<PlayManager>
         GetNotification(id).GetComponent<UINotification>().SendNotification(descriptionText, OnComplete);
     }
 
-    public void SendNotification(int id, string descriptionText = default, Action<int> OnComplete = default, int parameter = default)
+    public void LevelUpNotificationOnComplete()
     {
-        GetNotification(id).GetComponent<UINotification>().SendNotification(descriptionText, OnComplete, parameter);
-    }
-
-    public void LevelUp()
-    {
-        string description = "You have <color=#006A9A><b>" + GetLevelUpPoints(localPlayer) + "</b></color> upgrade points available!";
-        Action<int> action = SelectPortrait;
-        int parameter = 0;
-        for(int i = 0; i < turnOrderPlayerList.Count; i++)
+        int id = 0;
+        for (int i = 0; i < turnOrderPlayerList.Count; i++)
         {
             if (turnOrderPlayerList[i].UUID.Value == localPlayer.UUID.Value)
             {
-                parameter = i;
+                id = i;
                 break;
             }
         }
-        SendNotification(0, description, action, parameter);
+        SelectPortrait(id);
+    }
+
+    public void LevelUpNotification()
+    {
+        string description = "You have <color=#006A9A><b>" + GetLevelUpPoints(localPlayer) + "</b></color> upgrade points available!";
+        Action action = LevelUpNotificationOnComplete;
+        SendNotification(0, description, action);
+    }
+
+    public void CombatNotificationOnComplete()
+    {
+        MakeChoice("Assist in Combat", "Spectate Combat", InAssistingRange(turnOrderPlayerList[turnMarker], localPlayer, GetRange(localPlayer)), true);
+        ChoiceListener((a) => {
+            if(a == 1)
+            {
+                // Assist functionality
+            }
+            else
+            {
+                // Spectate functionality
+            }
+        });
+    }
+
+    public void CombatNotification()
+    {
+        string description = "<color=" + turnOrderPlayerList[turnMarker].Color.Value + ">" + turnOrderPlayerList[turnMarker].Name.Value + "</color> is fighting " + EncounterManager.Instance.GetEncounter().cardName + "!";
+        Action action = CombatNotificationOnComplete;
+        SendNotification(1, description, action);
     }
 
     public string DrawFromLootDeck()
@@ -1246,6 +1268,18 @@ public class PlayManager : Singleton<PlayManager>
     public int GetLevelUpPoints(Player p)
     {
         return p.LevelUpPoints.Value;
+    }
+
+    public int GetRange(Player p)
+    {
+        int x = 0;
+        if (itemReference.ContainsKey(p.Weapon.Value + ""))
+            x += (itemReference[p.Weapon.Value + ""] as WeaponCard).range;
+        return x;
+    }
+    public bool InAssistingRange(Player p1, Player p2, int range)
+    {
+        return gameboard[p1.Position.Value].DistanceToTile(p2.Position.Value) <= range + 1;
     }
     #endregion
 }
