@@ -12,6 +12,8 @@ public class CharacterCreationManager : MonoBehaviour
     [SerializeField] private GameObject UIMan;
     private GameObject canvas;
     private GameObject title;
+    private GameObject[] players;
+    private bool readiedUp;
 
     private string emptyValue = "empty";
 
@@ -31,7 +33,7 @@ public class CharacterCreationManager : MonoBehaviour
 
 
     void setupLocalCharacter() {
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        players = GameObject.FindGameObjectsWithTag("Player");
 
         // Gets local player
         foreach(GameObject p in players)
@@ -108,15 +110,41 @@ public class CharacterCreationManager : MonoBehaviour
                     p.SetValue("Inventory3", emptyValue);
                     p.SetValue("Inventory4", emptyValue);
                     p.SetValue("Inventory5", emptyValue);
+                    // Ready up bots to load into game
+                    p.ReadyUp();
                 }
             }
         }
 
-        // Leave scene
+        // Ready up local player to load into game
+        localPlayer.ReadyUp();
+
+        // If player is host, Wait for other players before changing scene
         if (NetworkManager.Singleton.IsServer)
-        {   
-            localPlayer.ChangeScene("Core Game");
+        {
+            StartCoroutine(WaitForPlayers());
         }
+    }
+
+    IEnumerator WaitForPlayers()
+    {
+        // Wait until all players are ready
+        yield return new WaitUntil(() => {
+            bool allReady = true;
+            foreach (GameObject g in players)
+            {
+                if (!g.GetComponent<Player>().Ready.Value)
+                    allReady = false;
+            }
+            return allReady;
+        });
+
+        // Once all players are ready, unready them all and start the game
+        foreach (GameObject g in players)
+        {
+            g.GetComponent<Player>().Unready();
+        }
+        localPlayer.ChangeScene("Core Game");
     }
 
     // Start is called before the first frame update
@@ -138,8 +166,9 @@ public class CharacterCreationManager : MonoBehaviour
     }
 
     void Update() {
-        if (UIMan.GetComponent<CharManUI>().gamestart) {
+        if (UIMan.GetComponent<CharManUI>().gamestart && !readiedUp) {
             setupLocalCharacter();
+            readiedUp = true;
         }
     }
 }

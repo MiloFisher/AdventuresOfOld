@@ -276,6 +276,9 @@ public class PlayManager : Singleton<PlayManager>
             // Fill all of their ability charges
             p.RestoreAbilityCharges(999);
 
+            // Set their health to full
+            p.RestoreHealth(999);
+
             // Set player positions to starting tile
             p.SetPosition(new Vector3Int(0, 7, -7));
         }
