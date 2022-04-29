@@ -69,9 +69,9 @@ Material:
     - _OutlineWidth: 0
     - _PerspectiveFilter: 0.875
     - _Reflectivity: 10
-    - _ScaleRatioA: 1
-    - _ScaleRatioB: 1
-    - _ScaleRatioC: 1
+    - _ScaleRatioA: 0.8333333
+    - _ScaleRatioB: 0.6770833
+    - _ScaleRatioC: 0.6770833
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0
@@ -116,9 +116,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
   m_Name: Walter-zrol SDF
   m_EditorClassIdentifier: 
-  hashCode: 0
+  hashCode: -1642285010
   material: {fileID: -3941319141935839364}
-  materialHashCode: 0
+  materialHashCode: -240409522
   m_Version: 1.1.0
   m_SourceFontFileGUID: cb9bb55adda26ee43a9e710bc95753fe
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: cb9bb55adda26ee43a9e710bc95753fe, type: 3}
