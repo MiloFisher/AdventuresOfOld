@@ -60,18 +60,18 @@ public class UIStatRoll : MonoBehaviour
 
         // Then grow the object
         float dif = endScale - startScale;
-        for (int i = 1; i <= 100; i++)
+        for (int i = 1; i <= Global.animSteps; i++)
         {
-            transform.localScale = new Vector3(startScale + dif * i * 0.01f, startScale + dif * i * 0.01f, 1);
-            yield return new WaitForSeconds(growingLength);
+            transform.localScale = new Vector3(startScale + dif * i * Global.animRate, startScale + dif * i * Global.animRate, 1);
+            yield return new WaitForSeconds(growingLength * Global.animTimeMod);
         }
 
         // Next open the scroll
         dif = endWidth - startWidth;
-        for (int i = 1; i <= 100; i++)
+        for (int i = 1; i <= Global.animSteps; i++)
         {
-            rt.sizeDelta = new Vector2(startWidth + dif * i * 0.01f, constHeight);
-            yield return new WaitForSeconds(openingLength);
+            rt.sizeDelta = new Vector2(startWidth + dif * i * Global.animRate, constHeight);
+            yield return new WaitForSeconds(openingLength * Global.animTimeMod);
         }
 
         // Finally set opened to true
@@ -149,18 +149,18 @@ public class UIStatRoll : MonoBehaviour
     {
         // First close the scroll
         float dif = endWidth - startWidth;
-        for (int i = 99; i >= 0; i--)
+        for (int i = Global.animSteps - 1; i >= 0; i--)
         {
-            rt.sizeDelta = new Vector2(startWidth + dif * i * 0.01f, constHeight);
-            yield return new WaitForSeconds(openingLength);
+            rt.sizeDelta = new Vector2(startWidth + dif * i * Global.animRate, constHeight);
+            yield return new WaitForSeconds(openingLength * Global.animTimeMod);
         }
 
         // Next shrink the object
         dif = endScale - startScale;
-        for (int i = 99; i >= 0; i--)
+        for (int i = Global.animSteps - 1; i >= 0; i--)
         {
-            transform.localScale = new Vector3(startScale + dif * i * 0.01f, startScale + dif * i * 0.01f, 1);
-            yield return new WaitForSeconds(growingLength);
+            transform.localScale = new Vector3(startScale + dif * i * Global.animRate, startScale + dif * i * Global.animRate, 1);
+            yield return new WaitForSeconds(growingLength * Global.animTimeMod);
         }
 
         yield return new WaitForSeconds(waitTime);

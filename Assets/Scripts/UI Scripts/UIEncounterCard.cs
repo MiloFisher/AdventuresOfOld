@@ -209,12 +209,12 @@ public class UIEncounterCard : MonoBehaviour
         foreach (GameObject g in eventOptionButtons)
             g.SetActive(true);
 
-        for (int i = 1; i <= 100; i++)
+        for (int i = 1; i <= Global.animSteps; i++)
         {
-            SetAlpha(monsterFightButton, i * 0.01f);
+            SetAlpha(monsterFightButton, i * Global.animRate);
             foreach (GameObject g in eventOptionButtons)
-                SetAlpha(g, i * 0.01f);
-            yield return new WaitForSeconds(fadeLength);
+                SetAlpha(g, i * Global.animRate);
+            yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
         }
 
         actionButtonActive = true;
@@ -224,12 +224,12 @@ public class UIEncounterCard : MonoBehaviour
     {
         actionButtonActive = false;
 
-        for (int i = 99; i >= 0; i--)
+        for (int i = Global.animSteps - 1; i >= 0; i--)
         {
-            SetAlpha(monsterFightButton, i * 0.01f);
+            SetAlpha(monsterFightButton, i * Global.animRate);
             foreach (GameObject g in eventOptionButtons)
-                SetAlpha(g, i * 0.01f);
-            yield return new WaitForSeconds(fadeLength);
+                SetAlpha(g, i * Global.animRate);
+            yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
         }
 
         monsterFightButton.SetActive(false);

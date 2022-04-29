@@ -40,26 +40,26 @@ public class TransitionGeneric : MonoBehaviour
     IEnumerator FadeSequence()
     {
         // Fade in background, images, and texts
-        for (int i = 1; i <= 100; i++)
+        for (int i = 1; i <= Global.animSteps; i++)
         {
-            SetAlpha(background, i * 0.00627f);
+            SetAlpha(background, i * 0.627f * Global.animRate);
             for (int j = 0; j < images.Length; j++)
-                SetAlpha(images[j], i * 0.01f);
+                SetAlpha(images[j], i * Global.animRate);
             for (int j = 0; j < texts.Length; j++)
-                SetAlpha(texts[j], i * 0.01f);
-            yield return new WaitForSeconds(fadeLength);
+                SetAlpha(texts[j], i * Global.animRate);
+            yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
         }
 
         yield return new WaitForSeconds(waitTime);
 
-        for (int i = 99; i >= 0; i--)
+        for (int i = Global.animSteps - 1; i >= 0; i--)
         {
-            SetAlpha(background, i * 0.00627f);
+            SetAlpha(background, i * 0.627f * Global.animRate);
             for (int j = 0; j < images.Length; j++)
-                SetAlpha(images[j], i * 0.01f);
+                SetAlpha(images[j], i * Global.animRate);
             for (int j = 0; j < texts.Length; j++)
-                SetAlpha(texts[j], i * 0.01f);
-            yield return new WaitForSeconds(fadeLength);
+                SetAlpha(texts[j], i * Global.animRate);
+            yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
         }
 
         gameObject.SetActive(false);

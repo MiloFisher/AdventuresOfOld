@@ -30,11 +30,13 @@ namespace AdventuresOfOldMultiplayer
         {
             hostingInProgress.SetActive(false);
             joiningInProgress.SetActive(false);
+
+            Application.targetFrameRate = 60;
         }
 
         void Update()
         {
-            if(inLobby && !NetworkManager.Singleton.IsConnectedClient && !NetworkManager.Singleton.IsHost)
+            if (inLobby && !NetworkManager.Singleton.IsConnectedClient && !NetworkManager.Singleton.IsHost)
             {
                 LeaveLobby();
             }

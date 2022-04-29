@@ -159,7 +159,7 @@ public class CharacterCreationManager : MonoBehaviour
         //Scrollable container to spawn the buttons in
         canvas = GameObject.Find("RaceTextContainer");
 
-        foreach(Race race in default_races) {
+        foreach (Race race in default_races) {
             UIMan.GetComponent<CharManUI>().RaceButtonBuilder(race, canvas.transform);
         }
 

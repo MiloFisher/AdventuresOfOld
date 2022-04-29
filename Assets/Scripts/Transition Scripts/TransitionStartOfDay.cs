@@ -49,39 +49,39 @@ public class TransitionStartOfDay : MonoBehaviour
     IEnumerator FadeInSequence()
     {
         // First fade in background + title + divider + divider underlay
-        for (int i = 01; i <= 100; i++)
+        for (int i = 01; i <= Global.animSteps; i++)
         {
-            SetAlpha(background, i * 0.00627f);
-            SetAlpha(title, i * 0.01f);
-            SetAlpha(divider, i * 0.01f);
-            SetAlpha(dividerUnderlay, i * 0.01f);
-            yield return new WaitForSeconds(fadeLength);
+            SetAlpha(background, i * 0.627f * Global.animRate);
+            SetAlpha(title, i * Global.animRate);
+            SetAlpha(divider, i * Global.animRate);
+            SetAlpha(dividerUnderlay, i * Global.animRate);
+            yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
         }
 
         // Next fade in turn order prompt
-        for (int i = 1; i <= 100; i++)
+        for (int i = 1; i <= Global.animSteps; i++)
         {
-            SetAlpha(turnOrderPrompt, i * 0.01f);
-            yield return new WaitForSeconds(fadeLength);
+            SetAlpha(turnOrderPrompt, i * Global.animRate);
+            yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
         }
 
         //Next fade in number + player list
         for(int x = 0; x < PlayManager.Instance.turnOrderPlayerList.Count; x++)
         {
             playerList[x].text = "<color=" + PlayManager.Instance.turnOrderPlayerList[x].Color.Value + ">" + PlayManager.Instance.turnOrderPlayerList[x].Name.Value + "</color>";
-            for (int i = 1; i <= 100; i++)
+            for (int i = 1; i <= Global.animSteps; i++)
             {
-                SetAlpha(numberList[x], i * 0.01f);
-                SetAlpha(playerList[x], i * 0.01f);
-                yield return new WaitForSeconds(fadeLength);
+                SetAlpha(numberList[x], i * Global.animRate);
+                SetAlpha(playerList[x], i * Global.animRate);
+                yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
             }
         }
 
         // Next fade in close prompt
-        for (int i = 1; i <= 100; i++)
+        for (int i = 1; i <= Global.animSteps; i++)
         {
-            SetAlpha(closePrompt, i * 0.01f);
-            yield return new WaitForSeconds(fadeLength);
+            SetAlpha(closePrompt, i * Global.animRate);
+            yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
         }
 
         canClose = true;
@@ -89,21 +89,21 @@ public class TransitionStartOfDay : MonoBehaviour
         // Animate close prompt
         while(canClose)
         {
-            for (int i = 99; i >= 0; i--)
+            for (int i = Global.animSteps - 1; i >= 0; i--)
             {
                 if (!canClose)
                     break;
-                SetAlpha(closePrompt, i * 0.01f);
-                yield return new WaitForSeconds(pulseLength);
+                SetAlpha(closePrompt, i * Global.animRate);
+                yield return new WaitForSeconds(pulseLength * Global.animTimeMod);
             }
             if (!canClose)
                 break;
-            for (int i = 1; i <= 100; i++)
+            for (int i = 1; i <= Global.animSteps; i++)
             {
                 if (!canClose)
                     break;
-                SetAlpha(closePrompt, i * 0.01f);
-                yield return new WaitForSeconds(pulseLength);
+                SetAlpha(closePrompt, i * Global.animRate);
+                yield return new WaitForSeconds(pulseLength * Global.animTimeMod);
             }
         }
     }
@@ -113,20 +113,20 @@ public class TransitionStartOfDay : MonoBehaviour
         canClose = false;
 
         // Fade everything out
-        for (int i = 99; i >= 0; i--)
+        for (int i = Global.animSteps - 1; i >= 0; i--)
         {
-            SetAlpha(background, i * 0.00627f);
-            SetAlpha(title, i * 0.01f);
-            SetAlpha(divider, i * 0.01f);
-            SetAlpha(dividerUnderlay, i * 0.01f);
-            SetAlpha(turnOrderPrompt, i * 0.01f);
+            SetAlpha(background, i * 0.627f * Global.animRate);
+            SetAlpha(title, i * Global.animRate);
+            SetAlpha(divider, i * Global.animRate);
+            SetAlpha(dividerUnderlay, i * Global.animRate);
+            SetAlpha(turnOrderPrompt, i * Global.animRate);
             for (int x = 0; x < PlayManager.Instance.turnOrderPlayerList.Count; x++)
             {
-                SetAlpha(numberList[x], i * 0.01f);
-                SetAlpha(playerList[x], i * 0.01f);
+                SetAlpha(numberList[x], i * Global.animRate);
+                SetAlpha(playerList[x], i * Global.animRate);
             }
-            SetAlpha(closePrompt, i * 0.01f);
-            yield return new WaitForSeconds(fadeLength);
+            SetAlpha(closePrompt, i * Global.animRate);
+            yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
         }
 
         yield return new WaitForSeconds(waitTime);

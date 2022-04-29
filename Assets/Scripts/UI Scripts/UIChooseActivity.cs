@@ -89,29 +89,29 @@ public class UIChooseActivity : MonoBehaviour
     {
         // First fade out buttons and shift selection over
         float startY = selection.transform.localPosition.y;
-        for (int i = 1; i <= 100; i++)
+        for (int i = 1; i <= Global.animSteps; i++)
         {
             foreach (Image b in buttons)
             {
-                SetAlpha(b, (100-i) * 0.01f);
-                SetAlpha(b.GetComponentInChildren<TMP_Text>(), (100-i) * 0.01f);
+                SetAlpha(b, (Global.animSteps-i) * Global.animRate);
+                SetAlpha(b.GetComponentInChildren<TMP_Text>(), (Global.animSteps-i) * Global.animRate);
             }
-            selection.transform.localPosition = new Vector3(0, startY + (selectionEndY - startY) * i * 0.01f, 0);
-            selection.GetComponent<RectTransform>().sizeDelta = new Vector2(selectionStartWidth + (selectionEndWidth - selectionStartWidth) * i * 0.01f, selectionStartHeight + (selectionEndHeight - selectionStartHeight) * i * 0.01f);
-            yield return new WaitForSeconds(selectionShiftLength);
+            selection.transform.localPosition = new Vector3(0, startY + (selectionEndY - startY) * i * Global.animRate, 0);
+            selection.GetComponent<RectTransform>().sizeDelta = new Vector2(selectionStartWidth + (selectionEndWidth - selectionStartWidth) * i * Global.animRate, selectionStartHeight + (selectionEndHeight - selectionStartHeight) * i * Global.animRate);
+            yield return new WaitForSeconds(selectionShiftLength * Global.animTimeMod);
         }
 
         // Next fade in playerNames and activities
         playerNames.SetActive(true);
         activities.SetActive(true);
-        for (int i = 1; i <= 100; i++)
+        for (int i = 1; i <= Global.animSteps; i++)
         {
             for(int j = 0; j < PlayManager.Instance.turnOrderPlayerList.Count; j++)
             {
-                SetAlpha(playerNames.transform.GetChild(j).GetComponent<TMP_Text>(), i * 0.01f);
-                SetAlpha(activities.transform.GetChild(j).GetComponent<TMP_Text>(), i * 0.01f);
+                SetAlpha(playerNames.transform.GetChild(j).GetComponent<TMP_Text>(), i * Global.animRate);
+                SetAlpha(activities.transform.GetChild(j).GetComponent<TMP_Text>(), i * Global.animRate);
             }
-            yield return new WaitForSeconds(selectionShiftLength);
+            yield return new WaitForSeconds(selectionShiftLength * Global.animTimeMod);
         }
 
         PlayManager.Instance.localPlayer.SetValue("EndOfDayActivity", option);
@@ -134,18 +134,18 @@ public class UIChooseActivity : MonoBehaviour
     {
         // First grow the object
         float dif = endScale - startScale;
-        for (int i = 1; i <= 100; i++)
+        for (int i = 1; i <= Global.animSteps; i++)
         {
-            transform.localScale = new Vector3(startScale + dif * i * 0.01f, startScale + dif * i * 0.01f, 1);
-            yield return new WaitForSeconds(growingLength);
+            transform.localScale = new Vector3(startScale + dif * i * Global.animRate, startScale + dif * i * Global.animRate, 1);
+            yield return new WaitForSeconds(growingLength * Global.animTimeMod);
         }
 
         // Next open the scroll
         dif = endWidth - startWidth;
-        for (int i = 1; i <= 100; i++)
+        for (int i = 1; i <= Global.animSteps; i++)
         {
-            rt.sizeDelta = new Vector2(startWidth + dif * i * 0.01f, constHeight);
-            yield return new WaitForSeconds(openingLength);
+            rt.sizeDelta = new Vector2(startWidth + dif * i * Global.animRate, constHeight);
+            yield return new WaitForSeconds(openingLength * Global.animTimeMod);
         }
 
         // Finally set opened to true
@@ -194,18 +194,18 @@ public class UIChooseActivity : MonoBehaviour
     {
         // First close the scroll
         float dif = endWidth - startWidth;
-        for (int i = 99; i >= 0; i--)
+        for (int i = Global.animSteps - 1; i >= 0; i--)
         {
-            rt.sizeDelta = new Vector2(startWidth + dif * i * 0.01f, constHeight);
-            yield return new WaitForSeconds(openingLength);
+            rt.sizeDelta = new Vector2(startWidth + dif * i * Global.animRate, constHeight);
+            yield return new WaitForSeconds(openingLength * Global.animTimeMod);
         }
 
         // Next shrink the object
         dif = endScale - startScale;
-        for (int i = 99; i >= 0; i--)
+        for (int i = Global.animSteps - 1; i >= 0; i--)
         {
-            transform.localScale = new Vector3(startScale + dif * i * 0.01f, startScale + dif * i * 0.01f, 1);
-            yield return new WaitForSeconds(growingLength);
+            transform.localScale = new Vector3(startScale + dif * i * Global.animRate, startScale + dif * i * Global.animRate, 1);
+            yield return new WaitForSeconds(growingLength * Global.animTimeMod);
         }
 
         yield return new WaitForSeconds(waitTime);

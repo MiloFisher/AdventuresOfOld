@@ -3721,6 +3721,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   UIMan: {fileID: 17325666}
+  canvas: {fileID: 568169937}
 --- !u!4 &431297264
 Transform:
   m_ObjectHideFlags: 0
@@ -12545,6 +12546,8 @@ MonoBehaviour:
   - {fileID: 132142699}
   - {fileID: 822782763}
   - {fileID: 1171043814}
+  themePlayer: {fileID: 0}
+  effectPlayer: {fileID: 0}
 --- !u!4 &1655309230
 Transform:
   m_ObjectHideFlags: 0

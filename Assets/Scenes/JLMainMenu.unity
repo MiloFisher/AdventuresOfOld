@@ -7978,7 +7978,7 @@ MonoBehaviour:
   - {fileID: 999326671}
   - {fileID: 766743623}
   themePlayer: {fileID: 1638148885}
-  effectPlayer: {fileID: 1638148887}
+  effectPlayer: {fileID: 0}
 --- !u!82 &1638148887
 AudioSource:
   m_ObjectHideFlags: 0

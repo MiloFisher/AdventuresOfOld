@@ -182,7 +182,7 @@ public class InventoryManager : Singleton<InventoryManager>
         float gap = maximized ? maximizedGap : minimizedGap;
         float y = maximized ? maximizedY : minimizedY;
         // Animate moving to new positions for all cards
-        for (int i = 1; i <= 100; i++)
+        for (int i = 1; i <= Global.animSteps; i++)
         {
             for (int j = 0; j < 9; j++)
             {
@@ -191,19 +191,19 @@ public class InventoryManager : Singleton<InventoryManager>
                 // Move from one position to another
                 if (gearPos[j] > -1 && newGearPos[j] > -1)
                 {
-                    cards[j].transform.localPosition = new Vector3(startPos + (endPos - startPos) * i * 0.01f, y, 0);
+                    cards[j].transform.localPosition = new Vector3(startPos + (endPos - startPos) * i * Global.animRate, y, 0);
                 }
                 // Insert drawn card
                 else if (gearPos[j] == -1 && newGearPos[j] > -1)
                 {
                     float distX = endPos - cardStartX;
                     float distY = y - cardStartY;
-                    float yVal = distY * 0.01f - 1;
+                    float yVal = distY * Global.animRate - 1;
                     float xVal = Mathf.Log10(1 + Mathf.Abs(yVal));
-                    cards[j].transform.localPosition = new Vector3(cardStartX + Mathf.Log10(1 + Mathf.Abs(yVal * i * 0.01f)) / xVal * distX, cardStartY + (y - cardStartY) * i * 0.01f, 0);
+                    cards[j].transform.localPosition = new Vector3(cardStartX + Mathf.Log10(1 + Mathf.Abs(yVal * i * Global.animRate)) / xVal * distX, cardStartY + (y - cardStartY) * i * Global.animRate, 0);
                 }
             }
-            yield return new WaitForSeconds(movementTimeLength);
+            yield return new WaitForSeconds(movementTimeLength * Global.animTimeMod);
         }
 
         SetGear(newGear);
@@ -257,7 +257,7 @@ public class InventoryManager : Singleton<InventoryManager>
         float y = maximized ? maximizedY : minimizedY;
         float auxHeight = auxiliaryCardY + y;
         // Animate moving to new positions for all cards
-        for(int i = 1; i <= 100; i++)
+        for(int i = 1; i <= Global.animSteps; i++)
         {
             for(int j = 0; j < 9; j++)
             {
@@ -266,22 +266,22 @@ public class InventoryManager : Singleton<InventoryManager>
                 // Move from one position to another
                 if (gearPos[j] > -1 && newGearPos[j] > -1)
                 {
-                    cards[j].transform.localPosition = new Vector3(startPos + (endPos - startPos) * i * 0.01f, y, 0);
+                    cards[j].transform.localPosition = new Vector3(startPos + (endPos - startPos) * i * Global.animRate, y, 0);
                 }
                 // Insert new card
                 else if (gearPos[j] == -1 && newGearPos[j] > -1)
                 {
-                    cards[j].transform.localPosition = new Vector3(endPos, auxHeight + (y - auxHeight) * i * 0.01f, 0);
-                    SetAlpha(cards[j], i * 0.01f);
+                    cards[j].transform.localPosition = new Vector3(endPos, auxHeight + (y - auxHeight) * i * Global.animRate, 0);
+                    SetAlpha(cards[j], i * Global.animRate);
                 }
                 // Remove old card
                 else if (gearPos[j] > -1 && newGearPos[j] == -1)
                 {
-                    cards[j].transform.localPosition = new Vector3(startPos, y + (auxHeight - y) * i * 0.01f, 0);
-                    SetAlpha(cards[j], (100 - i) * 0.01f);
+                    cards[j].transform.localPosition = new Vector3(startPos, y + (auxHeight - y) * i * Global.animRate, 0);
+                    SetAlpha(cards[j], (Global.animSteps - i) * Global.animRate);
                 }
             }
-            yield return new WaitForSeconds(movementTimeLength);
+            yield return new WaitForSeconds(movementTimeLength * Global.animTimeMod);
         }
 
         SetGear(newGear);
@@ -296,7 +296,7 @@ public class InventoryManager : Singleton<InventoryManager>
         float startY = maximized ? minimizedY : maximizedY;
         float endY = maximized ? maximizedY : minimizedY;
         // Animate moving to new positions for all cards
-        for (int i = 1; i <= 100; i++)
+        for (int i = 1; i <= Global.animSteps; i++)
         {
             for (int j = 0; j < 9; j++)
             {
@@ -305,10 +305,10 @@ public class InventoryManager : Singleton<InventoryManager>
                 // Move from one position to another
                 if (gearPos[j] > -1)
                 {
-                    cards[j].transform.localPosition = new Vector3(startPos + (endPos - startPos) * i * 0.01f, startY + (endY - startY) * i * 0.01f, 0);
+                    cards[j].transform.localPosition = new Vector3(startPos + (endPos - startPos) * i * Global.animRate, startY + (endY - startY) * i * Global.animRate, 0);
                 }
             }
-            yield return new WaitForSeconds(movementTimeLength);
+            yield return new WaitForSeconds(movementTimeLength * Global.animTimeMod);
         }
         inAnimation = false;
     }

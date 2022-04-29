@@ -8,12 +8,20 @@ public class MenuManager : Singleton<MenuManager>
 
     private void Awake()
     {
-        //SwapScene(0);
+        SwapScene(0);
+    }
+
+    private void Start()
+    {
+        AudioSource[] audioSources = GetComponents<AudioSource>();
+        if (audioSources.Length > 1)
+            effectPlayer = audioSources[1];
     }
 
     public void SwapScene(int id)
     {
-        effectPlayer.Play();
+        if(effectPlayer)
+            effectPlayer.Play();
         if (id >= menuScenes.Length || id < 0)
             return;
         foreach (GameObject g in menuScenes)

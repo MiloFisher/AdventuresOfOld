@@ -621,10 +621,10 @@ public class PlayManager : Singleton<PlayManager>
 
     IEnumerator OpenPlayerSheet()
     {
-        for (int i = 1; i <= 100; i++)
+        for (int i = 1; i <= Global.animSteps; i++)
         {
-            characterDisplays.transform.localPosition = new Vector3(minimizedX + (maximizedX - minimizedX) * i * 0.01f, 0, 0);
-            yield return new WaitForSeconds(characterSheetOpenLength);
+            characterDisplays.transform.localPosition = new Vector3(minimizedX + (maximizedX - minimizedX) * i * Global.animRate, 0, 0);
+            yield return new WaitForSeconds(characterSheetOpenLength * Global.animTimeMod);
         }
     }
 
@@ -639,10 +639,10 @@ public class PlayManager : Singleton<PlayManager>
 
     IEnumerator ClosePlayerSheet()
     {
-        for (int i = 99; i >= 0; i--)
+        for (int i = Global.animSteps - 1; i >= 0; i--)
         {
-            characterDisplays.transform.localPosition = new Vector3(minimizedX + (maximizedX - minimizedX) * i * 0.01f, 0, 0);
-            yield return new WaitForSeconds(characterSheetOpenLength);
+            characterDisplays.transform.localPosition = new Vector3(minimizedX + (maximizedX - minimizedX) * i * Global.animRate, 0, 0);
+            yield return new WaitForSeconds(characterSheetOpenLength * Global.animTimeMod);
         }
         characterDisplayMinimizeButton.SetActive(false);
     }

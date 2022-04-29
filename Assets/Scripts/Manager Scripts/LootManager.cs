@@ -79,13 +79,13 @@ public class LootManager : Singleton<LootManager>
         }
 
         // Next fade out cards
-        for (int i = 99; i >= 0; i--)
+        for (int i = Global.animSteps - 1; i >= 0; i--)
         {
             foreach(GameObject g in displayCards)
             {
-                SetAlpha(g, i * 0.01f);
+                SetAlpha(g, i * Global.animRate);
             }
-            yield return new WaitForSeconds(fadeLength);
+            yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
         }
 
         // Then destroy cards
@@ -111,18 +111,18 @@ public class LootManager : Singleton<LootManager>
 
         // Then grow the object
         float dif = bannerEndScale - bannerStartScale;
-        for (int i = 1; i <= 100; i++)
+        for (int i = 1; i <= Global.animSteps; i++)
         {
-            lootBanner.transform.localScale = new Vector3(bannerStartScale + dif * i * 0.01f, bannerStartScale + dif * i * 0.01f, 1);
-            yield return new WaitForSeconds(bannerGrowingLength);
+            lootBanner.transform.localScale = new Vector3(bannerStartScale + dif * i * Global.animRate, bannerStartScale + dif * i * Global.animRate, 1);
+            yield return new WaitForSeconds(bannerGrowingLength * Global.animTimeMod);
         }
 
         // Next open the scroll
         dif = bannerEndWidth - bannerStartWidth;
-        for (int i = 1; i <= 100; i++)
+        for (int i = 1; i <= Global.animSteps; i++)
         {
-            lootBanner.GetComponent<RectTransform>().sizeDelta = new Vector2(bannerStartWidth + dif * i * 0.01f, bannerConstHeight);
-            yield return new WaitForSeconds(bannerOpeningLength);
+            lootBanner.GetComponent<RectTransform>().sizeDelta = new Vector2(bannerStartWidth + dif * i * Global.animRate, bannerConstHeight);
+            yield return new WaitForSeconds(bannerOpeningLength * Global.animTimeMod);
         }
 
         // Finally animate cards
@@ -135,18 +135,18 @@ public class LootManager : Singleton<LootManager>
 
         // First close the scroll
         float dif = bannerEndWidth - bannerStartWidth;
-        for (int i = 99; i >= 0; i--)
+        for (int i = Global.animSteps - 1; i >= 0; i--)
         {
-            lootBanner.GetComponent<RectTransform>().sizeDelta = new Vector2(bannerStartWidth + dif * i * 0.01f, bannerConstHeight);
-            yield return new WaitForSeconds(bannerOpeningLength);
+            lootBanner.GetComponent<RectTransform>().sizeDelta = new Vector2(bannerStartWidth + dif * i * Global.animRate, bannerConstHeight);
+            yield return new WaitForSeconds(bannerOpeningLength * Global.animTimeMod);
         }
 
         // Then shrink the object
         dif = bannerEndScale - bannerStartScale;
-        for (int i = 99; i >= 0; i--)
+        for (int i = Global.animSteps - 1; i >= 0; i--)
         {
-            lootBanner.transform.localScale = new Vector3(bannerStartScale + dif * i * 0.01f, bannerStartScale + dif * i * 0.01f, 1);
-            yield return new WaitForSeconds(bannerGrowingLength);
+            lootBanner.transform.localScale = new Vector3(bannerStartScale + dif * i * Global.animRate, bannerStartScale + dif * i * Global.animRate, 1);
+            yield return new WaitForSeconds(bannerGrowingLength * Global.animTimeMod);
         }
 
         // Finally deactivate banner
@@ -165,24 +165,24 @@ public class LootManager : Singleton<LootManager>
         travelCard.GetComponent<UILootCard>().ActivateCardBack(true);
 
         float distX = endX - startX - gap * (2 * current + 1 - amount);
-        float x = distX * 0.01f - 1;
+        float x = distX * Global.animRate - 1;
         float distY = endY - startY;
         float y = Mathf.Log10(1 + Mathf.Abs(x));
         float scale;
 
-        for (int i = 1; i <= 100; i++)
+        for (int i = 1; i <= Global.animSteps; i++)
         {
             // Move Position
-            travelCard.transform.localPosition = new Vector3(startX + distX * i * 0.01f, startY + Mathf.Log10(1 + Mathf.Abs(x * i * 0.01f)) / y * distY, 0);
+            travelCard.transform.localPosition = new Vector3(startX + distX * i * Global.animRate, startY + Mathf.Log10(1 + Mathf.Abs(x * i * Global.animRate)) / y * distY, 0);
             // Rotate X, Y, Z
-            travelCard.transform.localRotation = Quaternion.Euler(new Vector3(i <= 50 ? 22.5f * i * 0.02f - 45 : 22.5f * (50-(i-50)) * 0.02f, i <= 50 ? -90 * i * 0.02f : 90 * (50 - (i - 50)) * 0.02f, i <= 50 ? 17.6f * (50-i) * 0.02f + 17.6f : -17.6f * (100-i) * 0.02f)); //45 * i * 0.01f - 45, -180 * i * 0.01f, 35.2f * (100-i) * 0.01f
+            travelCard.transform.localRotation = Quaternion.Euler(new Vector3(i <= Global.animSteps / 2 ? 22.5f * i * 2 * Global.animRate - 45 : 22.5f * (Global.animSteps / 2-(i-Global.animSteps / 2)) * 2 * Global.animRate, i <= Global.animSteps / 2 ? -90 * i * 2 * Global.animRate : 90 * (Global.animSteps / 2 - (i - Global.animSteps / 2)) * 2 * Global.animRate, i <= Global.animSteps / 2 ? 17.6f * (Global.animSteps / 2-i) * 2 * Global.animRate + 17.6f : -17.6f * (Global.animSteps-i) * 2 * Global.animRate)); //45 * i * Global.animRate - 45, -180 * i * Global.animRate, 35.2f * (Global.animSteps-i) * Global.animRate
             // Scale up
-            scale = 0.25f * i * 0.01f + 0.75f;
+            scale = 0.25f * i * Global.animRate + 0.75f;
             travelCard.transform.localScale = new Vector3(scale, scale, 1);
             // Flip card face halfway through
-            if (i == 50)
+            if (i == Global.animSteps / 2)
                 travelCard.GetComponent<UILootCard>().ActivateCardBack(false);
-            yield return new WaitForSeconds(travelLength);
+            yield return new WaitForSeconds(travelLength * Global.animTimeMod);
         }
 
         GameObject card = Instantiate(cardPrefab, travelCard.transform.position, Quaternion.identity, transform.parent);
