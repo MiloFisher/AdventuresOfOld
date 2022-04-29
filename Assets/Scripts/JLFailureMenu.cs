@@ -8,7 +8,8 @@ public class JLFailureMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        Debug.Log(players.Length);
     }
 
     // Update is called once per frame
