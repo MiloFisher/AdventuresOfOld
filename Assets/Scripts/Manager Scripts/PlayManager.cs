@@ -64,6 +64,7 @@ public class PlayManager : Singleton<PlayManager>
 
     public GameObject[] characterPanels;
 
+    public GameObject characterTurnSelector;
     public GameObject characterDisplays;
     public GameObject characterDisplayMinimizeButton;
     public float minimizedX = -1600f;
@@ -570,6 +571,9 @@ public class PlayManager : Singleton<PlayManager>
         {
             characterPanels[i].GetComponent<UICharacterPanel>().UpdateHealthbar(GetHealth(turnOrderPlayerList[i]), GetMaxHealth(turnOrderPlayerList[i]));
         }
+        characterTurnSelector.SetActive(turnMarker < playerList.Count);
+        if(characterTurnSelector.activeInHierarchy)
+            characterTurnSelector.transform.localPosition = characterPanels[turnMarker].transform.localPosition;
     }
 
     public Color ColorLookUp(string color)

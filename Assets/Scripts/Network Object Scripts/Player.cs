@@ -938,7 +938,7 @@ namespace AdventuresOfOldMultiplayer
         private void UpdateCombatTurnMarkerServerRPC(int marker, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
-                p.SetTurnMarkerClientRPC(marker);
+                p.SetCombatTurnMarkerClientRPC(marker);
         }
 
         [ClientRpc]

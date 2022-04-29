@@ -78,27 +78,18 @@ public class TransitionStartOfDay : MonoBehaviour
         }
 
         canClose = true;
-
-        // Next fade in close prompt
-        for (int i = 1; i <= Global.animSteps; i++)
-        {
-            SetAlpha(closePrompt, i * Global.animRate);
-            yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
-        }
         
         // Animate close prompt
         while(canClose)
         {
-            for (int i = Global.animSteps - 1; i >= 0; i--)
+            for (int i = 1; i <= Global.animSteps; i++)
             {
                 if (!canClose)
                     break;
                 SetAlpha(closePrompt, i * Global.animRate);
                 yield return new WaitForSeconds(pulseLength * Global.animTimeMod);
             }
-            if (!canClose)
-                break;
-            for (int i = 1; i <= Global.animSteps; i++)
+            for (int i = Global.animSteps - 1; i >= 0; i--)
             {
                 if (!canClose)
                     break;
