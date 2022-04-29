@@ -49,7 +49,7 @@ public class TransitionStartOfDay : MonoBehaviour
     IEnumerator FadeInSequence()
     {
         // First fade in background + title + divider + divider underlay
-        for (int i = 01; i <= Global.animSteps; i++)
+        for (int i = 1; i <= Global.animSteps; i++)
         {
             SetAlpha(background, i * 0.627f * Global.animRate);
             SetAlpha(title, i * Global.animRate);
@@ -77,15 +77,15 @@ public class TransitionStartOfDay : MonoBehaviour
             }
         }
 
+        canClose = true;
+
         // Next fade in close prompt
         for (int i = 1; i <= Global.animSteps; i++)
         {
             SetAlpha(closePrompt, i * Global.animRate);
             yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
         }
-
-        canClose = true;
-
+        
         // Animate close prompt
         while(canClose)
         {

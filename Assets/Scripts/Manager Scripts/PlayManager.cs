@@ -324,7 +324,7 @@ public class PlayManager : Singleton<PlayManager>
 
     }
 
-    private void ShuffleDeck<T>(List<T> deck)
+    public void ShuffleDeck<T>(List<T> deck)
     {
         for (int i = 0; i < deck.Count; i++)
         {
@@ -711,11 +711,14 @@ public class PlayManager : Singleton<PlayManager>
             if(a == 1)
             {
                 // Assist functionality
+                localPlayer.SetValue("ParticipatingInCombat", 1);
             }
             else
             {
                 // Spectate functionality
+                localPlayer.SetValue("ParticipatingInCombat", 0);
             }
+            CallEncounterElement(7);
         });
     }
 
@@ -724,6 +727,11 @@ public class PlayManager : Singleton<PlayManager>
         string description = "<color=" + turnOrderPlayerList[turnMarker].Color.Value + ">" + turnOrderPlayerList[turnMarker].Name.Value + "</color> is fighting " + EncounterManager.Instance.GetEncounter().cardName + "!";
         Action action = CombatNotificationOnComplete;
         SendNotification(1, description, action);
+    }
+
+    public void ContinueToCombat()
+    {
+        encounterElements.transform.GetChild(7).GetComponent<UICombatantList>().CloseCombatantList();
     }
 
     public string DrawFromLootDeck()
@@ -846,7 +854,7 @@ public class PlayManager : Singleton<PlayManager>
     #region Chaos Counter Functions
     public int XPModifier()
     {
-        return 2 * Mathf.FloorToInt((chaosCounter - 1) / 4);
+        return 2 * (ChaosTier() - 1);
     }
 
     public void ReduceChaos(int amount)
@@ -892,6 +900,21 @@ public class PlayManager : Singleton<PlayManager>
             chaosMarker.GetComponentInChildren<TMP_Text>().text = "x";
             chaosMarker.transform.localPosition = new Vector3(-979 + 85.1052632f * (chaosCounter - 1), 0, 0);
         }
+    }
+
+    public int AttackModifier()
+    {
+        return 2 * (ChaosTier() - 1);
+    }
+
+    public int HealthModifier()
+    {
+        return 8 * (ChaosTier() - 1);
+    }
+
+    public int PowerModifier()
+    {
+        return (ChaosTier() - 1);
     }
     #endregion
 

@@ -56,6 +56,7 @@ namespace AdventuresOfOldMultiplayer
         public NetworkVariable<FixedString64Bytes> Color = new NetworkVariable<FixedString64Bytes>();
         public NetworkVariable<bool> Ready = new NetworkVariable<bool>();
         public NetworkVariable<int> EndOfDayActivity = new NetworkVariable<int>();
+        public NetworkVariable<int> ParticipatingInCombat = new NetworkVariable<int>();
 
         public override void OnNetworkSpawn()
         {
@@ -186,6 +187,7 @@ namespace AdventuresOfOldMultiplayer
                 case "LevelUpPoints": LevelUpPoints.Value = value; break;
                 case "FailedEncounters": FailedEncounters.Value = value; break;
                 case "EndOfDayActivity": EndOfDayActivity.Value = value; break;
+                case "ParticipatingInCombat": ParticipatingInCombat.Value = value; break;
                 default: Debug.LogError("Unknown Value: \"" + valueName + "\""); break;
             }
         }
@@ -851,9 +853,100 @@ namespace AdventuresOfOldMultiplayer
         [ClientRpc]
         private void SendCombatNotificationsClientRPC(ClientRpcParams clientRpcParams = default)
         {
+            if (IsOwner)
+            {
+                if(!isBot)
+                    PlayManager.Instance.CombatNotification();
+                else
+                {
+                    SetValue("ParticipatingInCombat", 0);
+                    ReadyUp();
+                }
+            }
+        }
+
+        public void ContinueToCombat()
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.ContinueToCombatClientRPC();
+            }
+            else
+                ContinueToCombatServerRPC();
+        }
+        [ServerRpc]
+        private void ContinueToCombatServerRPC(ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.ContinueToCombatClientRPC();
+        }
+        [ClientRpc]
+        private void ContinueToCombatClientRPC(ClientRpcParams clientRpcParams = default)
+        {
             if (IsOwner && !isBot)
             {
-                PlayManager.Instance.CombatNotification();
+                PlayManager.Instance.ContinueToCombat();
+            }
+        }
+
+        public void UpdateMonsterHealth(int value)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.UpdateMonsterHealthClientRPC(value);
+            }
+            else
+                UpdateMonsterHealthServerRPC(value);
+        }
+        [ServerRpc]
+        private void UpdateMonsterHealthServerRPC(int value, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.UpdateMonsterHealthClientRPC(value);
+        }
+        [ClientRpc]
+        private void UpdateMonsterHealthClientRPC(int value, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                CombatManager.Instance.monster.SetCurrentHealth(value);
+            }
+        }
+
+        [ClientRpc]
+        public void SetTurnOrderCombatantListClientRPC(FixedString64Bytes[] arr, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                CombatManager.Instance.SetTurnOrderCombatantList(arr);
+            }
+        }
+
+        public void UpdateCombatTurnMarker(int marker)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.SetCombatTurnMarkerClientRPC(marker);
+            }
+            else
+                UpdateCombatTurnMarkerServerRPC(marker);
+        }
+        [ServerRpc]
+        private void UpdateCombatTurnMarkerServerRPC(int marker, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.SetTurnMarkerClientRPC(marker);
+        }
+
+        [ClientRpc]
+        public void SetCombatTurnMarkerClientRPC(int marker, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                CombatManager.Instance.combatTurnMarker = marker;
             }
         }
         #endregion

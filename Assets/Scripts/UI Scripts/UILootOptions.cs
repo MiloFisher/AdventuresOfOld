@@ -135,6 +135,9 @@ public class UILootOptions : MonoBehaviour
             discardButton.GetComponent<Image>().color = enabledColor;
         }
 
+        // If first option is "Unequip", set option 2 inactive
+        discardButton.SetActive(useButton.GetComponentInChildren<TMP_Text>().text != unequipOption);
+
         // Third option is "Sell"
         sellButton.GetComponentInChildren<TMP_Text>().text = sellOption;
         sellButton.GetComponent<Button>().enabled = true;

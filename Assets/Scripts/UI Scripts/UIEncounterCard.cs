@@ -63,9 +63,11 @@ public class UIEncounterCard : MonoBehaviour
 
         ActivateOptionCardButton(false);
 
-        PlayManager.Instance.localPlayer.SendCombatNotifications();
+        CombatManager.Instance.monsterCard = m;
 
-        // Other combat functionality here...
+        PlayManager.Instance.localPlayer.SendCombatNotifications();
+        PlayManager.Instance.localPlayer.SetValue("ParticipatingInCombat", 1);
+        PlayManager.Instance.CallEncounterElement(7);
     }
 
     public void ChooseOption()
@@ -88,11 +90,11 @@ public class UIEncounterCard : MonoBehaviour
             monsterComponents.SetActive(true);
             monsterImage.sprite = m.image;
             monsterCardName.text = m.cardName;
-            monsterHealth.text = m.health + "";
-            monsterAttack.text = m.attack + "";
+            monsterHealth.text = m.health + PlayManager.Instance.HealthModifier() + "";
+            monsterAttack.text = m.attack + PlayManager.Instance.AttackModifier() + "";
             monsterSpeed.text = m.speed + "";
-            monsterPhysicalPower.text = m.physicalPower + "";
-            monsterMagicalPower.text = m.magicalPower + "";
+            monsterPhysicalPower.text = m.physicalPower + PlayManager.Instance.PowerModifier() + "";
+            monsterMagicalPower.text = m.magicalPower + PlayManager.Instance.PowerModifier() + "";
             monsterFlavorText.text = m.flavorText;
             monsterSkillName.text = m.skillName;
             monsterSkillDescription.text = m.skillDescription;
