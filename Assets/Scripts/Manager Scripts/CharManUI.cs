@@ -14,7 +14,6 @@ public class CharManUI : MonoBehaviour
     public GameObject stat_container;
     public GameObject race_selected_text;
     public GameObject race_details_text;
-    public GameObject race_stats_text;
     public GameObject race_trait_text;
     public GameObject class_str_text;
     public GameObject class_dex_text;
@@ -24,6 +23,7 @@ public class CharManUI : MonoBehaviour
     public GameObject class_eng_text;
     public GameObject chosen_class_text;
     public GameObject chosen_class_image;
+    public GameObject chosen_class_icon;
     public Sprite aasimar_image;
     public Sprite centaur_image;
     public Sprite dwarf_image;
@@ -95,6 +95,7 @@ public class CharManUI : MonoBehaviour
         //Updating text for next confirmation scene
         createdchar.setChosen_race(race);
         chosen_class_image.SetActive(true);
+        chosen_class_icon.SetActive(true);
 
         //Using a scuffed switch case since I don't want to mess with game_resource files
         //Resource.load is what I would have used here so that I wouldn't have to deal with names
@@ -131,7 +132,13 @@ public class CharManUI : MonoBehaviour
 
         race_selected_text.GetComponent<TextMeshProUGUI>().text = race.get_name();
         race_details_text.GetComponent<TextMeshProUGUI>().text = race.get_desc();
-        race_stats_text.GetComponent<TextMeshProUGUI>().text = race.get_stats().ToString();
+        stat_container.SetActive(true);
+        class_str_text.GetComponent<TextMeshProUGUI>().text = "STR:" + race.get_stats().get_str();
+        class_dex_text.GetComponent<TextMeshProUGUI>().text = "DEX:" + race.get_stats().get_dex();
+        class_spd_text.GetComponent<TextMeshProUGUI>().text = "SPD:" + race.get_stats().get_spd();
+        class_int_text.GetComponent<TextMeshProUGUI>().text = "INT:" + race.get_stats().get_inte();
+        class_con_text.GetComponent<TextMeshProUGUI>().text = "CON:" + race.get_stats().get_con();
+        class_eng_text.GetComponent<TextMeshProUGUI>().text = "ENG:" + race.get_stats().get_eng();
         race_trait_text.GetComponent<TextMeshProUGUI>().text = race.get_unique_ability() + ":\n" + race.get_unique_ability_desc();
         
     }
@@ -150,6 +157,7 @@ public class CharManUI : MonoBehaviour
     public void BackToRace() {
         stat_container.SetActive(false);
         chosen_class_image.SetActive(false);
+        chosen_class_icon.SetActive(false);
         SceneHeader.GetComponent<TextMeshProUGUI>().SetText("Race Selection");
     }
 
@@ -193,6 +201,7 @@ public class CharManUI : MonoBehaviour
             createdchar.getChosen_race().get_stats().get_eng());
         ability_desc_panel.SetActive(false);
         class_confirm_button.SetActive(false);
+        stat_container.SetActive(false);
         SceneHeader.GetComponent<TextMeshProUGUI>().SetText("Class Selection");
     }
 
@@ -233,11 +242,17 @@ public class CharManUI : MonoBehaviour
     }
 
     public void PreviewAbility(int abilitynum) {
-        ability_desc_text.GetComponent<TextMeshProUGUI>().SetText(createdchar.getChosen_class().getAbilities()[abilitynum].getDesc());
-        ability_cost_text.GetComponent<TextMeshProUGUI>().SetText("Ability cost: " + createdchar.getChosen_class().getAbilities()[abilitynum].getCost());
-        ability_type_text.GetComponent<TextMeshProUGUI>().SetText("Ability type: " + createdchar.getChosen_class().getAbilities()[abilitynum].getType());
-        ability_level_text.GetComponent<TextMeshProUGUI>().SetText("Ability level: " + createdchar.getChosen_class().getAbilities()[abilitynum].getLevel());
-        ability_desc_panel.SetActive(true);
+        if (abilitynum == -1) {
+            ability_desc_panel.SetActive(false);
+        }
+        else {
+            ability_desc_text.GetComponent<TextMeshProUGUI>().SetText(createdchar.getChosen_class().getAbilities()[abilitynum].getDesc());
+            //Extra ability descriptions removed.
+            /* ability_cost_text.GetComponent<TextMeshProUGUI>().SetText("Ability cost: " + createdchar.getChosen_class().getAbilities()[abilitynum].getCost());
+            ability_type_text.GetComponent<TextMeshProUGUI>().SetText("Ability type: " + createdchar.getChosen_class().getAbilities()[abilitynum].getType());
+            ability_level_text.GetComponent<TextMeshProUGUI>().SetText("Ability level: " + createdchar.getChosen_class().getAbilities()[abilitynum].getLevel()); */
+            ability_desc_panel.SetActive(true);
+        }
     }
 
     //See changes to player stats before they confirm
@@ -300,7 +315,7 @@ public class CharManUI : MonoBehaviour
         }
     }
 
-    public void previewTrait(string traitname) {
+    public void PreviewTrait(string traitname) {
         createdchar.setChosen_trait(new Trait(traitname));
         trait_details_container.SetActive(true);
         trait_confirm_button.SetActive(true);
