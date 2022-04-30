@@ -391,6 +391,17 @@ public class CharManUI : MonoBehaviour
         }
     }
 
+    public void previewPowerful(int type) {
+        if(type == 0) {
+            PreviewTrait("Musclehead");
+        }
+        else if(type == 1) {
+            PreviewTrait("Bookworm");
+        }
+        else {
+            PreviewTrait("Delicate");
+        }
+    }
     public void setCharName() {
         createdchar.setName(inputname.GetComponent<TextMeshProUGUI>().text);
         gamestart = true;
