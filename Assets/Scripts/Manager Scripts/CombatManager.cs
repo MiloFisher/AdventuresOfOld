@@ -13,13 +13,23 @@ public class CombatManager : Singleton<CombatManager>
     public GameObject combatBackground;
     public Sprite[] backgroundSprites;
     public GameObject combatMainLayout;
-
+    public GameObject[] playerCards;
     public int combatTurnMarker;
     public MonsterCard monsterCard;
     public Combatant monster;
     
     public float fadeLength = 0.01f;
     public float fadedWaitTime = 0.5f;
+
+    public int testPlayersAmount;
+    public float radius;
+    public float originX;
+    public float originY;
+
+    private void Update()
+    {
+        AllignPlayerCards();
+    }
 
     public void LoadIntoCombat()
     {
@@ -53,6 +63,24 @@ public class CombatManager : Singleton<CombatManager>
                 p.SetTurnOrderCombatantListClientRPC(arr);
                 p.SetCombatTurnMarkerClientRPC(combatTurnMarker);
             }
+        }
+    }
+
+    private void AllignPlayerCards()
+    {
+        testPlayersAmount = Mathf.Clamp(testPlayersAmount, 1, 6);
+        float theta = Mathf.PI / 7f;
+        float startingDegree = Mathf.PI * 2f;
+        float start = (6 - testPlayersAmount) / 2f;
+        int i;
+        for(i = 0; i < testPlayersAmount; i++)
+        {
+            playerCards[i].SetActive(true);
+            playerCards[i].transform.localPosition = new Vector3(radius * Mathf.Cos(startingDegree - theta*(i+1+start)) + originX, radius * Mathf.Sin(startingDegree - theta * (i + 1+start)) + originY, 0);
+        }
+        for(; i < 6; i++)
+        {
+            playerCards[i].SetActive(false);
         }
     }
 
