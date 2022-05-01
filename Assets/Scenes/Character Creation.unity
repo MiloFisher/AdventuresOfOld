@@ -308,7 +308,6 @@ MonoBehaviour:
   stat_container: {fileID: 2132674260}
   race_selected_text: {fileID: 35451472}
   race_details_text: {fileID: 2003111237}
-  race_stats_text: {fileID: 1460095426}
   race_trait_text: {fileID: 301870612}
   class_str_text: {fileID: 1235969496}
   class_dex_text: {fileID: 262069349}
@@ -318,6 +317,7 @@ MonoBehaviour:
   class_eng_text: {fileID: 410313871}
   chosen_class_text: {fileID: 579909186}
   chosen_class_image: {fileID: 1130908464}
+  chosen_class_icon: {fileID: 1738750294}
   aasimar_image: {fileID: 21300000, guid: 79d59ac1fca734642984f19f597a73c5, type: 3}
   centaur_image: {fileID: 21300000, guid: d8bd8f5900d4d437fb9d8db005bc7859, type: 3}
   dwarf_image: {fileID: 21300000, guid: c89ee6f1b03364cdfb2e1e39ab663bc0, type: 3}
@@ -989,7 +989,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 17325667}
         m_TargetAssemblyTypeName: CharManUI, Assembly-CSharp
-        m_MethodName: previewTrait
+        m_MethodName: PreviewTrait
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1460,7 +1460,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 17325667}
         m_TargetAssemblyTypeName: CharManUI, Assembly-CSharp
-        m_MethodName: previewTrait
+        m_MethodName: PreviewTrait
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3819,7 +3819,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 17325667}
         m_TargetAssemblyTypeName: CharManUI, Assembly-CSharp
-        m_MethodName: previewTrait
+        m_MethodName: PreviewTrait
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4388,7 +4388,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 17325667}
         m_TargetAssemblyTypeName: CharManUI, Assembly-CSharp
-        m_MethodName: previewTrait
+        m_MethodName: PreviewTrait
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -7969,7 +7969,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 17325667}
         m_TargetAssemblyTypeName: CharManUI, Assembly-CSharp
-        m_MethodName: previewTrait
+        m_MethodName: PreviewTrait
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8844,7 +8844,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 17325667}
         m_TargetAssemblyTypeName: CharManUI, Assembly-CSharp
-        m_MethodName: previewTrait
+        m_MethodName: PreviewTrait
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10910,7 +10910,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 17325667}
         m_TargetAssemblyTypeName: CharManUI, Assembly-CSharp
-        m_MethodName: previewTrait
+        m_MethodName: PreviewTrait
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11859,7 +11859,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 17325667}
         m_TargetAssemblyTypeName: CharManUI, Assembly-CSharp
-        m_MethodName: previewTrait
+        m_MethodName: PreviewTrait
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12733,7 +12733,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 17325667}
         m_TargetAssemblyTypeName: CharManUI, Assembly-CSharp
-        m_MethodName: previewTrait
+        m_MethodName: PreviewTrait
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -13564,7 +13564,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 17325667}
         m_TargetAssemblyTypeName: CharManUI, Assembly-CSharp
-        m_MethodName: previewTrait
+        m_MethodName: PreviewTrait
         m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
