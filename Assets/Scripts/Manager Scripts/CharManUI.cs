@@ -51,9 +51,7 @@ public class CharManUI : MonoBehaviour
     public GameObject generalist_text;
     public GameObject highborn_text;
     public GameObject holy_text;
-    public GameObject musclehead_text;
-    public GameObject bookworm_text;
-    public GameObject delicate_text;
+    public GameObject powerful_text;
     public GameObject final_str;
     public GameObject final_dex;
     public GameObject final_int;
@@ -201,7 +199,6 @@ public class CharManUI : MonoBehaviour
             createdchar.getChosen_race().get_stats().get_eng());
         ability_desc_panel.SetActive(false);
         class_confirm_button.SetActive(false);
-        stat_container.SetActive(false);
         SceneHeader.GetComponent<TextMeshProUGUI>().SetText("Class Selection");
     }
 
@@ -389,9 +386,14 @@ public class CharManUI : MonoBehaviour
         else {
             class_eng_text.GetComponent<TextMeshProUGUI>().color = black;
         }
+
+        if (traitname != "Musclehead" || traitname != "Bookworm" || traitname != "Delicate") {
+            powerful_text.GetComponent<TextMeshProUGUI>().color = new Color32(255,255,255,255);
+        }
     }
 
     public void previewPowerful(int type) {
+        powerful_text.GetComponent<TextMeshProUGUI>().color = new Color32(59,255,0,255);
         if(type == 0) {
             PreviewTrait("Musclehead");
         }
@@ -404,6 +406,7 @@ public class CharManUI : MonoBehaviour
     }
     public void setCharName() {
         createdchar.setName(inputname.GetComponent<TextMeshProUGUI>().text);
+        chosen_class_icon.SetActive(false);
         gamestart = true;
     }
 
