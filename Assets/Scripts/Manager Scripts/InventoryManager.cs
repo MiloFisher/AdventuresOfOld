@@ -9,6 +9,7 @@ public class InventoryManager : Singleton<InventoryManager>
 {
     public GameObject[] cards;
     public GameObject minimizeButton;
+    public GameObject minimizeButton1;
     public float minimizedY;
     public float maximizedY;
     public float minimizedGap;
@@ -216,6 +217,7 @@ public class InventoryManager : Singleton<InventoryManager>
             return;
         maximized = true;
         minimizeButton.SetActive(true);
+        minimizeButton1.SetActive(true);
         StartCoroutine(AnimateMinMaxMovement());
     }
 
@@ -225,6 +227,7 @@ public class InventoryManager : Singleton<InventoryManager>
             return;
         maximized = false;
         minimizeButton.SetActive(false);
+        minimizeButton1.SetActive(false);
         StartCoroutine(AnimateMinMaxMovement());
     }
 

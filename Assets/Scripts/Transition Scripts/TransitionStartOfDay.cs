@@ -68,7 +68,7 @@ public class TransitionStartOfDay : MonoBehaviour
         //Next fade in number + player list
         for(int x = 0; x < PlayManager.Instance.turnOrderPlayerList.Count; x++)
         {
-            playerList[x].text = "<color=" + PlayManager.Instance.turnOrderPlayerList[x].Color.Value + ">" + PlayManager.Instance.turnOrderPlayerList[x].Name.Value + "</color>";
+            playerList[x].text = "<color=" + PlayManager.Instance.GetPlayerColorString(PlayManager.Instance.turnOrderPlayerList[x]) + ">" + PlayManager.Instance.turnOrderPlayerList[x].Name.Value + "</color>";
             for (int i = 1; i <= Global.animSteps; i++)
             {
                 SetAlpha(numberList[x], i * Global.animRate);

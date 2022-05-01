@@ -53,7 +53,7 @@ namespace AdventuresOfOldMultiplayer
         // Gameplay Data
         public NetworkVariable<Vector3Int> Position = new NetworkVariable<Vector3Int>();
         public NetworkVariable<int> TurnPhase = new NetworkVariable<int>();
-        public NetworkVariable<FixedString64Bytes> Color = new NetworkVariable<FixedString64Bytes>();
+        public NetworkVariable<int> Color = new NetworkVariable<int>();
         public NetworkVariable<bool> Ready = new NetworkVariable<bool>();
         public NetworkVariable<int> EndOfDayActivity = new NetworkVariable<int>();
         public NetworkVariable<int> ParticipatingInCombat = new NetworkVariable<int>();
@@ -150,7 +150,6 @@ namespace AdventuresOfOldMultiplayer
                 case "Inventory3": Inventory3.Value = value; break;
                 case "Inventory4": Inventory4.Value = value; break;
                 case "Inventory5": Inventory5.Value = value; break;
-                case "Color": Color.Value = value; break;
                 default: Debug.LogError("Unknown Value: \"" + valueName + "\""); break;
             }
         }
@@ -188,6 +187,7 @@ namespace AdventuresOfOldMultiplayer
                 case "FailedEncounters": FailedEncounters.Value = value; break;
                 case "EndOfDayActivity": EndOfDayActivity.Value = value; break;
                 case "ParticipatingInCombat": ParticipatingInCombat.Value = value; break;
+                case "Color": Color.Value = value; break;
                 default: Debug.LogError("Unknown Value: \"" + valueName + "\""); break;
             }
         }
