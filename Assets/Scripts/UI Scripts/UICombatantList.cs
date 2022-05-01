@@ -115,7 +115,7 @@ public class UICombatantList : MonoBehaviour
             // Setup PlayerNames
             GameObject g = playerNames.transform.GetChild(i).gameObject;
             g.SetActive(true);
-            g.GetComponent<TMP_Text>().text = "<color=" + PlayManager.Instance.turnOrderPlayerList[i].Color.Value + ">" + PlayManager.Instance.turnOrderPlayerList[i].Name.Value + "</color>";
+            g.GetComponent<TMP_Text>().text = "<color=" + PlayManager.Instance.GetPlayerColorString(PlayManager.Instance.turnOrderPlayerList[i]) + ">" + PlayManager.Instance.turnOrderPlayerList[i].Name.Value + "</color>";
             // Setup Activities
             g = activities.transform.GetChild(i).gameObject;
             g.SetActive(true);

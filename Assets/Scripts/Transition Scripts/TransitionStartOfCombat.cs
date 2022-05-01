@@ -105,7 +105,7 @@ public class TransitionStartOfCombat : MonoBehaviour
             SetAlpha(divider, i * Global.animRate);
             SetAlpha(dividerUnderlay, i * Global.animRate);
             SetAlpha(turnOrderPrompt, i * Global.animRate);
-            for (int x = 0; x < PlayManager.Instance.turnOrderPlayerList.Count; x++)
+            for (int x = 0; x < CombatManager.Instance.turnOrderCombatantList.Count; x++)
             {
                 SetAlpha(numberList[x], i * Global.animRate);
                 SetAlpha(playerList[x], i * Global.animRate);

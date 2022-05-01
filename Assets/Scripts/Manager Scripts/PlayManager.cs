@@ -79,6 +79,8 @@ public class PlayManager : Singleton<PlayManager>
 
     public GameObject questDisplay;
 
+    public Color[] playerColors;
+
     public EncounterCard testingCard;
 
     public bool startOrEndOfDay;
@@ -308,10 +310,10 @@ public class PlayManager : Singleton<PlayManager>
         // 6) Miniboss and minion decks already set up
 
         // Give each player a color (host only)
-        string[] colorList = { "red", "blue", "green", "yellow", "purple", "orange" };
+        //string[] colorList = { "red", "blue", "green", "yellow", "purple", "orange" };
         for (int i = 0; i < playerList.Count; i++)
         {
-            playerList[i].SetValue("Color", colorList[i]);
+            playerList[i].SetValue("Color", i);
         }
 
         yield return new WaitForSeconds(1);
@@ -541,7 +543,7 @@ public class PlayManager : Singleton<PlayManager>
         for (i = 0; i < playerList.Count; i++)
         {
             playerPieces[i].SetActive(true);
-            playerPieces[i].GetComponent<Image>().color = ColorLookUp(playerList[i].Color.Value + "");
+            playerPieces[i].GetComponent<Image>().color = GetPlayerColor(playerList[i]);
         }
         for (; i < 6; i++)
         {
@@ -557,7 +559,7 @@ public class PlayManager : Singleton<PlayManager>
             characterPanels[i].SetActive(true);
             characterPanels[i].transform.localPosition = new Vector3(characterPanels[i].transform.localPosition.x, 117.5f * (turnOrderPlayerList.Count - 2 * i - 1), 0);
             characterPanels[i].GetComponent<UICharacterPanel>().UpdateCharacterImage(portaitDictionary[turnOrderPlayerList[i].Image.Value]);
-            characterPanels[i].GetComponent<UICharacterPanel>().UpdateCharacterName(turnOrderPlayerList[i].Name.Value + "", turnOrderPlayerList[i].Color.Value + "");
+            characterPanels[i].GetComponent<UICharacterPanel>().UpdateCharacterName(turnOrderPlayerList[i].Name.Value + "", GetPlayerColorString(turnOrderPlayerList[i]));
         }
         for (; i < 6; i++)
         {
@@ -576,19 +578,19 @@ public class PlayManager : Singleton<PlayManager>
             characterTurnSelector.transform.localPosition = characterPanels[turnMarker].transform.localPosition;
     }
 
-    public Color ColorLookUp(string color)
-    {
-        switch (color)
-        {
-            case "red": return Color.red;
-            case "blue": return Color.blue;
-            case "green": return Color.green;
-            case "purple": return new Color(0.627f, 0, 1);
-            case "yellow": return Color.yellow;
-            case "orange": return new Color(1, 0.627f, 0);
-            default: return Color.black;
-        }
-    }
+    //public Color ColorLookUp(string color)
+    //{
+    //    switch (color)
+    //    {
+    //        case "red": return Color.red;
+    //        case "blue": return Color.blue;
+    //        case "green": return Color.green;
+    //        case "purple": return new Color(0.627f, 0, 1);
+    //        case "yellow": return Color.yellow;
+    //        case "orange": return new Color(1, 0.627f, 0);
+    //        default: return Color.black;
+    //    }
+    //}
 
     public void DrawPlayerPieces()
     {
@@ -728,7 +730,7 @@ public class PlayManager : Singleton<PlayManager>
 
     public void CombatNotification()
     {
-        string description = "<color=" + turnOrderPlayerList[turnMarker].Color.Value + ">" + turnOrderPlayerList[turnMarker].Name.Value + "</color> is fighting " + EncounterManager.Instance.GetEncounter().cardName + "!";
+        string description = "<color=" + GetPlayerColorString(turnOrderPlayerList[turnMarker]) + ">" + turnOrderPlayerList[turnMarker].Name.Value + "</color> is fighting " + EncounterManager.Instance.GetEncounter().cardName + "!";
         Action action = CombatNotificationOnComplete;
         SendNotification(1, description, action);
     }
@@ -1307,6 +1309,14 @@ public class PlayManager : Singleton<PlayManager>
     public bool InAssistingRange(Player p1, Player p2, int range)
     {
         return gameboard[p1.Position.Value].DistanceToTile(p2.Position.Value) <= range + 1;
+    }
+    public Color GetPlayerColor(Player p)
+    {
+        return playerColors[p.Color.Value];
+    }
+    public string GetPlayerColorString(Player p)
+    {
+        return "#" + ColorUtility.ToHtmlStringRGB(playerColors[p.Color.Value]);
     }
     #endregion
 }

@@ -21,14 +21,16 @@ public class CombatManager : Singleton<CombatManager>
     public float fadeLength = 0.01f;
     public float fadedWaitTime = 0.5f;
 
-    public int testPlayersAmount;
     public float radius;
     public float originX;
     public float originY;
 
+    private bool ready;
+
     private void Update()
     {
-        AllignPlayerCards();
+        if(ready)
+            AllignPlayerCards();
     }
 
     public void LoadIntoCombat()
@@ -68,12 +70,12 @@ public class CombatManager : Singleton<CombatManager>
 
     private void AllignPlayerCards()
     {
-        testPlayersAmount = Mathf.Clamp(testPlayersAmount, 1, 6);
+        int playerAmount = Mathf.Clamp(turnOrderCombatantList.Count - 1, 1, 6);
         float theta = Mathf.PI / 7f;
         float startingDegree = Mathf.PI * 2f;
-        float start = (6 - testPlayersAmount) / 2f;
+        float start = (6 - playerAmount) / 2f;
         int i;
-        for(i = 0; i < testPlayersAmount; i++)
+        for(i = 0; i < playerAmount; i++)
         {
             playerCards[i].SetActive(true);
             playerCards[i].transform.localPosition = new Vector3(radius * Mathf.Cos(startingDegree - theta*(i+1+start)) + originX, radius * Mathf.Sin(startingDegree - theta * (i + 1+start)) + originY, 0);
@@ -81,6 +83,15 @@ public class CombatManager : Singleton<CombatManager>
         for(; i < 6; i++)
         {
             playerCards[i].SetActive(false);
+        }
+        int index = 0;
+        for (i = 0; i < turnOrderCombatantList.Count; i++)
+        {
+            if (turnOrderCombatantList[i].combatantType == CombatantType.PLAYER)
+            {
+                playerCards[index].GetComponent<UIPlayerCard>().SetVisuals(turnOrderCombatantList[i].player);
+                index++;
+            }
         }
     }
 
@@ -102,6 +113,7 @@ public class CombatManager : Singleton<CombatManager>
 
         // Hold faded in overlay
         yield return new WaitForSeconds(fadedWaitTime);
+        ready = true;
 
         // Then fade out overlay
         for (int i = Global.animSteps - 1; i >= 0; i--)
@@ -151,6 +163,7 @@ public class CombatManager : Singleton<CombatManager>
 
     private void ResetCombat()
     {
+        ready = false;
         combatMainLayout.SetActive(false);
         combatBackground.SetActive(false);
     }

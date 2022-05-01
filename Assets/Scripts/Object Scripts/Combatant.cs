@@ -1,7 +1,9 @@
+using System;
 using AdventuresOfOldMultiplayer;
 
 public enum CombatantType { PLAYER, MONSTER };
 
+[Serializable]
 public class Combatant
 {
     public CombatantType combatantType;
@@ -36,7 +38,7 @@ public class Combatant
     public string GetColor()
     {
         if (combatantType == CombatantType.PLAYER)
-            return player.Color.Value + "";
+            return PlayManager.Instance.GetPlayerColorString(player);
         else
             return "white";
     }
