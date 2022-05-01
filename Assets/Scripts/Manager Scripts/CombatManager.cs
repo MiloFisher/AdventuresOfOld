@@ -13,6 +13,7 @@ public class CombatManager : Singleton<CombatManager>
     public GameObject combatBackground;
     public Sprite[] backgroundSprites;
     public GameObject combatMainLayout;
+    public GameObject enemyCard;
     public GameObject[] playerCards;
     public int combatTurnMarker;
     public MonsterCard monsterCard;
@@ -21,6 +22,8 @@ public class CombatManager : Singleton<CombatManager>
     public float fadeLength = 0.01f;
     public float fadedWaitTime = 0.5f;
 
+    public int PLAYER_AMOUNT = 6;
+    //public float START_RADIAN;
     public float radius;
     public float originX;
     public float originY;
@@ -71,26 +74,34 @@ public class CombatManager : Singleton<CombatManager>
     private void AllignPlayerCards()
     {
         int playerAmount = Mathf.Clamp(turnOrderCombatantList.Count - 1, 1, 6);
-        float theta = Mathf.PI / 7f;
-        float startingDegree = Mathf.PI * 2f;
+        playerAmount = PLAYER_AMOUNT;
+        //playerAmount = 6;
+        float theta = Mathf.PI / 5f;
+        float startingDegree = 0;
+        //startingDegree = START_RADIAN;
         float start = (6 - playerAmount) / 2f;
         int i;
         for(i = 0; i < playerAmount; i++)
         {
             playerCards[i].SetActive(true);
-            playerCards[i].transform.localPosition = new Vector3(radius * Mathf.Cos(startingDegree - theta*(i+1+start)) + originX, radius * Mathf.Sin(startingDegree - theta * (i + 1+start)) + originY, 0);
+            playerCards[i].transform.localPosition = new Vector3(radius * Mathf.Cos(startingDegree - theta*(i+start)) + originX, radius * Mathf.Sin(startingDegree - theta * (i+start)) + originY, 0);
         }
         for(; i < 6; i++)
         {
             playerCards[i].SetActive(false);
         }
-        int index = 0;
+        int index = playerAmount - 1;
         for (i = 0; i < turnOrderCombatantList.Count; i++)
         {
             if (turnOrderCombatantList[i].combatantType == CombatantType.PLAYER)
             {
                 playerCards[index].GetComponent<UIPlayerCard>().SetVisuals(turnOrderCombatantList[i].player);
-                index++;
+                index--;
+            }
+            else
+            {
+                enemyCard.GetComponent<UIEncounterCard>().SetVisuals(turnOrderCombatantList[i].monster.cardName);
+                enemyCard.GetComponent<UIEncounterCard>().UpdateHealthBar(turnOrderCombatantList[i]);
             }
         }
     }

@@ -44,6 +44,9 @@ public class UIEncounterCard : MonoBehaviour
     public TMP_Text monsterGold;
     public TMP_Text monsterXP;
     public GameObject monsterFightButton;
+    public GameObject healthBarBack;
+    public TMP_Text healthBarText;
+    public GameObject healthBar;
 
     private bool actionButtonActive;
 
@@ -180,6 +183,17 @@ public class UIEncounterCard : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void UpdateHealthBar(Combatant monster)
+    {
+        healthBarText.text = monster.GetHealth() + " / " + monster.GetMaxHealth();
+        healthBar.transform.localPosition = new Vector3(3954f * monster.GetHealth() / monster.GetMaxHealth() - 3954f, 0, 0);
+    }
+
+    public void ActivateHealthBar(bool active)
+    {
+        healthBarBack.SetActive(active);
     }
 
     public void ActivateCardBack(bool active)
