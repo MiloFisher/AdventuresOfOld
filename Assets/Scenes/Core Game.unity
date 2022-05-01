@@ -3827,6 +3827,7 @@ MonoBehaviour:
   - {fileID: 215521251}
   fadeLength: 0.006
   waitTime: 1
+  fadeAlpha: 0.785
   endEffect: 2
 --- !u!114 &148689329
 MonoBehaviour:
@@ -16703,6 +16704,7 @@ MonoBehaviour:
   fadeLength: 0.004
   pulseLength: 0.01
   waitTime: 0.5
+  fadeAlpha: 0.785
 --- !u!1 &655343511
 GameObject:
   m_ObjectHideFlags: 0
@@ -37404,6 +37406,7 @@ MonoBehaviour:
   fadeLength: 0.004
   pulseLength: 0.01
   waitTime: 0.5
+  fadeAlpha: 0.785
 --- !u!1001 &1299412057
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -39513,6 +39516,7 @@ MonoBehaviour:
   - {fileID: 1232651151}
   fadeLength: 0.006
   waitTime: 1
+  fadeAlpha: 0.785
   endEffect: 1
 --- !u!114 &1363844928
 MonoBehaviour:
@@ -50891,7 +50895,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -55008,6 +55012,7 @@ MonoBehaviour:
   - {fileID: 1932028817}
   fadeLength: 0.006
   waitTime: 1
+  fadeAlpha: 0.785
   endEffect: 0
 --- !u!114 &1913204155
 MonoBehaviour:

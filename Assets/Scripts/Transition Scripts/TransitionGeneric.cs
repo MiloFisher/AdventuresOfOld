@@ -13,6 +13,7 @@ public class TransitionGeneric : MonoBehaviour
     public TMP_Text[] texts;
     public float fadeLength = 0.004f;
     public float waitTime = 1f;
+    public float fadeAlpha = 0.785f;
     public EndEffect endEffect;
 
     public void OnEnable()
@@ -42,7 +43,7 @@ public class TransitionGeneric : MonoBehaviour
         // Fade in background, images, and texts
         for (int i = 1; i <= Global.animSteps; i++)
         {
-            SetAlpha(background, i * 0.627f * Global.animRate);
+            SetAlpha(background, i * fadeAlpha * Global.animRate);
             for (int j = 0; j < images.Length; j++)
                 SetAlpha(images[j], i * Global.animRate);
             for (int j = 0; j < texts.Length; j++)
@@ -54,7 +55,7 @@ public class TransitionGeneric : MonoBehaviour
 
         for (int i = Global.animSteps - 1; i >= 0; i--)
         {
-            SetAlpha(background, i * 0.627f * Global.animRate);
+            SetAlpha(background, i * fadeAlpha * Global.animRate);
             for (int j = 0; j < images.Length; j++)
                 SetAlpha(images[j], i * Global.animRate);
             for (int j = 0; j < texts.Length; j++)

@@ -17,6 +17,7 @@ public class TransitionStartOfCombat : MonoBehaviour
     public float fadeLength = 0.004f;
     public float pulseLength = 0.01f;
     public float waitTime = 0.5f;
+    public float fadeAlpha = 0.785f;
 
     private bool canClose;
 
@@ -45,7 +46,7 @@ public class TransitionStartOfCombat : MonoBehaviour
         // First fade in background + title + divider + divider underlay
         for (int i = 1; i <= Global.animSteps; i++)
         {
-            SetAlpha(background, i * 0.627f * Global.animRate);
+            SetAlpha(background, i * fadeAlpha * Global.animRate);
             SetAlpha(title, i * Global.animRate);
             SetAlpha(divider, i * Global.animRate);
             SetAlpha(dividerUnderlay, i * Global.animRate);
@@ -100,7 +101,7 @@ public class TransitionStartOfCombat : MonoBehaviour
         // Fade everything out
         for (int i = Global.animSteps - 1; i >= 0; i--)
         {
-            SetAlpha(background, i * 0.627f * Global.animRate);
+            SetAlpha(background, i * fadeAlpha * Global.animRate);
             SetAlpha(title, i * Global.animRate);
             SetAlpha(divider, i * Global.animRate);
             SetAlpha(dividerUnderlay, i * Global.animRate);

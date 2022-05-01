@@ -157,7 +157,7 @@ public class EncounterManager : Singleton<EncounterManager>
 
         GameObject card = Instantiate(cardPrefab, travelCard.transform.position, Quaternion.identity, transform.parent);
         card.GetComponent<UIEncounterCard>().SetVisuals(cardsToDraw[current]);
-        card.GetComponent<UIEncounterCard>().ActivateCardButton(false);
+        card.GetComponent<UIEncounterCard>().ActivateCardButton(true);
         card.GetComponent<UIEncounterCard>().ActivateOptionCardButton(isYourTurn);
         card.transform.localScale = travelCard.transform.localScale;
         displayCards.Add(card);

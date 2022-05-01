@@ -65,7 +65,7 @@ public class UICharacterSheet : MonoBehaviour
             return;
 
         portrait.sprite = PlayManager.Instance.portaitDictionary[p.Image.Value];
-        characterName.text = "<color=" + p.Color.Value + ">" + p.Name.Value + "</color>";
+        characterName.text = "<color=" + PlayManager.Instance.GetPlayerColorString(p) + ">" + p.Name.Value + "</color>";
         characterDescription.text = p.Trait.Value + " " + p.Race.Value + " " + p.Class.Value;
 
         healthBarText.text = PlayManager.Instance.GetHealth(p) + " / " + PlayManager.Instance.GetMaxHealth(p);
