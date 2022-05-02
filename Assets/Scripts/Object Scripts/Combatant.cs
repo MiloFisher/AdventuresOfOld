@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using AdventuresOfOldMultiplayer;
 
 public enum CombatantType { PLAYER, MONSTER };
@@ -9,6 +10,7 @@ public class Combatant
     public CombatantType combatantType;
     public Player player;
     public MonsterCard monster;
+    public List<Effect> statusEffects;
 
     private int currentHealth;
 
@@ -16,6 +18,7 @@ public class Combatant
     {
         this.combatantType = combatantType;
         this.player = player;
+        statusEffects = new List<Effect>();
         monster = default;
     }
 
@@ -24,6 +27,7 @@ public class Combatant
         this.combatantType = combatantType;
         this.monster = monster;
         player = default;
+        statusEffects = new List<Effect>();
         currentHealth = monster.health + PlayManager.Instance.HealthModifier();
     }
 

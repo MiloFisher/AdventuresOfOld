@@ -28,3 +28,4 @@ MonoBehaviour:
   passiveDescription: Whenever a player is damaged by the Spider, they must make
     a CON Roll (8).  On a failure, that player becomes <b>Poisoned (3)</b>.
   background: {fileID: 21300000, guid: c9bd982ee37cfa548ad465fc93dcddf4, type: 3}
+  target: 3

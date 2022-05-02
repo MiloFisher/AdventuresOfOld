@@ -2,8 +2,11 @@ using UnityEngine;
 
 public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
 {
-    public void CallSkill(string objectName)
+    private Combatant target;
+
+    public void CallSkill(string objectName, Combatant c)
     {
+        target = c;
         Invoke(objectName + "_Skill", 0);
     }
 
@@ -17,24 +20,37 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
     #region Ugly Slime
     private void UglySlime_Skill()
     {
-        // effect goes here...
+        CombatManager.Instance.MonsterEndTurn();
     }
 
     private void UglySlime_Passive()
     {
-        // effect goes here...
+        CombatManager.Instance.OnPlayerDealDamage = (t) => {
+            CombatManager.Instance.InflictDebuff(t, new Effect("Weakened", 1, 1));
+        };
     }
     #endregion
 
     #region Slime Congregation
     private void SlimeCongregation_Skill()
     {
-        // effect goes here...
+        CombatManager.Instance.MakeStatRoll("INT", 9);
+        CombatManager.Instance.StatRollListener((a) => {
+            if(a == -1)
+            {
+                CombatManager.Instance.AttackPlayer(target);
+                CombatManager.Instance.InflictDebuff(target, new Effect("Eaten", 1));
+            }
+            else
+                CombatManager.Instance.MonsterEndTurn();
+        });
     }
 
     private void SlimeCongregation_Passive()
     {
-        // effect goes here...
+        CombatManager.Instance.OnPlayerDealDamage = (t) => {
+            CombatManager.Instance.InflictDebuff(t, new Effect("Weakened", 1, 2));
+        };
     }
     #endregion
 

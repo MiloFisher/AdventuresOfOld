@@ -29,3 +29,4 @@ MonoBehaviour:
   passiveDescription: Whenever a player spends an Ability Charge, that player becomes
     <b>Weakened (3)</b>.
   background: {fileID: 21300000, guid: c9bd982ee37cfa548ad465fc93dcddf4, type: 3}
+  target: 3

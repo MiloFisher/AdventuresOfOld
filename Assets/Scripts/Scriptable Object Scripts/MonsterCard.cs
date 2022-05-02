@@ -1,6 +1,7 @@
 using UnityEngine;
 
 public enum MonsterType {BASIC, ELITE, MINIBOSS, BOSS, MINION};
+public enum Target {NONE, LOWEST_HEALTH, HIGHEST_HEALTH, ALL};
 
 [CreateAssetMenu(fileName = "New Monster Card", menuName = "Cards/Monster Card")]
 public class MonsterCard : EncounterCard
@@ -16,6 +17,7 @@ public class MonsterCard : EncounterCard
     public string passiveName;
     public string passiveDescription;
     public Sprite background;
-    public void Skill() { MonsterAbilityManager.Instance.CallSkill(name); }
+    public Target target;
+    public void Skill(Combatant c) { MonsterAbilityManager.Instance.CallSkill(name, c); }
     public void Passive() { MonsterAbilityManager.Instance.CallPassive(name); }
 }

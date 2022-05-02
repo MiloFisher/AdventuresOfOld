@@ -964,6 +964,57 @@ namespace AdventuresOfOldMultiplayer
                 CombatManager.Instance.combatTurnMarker = marker;
             }
         }
+
+        public void StartNextCombatantTurn(int turnMarker)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                CombatManager.Instance.turnOrderCombatantList[turnMarker].player.StartNextCombatantTurnClientRPC();
+            }
+            else
+                StartNextCombatantTurnServerRPC(turnMarker);
+        }
+        [ServerRpc]
+        private void StartNextCombatantTurnServerRPC(int turnMarker, ServerRpcParams rpcParams = default)
+        {
+            CombatManager.Instance.turnOrderCombatantList[turnMarker].player.StartNextCombatantTurnClientRPC();
+        }
+        [ClientRpc]
+        public void StartNextCombatantTurnClientRPC(ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner)
+            {
+                if (isBot)
+                    CombatManager.Instance.StartBotTurn();
+                else
+                    CombatManager.Instance.StartTurn();
+            }
+        }
+
+        public void StartMonsterTurn(int[] targets)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.StartMonsterTurnClientRPC(targets);
+            }
+            else
+                StartMonsterTurnServerRPC(targets);
+        }
+        [ServerRpc]
+        private void StartMonsterTurnServerRPC(int[] targets, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.StartMonsterTurnClientRPC(targets);
+        }
+        [ClientRpc]
+        public void StartMonsterTurnClientRPC(int[] targets, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                CombatManager.Instance.StartMonsterTurn(targets);
+            }
+        }
         #endregion
     }
 }

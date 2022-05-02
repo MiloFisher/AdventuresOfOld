@@ -28,3 +28,4 @@ MonoBehaviour:
   passiveDescription: When being attacked by the Bandits, players can pay 20 Gold
     to ignore the incoming damage.  (Must be done before attempting to Dodge)
   background: {fileID: 21300000, guid: e4ae604d20bf447dfb71c0a2e09e908b, type: 3}
+  target: 2

@@ -23,6 +23,7 @@ public class UIPlayerCard : MonoBehaviour
     public TMP_Text playerMagicalPower;
     public TMP_Text playerDescription;
     public GameObject playerTurnMarker;
+    public GameObject targetCrosshair;
 
     public void SetVisuals(Player p)
     {
@@ -71,5 +72,10 @@ public class UIPlayerCard : MonoBehaviour
     public void ActivateHealthBar(bool active)
     {
         healthBarBack.SetActive(active);
+    }
+
+    public void ActivateCrosshair(bool active)
+    {
+        targetCrosshair.SetActive(active);
     }
 }

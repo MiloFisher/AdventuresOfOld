@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public enum EndEffect { START_MOVEMENT_PHASE, START_ENCOUNTER_PHASE, START_END_OF_DAY };
+public enum EndEffect { START_MOVEMENT_PHASE, START_ENCOUNTER_PHASE, START_END_OF_DAY, START_COMBAT_TURN, START_MONSTER_TURN };
 
 public class TransitionGeneric : MonoBehaviour
 {
@@ -34,6 +34,13 @@ public class TransitionGeneric : MonoBehaviour
                 break;
             case EndEffect.START_END_OF_DAY:
                 PlayManager.Instance.EndOfDay();
+                break;
+            case EndEffect.START_COMBAT_TURN:
+                CombatManager.Instance.TakeTurn();
+                break;
+            case EndEffect.START_MONSTER_TURN:
+                CombatManager.Instance.MonsterTakeTurn();
+                CombatManager.Instance.isMonsterTurn = false;
                 break;
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Unity.Netcode;
 
 public class TransitionStartOfCombat : MonoBehaviour
 {
@@ -30,7 +31,12 @@ public class TransitionStartOfCombat : MonoBehaviour
 
     public void OnDisable()
     {
-        
+        // If it is your turn, after displaying "Start of Combat", display "Your Turn"
+        if (CombatManager.Instance.isYourTurn)
+            PlayManager.Instance.CallTransition(5);
+        // Else if it is the monster's turn, after displaying "Start of Combat", display "Monster Turn"
+        else if (CombatManager.Instance.isMonsterTurn)
+            PlayManager.Instance.CallTransition(6);
     }
 
     public void Close()
