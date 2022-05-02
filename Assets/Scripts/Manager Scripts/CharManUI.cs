@@ -317,9 +317,7 @@ public class CharManUI : MonoBehaviour
     public void PreviewTrait(string traitname) {
         createdchar.setChosen_trait(new Trait(traitname));
         trait_details_container.SetActive(true);
-        if(traitname != "Powerful") {
-            trait_confirm_button.SetActive(true);
-        }
+        trait_confirm_button.SetActive(true);
         trait_details_text.GetComponent<TextMeshProUGUI>().SetText(createdchar.getChosen_trait().getDesc());
         Color32 green = new Color32(175, 255, 0, 255);
         Color32 black = new Color32(0, 0, 0, 255);
@@ -396,6 +394,13 @@ public class CharManUI : MonoBehaviour
             powerful_text.GetComponent<TMP_Dropdown>().SetValueWithoutNotify(3); //Anything not 0 1 2 will work here
         }
 
+    }
+
+    public void ViewPowerful() {
+        trait_details_container.SetActive(true);
+        trait_confirm_button.SetActive(false);
+        trait_details_text.GetComponent<TextMeshProUGUI>().SetText(
+            "Gain +3 in either STR, DEX, or INT, then lose -1 from the two Stats you didn’t choose.");
     }
 
     //Dropdown menu functionality. Manually sets the colors of the Powerful text (coz dropdown color was jank)
