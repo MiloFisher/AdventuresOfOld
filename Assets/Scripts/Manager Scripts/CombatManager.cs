@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using AdventuresOfOldMultiplayer;
 using Unity.Collections;
-using Unity.Netcode;
 
 public class CombatManager : Singleton<CombatManager>
 {
@@ -30,6 +29,7 @@ public class CombatManager : Singleton<CombatManager>
     public float originY;
 
     private bool ready;
+    private bool combatantListSet;
 
     private void Update()
     {
@@ -41,8 +41,8 @@ public class CombatManager : Singleton<CombatManager>
     {
         StartCoroutine(FadeOverlay());
 
-        // If host, set turn order combatant list for all players
-        if(NetworkManager.Singleton.IsServer)
+        // If it is your turn, set turn order combatant list for all players
+        if(PlayManager.Instance.isYourTurn)
         {
             turnOrderCombatantList = new List<Combatant>();
             foreach(Player p in PlayManager.Instance.playerList)
@@ -65,11 +65,8 @@ public class CombatManager : Singleton<CombatManager>
                     arr[i] = turnOrderCombatantList[i].monster.cardName;
             }
             combatTurnMarker = 0;
-            foreach(Player p in PlayManager.Instance.playerList)
-            {
-                p.SetTurnOrderCombatantListClientRPC(arr);
-                p.SetCombatTurnMarkerClientRPC(combatTurnMarker);
-            }
+            PlayManager.Instance.localPlayer.SetTurnOrderCombatantList(arr);
+            PlayManager.Instance.localPlayer.UpdateCombatTurnMarker(combatTurnMarker);
         }
     }
 
@@ -123,6 +120,8 @@ public class CombatManager : Singleton<CombatManager>
         // Activate main layout while screen is obstructed by overlay
         combatMainLayout.SetActive(true);
         combatBackground.SetActive(true);
+
+        yield return new WaitUntil(() => combatantListSet);
         combatBackground.GetComponent<Image>().sprite = monsterCard.background;
 
         // Hold faded in overlay
@@ -163,6 +162,7 @@ public class CombatManager : Singleton<CombatManager>
                 }
             }
         }
+        combatantListSet = true;
     }
 
     private void SetAlpha(Image i, float a)
@@ -172,6 +172,7 @@ public class CombatManager : Singleton<CombatManager>
 
     private void ResetCombat()
     {
+        combatantListSet = false;
         ready = false;
         combatMainLayout.SetActive(false);
         combatBackground.SetActive(false);
