@@ -47,6 +47,7 @@ public class UIEncounterCard : MonoBehaviour
     public GameObject healthBarBack;
     public TMP_Text healthBarText;
     public GameObject healthBar;
+    public GameObject turnMarker;
 
     private bool actionButtonActive;
 
@@ -189,6 +190,11 @@ public class UIEncounterCard : MonoBehaviour
     {
         healthBarText.text = monster.GetHealth() + " / " + monster.GetMaxHealth();
         healthBar.transform.localPosition = new Vector3(3954f * monster.GetHealth() / monster.GetMaxHealth() - 3954f, 0, 0);
+    }
+
+    public void ActivateTurnMarker(bool active)
+    {
+        turnMarker.SetActive(active);
     }
 
     public void ActivateHealthBar(bool active)

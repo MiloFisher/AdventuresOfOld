@@ -27,3 +27,4 @@ MonoBehaviour:
   passiveName: Acidic Ooze
   passiveDescription: Whenever a player damages the Slime, they become <b>Weakened
     (1)</b>.
+  background: {fileID: 21300000, guid: b9ebf2ffbc1996f49b4d659f32fd2d33, type: 3}

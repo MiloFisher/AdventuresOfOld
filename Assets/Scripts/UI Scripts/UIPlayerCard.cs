@@ -22,6 +22,7 @@ public class UIPlayerCard : MonoBehaviour
     public TMP_Text playerPhysicalPower;
     public TMP_Text playerMagicalPower;
     public TMP_Text playerDescription;
+    public GameObject playerTurnMarker;
 
     public void SetVisuals(Player p)
     {
@@ -50,6 +51,11 @@ public class UIPlayerCard : MonoBehaviour
     public void ClickCard(int id)
     {
 
+    }
+
+    public void ActivateTurnMarker(bool active)
+    {
+        playerTurnMarker.SetActive(active);
     }
 
     public void ActivateCardBack(bool active)

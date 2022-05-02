@@ -26,3 +26,4 @@ MonoBehaviour:
     On a failure, the player is attacked by the Wolf.
   passiveName: Frenzy
   passiveDescription: Whenever the Wolf deals damage, it recovers +2 Health.
+  background: {fileID: 21300000, guid: b9ebf2ffbc1996f49b4d659f32fd2d33, type: 3}

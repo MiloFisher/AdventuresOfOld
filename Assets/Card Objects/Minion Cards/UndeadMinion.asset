@@ -29,3 +29,4 @@ MonoBehaviour:
   passiveName: Undead Loyalty
   passiveDescription: Redirect all incoming attacks to the caster to this minion
     instead.
+  background: {fileID: 21300000, guid: c9bd982ee37cfa548ad465fc93dcddf4, type: 3}

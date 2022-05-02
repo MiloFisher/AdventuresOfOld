@@ -94,13 +94,13 @@ public class UICombatantList : MonoBehaviour
                 }
                 return allReady;
             });
-        }
 
-        // Unready all players and continue them
-        foreach (Player p in PlayManager.Instance.playerList)
-        {
-            p.Unready();
-            p.ContinueToCombat();
+            // Unready all players and continue them
+            foreach (Player p in PlayManager.Instance.playerList)
+            {
+                p.Unready();
+                p.ContinueToCombat();
+            }
         }
     }
 

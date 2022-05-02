@@ -27,3 +27,4 @@ MonoBehaviour:
   passiveName: Rainbow Ooze
   passiveDescription: Whenever a player damages the Slime, they become <b>Weakened
     (3)</b>.
+  background: {fileID: 21300000, guid: f34021dd562236546bea7170a9a9b8f1, type: 3}

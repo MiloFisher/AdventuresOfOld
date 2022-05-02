@@ -26,3 +26,4 @@ MonoBehaviour:
     On a failure, the player is attacked by the Wolfpack.
   passiveName: Pack Frenzy
   passiveDescription: Whenever the Wolfpack deals damage, it recovers +3 Health.
+  background: {fileID: 21300000, guid: f4254ba4d59914c7785bfbb98382e5f3, type: 3}

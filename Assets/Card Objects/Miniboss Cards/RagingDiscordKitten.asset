@@ -26,3 +26,4 @@ MonoBehaviour:
     Roll (11).  On a failure, that player is attacked by the Kitten.
   passiveName: Annihilation Claws
   passiveDescription: Whenever a player is damaged by the Kitten, they become <b>Plagued</b>.
+  background: {fileID: 21300000, guid: f4254ba4d59914c7785bfbb98382e5f3, type: 3}

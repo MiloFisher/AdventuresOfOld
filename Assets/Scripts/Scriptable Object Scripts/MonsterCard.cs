@@ -15,6 +15,7 @@ public class MonsterCard : EncounterCard
     public string skillDescription;
     public string passiveName;
     public string passiveDescription;
+    public Sprite background;
     public void Skill() { MonsterAbilityManager.Instance.CallSkill(name); }
     public void Passive() { MonsterAbilityManager.Instance.CallPassive(name); }
 }

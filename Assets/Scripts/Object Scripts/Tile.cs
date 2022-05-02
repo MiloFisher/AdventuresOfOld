@@ -96,7 +96,7 @@ public class Tile : MonoBehaviour
             openPathTiles.Remove(currentTile);
             closedPathTiles.Add(currentTile);
 
-            int g = currentTile.g + 1;
+            int g1 = currentTile.g + 1;
 
             // If there is a target tile in the closed list, we have found a path.
             if (closedPathTiles.Contains(endPoint))
@@ -104,23 +104,23 @@ public class Tile : MonoBehaviour
                 break;
             }
 
-            foreach(Tile t in neighbors)
+            foreach(Tile t in currentTile.neighbors)
             {
                 // Check if tile is valid
                 if (!closedPathTiles.Contains(t))
                 {
                     if (!openPathTiles.Contains(t))
                     {
-                        t.g = g;
+                        t.g = g1;
                         t.h = GetH(t.position, endPoint.position);
-                        t.parent = parent;
+                        t.parent = currentTile;
                         openPathTiles.Add(t);
                     }
                     // Otherwise check if using current G we can get a lower value of F, if so update it's value.
-                    else if (t.g + t.h > g + t.h)
+                    else if (t.g + t.h > g1 + t.h)
                     {
-                        t.g = g;
-                        t.parent = parent;
+                        t.g = g1;
+                        t.parent = currentTile;
                     }
                 }
             }

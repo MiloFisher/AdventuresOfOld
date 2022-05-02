@@ -11,7 +11,6 @@ public class CombatManager : Singleton<CombatManager>
     public List<Combatant> turnOrderCombatantList;
     public GameObject combatFadeOverlay;
     public GameObject combatBackground;
-    public Sprite[] backgroundSprites;
     public GameObject combatMainLayout;
     public GameObject enemyCard;
     public GameObject[] playerCards;
@@ -22,8 +21,10 @@ public class CombatManager : Singleton<CombatManager>
     public float fadeLength = 0.01f;
     public float fadedWaitTime = 0.5f;
 
-    public int PLAYER_AMOUNT = 6;
+    // *** Testing Variables ***
+    //public int PLAYER_AMOUNT = 6;
     //public float START_RADIAN;
+
     public float radius;
     public float originX;
     public float originY;
@@ -63,6 +64,7 @@ public class CombatManager : Singleton<CombatManager>
                 else
                     arr[i] = turnOrderCombatantList[i].monster.cardName;
             }
+            combatTurnMarker = 0;
             foreach(Player p in PlayManager.Instance.playerList)
             {
                 p.SetTurnOrderCombatantListClientRPC(arr);
@@ -74,8 +76,7 @@ public class CombatManager : Singleton<CombatManager>
     private void AllignPlayerCards()
     {
         int playerAmount = Mathf.Clamp(turnOrderCombatantList.Count - 1, 1, 6);
-        playerAmount = PLAYER_AMOUNT;
-        //playerAmount = 6;
+        //playerAmount = PLAYER_AMOUNT;
         float theta = Mathf.PI / 5f;
         float startingDegree = 0;
         //startingDegree = START_RADIAN;
@@ -95,11 +96,13 @@ public class CombatManager : Singleton<CombatManager>
         {
             if (turnOrderCombatantList[i].combatantType == CombatantType.PLAYER)
             {
+                playerCards[index].GetComponent<UIPlayerCard>().ActivateTurnMarker(combatTurnMarker == i);
                 playerCards[index].GetComponent<UIPlayerCard>().SetVisuals(turnOrderCombatantList[i].player);
                 index--;
             }
             else
             {
+                enemyCard.GetComponent<UIEncounterCard>().ActivateTurnMarker(combatTurnMarker == i);
                 enemyCard.GetComponent<UIEncounterCard>().SetVisuals(turnOrderCombatantList[i].monster.cardName);
                 enemyCard.GetComponent<UIEncounterCard>().UpdateHealthBar(turnOrderCombatantList[i]);
             }
@@ -120,7 +123,7 @@ public class CombatManager : Singleton<CombatManager>
         // Activate main layout while screen is obstructed by overlay
         combatMainLayout.SetActive(true);
         combatBackground.SetActive(true);
-        combatBackground.GetComponent<Image>().sprite = GetBackgroundSprite();
+        combatBackground.GetComponent<Image>().sprite = monsterCard.background;
 
         // Hold faded in overlay
         yield return new WaitForSeconds(fadedWaitTime);
@@ -165,11 +168,6 @@ public class CombatManager : Singleton<CombatManager>
     private void SetAlpha(Image i, float a)
     {
         i.color = new Color(i.color.r, i.color.g, i.color.b, a);
-    }
-
-    private Sprite GetBackgroundSprite()
-    {
-        return backgroundSprites[Random.Range(0, backgroundSprites.Length)];
     }
 
     private void ResetCombat()

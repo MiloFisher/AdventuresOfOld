@@ -2089,7 +2089,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6275235850686116054, guid: a63c8167ea20e476fa91e0ab36279574, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -480
       objectReference: {fileID: 0}
     - target: {fileID: 6275235850686116054, guid: a63c8167ea20e476fa91e0ab36279574, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -3473,7 +3473,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6275235850686116054, guid: a63c8167ea20e476fa91e0ab36279574, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -480
       objectReference: {fileID: 0}
     - target: {fileID: 6275235850686116054, guid: a63c8167ea20e476fa91e0ab36279574, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -13649,7 +13649,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6275235850686116054, guid: a63c8167ea20e476fa91e0ab36279574, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -480
       objectReference: {fileID: 0}
     - target: {fileID: 6275235850686116054, guid: a63c8167ea20e476fa91e0ab36279574, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -14471,7 +14471,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6275235850686116054, guid: a63c8167ea20e476fa91e0ab36279574, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -480
       objectReference: {fileID: 0}
     - target: {fileID: 6275235850686116054, guid: a63c8167ea20e476fa91e0ab36279574, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -27692,12 +27692,6 @@ MonoBehaviour:
   turnOrderCombatantList: []
   combatFadeOverlay: {fileID: 356304735}
   combatBackground: {fileID: 629605226}
-  backgroundSprites:
-  - {fileID: 21300000, guid: b9ebf2ffbc1996f49b4d659f32fd2d33, type: 3}
-  - {fileID: 21300000, guid: f4254ba4d59914c7785bfbb98382e5f3, type: 3}
-  - {fileID: 21300000, guid: e4ae604d20bf447dfb71c0a2e09e908b, type: 3}
-  - {fileID: 21300000, guid: c9bd982ee37cfa548ad465fc93dcddf4, type: 3}
-  - {fileID: 21300000, guid: f34021dd562236546bea7170a9a9b8f1, type: 3}
   combatMainLayout: {fileID: 1856231132}
   enemyCard: {fileID: 2007940741}
   playerCards:
@@ -27715,7 +27709,6 @@ MonoBehaviour:
     monster: {fileID: 0}
   fadeLength: 0.01
   fadedWaitTime: 0.5
-  PLAYER_AMOUNT: 6
   radius: 900
   originX: 0
   originY: 420
@@ -45641,7 +45634,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6275235850686116054, guid: a63c8167ea20e476fa91e0ab36279574, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -480
       objectReference: {fileID: 0}
     - target: {fileID: 6275235850686116054, guid: a63c8167ea20e476fa91e0ab36279574, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -61267,7 +61260,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6275235850686116054, guid: a63c8167ea20e476fa91e0ab36279574, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: -480
       objectReference: {fileID: 0}
     - target: {fileID: 6275235850686116054, guid: a63c8167ea20e476fa91e0ab36279574, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
