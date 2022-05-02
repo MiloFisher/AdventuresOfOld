@@ -915,6 +915,22 @@ namespace AdventuresOfOldMultiplayer
             }
         }
 
+        public void SetTurnOrderCombatantList(FixedString64Bytes[] arr)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.SetTurnOrderCombatantListClientRPC(arr);
+            }
+            else
+                SetTurnOrderCombatantListServerRPC(arr);
+        }
+        [ServerRpc]
+        private void SetTurnOrderCombatantListServerRPC(FixedString64Bytes[] arr, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.SetTurnOrderCombatantListClientRPC(arr);
+        }
         [ClientRpc]
         public void SetTurnOrderCombatantListClientRPC(FixedString64Bytes[] arr, ClientRpcParams clientRpcParams = default)
         {
@@ -929,7 +945,7 @@ namespace AdventuresOfOldMultiplayer
             if (NetworkManager.Singleton.IsServer)
             {
                 foreach (Player p in PlayManager.Instance.playerList)
-                    p.SetCombatTurnMarkerClientRPC(marker);
+                    p.UpdateCombatTurnMarkerClientRPC(marker);
             }
             else
                 UpdateCombatTurnMarkerServerRPC(marker);
@@ -938,11 +954,10 @@ namespace AdventuresOfOldMultiplayer
         private void UpdateCombatTurnMarkerServerRPC(int marker, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
-                p.SetCombatTurnMarkerClientRPC(marker);
+                p.UpdateCombatTurnMarkerClientRPC(marker);
         }
-
         [ClientRpc]
-        public void SetCombatTurnMarkerClientRPC(int marker, ClientRpcParams clientRpcParams = default)
+        public void UpdateCombatTurnMarkerClientRPC(int marker, ClientRpcParams clientRpcParams = default)
         {
             if (IsOwner && !isBot)
             {

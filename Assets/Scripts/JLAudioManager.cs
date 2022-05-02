@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 using UnityEngine.Audio;
 
-public class JLAudioManager : MonoBehaviour
+public class JLAudioManager : Singleton<JLAudioManager>
 {
     public JLSoundClass[] soundArray;
 
@@ -22,13 +22,7 @@ public class JLAudioManager : MonoBehaviour
         }
     }
 
-    // FUNCTIONS + OVERLOADS TO USE FOR BUTTONS RATHER THAN SCRIPTS
-    public void playSound() {
-        JLSoundClass s = Array.Find(soundArray, sound => sound.name == name);
-        if (s == null)
-            return;
-        s.audioSource.Play();
-    }
+    // FUNCTIONS TO USE FOR BUTTONS RATHER THAN SCRIPTS
     public void playSound(string soundName) {
         JLSoundClass s = Array.Find(soundArray, sound => sound.name == soundName);
         if (s == null)
@@ -36,12 +30,6 @@ public class JLAudioManager : MonoBehaviour
         s.audioSource.Play();
     }
 
-    public void playOneShotSound() {
-        JLSoundClass s = Array.Find(soundArray, sound => sound.name == name);
-        if (s == null)
-            return;
-        s.audioSource.PlayOneShot(s.audioClip);
-    }
     public void playOneShotSound(string soundName) {
         JLSoundClass s = Array.Find(soundArray, sound => sound.name == soundName);
         if (s == null)
@@ -49,12 +37,6 @@ public class JLAudioManager : MonoBehaviour
         s.audioSource.PlayOneShot(s.audioClip);
     }
 
-    public void stopSound() {
-        JLSoundClass s = Array.Find(soundArray, sound => sound.name == name);
-        if (s == null)
-            return;
-        s.audioSource.Stop();
-    }
     public void stopSound(string soundName) {
         JLSoundClass s = Array.Find(soundArray, sound => sound.name == soundName);
         if (s == null)
@@ -62,12 +44,6 @@ public class JLAudioManager : MonoBehaviour
         s.audioSource.Stop();
     }
 
-    public void pauseSound() {
-        JLSoundClass s = Array.Find(soundArray, sound => sound.name == name);
-        if (s == null)
-            return;
-        s.audioSource.Pause();
-    }
     public void pauseSound(string soundName) {
         JLSoundClass s = Array.Find(soundArray, sound => sound.name == soundName);
         if (s == null)
@@ -75,12 +51,6 @@ public class JLAudioManager : MonoBehaviour
         s.audioSource.Pause();
     }
 
-    public void resumeSound() {
-        JLSoundClass s = Array.Find(soundArray, sound => sound.name == name);
-        if (s == null)
-            return;
-        s.audioSource.UnPause();
-    }
     public void resumeSound(string soundName) {
         JLSoundClass s = Array.Find(soundArray, sound => sound.name == soundName);
         if (s == null)
