@@ -231,6 +231,7 @@ public class CharManUI : MonoBehaviour
         class_eng_text.GetComponent<TextMeshProUGUI>().color = black;
         trait_details_container.SetActive(false);
         trait_confirm_button.SetActive(false);
+        stat_container.SetActive(true);
         SceneHeader.GetComponent<TextMeshProUGUI>().SetText("View Abilities");
     }
 
