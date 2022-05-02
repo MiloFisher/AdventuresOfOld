@@ -44,6 +44,7 @@ public class CharManUI : MonoBehaviour
     public GameObject ability_desc_panel;
     public GameObject trait_details_container;
     public GameObject trait_details_text;
+    public GameObject trait_scroll;
     public GameObject fleet_footed_text;
     public GameObject healthy_text;
     public GameObject mystical_text;
@@ -388,22 +389,34 @@ public class CharManUI : MonoBehaviour
             class_eng_text.GetComponent<TextMeshProUGUI>().color = black;
         }
 
-        if (traitname != "Musclehead" || traitname != "Bookworm" || traitname != "Delicate") {
-            powerful_text.GetComponent<TextMeshProUGUI>().color = new Color32(255,255,255,255);
+        if (traitname != "Musclehead" && traitname != "Bookworm" && traitname != "Delicate") {
+            powerful_text.GetComponent<TextMeshProUGUI>().color = new Color32(0,0,0,255);
+            powerful_text.GetComponent<TMP_Dropdown>().SetValueWithoutNotify(3); //Anything not 0 1 2 will work here
         }
+
     }
 
-    public void previewPowerful(int type) {
+    //Dropdown menu functionality. Manually sets the colors of the Powerful text (coz dropdown color was jank)
+    //0,1,2 refers to the index position in the Unity Editor dropdown object
+    public void PreviewPowerful(int type) {
         powerful_text.GetComponent<TextMeshProUGUI>().color = new Color32(59,255,0,255);
+        trait_confirm_button.SetActive(false);
+        trait_scroll.GetComponent<ScrollRect>().enabled = false;
         if(type == 0) {
             PreviewTrait("Musclehead");
         }
         else if(type == 1) {
             PreviewTrait("Bookworm");
         }
-        else {
+        else if(type == 2) {
             PreviewTrait("Delicate");
         }
+        else {
+            // do nothing dont need case to do for now
+        }
+        //Renable the confirm button and scroll after dropdown selection.
+        trait_confirm_button.SetActive(true);
+        trait_scroll.GetComponent<ScrollRect>().enabled = true;
     }
     public void setCharName() {
         createdchar.setName(inputname.GetComponent<TextMeshProUGUI>().text);
@@ -415,4 +428,7 @@ public class CharManUI : MonoBehaviour
         return createdchar;
     }
 
+    void Awake() {
+        powerful_text.GetComponent<TMP_Dropdown>().SetValueWithoutNotify(3);//Setting default value of dropdown menu to not selected
+    }
 }

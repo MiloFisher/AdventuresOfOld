@@ -30,7 +30,8 @@ public class Trait {
         {"Looter", new default_trait("Take an extra loot card when defeating a Monster.", new Stats())},
         {"Musclehead", new default_trait("Gain +3 in STR, then lose -1 from DEX & INT.", new Stats(3,-1,-1,0,0,0))},
         {"Bookworm", new default_trait("Gain +3 in INT, then lose -1 from DEX & STR.", new Stats(-1,-1,3,0,0,0))},
-        {"Delicate", new default_trait("Gain +3 in DEX, then lose -1 from STR & INT.", new Stats(-1,3,-1,0,0,0))}
+        {"Delicate", new default_trait("Gain +3 in DEX, then lose -1 from STR & INT.", new Stats(-1,3,-1,0,0,0))},
+        {"Powerful", new default_trait("Gain +3 in either STR, DEX, or INT, then lose -1 from the two Stats you didn’t choose.", new Stats())}
     };
 
     public Stats get_stats()
@@ -78,6 +79,8 @@ public class Trait {
     public Trait(string name) {
         this.name = name;
         if(default_trait_desc.ContainsKey(name)) {
+            if (name == "Musclehead" || name == "Bookworm" || name == "Delicate")
+                this.name = "Powerful";
             this.desc = default_trait_desc[name].desc;
             this.stats = default_trait_desc[name].stats;
         }
