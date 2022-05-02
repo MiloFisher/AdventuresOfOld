@@ -16,7 +16,6 @@ public class JLRulebook : MonoBehaviour
 
     public void swapPages(int id)
     {
-        this.gameObject.GetComponent<AudioSource>().Play();
         if (pageID < 0 || (pageID == 0 && id == -1)|| (pageID >= rulebookPages.Length - 1 && id == 1))
             return;
         pageID = pageID + id;

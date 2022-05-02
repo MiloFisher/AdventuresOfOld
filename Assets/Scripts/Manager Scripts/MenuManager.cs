@@ -3,25 +3,22 @@ using UnityEngine.SceneManagement;
 public class MenuManager : Singleton<MenuManager>
 {
     public GameObject[] menuScenes;
-    public AudioSource themePlayer;
-    public AudioSource effectPlayer;
 
     private void Awake()
     {
+        if (SceneManager.GetActiveScene().name == "JLMainMenu") {
+            FindObjectOfType<JLAudioManager>().playSound("MainTheme");
+        }
         SwapScene(0);
     }
 
     private void Start()
     {
-        AudioSource[] audioSources = GetComponents<AudioSource>();
-        if (audioSources.Length > 1)
-            effectPlayer = audioSources[1];
+
     }
 
     public void SwapScene(int id)
     {
-        if(effectPlayer)
-            effectPlayer.Play();
         if (id >= menuScenes.Length || id < 0)
             return;
         foreach (GameObject g in menuScenes)
