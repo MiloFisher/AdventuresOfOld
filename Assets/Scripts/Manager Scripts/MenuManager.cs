@@ -8,7 +8,7 @@ public class MenuManager : Singleton<MenuManager>
     {
         if (SceneManager.GetActiveScene().name == "JLMainMenu")
         {
-            JLAudioManager.Instance.playSound("MainTheme");
+            JLAudioManager.Instance.PlaySound("MainTheme");
         }
         SwapScene(0);
     }

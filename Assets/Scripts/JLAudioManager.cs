@@ -23,35 +23,35 @@ public class JLAudioManager : Singleton<JLAudioManager>
     }
 
     // FUNCTIONS TO USE FOR BUTTONS RATHER THAN SCRIPTS
-    public void playSound(string soundName) {
+    public void PlaySound(string soundName) {
         JLSoundClass s = Array.Find(soundArray, sound => sound.name == soundName);
         if (s == null)
             return;
         s.audioSource.Play();
     }
 
-    public void playOneShotSound(string soundName) {
+    public void PlayOneShotSound(string soundName) {
         JLSoundClass s = Array.Find(soundArray, sound => sound.name == soundName);
         if (s == null)
             return;
         s.audioSource.PlayOneShot(s.audioClip);
     }
 
-    public void stopSound(string soundName) {
+    public void StopSound(string soundName) {
         JLSoundClass s = Array.Find(soundArray, sound => sound.name == soundName);
         if (s == null)
             return;
         s.audioSource.Stop();
     }
 
-    public void pauseSound(string soundName) {
+    public void PauseSound(string soundName) {
         JLSoundClass s = Array.Find(soundArray, sound => sound.name == soundName);
         if (s == null)
             return;
         s.audioSource.Pause();
     }
 
-    public void resumeSound(string soundName) {
+    public void ResumeSound(string soundName) {
         JLSoundClass s = Array.Find(soundArray, sound => sound.name == soundName);
         if (s == null)
             return;

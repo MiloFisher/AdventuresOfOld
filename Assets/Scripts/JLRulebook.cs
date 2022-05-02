@@ -10,11 +10,11 @@ public class JLRulebook : MonoBehaviour
     public GameObject currentPage;
     private int pageID = 0;
 
-    public void titleActive() {
+    public void TitleActive() {
         title.SetActive(!title.activeSelf);
     }
 
-    public void swapPages(int id)
+    public void SwapPages(int id)
     {
         if (pageID < 0 || (pageID == 0 && id == -1)|| (pageID >= rulebookPages.Length - 1 && id == 1))
             return;
