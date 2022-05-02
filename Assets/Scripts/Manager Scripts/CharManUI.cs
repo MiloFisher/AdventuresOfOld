@@ -317,7 +317,9 @@ public class CharManUI : MonoBehaviour
     public void PreviewTrait(string traitname) {
         createdchar.setChosen_trait(new Trait(traitname));
         trait_details_container.SetActive(true);
-        trait_confirm_button.SetActive(true);
+        if(traitname != "Powerful") {
+            trait_confirm_button.SetActive(true);
+        }
         trait_details_text.GetComponent<TextMeshProUGUI>().SetText(createdchar.getChosen_trait().getDesc());
         Color32 green = new Color32(175, 255, 0, 255);
         Color32 black = new Color32(0, 0, 0, 255);
