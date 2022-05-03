@@ -7,7 +7,7 @@ using AdventuresOfOldMultiplayer;
 
 public class UIPlayerCard : MonoBehaviour
 {
-    public Player player;
+    public Combatant combatant;
     public GameObject healthBarBack;
     public TMP_Text healthBarText;
     public GameObject healthBar;
@@ -26,35 +26,69 @@ public class UIPlayerCard : MonoBehaviour
     public GameObject targetCrosshair;
     public GameObject playerDamaged;
     public GameObject damageNumber;
+    public Transform statusEffectsContainer;
+    public GameObject statusEffectPrefab;
+    public Sprite[] statusEffectIcons;
     public float damageNumberFadeLength = 0.004f;
 
-    public void SetVisuals(Player p)
+    private List<GameObject> statusEffectList = new List<GameObject>();
+
+    public void SetVisuals(Combatant c)
     {
-        player = p;
-        playerImage.sprite = PlayManager.Instance.portaitDictionary[player.Image.Value];
-        playerFaceColor.color = PlayManager.Instance.GetPlayerColor(player);
-        cardBack.transform.GetChild(0).GetComponent<Image>().color = PlayManager.Instance.GetPlayerColor(player);
-        playerName.text = player.Name.Value + "";
-        playerArmor.text = PlayManager.Instance.GetArmor(player) + "";
-        playerAttack.text = PlayManager.Instance.GetAttack(player) + "";
-        playerSpeed.text = PlayManager.Instance.GetSpeed(player) + "";
-        playerPhysicalPower.text = PlayManager.Instance.GetPhysicalPower(player) + "";
-        playerMagicalPower.text = PlayManager.Instance.GetMagicalPower(player) + "";
-        playerDescription.text = player.Trait.Value + " " + player.Race.Value + " " + player.Class.Value;
+        combatant = c;
+        playerImage.sprite = PlayManager.Instance.portaitDictionary[combatant.player.Image.Value];
+        playerFaceColor.color = PlayManager.Instance.GetPlayerColor(combatant.player);
+        cardBack.transform.GetChild(0).GetComponent<Image>().color = PlayManager.Instance.GetPlayerColor(combatant.player);
+        playerName.text = combatant.GetName();
+        playerArmor.text = combatant.GetArmor().ToString();
+        playerAttack.text = combatant.GetAttack().ToString();
+        playerSpeed.text = combatant.GetSpeed().ToString();
+        playerPhysicalPower.text = combatant.GetPhysicalPower().ToString();
+        playerMagicalPower.text = combatant.GetMagicalPower().ToString();
+        playerDescription.text = combatant.player.Trait.Value + " " + combatant.player.Race.Value + " " + combatant.player.Class.Value;
         UpdateHealthBar();
     }
 
     public void UpdateHealthBar()
     {
-        if (player == null)
+        if (combatant == null)
             return;
-        healthBarText.text = PlayManager.Instance.GetHealth(player) + " / " + PlayManager.Instance.GetMaxHealth(player);
-        healthBar.transform.localPosition = new Vector3(1454f * PlayManager.Instance.GetHealth(player) / PlayManager.Instance.GetMaxHealth(player) - 1454f, 0, 0);
+        healthBarText.text = combatant.GetHealth() + " / " + combatant.GetMaxHealth();
+        healthBar.transform.localPosition = new Vector3(1454f * combatant.GetHealth() / combatant.GetMaxHealth() - 1454f, 0, 0);
     }
 
     public void ClickCard(int id)
     {
 
+    }
+
+    public void DrawStatusEffects(List<Effect> effects)
+    {
+        // First previous effects
+        for (int i = 0; i < statusEffectList.Count; i++)
+            Destroy(statusEffectList[i]);
+        statusEffectList.Clear();
+
+        // Then create new effects
+        for (int i = 0; i < effects.Count; i++)
+        {
+            GameObject g = Instantiate(statusEffectPrefab, statusEffectsContainer);
+            g.GetComponent<Image>().sprite = GetEffectSprite(effects[i]);
+            g.transform.localPosition = new Vector3(0, -50 * i, 0);
+            statusEffectList.Add(g);
+        }
+            
+    }
+
+    public Sprite GetEffectSprite(Effect e)
+    {
+        return e.name switch
+        {
+            "Bleeding" => statusEffectIcons[0],
+            "Poisoned" => statusEffectIcons[1],
+            "Weakened" => statusEffectIcons[2],
+            _ => null
+        };
     }
 
     public void ActivateTurnMarker(bool active)

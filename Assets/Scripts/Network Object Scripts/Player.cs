@@ -637,22 +637,20 @@ namespace AdventuresOfOldMultiplayer
                 Gold.Value = 0;
         }
 
-        public void TakeDamage(int amount)
+        public void TakeDamage(int amount, int armor, bool isTrue = false)
         {
-            int armor = PlayManager.Instance.GetArmor(this);
+            int damage = isTrue ? amount : amount - armor;
             if (NetworkManager.Singleton.IsServer)
             {
-                int damage = amount - armor;
                 if (damage > 0)
                     Health.Value -= damage;
             }
             else
-                TakeDamageServerRPC(amount, armor);
+                TakeDamageServerRPC(damage);
         }
         [ServerRpc]
-        private void TakeDamageServerRPC(int amount, int armor, ServerRpcParams rpcParams = default)
+        private void TakeDamageServerRPC(int damage, ServerRpcParams rpcParams = default)
         {
-            int damage = amount - armor;
             if (damage > 0)
                 Health.Value -= damage;
         }
@@ -1049,6 +1047,136 @@ namespace AdventuresOfOldMultiplayer
                     if(p.UUID.Value == uuid)
                         CombatManager.Instance.VisualizePlayerAttacked(p);
                 }
+            }
+        }
+
+        public void VisualizeTakeDamageForOthers(int amount)
+        {
+            FixedString64Bytes uuid = UUID.Value;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value != uuid)
+                        p.VisualizeTakeDamageForOthersClientRPC(uuid, amount);
+                }
+            }
+            else
+                VisualizeTakeDamageForOthersServerRPC(uuid, amount);
+        }
+        [ServerRpc]
+        private void VisualizeTakeDamageForOthersServerRPC(FixedString64Bytes uuid, int amount, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+            {
+                if (p.UUID.Value != uuid)
+                    p.VisualizeTakeDamageForOthersClientRPC(uuid, amount);
+            }
+        }
+        [ClientRpc]
+        public void VisualizeTakeDamageForOthersClientRPC(FixedString64Bytes uuid, int amount, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value == uuid)
+                        CombatManager.Instance.VisualizePlayerTakeDamage(p, amount);
+                }
+            }
+        }
+
+        public void GainStatusEffect(string name, int duration, int potency)
+        {
+            FixedString64Bytes uuid = UUID.Value;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.GainStatusEffectClientRPC(uuid, name, duration, potency);
+            }
+            else
+                GainStatusEffectServerRPC(uuid, name, duration, potency);
+        }
+        [ServerRpc]
+        private void GainStatusEffectServerRPC(FixedString64Bytes uuid, string name, int duration, int potency, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.GainStatusEffectClientRPC(uuid, name, duration, potency);
+        }
+        [ClientRpc]
+        public void GainStatusEffectClientRPC(FixedString64Bytes uuid, string name, int duration, int potency, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                Effect e = new Effect(name, duration, potency);
+                foreach(Player p in PlayManager.Instance.playerList)
+                {
+                    if(p.UUID.Value == uuid)
+                        CombatManager.Instance.GainStatusEffect(p, e);
+                }
+                
+            }
+        }
+
+        public void RemoveStatusEffect(string effectName)
+        {
+            FixedString64Bytes uuid = UUID.Value;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.RemoveStatusEffectClientRPC(uuid, effectName);
+            }
+            else
+                RemoveStatusEffectServerRPC(uuid, effectName);
+        }
+        [ServerRpc]
+        private void RemoveStatusEffectServerRPC(FixedString64Bytes uuid, string effectName, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.RemoveStatusEffectClientRPC(uuid, effectName);
+        }
+        [ClientRpc]
+        public void RemoveStatusEffectClientRPC(FixedString64Bytes uuid, string effectName, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value == uuid)
+                        CombatManager.Instance.RemoveStatusEffect(p, effectName);
+                }
+
+            }
+        }
+
+        public void CycleStatusEffects()
+        {
+            FixedString64Bytes uuid = UUID.Value;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.CycleStatusEffectsClientRPC(uuid);
+            }
+            else
+                CycleStatusEffectsServerRPC(uuid);
+        }
+        [ServerRpc]
+        private void CycleStatusEffectsServerRPC(FixedString64Bytes uuid, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.CycleStatusEffectsClientRPC(uuid);
+        }
+        [ClientRpc]
+        public void CycleStatusEffectsClientRPC(FixedString64Bytes uuid, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value == uuid)
+                        CombatManager.Instance.CycleStatusEffects(p);
+                }
+
             }
         }
         #endregion

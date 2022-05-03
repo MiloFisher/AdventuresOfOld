@@ -105,12 +105,17 @@ public class CombatManager : Singleton<CombatManager>
 
     public void EndTurn()
     {
+        Combatant c = GetCombatantFromPlayer(PlayManager.Instance.localPlayer);
+
         // Deactivate variable marking your turn
         isYourTurn = false;
 
         // Increment turn marker for all players
         combatTurnMarker++;
         PlayManager.Instance.localPlayer.UpdateTurnMarker(combatTurnMarker);
+
+        // Cycle effects
+        CycleEffects(c);
 
         // Start next combatant turn
         StartCombatantsTurn();
@@ -139,6 +144,19 @@ public class CombatManager : Singleton<CombatManager>
     public void TakeTurn()
     {
         // Player takes a turn here...
+        Combatant c = GetCombatantFromPlayer(PlayManager.Instance.localPlayer);
+        int poisoned = c.IsPoisoned();
+        if (poisoned > -1)
+        {
+            StartCoroutine(AnimatePlayerTakeDamage(GetPlayerCardFromCombatant(c), poisoned, () => {
+                c.TakeDamage(poisoned, true);
+            }));
+
+            // Visualize player taking damage for all other players
+            PlayManager.Instance.localPlayer.VisualizeTakeDamageForOthers(poisoned);
+        }
+        if (c.IsEnwebbed())
+            EndTurn();
     }
 
     public void MonsterTakeTurn()
@@ -224,7 +242,7 @@ public class CombatManager : Singleton<CombatManager>
                         // OnAttack
                         c.TakeDamage(monster.GetAttack());
                         foreach (Effect e in debuffs)
-                            InflictDebuff(c, e);
+                            InflictEffect(c, e);
                     },
                     () => {
                         // OnComplete
@@ -238,14 +256,45 @@ public class CombatManager : Singleton<CombatManager>
         });
     }
 
-    public void InflictDebuff(Combatant c, Effect debuff)
+    public void InflictEffect(Combatant c, Effect e)
     {
-        
+        c.player.GainStatusEffect(e.name, e.duration, e.potency);
+    }
+
+    public void CleanseEffect(Combatant c, string effectName)
+    {
+        c.player.RemoveStatusEffect(effectName);
+    }
+
+    public void CycleEffects(Combatant c)
+    {
+        c.player.CycleStatusEffects();
+    }
+
+    // Called from Player.cs
+    public void GainStatusEffect(Player p, Effect e)
+    {
+        GetCombatantFromPlayer(p).GainStatusEffect(e);
+    }
+    // Called from Player.cs
+    public void RemoveStatusEffect(Player p, string effectName)
+    {
+        GetCombatantFromPlayer(p).RemoveStatusEffect(effectName);
+    }
+    // Called from Player.cs
+    public void CycleStatusEffects(Player p)
+    {
+        GetCombatantFromPlayer(p).CycleStatusEffects();
     }
 
     public void VisualizePlayerAttacked(Player p)
     {
         StartCoroutine(AnimatePlayerAttacked(GetCombatantFromPlayer(p)));
+    }
+
+    public void VisualizePlayerTakeDamage(Player p, int amount)
+    {
+        StartCoroutine(AnimatePlayerTakeDamage(GetPlayerCardFromCombatant(GetCombatantFromPlayer(p)), amount));
     }
 
     private int[] GetMonsterTargets()
@@ -257,7 +306,7 @@ public class CombatManager : Singleton<CombatManager>
                 List<int> targets = new List<int>();
                 for (int i = 0; i < turnOrderCombatantList.Count; i++)
                 {
-                    if (turnOrderCombatantList[i].combatantType == CombatantType.PLAYER && turnOrderCombatantList[i].GetHealth() > 0)
+                    if (turnOrderCombatantList[i].combatantType == CombatantType.PLAYER && turnOrderCombatantList[i].IsAlive())
                         targets.Add(i);
                 }
                 return targets.ToArray();
@@ -274,7 +323,7 @@ public class CombatManager : Singleton<CombatManager>
         List<Combatant> playersInCombat = new List<Combatant>();
         foreach(Combatant c in turnOrderCombatantList)
         {
-            if (c.combatantType == CombatantType.PLAYER && c.GetHealth() > 0)
+            if (c.combatantType == CombatantType.PLAYER && c.IsAlive())
                 playersInCombat.Add(c);
         }
         PlayManager.Instance.ShuffleDeck(playersInCombat);
@@ -292,7 +341,7 @@ public class CombatManager : Singleton<CombatManager>
         List<Combatant> playersInCombat = new List<Combatant>();
         foreach (Combatant c in turnOrderCombatantList)
         {
-            if (c.combatantType == CombatantType.PLAYER && c.GetHealth() > 0)
+            if (c.combatantType == CombatantType.PLAYER && c.IsAlive())
                 playersInCombat.Add(c);
         }
         PlayManager.Instance.ShuffleDeck(playersInCombat);
@@ -328,7 +377,7 @@ public class CombatManager : Singleton<CombatManager>
             {
                 playerCards[index].GetComponent<UIPlayerCard>().ActivateCrosshair(IsTargetedByMonster(turnOrderCombatantList[i].player) && turnOrderCombatantList[combatTurnMarker].monster != null && !isMonsterTurn);
                 playerCards[index].GetComponent<UIPlayerCard>().ActivateTurnMarker(combatTurnMarker == i);
-                playerCards[index].GetComponent<UIPlayerCard>().SetVisuals(turnOrderCombatantList[i].player);
+                playerCards[index].GetComponent<UIPlayerCard>().SetVisuals(turnOrderCombatantList[i]);
                 index--;
             }
             else
@@ -381,7 +430,7 @@ public class CombatManager : Singleton<CombatManager>
     {
         // Create attack icon at midpoint between enemy and target player
         GameObject attackIcon = Instantiate(attackIconPrefab, transform);
-        GameObject playerCard = GetPlayerCardFromCombatant(target);
+        UIPlayerCard playerCard = GetPlayerCardFromCombatant(target);
         attackIcon.transform.localPosition = enemyCard.transform.localPosition + (playerCard.transform.localPosition - enemyCard.transform.localPosition) / 2;
 
         // Fade in attack icon
@@ -391,14 +440,9 @@ public class CombatManager : Singleton<CombatManager>
             yield return new WaitForSeconds(attackFadeLength * Global.animTimeMod);
         }
 
-        // Call OnAttack function
-        OnAttack();
-
-        // Flash card red for a duration
-        playerCard.GetComponent<UIPlayerCard>().ActivateDamaged(true);
-        playerCard.GetComponent<UIPlayerCard>().DisplayDamageNumber(monster.GetAttack() - target.GetArmor());
+        // Animate take damage
+        StartCoroutine(AnimatePlayerTakeDamage(playerCard, monster.GetAttack() - target.GetArmor(), OnAttack));
         yield return new WaitForSeconds(attackFlashLength);
-        playerCard.GetComponent<UIPlayerCard>().ActivateDamaged(false);
 
         // Fade out attack icon
         for (int i = Global.animSteps - 1; i >= 0; i--)
@@ -412,6 +456,17 @@ public class CombatManager : Singleton<CombatManager>
 
         // Call OnComplete function
         OnComplete();
+    }
+
+    IEnumerator AnimatePlayerTakeDamage(UIPlayerCard playerCard, int damage, Action OnAttack = default)
+    {
+        // Call OnAttack function
+        OnAttack();
+
+        playerCard.ActivateDamaged(true);
+        playerCard.DisplayDamageNumber(damage);
+        yield return new WaitForSeconds(attackFlashLength);
+        playerCard.ActivateDamaged(false);
     }
 
     public void SetTurnOrderCombatantList(FixedString64Bytes[] arr)
@@ -439,7 +494,7 @@ public class CombatManager : Singleton<CombatManager>
         combatantListSet = true;
     }
 
-    private bool IsCombatant(Player p)
+    public bool IsCombatant(Player p)
     {
         for(int i = 0; i < turnOrderCombatantList.Count; i++)
         {
@@ -449,7 +504,7 @@ public class CombatManager : Singleton<CombatManager>
         return false;
     }
 
-    private Combatant GetCombatantFromPlayer(Player p)
+    public Combatant GetCombatantFromPlayer(Player p)
     {
         for (int i = 0; i < turnOrderCombatantList.Count; i++)
         {
@@ -459,17 +514,17 @@ public class CombatManager : Singleton<CombatManager>
         return null;
     }
 
-    private GameObject GetPlayerCardFromCombatant(Combatant c)
+    public UIPlayerCard GetPlayerCardFromCombatant(Combatant c)
     {
         for(int i = 0; i < playerCards.Length; i++)
         {
-            if (playerCards[i].GetComponent<UIPlayerCard>().player.UUID.Value == c.player.UUID.Value)
-                return playerCards[i];
+            if (playerCards[i].GetComponent<UIPlayerCard>().combatant.player.UUID.Value == c.player.UUID.Value)
+                return playerCards[i].GetComponent<UIPlayerCard>();
         }
         return null;
     }
 
-    private bool IsTargetedByMonster(Player p)
+    public bool IsTargetedByMonster(Player p)
     {
         for(int i = 0; i < monsterTargets.Length; i++)
         {
@@ -479,7 +534,7 @@ public class CombatManager : Singleton<CombatManager>
         return false;
     }
 
-    private bool IsFirstTargetedByMonster(Player p)
+    public bool IsFirstTargetedByMonster(Player p)
     {
         if (monsterTargets.Length == 0)
             return true;

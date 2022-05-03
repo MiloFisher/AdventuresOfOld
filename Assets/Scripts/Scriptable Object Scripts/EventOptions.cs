@@ -93,7 +93,7 @@ public class EventOptions : ScriptableObject
                     else
                     {
                         p.LoseAbilityCharges(1);
-                        p.TakeDamage(5);
+                        p.TakeDamage(5, PlayManager.Instance.GetArmor(p));
                     }
                     p.CompleteEncounter(true, p.UUID.Value);
                     p.GainXP(xp);
@@ -145,7 +145,7 @@ public class EventOptions : ScriptableObject
                 PlayManager.Instance.ChoiceListener((a) => {
                     if (a == 1)
                     {
-                        p.TakeDamage(15);
+                        p.TakeDamage(15, PlayManager.Instance.GetArmor(p));
                         p.CompleteEncounter(true, p.UUID.Value);
                         p.GainXP(xp);
                     }
@@ -268,7 +268,7 @@ public class EventOptions : ScriptableObject
                             PlayManager.Instance.ForceDiscard();
                             PlayManager.Instance.ForcedDiscardListener(() => {
                                 p.LoseGold(20);
-                                p.TakeDamage(10);
+                                p.TakeDamage(10, PlayManager.Instance.GetArmor(p));
                                 p.CompleteEncounter(true, p.UUID.Value);
                                 p.GainXP(xp);
                             });
@@ -276,7 +276,7 @@ public class EventOptions : ScriptableObject
                         else
                         {
                             p.LoseGold(20);
-                            p.TakeDamage(10);
+                            p.TakeDamage(10, PlayManager.Instance.GetArmor(p));
                             p.CompleteEncounter(true, p.UUID.Value);
                             p.GainXP(xp);
                         }
@@ -321,7 +321,7 @@ public class EventOptions : ScriptableObject
                 PlayManager.Instance.MakeStatRoll("DEX", 11);
                 PlayManager.Instance.StatRollListener((a) => {
                     if (a == -1)
-                        p.TakeDamage(10);
+                        p.TakeDamage(10, PlayManager.Instance.GetArmor(p));
                     p.CompleteEncounter(true, p.UUID.Value);
                     p.GainXP(xp);
                 });
@@ -432,7 +432,7 @@ public class EventOptions : ScriptableObject
                         p.RestoreHealth(5);
                     }
                     else
-                        p.TakeDamage(10);
+                        p.TakeDamage(10, PlayManager.Instance.GetArmor(p));
                     p.CompleteEncounter(true, p.UUID.Value);
                     p.GainXP(xp);
                 });

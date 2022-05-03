@@ -47,7 +47,7 @@ public class UIEncounterElement : MonoBehaviour
                 if (roll % 2 == 0)
                     xp += 4;
                 else
-                    PlayManager.Instance.localPlayer.TakeDamage(8);
+                    PlayManager.Instance.localPlayer.TakeDamage(8, PlayManager.Instance.GetArmor(PlayManager.Instance.localPlayer));
                 PlayManager.Instance.localPlayer.GainXP(xp);
                 PlayManager.Instance.localPlayer.CompleteEncounter(true, PlayManager.Instance.localPlayer.UUID.Value);
                 break;

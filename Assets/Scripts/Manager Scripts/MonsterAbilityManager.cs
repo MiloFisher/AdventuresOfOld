@@ -27,7 +27,7 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
     private void UglySlime_Passive()
     {
         CombatManager.Instance.OnPlayerDealDamage = (t) => {
-            CombatManager.Instance.InflictDebuff(t, new Effect("Weakened", 1, 1));
+            CombatManager.Instance.InflictEffect(t, new Effect("Weakened", 1, 1));
         };
     }
     #endregion
@@ -49,7 +49,7 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
     private void SlimeCongregation_Passive()
     {
         CombatManager.Instance.OnPlayerDealDamage = (t) => {
-            CombatManager.Instance.InflictDebuff(t, new Effect("Weakened", 1, 2));
+            CombatManager.Instance.InflictEffect(t, new Effect("Weakened", 1, 2));
         };
     }
     #endregion
