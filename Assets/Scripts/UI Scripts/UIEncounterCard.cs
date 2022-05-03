@@ -9,7 +9,7 @@ public class UIEncounterCard : MonoBehaviour
 {
     [Header("Generic Components")]
     public string cardName;
-    public GameObject cardButton;
+    public GameObject[] cardButtons;
     public GameObject cardBack;
     public Sprite[] monsterCardFaces;
     public float fadeLength = 0.004f;
@@ -28,6 +28,7 @@ public class UIEncounterCard : MonoBehaviour
 
     [Header("Monster Card Components")]
     public GameObject monsterComponents;
+    public GameObject monsterDisplay;
     public Image monsterImage;
     public Image monsterCardFace;
     public TMP_Text monsterCardName;
@@ -48,8 +49,16 @@ public class UIEncounterCard : MonoBehaviour
     public TMP_Text healthBarText;
     public GameObject healthBar;
     public GameObject turnMarker;
+    public GameObject monsterDamaged;
+    public GameObject damageNumber;
+    public Transform statusEffectsContainer;
+    public GameObject statusEffectPrefab;
+    public Sprite[] statusEffectIcons;
+    public float damageNumberFadeLength = 0.004f;
 
     private bool actionButtonActive;
+
+    private List<GameObject> statusEffectList = new List<GameObject>();
 
     public void ClickCard(int id)
     {
@@ -192,6 +201,40 @@ public class UIEncounterCard : MonoBehaviour
         healthBar.transform.localPosition = new Vector3(3954f * monster.GetHealth() / monster.GetMaxHealth() - 3954f, 0, 0);
     }
 
+    public void SetDisplayPosition(Vector3 pos)
+    {
+        monsterDisplay.transform.localPosition = pos;
+    }
+
+    public void DrawStatusEffects(List<Effect> effects)
+    {
+        // First previous effects
+        for (int i = 0; i < statusEffectList.Count; i++)
+            Destroy(statusEffectList[i]);
+        statusEffectList.Clear();
+
+        // Then create new effects
+        for (int i = 0; i < effects.Count; i++)
+        {
+            GameObject g = Instantiate(statusEffectPrefab, statusEffectsContainer);
+            g.GetComponent<Image>().sprite = GetEffectSprite(effects[i]);
+            g.transform.localPosition = new Vector3(0, -50 * i, 0);
+            statusEffectList.Add(g);
+        }
+
+    }
+
+    public Sprite GetEffectSprite(Effect e)
+    {
+        return e.name switch
+        {
+            "Bleeding" => statusEffectIcons[0],
+            "Poisoned" => statusEffectIcons[1],
+            "Weakened" => statusEffectIcons[2],
+            _ => null
+        };
+    }
+
     public void ActivateTurnMarker(bool active)
     {
         turnMarker.SetActive(active);
@@ -209,7 +252,39 @@ public class UIEncounterCard : MonoBehaviour
 
     public void ActivateCardButton(bool active)
     {
-        cardButton.SetActive(active);
+        foreach(GameObject g in cardButtons)
+            g.SetActive(active);
+    }
+
+    public void ActivateDamaged(bool active)
+    {
+        monsterDamaged.SetActive(active);
+    }
+
+    public void DisplayDamageNumber(int amount)
+    {
+        if (amount < 0)
+            amount = 0;
+        Vector3 startPosition = healthBarBack.transform.localPosition + new Vector3(0.2f * (healthBar.GetComponent<RectTransform>().sizeDelta.x / 2 + healthBar.transform.localPosition.x), 0, 0);
+        damageNumber.GetComponent<TMP_Text>().text = "-" + amount;
+        damageNumber.SetActive(true);
+        SetAlpha(damageNumber.GetComponent<TMP_Text>(), 1);
+        StartCoroutine(AnimateDamageNumber(startPosition));
+    }
+
+    IEnumerator AnimateDamageNumber(Vector3 startPosition)
+    {
+        damageNumber.transform.localPosition = startPosition;
+
+        // Fade in and float number
+        for (int i = 1; i <= Global.animSteps; i++)
+        {
+            SetAlpha(damageNumber.GetComponent<TMP_Text>(), 1 - i * Global.animRate);
+            damageNumber.transform.localPosition = startPosition + new Vector3(i * Global.animRate * 50, i * Global.animRate * -100, 0);
+            yield return new WaitForSeconds(damageNumberFadeLength * Global.animTimeMod);
+        }
+
+        damageNumber.SetActive(false);
     }
 
     public void ActivateOptionCardButton(bool active)
@@ -264,6 +339,11 @@ public class UIEncounterCard : MonoBehaviour
         Image i = g.GetComponent<Image>();
         TMP_Text t = g.GetComponentInChildren<TMP_Text>();
         i.color = new Color(i.color.r, i.color.g, i.color.b, a);
+        t.color = new Color(t.color.r, t.color.g, t.color.b, a);
+    }
+
+    private void SetAlpha(TMP_Text t, float a)
+    {
         t.color = new Color(t.color.r, t.color.g, t.color.b, a);
     }
 

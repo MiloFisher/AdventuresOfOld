@@ -1098,21 +1098,21 @@ namespace AdventuresOfOldMultiplayer
                 GainStatusEffectServerRPC(uuid, name, duration, potency);
         }
         [ServerRpc]
-        private void GainStatusEffectServerRPC(FixedString64Bytes uuid, string name, int duration, int potency, ServerRpcParams rpcParams = default)
+        private void GainStatusEffectServerRPC(FixedString64Bytes uuid, FixedString64Bytes name, int duration, int potency, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
                 p.GainStatusEffectClientRPC(uuid, name, duration, potency);
         }
         [ClientRpc]
-        public void GainStatusEffectClientRPC(FixedString64Bytes uuid, string name, int duration, int potency, ClientRpcParams clientRpcParams = default)
+        public void GainStatusEffectClientRPC(FixedString64Bytes uuid, FixedString64Bytes name, int duration, int potency, ClientRpcParams clientRpcParams = default)
         {
             if (IsOwner && !isBot)
             {
-                Effect e = new Effect(name, duration, potency);
+                Effect e = new Effect(name + "", duration, potency);
                 foreach(Player p in PlayManager.Instance.playerList)
                 {
                     if(p.UUID.Value == uuid)
-                        CombatManager.Instance.GainStatusEffect(p, e);
+                        CombatManager.Instance.GainStatusEffect(CombatManager.Instance.GetCombatantFromPlayer(p), e);
                 }
                 
             }
@@ -1130,20 +1130,20 @@ namespace AdventuresOfOldMultiplayer
                 RemoveStatusEffectServerRPC(uuid, effectName);
         }
         [ServerRpc]
-        private void RemoveStatusEffectServerRPC(FixedString64Bytes uuid, string effectName, ServerRpcParams rpcParams = default)
+        private void RemoveStatusEffectServerRPC(FixedString64Bytes uuid, FixedString64Bytes effectName, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
                 p.RemoveStatusEffectClientRPC(uuid, effectName);
         }
         [ClientRpc]
-        public void RemoveStatusEffectClientRPC(FixedString64Bytes uuid, string effectName, ClientRpcParams clientRpcParams = default)
+        public void RemoveStatusEffectClientRPC(FixedString64Bytes uuid, FixedString64Bytes effectName, ClientRpcParams clientRpcParams = default)
         {
             if (IsOwner && !isBot)
             {
                 foreach (Player p in PlayManager.Instance.playerList)
                 {
                     if (p.UUID.Value == uuid)
-                        CombatManager.Instance.RemoveStatusEffect(p, effectName);
+                        CombatManager.Instance.RemoveStatusEffect(CombatManager.Instance.GetCombatantFromPlayer(p), effectName + "");
                 }
 
             }
@@ -1174,9 +1174,152 @@ namespace AdventuresOfOldMultiplayer
                 foreach (Player p in PlayManager.Instance.playerList)
                 {
                     if (p.UUID.Value == uuid)
-                        CombatManager.Instance.CycleStatusEffects(p);
+                        CombatManager.Instance.CycleStatusEffects(CombatManager.Instance.GetCombatantFromPlayer(p));
                 }
 
+            }
+        }
+
+        public void MonsterGainStatusEffect(string name, int duration, int potency)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.MonsterGainStatusEffectClientRPC(name, duration, potency);
+            }
+            else
+                MonsterGainStatusEffectServerRPC(name, duration, potency);
+        }
+        [ServerRpc]
+        private void MonsterGainStatusEffectServerRPC(FixedString64Bytes name, int duration, int potency, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.MonsterGainStatusEffectClientRPC(name, duration, potency);
+        }
+        [ClientRpc]
+        public void MonsterGainStatusEffectClientRPC(FixedString64Bytes name, int duration, int potency, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                CombatManager.Instance.GainStatusEffect(CombatManager.Instance.monster, new Effect(name + "", duration, potency));
+            }
+        }
+
+        public void MonsterRemoveStatusEffect(string effectName)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.MonsterRemoveStatusEffectClientRPC(effectName);
+            }
+            else
+                MonsterRemoveStatusEffectServerRPC(effectName);
+        }
+        [ServerRpc]
+        private void MonsterRemoveStatusEffectServerRPC(FixedString64Bytes effectName, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.MonsterRemoveStatusEffectClientRPC(effectName);
+        }
+        [ClientRpc]
+        public void MonsterRemoveStatusEffectClientRPC(FixedString64Bytes effectName, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                CombatManager.Instance.RemoveStatusEffect(CombatManager.Instance.monster, effectName + "");
+            }
+        }
+
+        public void MonsterCycleStatusEffects()
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.MonsterCycleStatusEffectsClientRPC();
+            }
+            else
+                MonsterCycleStatusEffectsServerRPC();
+        }
+        [ServerRpc]
+        private void MonsterCycleStatusEffectsServerRPC(ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.MonsterCycleStatusEffectsClientRPC();
+        }
+        [ClientRpc]
+        public void MonsterCycleStatusEffectsClientRPC(ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                CombatManager.Instance.CycleStatusEffects(CombatManager.Instance.monster);
+            }
+        }
+
+        public void VisualizeMonsterAttackForOthers(int amount)
+        {
+            FixedString64Bytes uuid = UUID.Value;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value != uuid)
+                        p.VisualizeMonsterAttackForOthersClientRPC(uuid, amount);
+                }
+            }
+            else
+                VisualizeMonsterAttackForOthersServerRPC(uuid, amount);
+        }
+        [ServerRpc]
+        private void VisualizeMonsterAttackForOthersServerRPC(FixedString64Bytes uuid, int amount, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+            {
+                if (p.UUID.Value != uuid)
+                    p.VisualizeMonsterAttackForOthersClientRPC(uuid, amount);
+            }
+        }
+        [ClientRpc]
+        public void VisualizeMonsterAttackForOthersClientRPC(FixedString64Bytes uuid, int amount, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value == uuid)
+                        CombatManager.Instance.VisualizeMonsterAttacked(p, amount);
+                }
+            }
+        }
+
+        public void VisualizeMonsterTakeDamageForOthers(int amount)
+        {
+            FixedString64Bytes uuid = UUID.Value;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value != uuid)
+                        p.VisualizeMonsterTakeDamageForOthersClientRPC(amount);
+                }
+            }
+            else
+                VisualizeMonsterTakeDamageForOthersServerRPC(uuid, amount);
+        }
+        [ServerRpc]
+        private void VisualizeMonsterTakeDamageForOthersServerRPC(FixedString64Bytes uuid, int amount, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+            {
+                if (p.UUID.Value != uuid)
+                    p.VisualizeMonsterTakeDamageForOthersClientRPC(amount);
+            }
+        }
+        [ClientRpc]
+        public void VisualizeMonsterTakeDamageForOthersClientRPC(int amount, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                CombatManager.Instance.VisualizeMonsterTakeDamage(amount);
             }
         }
         #endregion

@@ -1620,7 +1620,6 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5204690659133762651}
-  - {fileID: 2111380586474243500}
   - {fileID: 7337158790185980881}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -1642,7 +1641,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a053c8dcdce624c75a8dd44b892cabe9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  combatant:
+    combatantType: 0
+    player: {fileID: 0}
+    monster: {fileID: 0}
+    statusEffects: []
   healthBarBack: {fileID: 2218000240353160965}
   healthBarText: {fileID: 4491462767070786584}
   healthBar: {fileID: 6548128504792757614}
@@ -2004,7 +2007,7 @@ RectTransform:
   m_Children:
   - {fileID: 3354635227041971628}
   m_Father: {fileID: 6275235850686116054}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -2076,18 +2079,18 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7064133848869992872}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 6275235850686116054}
-  m_RootOrder: 1
+  m_Father: {fileID: 5204690659133762651}
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 150, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5374830425497729572
 CanvasRenderer:
@@ -2924,6 +2927,7 @@ RectTransform:
   - {fileID: 5447306001180737087}
   - {fileID: 4953755545437692138}
   - {fileID: 2667044961997569669}
+  - {fileID: 2111380586474243500}
   m_Father: {fileID: 6275235850686116054}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

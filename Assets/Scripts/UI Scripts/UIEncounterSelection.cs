@@ -3,17 +3,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class UIEncounterSelection : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class UIEncounterSelection : MonoBehaviour, IPointerClickHandler, IPointerExitHandler
 {
     public GameObject eventDisplay;
     public GameObject monsterDisplay;
     public Vector3 normalScale;
     public Vector3 zoomScale;
 
-    public void OnPointerEnter(PointerEventData eventData)
+    public void OnPointerClick(PointerEventData eventData)
     {
-        eventDisplay.transform.localScale = zoomScale;
-        monsterDisplay.transform.localScale = zoomScale;
+        if (eventDisplay.transform.localScale != zoomScale)
+        {
+            eventDisplay.transform.localScale = zoomScale;
+            monsterDisplay.transform.localScale = zoomScale;
+        }
+        else
+            HideSelection();
     }
 
     public void OnPointerExit(PointerEventData eventData)
