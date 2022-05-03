@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections.Generic;
 
 public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
 {
@@ -36,10 +37,9 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
     {
         CombatManager.Instance.MakeStatRoll("INT", 9);
         CombatManager.Instance.StatRollListener((a) => {
-            if(a == -1)
+            if (a == -1)
             {
-                CombatManager.Instance.AttackPlayer(target);
-                CombatManager.Instance.InflictDebuff(target, new Effect("Eaten", 1));
+                CombatManager.Instance.AttackPlayer(target, new List<Effect>{new Effect("Eaten", 1)});
             }
             else
                 CombatManager.Instance.MonsterEndTurn();
@@ -134,7 +134,7 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
 
     private void ShyUnfriendlyBandits_Passive()
     {
-        // effect goes here...
+        CombatManager.Instance.OnPlayerBeingAttacked = OnAttacked.PAY_10_GOLD;
     }
     #endregion
 
@@ -146,7 +146,7 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
 
     private void BeefyChadBandits_Passive()
     {
-        // effect goes here...
+        CombatManager.Instance.OnPlayerBeingAttacked = OnAttacked.PAY_20_GOLD;
     }
     #endregion
 

@@ -1318,5 +1318,14 @@ public class PlayManager : Singleton<PlayManager>
     {
         return "#" + ColorUtility.ToHtmlStringRGB(playerColors[p.Color.Value]);
     }
+
+    public bool MeetsDodgeRequirement(Player p)
+    {
+        return GetDexterity(p) >= 14;
+    }
+    public bool MeetsTauntRequirement(Player p)
+    {
+        return GetStrength(p) >= 14;
+    }
     #endregion
 }

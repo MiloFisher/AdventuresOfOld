@@ -1015,6 +1015,42 @@ namespace AdventuresOfOldMultiplayer
                 CombatManager.Instance.StartMonsterTurn(targets);
             }
         }
+
+        public void VisualizeAttackForOthers()
+        {
+            FixedString64Bytes uuid = UUID.Value;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value != uuid)
+                        p.VisualizeAttackForOthersClientRPC(uuid);
+                }
+            }
+            else
+                VisualizeAttackForOthersServerRPC(uuid);
+        }
+        [ServerRpc]
+        private void VisualizeAttackForOthersServerRPC(FixedString64Bytes uuid, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+            {
+                if (p.UUID.Value != uuid)
+                    p.VisualizeAttackForOthersClientRPC(uuid);
+            }
+        }
+        [ClientRpc]
+        public void VisualizeAttackForOthersClientRPC(FixedString64Bytes uuid, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if(p.UUID.Value == uuid)
+                        CombatManager.Instance.VisualizePlayerAttacked(p);
+                }
+            }
+        }
         #endregion
     }
 }

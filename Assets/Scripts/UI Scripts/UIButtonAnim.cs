@@ -26,7 +26,7 @@ public class UIButtonAnim : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         defaultHeight = rt.sizeDelta.y;
         image.alphaHitTestMinimumThreshold = 0.1f;
         if(transform.childCount > 0)
-            defaultChildScale = transform.GetChild(0).localScale.x;
+            defaultChildScale = 1;
     }
 
     public void OnPointerEnter(PointerEventData eventData)
@@ -41,8 +41,6 @@ public class UIButtonAnim : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (!GetComponent<Button>().enabled)
-            return;
         image.sprite = defaultSprite;
         rt.sizeDelta = new Vector2(defaultWidth, defaultHeight);
         if (transform.childCount > 0)

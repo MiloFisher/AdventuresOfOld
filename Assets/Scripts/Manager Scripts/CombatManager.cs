@@ -7,6 +7,8 @@ using Unity.Collections;
 using System;
 using Unity.Netcode;
 
+public enum OnAttacked { NONE, PAY_10_GOLD, PAY_20_GOLD };
+
 public class CombatManager : Singleton<CombatManager>
 {
     public List<Combatant> turnOrderCombatantList;
@@ -14,14 +16,18 @@ public class CombatManager : Singleton<CombatManager>
     public GameObject combatBackground;
     public GameObject combatMainLayout;
     public GameObject statRoll;
+    public GameObject defensiveOptions;
     public GameObject enemyCard;
     public GameObject[] playerCards;
     public int combatTurnMarker;
     public MonsterCard monsterCard;
     public Combatant monster;
+    public GameObject attackIconPrefab;
     
     public float fadeLength = 0.01f;
     public float fadedWaitTime = 0.5f;
+    public float attackFadeLength = 0.004f;
+    public float attackFlashLength = 0.5f;
 
     public float radius;
     public float originX;
@@ -31,6 +37,7 @@ public class CombatManager : Singleton<CombatManager>
     public int[] monsterTargets;
 
     public Action<Combatant> OnPlayerDealDamage;
+    public OnAttacked OnPlayerBeingAttacked;
 
     private bool ready;
     private bool combatantListSet;
@@ -184,15 +191,61 @@ public class CombatManager : Singleton<CombatManager>
         StartCombatantsTurn();
     }
 
-    public void AttackPlayer(Combatant c)
+    public void AttackPlayer(Combatant c, List<Effect> debuffs = default)
     {
-        // After attack occurs and player has had a chance to dodge and get taunted, end monster turn
-        MonsterEndTurn();
+        EnableDefensiveOptions();
+        DefensiveOptionsListener((a) => {
+            if(a == 1)
+            {
+                // Avoided getting attacked
+                MonsterEndTurn();
+            }
+            else
+            {
+                // Got attacked
+                if(c.GetArmor() >= monster.GetAttack())
+                {
+                    // No damage will be taken, therefore avoid debuffs
+                    StartCoroutine(AnimatePlayerAttacked(c,
+                    () => {
+                        // OnAttack
+                        c.TakeDamage(monster.GetAttack());
+                    },
+                    () => {
+                        // OnComplete
+                        MonsterEndTurn();
+                    }));
+                }
+                else
+                {
+                    // Attack animation + effect + end monster turn
+                    StartCoroutine(AnimatePlayerAttacked(c,
+                    () => {
+                        // OnAttack
+                        c.TakeDamage(monster.GetAttack());
+                        foreach (Effect e in debuffs)
+                            InflictDebuff(c, e);
+                    },
+                    () => {
+                        // OnComplete
+                        MonsterEndTurn();
+                    }));
+                }
+
+                // Visualize player attack for all other players
+                PlayManager.Instance.localPlayer.VisualizeAttackForOthers();
+            }
+        });
     }
 
     public void InflictDebuff(Combatant c, Effect debuff)
     {
         
+    }
+
+    public void VisualizePlayerAttacked(Player p)
+    {
+        StartCoroutine(AnimatePlayerAttacked(GetCombatantFromPlayer(p)));
     }
 
     private int[] GetMonsterTargets()
@@ -324,6 +377,43 @@ public class CombatManager : Singleton<CombatManager>
         monsterCard.Passive();
     }
 
+    IEnumerator AnimatePlayerAttacked(Combatant target, Action OnAttack = default, Action OnComplete = default)
+    {
+        // Create attack icon at midpoint between enemy and target player
+        GameObject attackIcon = Instantiate(attackIconPrefab, transform);
+        GameObject playerCard = GetPlayerCardFromCombatant(target);
+        attackIcon.transform.localPosition = enemyCard.transform.localPosition + (playerCard.transform.localPosition - enemyCard.transform.localPosition) / 2;
+
+        // Fade in attack icon
+        for(int i = 1; i <= Global.animSteps; i++)
+        {
+            SetAlpha(attackIcon.GetComponent<Image>(), i * Global.animRate);
+            yield return new WaitForSeconds(attackFadeLength * Global.animTimeMod);
+        }
+
+        // Call OnAttack function
+        OnAttack();
+
+        // Flash card red for a duration
+        playerCard.GetComponent<UIPlayerCard>().ActivateDamaged(true);
+        playerCard.GetComponent<UIPlayerCard>().DisplayDamageNumber(monster.GetAttack() - target.GetArmor());
+        yield return new WaitForSeconds(attackFlashLength);
+        playerCard.GetComponent<UIPlayerCard>().ActivateDamaged(false);
+
+        // Fade out attack icon
+        for (int i = Global.animSteps - 1; i >= 0; i--)
+        {
+            SetAlpha(attackIcon.GetComponent<Image>(), i * Global.animRate);
+            yield return new WaitForSeconds(attackFadeLength * Global.animTimeMod);
+        }
+
+        // Destroy attackIcon
+        Destroy(attackIcon);
+
+        // Call OnComplete function
+        OnComplete();
+    }
+
     public void SetTurnOrderCombatantList(FixedString64Bytes[] arr)
     {
         turnOrderCombatantList = new List<Combatant>();
@@ -369,6 +459,16 @@ public class CombatManager : Singleton<CombatManager>
         return null;
     }
 
+    private GameObject GetPlayerCardFromCombatant(Combatant c)
+    {
+        for(int i = 0; i < playerCards.Length; i++)
+        {
+            if (playerCards[i].GetComponent<UIPlayerCard>().player.UUID.Value == c.player.UUID.Value)
+                return playerCards[i];
+        }
+        return null;
+    }
+
     private bool IsTargetedByMonster(Player p)
     {
         for(int i = 0; i < monsterTargets.Length; i++)
@@ -386,6 +486,17 @@ public class CombatManager : Singleton<CombatManager>
         return turnOrderCombatantList[monsterTargets[0]].player.UUID.Value == p.UUID.Value;
     }
 
+    public List<Combatant> GetAlliesWhoCanTaunt(Player p)
+    {
+        List<Combatant> taunters = new List<Combatant>();
+        for (int i = 0; i < turnOrderCombatantList.Count; i++)
+        {
+            if (turnOrderCombatantList[i].combatantType == CombatantType.PLAYER && turnOrderCombatantList[i].player.UUID.Value != p.UUID.Value && PlayManager.Instance.MeetsTauntRequirement(turnOrderCombatantList[i].player))
+                taunters.Add(turnOrderCombatantList[i]);
+        }
+        return taunters;
+    }
+
     private void SetAlpha(Image i, float a)
     {
         i.color = new Color(i.color.r, i.color.g, i.color.b, a);
@@ -393,6 +504,8 @@ public class CombatManager : Singleton<CombatManager>
 
     private void ResetCombat()
     {
+        OnPlayerDealDamage = default;
+        OnPlayerBeingAttacked = default;
         isMonsterTurn = false;
         isYourTurn = false;
         combatantListSet = false;
@@ -421,6 +534,29 @@ public class CombatManager : Singleton<CombatManager>
     private int FetchStatRollResult()
     {
         return statRoll.GetComponent<UIStatRoll>().success;
+    }
+    #endregion
+
+    #region Defensive Options
+    public void DefensiveOptionsListener(Action<int> Response)
+    {
+        StartCoroutine(WaitForDefensiveOptions(Response));
+    }
+
+    IEnumerator WaitForDefensiveOptions(Action<int> Response)
+    {
+        yield return new WaitUntil(() => FetchDefensiveOptionsResult() != 0);
+        Response(FetchDefensiveOptionsResult());
+    }
+
+    public void EnableDefensiveOptions()
+    {
+        defensiveOptions.SetActive(true);
+    }
+
+    private int FetchDefensiveOptionsResult()
+    {
+        return defensiveOptions.GetComponent<UIDefensiveOptions>().resolution;
     }
     #endregion
 }
