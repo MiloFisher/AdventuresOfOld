@@ -117,6 +117,40 @@ AudioMixerGroupController:
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0
+--- !u!243 &-4332315574790340804
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: MainNarrator
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: 3cbd4ee4d1d3abe4eb247dbdd86ed5ef
+  m_Children:
+  - {fileID: -689994064969802828}
+  m_Volume: 9c6254e5d62820b46b255799c552af85
+  m_Pitch: f61c10a9f44a7cf459cef759297f81d5
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -3618020868867157054}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
+--- !u!244 &-3618020868867157054
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 727db73d533c9094fa33c52333152a48
+  m_EffectName: Attenuation
+  m_MixLevel: 62abbe7ed6fcea14dbd54b85cffcf287
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!244 &-3217002543996394973
 AudioMixerEffectController:
   m_ObjectHideFlags: 3
@@ -192,6 +226,22 @@ AudioMixerEffectController:
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
   m_Bypass: 0
+--- !u!244 &-1884709524333186465
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: a55304214dddd0348bcc72e5e18db0d1
+  m_EffectName: Highpass Simple
+  m_MixLevel: 5985aded66767dd4fad910b9b61195cd
+  m_Parameters:
+  - m_ParameterName: Cutoff freq
+    m_GUID: d25444da6ab513447aa26475ee9c64c4
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!244 &-853512030271268437
 AudioMixerEffectController:
   m_ObjectHideFlags: 3
@@ -212,7 +262,7 @@ AudioMixerGroupController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MainNarrator
+  m_Name: ProphecyVO
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: 1c053a3625dc5d142b613b949d68c922
   m_Children: []
@@ -221,6 +271,8 @@ AudioMixerGroupController:
   m_Send: 00000000000000000000000000000000
   m_Effects:
   - {fileID: 1889355561718682830}
+  - {fileID: 7244001208199159077}
+  - {fileID: -1884709524333186465}
   m_UserColorIndex: 0
   m_Mute: 0
   m_Solo: 0
@@ -275,6 +327,7 @@ AudioMixerController:
     - a893eb33b4faaff499aba3c49a712316
     - 72ec1e696385b984fa07046442bd9221
     - 7b77aab642bd2eb43a8c3be1946b868e
+    - 3cbd4ee4d1d3abe4eb247dbdd86ed5ef
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -288,7 +341,7 @@ AudioMixerGroupController:
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: 45d275d7ddcf30c428acae08d9b9651d
   m_Children:
-  - {fileID: -689994064969802828}
+  - {fileID: -4332315574790340804}
   - {fileID: -7502533423361790704}
   - {fileID: -4883745418266828750}
   - {fileID: 4422408852199262549}
@@ -349,6 +402,7 @@ AudioMixerSnapshotController:
     2044a2db85ae6934992b7776a932f2a6: 1.5
     c5c21a2d508db8a4288a036e0fc19081: 239
     9649c3adbfeecfa4b902b7c20144e449: 1
+    9e38ae3e4455db04e8237d75bc467ba3: 4
     ae6261fe8bcc1cd408eb39a0bbbc4f00: 4882.8
     4196a71f0e8dae141a8baf1c02bc24ad: 1
   m_TransitionOverrides: {}
@@ -502,6 +556,22 @@ AudioMixerEffectController:
   m_EffectName: Attenuation
   m_MixLevel: 9fdda50f96aeb8a418c472552764dc5b
   m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
+--- !u!244 &7244001208199159077
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 7fcde288da2ab7141a4e7407f6e38be4
+  m_EffectName: Lowpass Simple
+  m_MixLevel: 4dca7d1cd926334478d5895aeea8e17d
+  m_Parameters:
+  - m_ParameterName: Cutoff freq
+    m_GUID: edae0fbf78f858247bf3d8fdd19f2299
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
   m_Bypass: 0
