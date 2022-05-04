@@ -39,7 +39,7 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
         CombatManager.Instance.StatRollListener((a) => {
             if (a == -1)
             {
-                CombatManager.Instance.AttackPlayer(target, new List<Effect>{new Effect("Eaten", 1)});
+                CombatManager.Instance.AttackPlayer(target, CombatManager.Instance.MonsterEndTurn, new List<Effect>{new Effect("Eaten", 1)});
             }
             else
                 CombatManager.Instance.MonsterEndTurn();

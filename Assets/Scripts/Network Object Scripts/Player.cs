@@ -3,6 +3,7 @@ using Unity.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using System;
 
 namespace AdventuresOfOldMultiplayer
 {
@@ -568,13 +569,16 @@ namespace AdventuresOfOldMultiplayer
             }
         }
 
-        public void GainXP(int amount)
+        public void GainXP(int amount, bool halved = false)
         {
+            if (Level.Value == 5)
+                return;
+            int total = PlayManager.Instance.XPModifier() + amount;
+            if (halved)
+                total = (int)MathF.Ceiling(total / 2f);
             if (NetworkManager.Singleton.IsServer)
             {
-                if (Level.Value == 5)
-                    return;
-                XP.Value += PlayManager.Instance.XPModifier() + amount;
+                XP.Value += total;
                 if(XP.Value > PlayManager.Instance.GetNeededXP(this))
                 {
                     XP.Value -= PlayManager.Instance.GetNeededXP(this);
@@ -586,14 +590,12 @@ namespace AdventuresOfOldMultiplayer
                 }
             }
             else
-                GainXPServerRPC(amount);
+                GainXPServerRPC(total);
         }
         [ServerRpc]
-        private void GainXPServerRPC(int amount, ServerRpcParams rpcParams = default)
+        private void GainXPServerRPC(int total, ServerRpcParams rpcParams = default)
         {
-            if (Level.Value == 5)
-                return;
-            XP.Value += PlayManager.Instance.XPModifier() + amount;
+            XP.Value += total;
             if (XP.Value > PlayManager.Instance.GetNeededXP(this))
             {
                 XP.Value -= PlayManager.Instance.GetNeededXP(this);
@@ -644,6 +646,8 @@ namespace AdventuresOfOldMultiplayer
             {
                 if (damage > 0)
                     Health.Value -= damage;
+                if (Health.Value < 0)
+                    Health.Value = 0;
             }
             else
                 TakeDamageServerRPC(damage);
@@ -653,6 +657,8 @@ namespace AdventuresOfOldMultiplayer
         {
             if (damage > 0)
                 Health.Value -= damage;
+            if (Health.Value < 0)
+                Health.Value = 0;
         }
 
         public void RestoreAbilityCharges(int amount)
@@ -1320,6 +1326,87 @@ namespace AdventuresOfOldMultiplayer
             if (IsOwner && !isBot)
             {
                 CombatManager.Instance.VisualizeMonsterTakeDamage(amount);
+            }
+        }
+
+        public void TransitionOthersToStyle(CombatLayoutStyle s, int attackerId = -1)
+        {
+            FixedString64Bytes uuid = UUID.Value;
+            FixedString64Bytes style = "";
+            switch (s)
+            {
+                case CombatLayoutStyle.DEFAULT: style = "DEFAULT"; break;
+                case CombatLayoutStyle.ATTACKING: style = "ATTACKING"; break;
+            }
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value != uuid)
+                        p.TransitionOthersToStyleClientRPC(style, attackerId);
+                }
+            }
+            else
+                TransitionOthersToStyleServerRPC(uuid, style, attackerId);
+        }
+        [ServerRpc]
+        private void TransitionOthersToStyleServerRPC(FixedString64Bytes uuid, FixedString64Bytes style, int attackerId, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+            {
+                if (p.UUID.Value != uuid)
+                    p.TransitionOthersToStyleClientRPC(style, attackerId);
+            }
+        }
+        [ClientRpc]
+        public void TransitionOthersToStyleClientRPC(FixedString64Bytes style, int attackerId, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                CombatLayoutStyle s = CombatLayoutStyle.DEFAULT;
+                switch(style + "")
+                {
+                    case "DEFAULT": s = CombatLayoutStyle.DEFAULT; break;
+                    case "ATTACKING": s = CombatLayoutStyle.ATTACKING; break;
+                }
+                CombatManager.Instance.TransitionToStyle(s, attackerId);
+            }
+        }
+
+        public void SendCombatCompleteNotifications(int result)
+        {
+            FixedString64Bytes uuid = UUID.Value;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value != uuid)
+                        p.SendCombatCompleteNotificationsClientRPC(result);
+                }
+            }
+            else
+                SendCombatCompleteNotificationsServerRPC(uuid, result);
+        }
+        [ServerRpc]
+        private void SendCombatCompleteNotificationsServerRPC(FixedString64Bytes uuid, int result, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+            {
+                if (p.UUID.Value != uuid)
+                    p.SendCombatCompleteNotificationsClientRPC(result);
+            }
+        }
+        [ClientRpc]
+        private void SendCombatCompleteNotificationsClientRPC(int result, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner)
+            {
+                if (!isBot)
+                    CombatManager.Instance.CombatCompleteNotification(result);
+                else
+                {
+
+                }
             }
         }
         #endregion

@@ -198,12 +198,17 @@ public class UIEncounterCard : MonoBehaviour
     public void UpdateHealthBar(Combatant monster)
     {
         healthBarText.text = monster.GetHealth() + " / " + monster.GetMaxHealth();
-        healthBar.transform.localPosition = new Vector3(3954f * monster.GetHealth() / monster.GetMaxHealth() - 3954f, 0, 0);
+        healthBar.transform.localPosition = new Vector3(6954f * monster.GetHealth() / monster.GetMaxHealth() - 6954f, 0, 0);
     }
 
     public void SetDisplayPosition(Vector3 pos)
     {
         monsterDisplay.transform.localPosition = pos;
+    }
+
+    public Vector3 GetDisplayPositionScaled()
+    {
+        return transform.localPosition + monsterDisplay.transform.localPosition * transform.localScale.x;
     }
 
     public void DrawStatusEffects(List<Effect> effects)

@@ -134,7 +134,9 @@ public class Combatant
         else
         {
             currentHealth -= amount;
-            player.UpdateMonsterHealth(currentHealth);
+            if (currentHealth < 0)
+                currentHealth = 0;
+            PlayManager.Instance.localPlayer.UpdateMonsterHealth(currentHealth);
         }
     }
 

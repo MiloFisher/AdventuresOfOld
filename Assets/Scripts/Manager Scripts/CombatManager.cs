@@ -17,9 +17,10 @@ public class CombatManager : Singleton<CombatManager>
     public GameObject combatBackground;
     public GameObject combatLayout;
     public GameObject statRoll;
+    public GameObject attackRoll;
     public GameObject defensiveOptions;
     public GameObject combatOptions;
-    public GameObject enemyCard;
+    public UIEncounterCard enemyCard;
     public GameObject[] playerCards;
     public int combatTurnMarker;
     public MonsterCard monsterCard;
@@ -90,9 +91,140 @@ public class CombatManager : Singleton<CombatManager>
         }
     }
 
-    public void EndCombat()
+    public void EndCombat(int result)
     {
-        // Gather amd process combat results 
+        // Results:
+        // 1 = Monster Died
+        // 2 = Players died or fled
+        // 3 = Both parties died
+
+        Action OnComplete = default;
+        
+        switch (result)
+        {
+            case 1:
+                // Monster defeated case
+                OnComplete = () => {
+                    Player currentTurnPlayer = PlayManager.Instance.turnOrderPlayerList[PlayManager.Instance.turnMarker];
+                    List<Player> otherPlayersInCombat = new List<Player>();
+                    foreach(Combatant c in turnOrderCombatantList)
+                    {
+                        if (c.combatantType == CombatantType.PLAYER && c.player.UUID.Value != currentTurnPlayer.UUID.Value)
+                            otherPlayersInCombat.Add(c.player);
+                    }
+
+                    // If the current turn player is a combatant, and they are alive, give them their rewards
+                    if(IsCombatant(currentTurnPlayer) && GetCombatantFromPlayer(currentTurnPlayer).IsAlive())
+                    {
+                        switch(monsterCard.type)
+                        {
+                            case MonsterType.BASIC:
+                                currentTurnPlayer.DrawLootCards(1, currentTurnPlayer.UUID.Value, true);
+                                currentTurnPlayer.GainXP(3);
+                                currentTurnPlayer.GainGold(10);
+                                break;
+                            case MonsterType.ELITE:
+                                currentTurnPlayer.DrawLootCards(2, currentTurnPlayer.UUID.Value, true);
+                                currentTurnPlayer.GainXP(6);
+                                currentTurnPlayer.GainGold(20);
+                                break;
+                            case MonsterType.MINIBOSS:
+                                currentTurnPlayer.DrawLootCards(1, currentTurnPlayer.UUID.Value, true);
+                                currentTurnPlayer.GainXP(6);
+                                currentTurnPlayer.GainGold(20);
+                                break;
+                            case MonsterType.BOSS:
+                                // Win the game
+                                break;
+                        }
+                        currentTurnPlayer.CompleteEncounter(false, currentTurnPlayer.UUID.Value);
+                    }
+                    // Otherwise pick another combatant to be graced
+                    else
+                    {
+                        PlayManager.Instance.ShuffleDeck(otherPlayersInCombat);
+                        Player chosenOne = otherPlayersInCombat[0];
+                        otherPlayersInCombat.RemoveAt(0);
+                        switch (monsterCard.type)
+                        {
+                            case MonsterType.BASIC:
+                                chosenOne.DrawLootCards(1, chosenOne.UUID.Value, false);
+                                chosenOne.GainXP(3, true);
+                                chosenOne.GainGold(10);
+                                break;
+                            case MonsterType.ELITE:
+                                chosenOne.DrawLootCards(2, chosenOne.UUID.Value, false);
+                                chosenOne.GainXP(6, true);
+                                chosenOne.GainGold(20);
+                                break;
+                            case MonsterType.MINIBOSS:
+                                chosenOne.DrawLootCards(1, chosenOne.UUID.Value, false);
+                                chosenOne.GainXP(6, true);
+                                chosenOne.GainGold(20);
+                                break;
+                            case MonsterType.BOSS:
+                                // Win the game
+                                break;
+                        }
+                        currentTurnPlayer.CompleteEncounter(true, currentTurnPlayer.UUID.Value);
+                    }
+
+                    // Handle other players in combat
+                    switch (monsterCard.type)
+                    {
+                        case MonsterType.BASIC:
+                            foreach(Player p in otherPlayersInCombat)
+                                p.GainXP(3, true);
+                            break;
+                        case MonsterType.ELITE:
+                            foreach (Player p in otherPlayersInCombat)
+                                p.GainXP(6, true);
+                            break;
+                        case MonsterType.MINIBOSS:
+                            foreach (Player p in otherPlayersInCombat)
+                            {
+                                p.DrawLootCards(1, p.UUID.Value, false);
+                                p.GainXP(6, true);
+                            }
+                            break;
+                        case MonsterType.BOSS:
+                            // Win the game
+                            break;
+                    }
+                };
+                break;
+            case 2:
+                // Players defeated case
+                OnComplete = () =>
+                {
+                    Player currentTurnPlayer = PlayManager.Instance.turnOrderPlayerList[PlayManager.Instance.turnMarker];
+                    currentTurnPlayer.CompleteEncounter(true, currentTurnPlayer.UUID.Value);
+                };
+                break;
+            case 3:
+                // Laugh because i'm not handling this case lmao
+                Debug.Log("Yeah right, I totally believe that every player and the monster ALL died at the same time!");
+                break;
+        }
+
+        CombatCompleteNotification(result, OnComplete);
+        PlayManager.Instance.localPlayer.SendCombatCompleteNotifications(result);
+    }
+
+    public void CombatCompleteNotification(int result, Action OnComplete = default)
+    {
+        string description;
+        if (result == 1)
+        {
+            description = "<color=#267833>VICTORY</color>";
+        }
+        else
+        {
+            description = "<color=#902E2E>DEFEAT</color>";
+        }
+        PlayManager.Instance.SendNotification(4, description, () => {
+            StartCoroutine(LeaveCombat(OnComplete));
+        });
     }
 
     public void StartTurn()
@@ -124,7 +256,7 @@ public class CombatManager : Singleton<CombatManager>
 
         // Increment turn marker for all players
         combatTurnMarker++;
-        PlayManager.Instance.localPlayer.UpdateTurnMarker(combatTurnMarker);
+        PlayManager.Instance.localPlayer.UpdateCombatTurnMarker(combatTurnMarker);
 
         // Cycle effects
         CycleEffects(c);
@@ -137,7 +269,7 @@ public class CombatManager : Singleton<CombatManager>
     {
         // Increment turn marker for all players
         combatTurnMarker++;
-        PlayManager.Instance.localPlayer.UpdateTurnMarker(combatTurnMarker);
+        PlayManager.Instance.localPlayer.UpdateCombatTurnMarker(combatTurnMarker);
 
         // Start next combatant turn
         StartCombatantsTurn();
@@ -145,6 +277,12 @@ public class CombatManager : Singleton<CombatManager>
 
     public void StartCombatantsTurn()
     {
+        if(CombatOverCheck() > -1)
+        {
+            EndCombat(CombatOverCheck());
+            return;
+        }
+
         if (combatTurnMarker >= turnOrderCombatantList.Count)
             combatTurnMarker = 0;
         if (turnOrderCombatantList[combatTurnMarker].combatantType == CombatantType.PLAYER)
@@ -155,7 +293,7 @@ public class CombatManager : Singleton<CombatManager>
             int burning = monster.IsBurning();
             if (burning > -1)
             {
-                StartCoroutine(AnimateMonsterTakeDamage(enemyCard.GetComponent<UIEncounterCard>(), burning, () => {
+                StartCoroutine(AnimateMonsterTakeDamage(enemyCard, burning, () => {
                     monster.TakeDamage(burning);
                 }));
 
@@ -165,7 +303,7 @@ public class CombatManager : Singleton<CombatManager>
                 // Check if still alive with incoming poison damage
                 if (monster.GetHealth() <= burning)
                 {
-                    EndCombat();
+                    EndCombat(1);
                     return;
                 }
             }
@@ -217,7 +355,43 @@ public class CombatManager : Singleton<CombatManager>
                 // Basic Attack
                 attackerId = GetIdFromCombatant(c);
                 // Make sure to sync this between all players if we decide to have all players see this
-                StartCoroutine(TransitionCombatLayoutStyle(CombatLayoutStyle.ATTACKING));
+                StartCoroutine(TransitionCombatLayoutStyle(CombatLayoutStyle.ATTACKING, () => {
+                    int playerPower = 0;
+                    int monsterPower = 0;
+                    if (PlayManager.Instance.IsPhysicalBased(c.player))
+                    {
+                        playerPower = c.GetPhysicalPower();
+                        monsterPower = monster.GetPhysicalPower();
+                    }
+                    else
+                    {
+                        playerPower = c.GetMagicalPower();
+                        monsterPower = monster.GetMagicalPower();
+                    }
+                    MakeAttackRoll(playerPower, monsterPower);
+                    AttackRollListener((a, crit) => {
+                        if(a == 1)
+                        {
+                            // player attacks monster
+                            int damage = c.GetAttack();
+                            if (crit)
+                                damage *= 2;
+                            AttackMonster(c, damage);
+                        }
+                        else
+                        {
+                            // monster attacks player
+                            AttackPlayer(c, () => {
+                                // OnComplete
+                                StartCoroutine(TransitionCombatLayoutStyle(CombatLayoutStyle.DEFAULT, () => {
+                                    EndTurn();
+                                }));
+                                PlayManager.Instance.localPlayer.TransitionOthersToStyle(CombatLayoutStyle.DEFAULT);
+                            });
+                        }
+                    });
+                }));
+                PlayManager.Instance.localPlayer.TransitionOthersToStyle(CombatLayoutStyle.ATTACKING, attackerId);
             }
             else if (a == 2)
             {
@@ -229,7 +403,29 @@ public class CombatManager : Singleton<CombatManager>
                 // Attack Ability
             }
         });
+    }
 
+    public void AttackMonster(Combatant c, int damage, List<Effect> debuffs = default)
+    {
+        // Attack animation + effect + end monster turn
+        StartCoroutine(AnimateMonsterAttacked(c, damage,() => {
+            // OnAttack
+            monster.TakeDamage(damage);
+            if(debuffs != default)
+            {
+                foreach (Effect e in debuffs)
+                    InflictEffect(c, e);
+            }           
+        }, () => {
+            // OnComplete
+            StartCoroutine(TransitionCombatLayoutStyle(CombatLayoutStyle.DEFAULT, () => {
+                EndTurn();
+            }));
+            PlayManager.Instance.localPlayer.TransitionOthersToStyle(CombatLayoutStyle.DEFAULT);
+        }));
+
+        // Visualize monster attack for all other players
+        PlayManager.Instance.localPlayer.VisualizeMonsterAttackForOthers(damage);
     }
 
     public void RemoveFromCombat(Combatant c, bool isTheirTurn)
@@ -270,7 +466,7 @@ public class CombatManager : Singleton<CombatManager>
         // Otherwise End Combat
         else
         {
-            EndCombat();
+            EndCombat(2);
         }
     }
 
@@ -318,20 +514,20 @@ public class CombatManager : Singleton<CombatManager>
 
         // Increment turn marker for all players
         combatTurnMarker++;
-        PlayManager.Instance.localPlayer.UpdateTurnMarker(combatTurnMarker);
+        PlayManager.Instance.localPlayer.UpdateCombatTurnMarker(combatTurnMarker);
 
         // Start next combatant turn
         StartCombatantsTurn();
     }
 
-    public void AttackPlayer(Combatant c, List<Effect> debuffs = default)
+    public void AttackPlayer(Combatant c, Action OnComplete, List<Effect> debuffs = default)
     {
         EnableDefensiveOptions();
         DefensiveOptionsListener((a) => {
             if(a == 1)
             {
                 // Avoided getting attacked
-                MonsterEndTurn();
+                OnComplete();
             }
             else
             {
@@ -343,11 +539,7 @@ public class CombatManager : Singleton<CombatManager>
                     () => {
                         // OnAttack
                         c.TakeDamage(monster.GetAttack());
-                    },
-                    () => {
-                        // OnComplete
-                        MonsterEndTurn();
-                    }));
+                    }, OnComplete));
                 }
                 else
                 {
@@ -356,13 +548,12 @@ public class CombatManager : Singleton<CombatManager>
                     () => {
                         // OnAttack
                         c.TakeDamage(monster.GetAttack());
-                        foreach (Effect e in debuffs)
-                            InflictEffect(c, e);
-                    },
-                    () => {
-                        // OnComplete
-                        MonsterEndTurn();
-                    }));
+                        if (debuffs != default)
+                        {
+                            foreach (Effect e in debuffs)
+                                InflictEffect(c, e);
+                        }
+                    }, OnComplete));
                 }
 
                 // Visualize player attack for all other players
@@ -428,7 +619,7 @@ public class CombatManager : Singleton<CombatManager>
 
     public void VisualizeMonsterTakeDamage(int amount)
     {
-        StartCoroutine(AnimateMonsterTakeDamage(enemyCard.GetComponent<UIEncounterCard>(), amount));
+        StartCoroutine(AnimateMonsterTakeDamage(enemyCard, amount));
     }
 
     private int[] GetMonsterTargets()
@@ -512,25 +703,22 @@ public class CombatManager : Singleton<CombatManager>
             {
                 if (turnOrderCombatantList[i].combatantType == CombatantType.PLAYER)
                 {
-                    playerCards[index].GetComponent<UIPlayerCard>().ActivateCrosshair(IsTargetedByMonster(turnOrderCombatantList[i].player) && turnOrderCombatantList[combatTurnMarker].monster != null && !isMonsterTurn);
+                    playerCards[index].GetComponent<UIPlayerCard>().ActivateCrosshair(IsTargetedByMonster(turnOrderCombatantList[i].player) && turnOrderCombatantList[combatTurnMarker].monster != null && !isMonsterTurn && CombatOverCheck() == -1);
                     playerCards[index].GetComponent<UIPlayerCard>().ActivateTurnMarker(combatTurnMarker == i);
                     playerCards[index].GetComponent<UIPlayerCard>().SetVisuals(turnOrderCombatantList[i]);
                     index--;
                 }
                 else
                 {
-                    enemyCard.GetComponent<UIEncounterCard>().ActivateTurnMarker(combatTurnMarker == i);
-                    enemyCard.GetComponent<UIEncounterCard>().SetVisuals(turnOrderCombatantList[i].monster.cardName);
-                    enemyCard.GetComponent<UIEncounterCard>().UpdateHealthBar(turnOrderCombatantList[i]);
-                    enemyCard.GetComponent<UIEncounterCard>().SetDisplayPosition(new Vector3(0, 0, 0));
+                    enemyCard.ActivateTurnMarker(combatTurnMarker == i);
+                    enemyCard.SetVisuals(turnOrderCombatantList[i].monster.cardName);
+                    enemyCard.UpdateHealthBar(turnOrderCombatantList[i]);
+                    enemyCard.SetDisplayPosition(new Vector3(0, 0, 0));
                 }
             }
         }
         else if(combatLayoutStyle == CombatLayoutStyle.ATTACKING)
         {
-            // MonsterCard.display = new Vector3(530, 0, 0)
-            // Target PlayerCard = new Vector3(-800, 330, 0)
-            // Space out other cards below = new Vector3(200 * (2 * i + 1 - amount), -480, 0)
             int i;
             int pos = 0;
             for (i = 0; i < playerAmount; i++)
@@ -538,7 +726,7 @@ public class CombatManager : Singleton<CombatManager>
                 playerCards[i].SetActive(true);
                 if (i == attackerId)
                 {
-                    playerCards[i].transform.localPosition = new Vector3(-800, 330, 0);
+                    playerCards[i].transform.localPosition = new Vector3(-900, 330, 0);
                     playerCards[i].transform.localScale = new Vector3(1.5f, 1.5f, 1);
                 }
                 else
@@ -557,17 +745,17 @@ public class CombatManager : Singleton<CombatManager>
             {
                 if (turnOrderCombatantList[i].combatantType == CombatantType.PLAYER)
                 {
-                    playerCards[index].GetComponent<UIPlayerCard>().ActivateCrosshair(IsTargetedByMonster(turnOrderCombatantList[i].player) && turnOrderCombatantList[combatTurnMarker].monster != null && !isMonsterTurn);
+                    playerCards[index].GetComponent<UIPlayerCard>().ActivateCrosshair(IsTargetedByMonster(turnOrderCombatantList[i].player) && turnOrderCombatantList[combatTurnMarker].monster != null && !isMonsterTurn && CombatOverCheck() == -1);
                     playerCards[index].GetComponent<UIPlayerCard>().ActivateTurnMarker(combatTurnMarker == i);
                     playerCards[index].GetComponent<UIPlayerCard>().SetVisuals(turnOrderCombatantList[i]);
                     index--;
                 }
                 else
                 {
-                    enemyCard.GetComponent<UIEncounterCard>().ActivateTurnMarker(combatTurnMarker == i);
-                    enemyCard.GetComponent<UIEncounterCard>().SetVisuals(turnOrderCombatantList[i].monster.cardName);
-                    enemyCard.GetComponent<UIEncounterCard>().UpdateHealthBar(turnOrderCombatantList[i]);
-                    enemyCard.GetComponent<UIEncounterCard>().SetDisplayPosition(new Vector3(530, 0, 0));
+                    enemyCard.ActivateTurnMarker(combatTurnMarker == i);
+                    enemyCard.SetVisuals(turnOrderCombatantList[i].monster.cardName);
+                    enemyCard.UpdateHealthBar(turnOrderCombatantList[i]);
+                    enemyCard.SetDisplayPosition(new Vector3(470, 0, 0));
                 }
             }
         }
@@ -610,7 +798,45 @@ public class CombatManager : Singleton<CombatManager>
         monsterCard.Passive();
     }
 
-    IEnumerator TransitionCombatLayoutStyle(CombatLayoutStyle targetLayoutStyle)
+    IEnumerator LeaveCombat(Action OnComplete = default)
+    {
+        combatFadeOverlay.SetActive(true);
+
+        // First fade in overlay
+        for (int i = 1; i <= Global.animSteps; i++)
+        {
+            SetAlpha(combatFadeOverlay.GetComponent<Image>(), i * Global.animRate);
+            yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
+        }
+
+        // Deactivate main layout while screen is obstructed by overlay
+        combatLayout.SetActive(false);
+        combatBackground.SetActive(false);
+
+        // Hold faded in overlay
+        yield return new WaitForSeconds(fadedWaitTime);
+
+        // Then fade out overlay
+        for (int i = Global.animSteps - 1; i >= 0; i--)
+        {
+            SetAlpha(combatFadeOverlay.GetComponent<Image>(), i * Global.animRate);
+            yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
+        }
+
+        combatFadeOverlay.SetActive(false);
+
+        // Call OnComplete
+        OnComplete();
+    }
+
+    public void TransitionToStyle(CombatLayoutStyle style, int attackerId)
+    {
+        if (attackerId > -1)
+            this.attackerId = attackerId;
+        StartCoroutine(TransitionCombatLayoutStyle(style));
+    }
+
+    IEnumerator TransitionCombatLayoutStyle(CombatLayoutStyle targetLayoutStyle, Action OnComplete = default)
     {
         changingStyle = true;
 
@@ -644,7 +870,7 @@ public class CombatManager : Singleton<CombatManager>
             {
                 if (i == attackerId)
                 {
-                    playerStartingPositions[i] = new Vector3(-800, 330, 0);
+                    playerStartingPositions[i] = new Vector3(-900, 330, 0);
                     playerStartingScales[i] = new Vector3(1.5f, 1.5f, 1);
                 }
                 else
@@ -654,7 +880,7 @@ public class CombatManager : Singleton<CombatManager>
                     pos++;
                 }
             }
-            monsterStartingPosition = new Vector3(530, 0, 0);
+            monsterStartingPosition = new Vector3(470, 0, 0);
         }
 
         // If target style is default
@@ -675,7 +901,7 @@ public class CombatManager : Singleton<CombatManager>
             {
                 if (i == attackerId)
                 {
-                    playerEndingPositions[i] = new Vector3(-800, 330, 0);
+                    playerEndingPositions[i] = new Vector3(-900, 330, 0);
                     playerEndingScales[i] = new Vector3(1.5f, 1.5f, 1);
                 }
                 else
@@ -685,7 +911,7 @@ public class CombatManager : Singleton<CombatManager>
                     pos++;
                 }
             }
-            monsterEndingPosition = new Vector3(530, 0, 0);
+            monsterEndingPosition = new Vector3(470, 0, 0);
         }
 
         // Now tween between starting an ending positions
@@ -693,16 +919,19 @@ public class CombatManager : Singleton<CombatManager>
         {
             for (int j = 0; j < playerAmount; j++)
             {
-                playerCards[j].transform.localPosition = playerStartingPositions[j] + i * Global.animRate * playerEndingPositions[j];
+                playerCards[j].transform.localPosition = playerStartingPositions[j] + i * Global.animRate * (playerEndingPositions[j] - playerStartingPositions[j]);
                 playerCards[j].transform.localScale = playerStartingScales[j] + i * Global.animRate * (playerEndingScales[j] - playerStartingScales[j]);
             }
-            enemyCard.GetComponent<UIEncounterCard>().SetDisplayPosition(monsterStartingPosition + i * Global.animRate * monsterEndingPosition);
+            enemyCard.SetDisplayPosition(monsterStartingPosition + i * Global.animRate * (monsterEndingPosition - monsterStartingPosition));
             yield return new WaitForSeconds(layoutChangeLength * Global.animTimeMod);
         }
 
         // Update current style
         combatLayoutStyle = targetLayoutStyle;
         changingStyle = false;
+
+        // Call OnComplete
+        OnComplete();
     }
 
     IEnumerator AnimatePlayerAttacked(Combatant target, Action OnAttack = default, Action OnComplete = default)
@@ -710,7 +939,7 @@ public class CombatManager : Singleton<CombatManager>
         // Create attack icon at midpoint between enemy and target player
         GameObject attackIcon = Instantiate(attackIconPrefab, transform);
         UIPlayerCard playerCard = GetPlayerCardFromCombatant(target);
-        attackIcon.transform.localPosition = enemyCard.transform.localPosition + (playerCard.transform.localPosition - enemyCard.transform.localPosition) / 2;
+        attackIcon.transform.localPosition = enemyCard.GetDisplayPositionScaled() + (playerCard.transform.localPosition - enemyCard.GetDisplayPositionScaled()) / 2;
 
         // Fade in attack icon
         for(int i = 1; i <= Global.animSteps; i++)
@@ -753,7 +982,7 @@ public class CombatManager : Singleton<CombatManager>
         // Create attack icon at midpoint between enemy and attacking player
         GameObject attackIcon = Instantiate(attackIconPrefab, transform);
         UIPlayerCard playerCard = GetPlayerCardFromCombatant(attacker);
-        attackIcon.transform.localPosition = enemyCard.transform.localPosition + (playerCard.transform.localPosition - enemyCard.transform.localPosition) / 2;
+        attackIcon.transform.localPosition = enemyCard.GetDisplayPositionScaled() + (playerCard.transform.localPosition - enemyCard.GetDisplayPositionScaled()) / 2;
 
         // Fade in attack icon
         for (int i = 1; i <= Global.animSteps; i++)
@@ -763,7 +992,7 @@ public class CombatManager : Singleton<CombatManager>
         }
 
         // Animate take damage
-        StartCoroutine(AnimateMonsterTakeDamage(enemyCard.GetComponent<UIEncounterCard>(), damage, OnAttack));
+        StartCoroutine(AnimateMonsterTakeDamage(enemyCard, damage, OnAttack));
         yield return new WaitForSeconds(attackFlashLength);
 
         // Fade out attack icon
@@ -816,6 +1045,24 @@ public class CombatManager : Singleton<CombatManager>
         combatantListSet = true;
     }
 
+    public int CombatOverCheck()
+    {
+        bool playersGone = !PlayersStillInCombat();
+        bool monsterDead = !monster.IsAlive();
+
+        // Players died or fled and monster died
+        if (playersGone && monsterDead)
+            return 3;
+        // Players died or fled
+        if (playersGone)
+            return 2;
+        // Monster died
+        if (monsterDead)
+            return 1;
+        // Game isn't over
+        return -1;
+    }
+
     public bool PlayersStillInCombat()
     {
         for (int i = 0; i < turnOrderCombatantList.Count; i++)
@@ -838,10 +1085,15 @@ public class CombatManager : Singleton<CombatManager>
 
     public int GetIdFromCombatant(Combatant c)
     {
+        int pos = 0;
         for (int i = 0; i < turnOrderCombatantList.Count; i++)
         {
-            if (turnOrderCombatantList[i].combatantType == CombatantType.PLAYER && turnOrderCombatantList[i].player.UUID.Value == c.player.UUID.Value)
-                return i;
+            if (turnOrderCombatantList[i].combatantType == CombatantType.PLAYER)
+            {
+                if (turnOrderCombatantList[i].player.UUID.Value == c.player.UUID.Value)
+                    return pos;
+                pos++;
+            }
         }
         return -1;
     }
@@ -979,6 +1231,34 @@ public class CombatManager : Singleton<CombatManager>
     private int FetchCombatOptionsResult()
     {
         return combatOptions.GetComponent<UICombatOptions>().resolution;
+    }
+    #endregion
+
+    #region Attack Roll
+    public void AttackRollListener(Action<int, bool> Response)
+    {
+        StartCoroutine(WaitForAttackRoll(Response));
+    }
+
+    IEnumerator WaitForAttackRoll(Action<int, bool> Response)
+    {
+        yield return new WaitUntil(() => FetchAttackRollResult() != 0);
+        Response(FetchAttackRollResult(), FetchAttackRollCritResult());
+    }
+
+    public void MakeAttackRoll(int playerPower, int monsterPower, string abilityName = "Attack Roll")
+    {
+        attackRoll.GetComponent<UIAttackRoll>().MakeAttackRoll(playerPower, monsterPower, abilityName);
+    }
+
+    private int FetchAttackRollResult()
+    {
+        return attackRoll.GetComponent<UIAttackRoll>().success;
+    }
+
+    private bool FetchAttackRollCritResult()
+    {
+        return attackRoll.GetComponent<UIAttackRoll>().crit;
     }
     #endregion
 }

@@ -1255,6 +1255,13 @@ public class PlayManager : Singleton<PlayManager>
             x += (itemReference[p.Weapon.Value + ""] as WeaponCard).damage;
         return x;
     }
+    public int GetCrit(Player p)
+    {
+        int x = 12;
+        if (itemReference.ContainsKey(p.Weapon.Value + ""))
+            x = (itemReference[p.Weapon.Value + ""] as WeaponCard).crit;
+        return x;
+    }
     public int GetArmor(Player p)
     {
         int x = 0;
