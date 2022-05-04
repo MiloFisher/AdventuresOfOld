@@ -1892,7 +1892,6 @@ GameObject:
   - component: {fileID: 252133597}
   - component: {fileID: 252133596}
   - component: {fileID: 252133595}
-  - component: {fileID: 252133598}
   m_Layer: 5
   m_Name: SoundSettings_MENU
   m_TagString: Untagged
@@ -1987,22 +1986,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!114 &252133598
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 252133593}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4c4eafa6172e49d45a4f7332f9da415f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  masterMixer: {fileID: 24100000, guid: 6a4f5ae3d08d1b640a795a944b1a464a, type: 2}
-  musicMixer: {fileID: 24100000, guid: dfffffeaefd95134da98ebaa4b571ba5, type: 2}
-  effectsMixer: {fileID: 24100000, guid: 7c6c585bcdbdbbd499c864e88bace28d, type: 2}
-  voiceMixer: {fileID: 24100000, guid: bde724a783de5ec49acd55fbed01529c, type: 2}
 --- !u!1001 &273901177
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5097,8 +5080,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 252133598}
-        m_TargetAssemblyTypeName: JLVolumeControl, Assembly-CSharp
+      - m_Target: {fileID: 1279737331}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
         m_MethodName: SetMusicVolume
         m_Mode: 0
         m_Arguments:
@@ -9435,8 +9418,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 252133598}
-        m_TargetAssemblyTypeName: JLVolumeControl, Assembly-CSharp
+      - m_Target: {fileID: 1279737331}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
         m_MethodName: SetVoiceVolume
         m_Mode: 0
         m_Arguments:
@@ -11213,8 +11196,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 252133598}
-        m_TargetAssemblyTypeName: JLVolumeControl, Assembly-CSharp
+      - m_Target: {fileID: 1279737331}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
         m_MethodName: SetEffectsVolume
         m_Mode: 0
         m_Arguments:
@@ -13022,8 +13005,8 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 252133598}
-        m_TargetAssemblyTypeName: JLVolumeControl, Assembly-CSharp
+      - m_Target: {fileID: 1279737331}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
         m_MethodName: SetMasterVolume
         m_Mode: 0
         m_Arguments:
@@ -16461,6 +16444,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: musicMixer
+      value: 
+      objectReference: {fileID: 24100000, guid: dfffffeaefd95134da98ebaa4b571ba5, type: 2}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: voiceMixer
+      value: 
+      objectReference: {fileID: 24100000, guid: bde724a783de5ec49acd55fbed01529c, type: 2}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: masterMixer
+      value: 
+      objectReference: {fileID: 24100000, guid: 6a4f5ae3d08d1b640a795a944b1a464a, type: 2}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: effectsMixer
+      value: 
+      objectReference: {fileID: 24100000, guid: 7c6c585bcdbdbbd499c864e88bace28d, type: 2}
     - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
       propertyPath: soundArray.Array.size
       value: 2
