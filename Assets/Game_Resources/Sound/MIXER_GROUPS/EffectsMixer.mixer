@@ -26,7 +26,7 @@ AudioMixerController:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: EffectsMixer
-  m_OutputGroup: {fileID: 0}
+  m_OutputGroup: {fileID: 24300002, guid: 6a4f5ae3d08d1b640a795a944b1a464a, type: 2}
   m_MasterGroup: {fileID: 24300002}
   m_Snapshots:
   - {fileID: 24500006}
@@ -34,7 +34,9 @@ AudioMixerController:
   m_SuspendThreshold: -80
   m_EnableSuspend: 1
   m_UpdateMode: 0
-  m_ExposedParameters: []
+  m_ExposedParameters:
+  - guid: f72d6d3a51933a5448af662059de7525
+    name: EffectsMasterMixer
   m_AudioMixerGroupViews:
   - guids:
     - 5bc663b5e6f83c04a8b1bee96791760e
