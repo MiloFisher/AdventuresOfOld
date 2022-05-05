@@ -22,16 +22,16 @@ public class JLPauseMenu : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape)) {
             if (!pauseCanvas.activeSelf) {
                 pauseCanvas.SetActive(!pauseCanvas.activeSelf);
-                swapMenus(0);
+                SwapMenus(0);
                 Time.timeScale = 0;
             }
             else {
-                resumeButton();
+                ResumeButton();
             }
         }
     }
 
-    public void swapMenus(int id)
+    public void SwapMenus(int id)
     {
         if (id >= pauseMenus.Length || id < 0)
             return;
@@ -41,17 +41,17 @@ public class JLPauseMenu : MonoBehaviour
         currentID = id;
     }
 
-    public void resumeButton() {
+    public void ResumeButton() {
         pauseCanvas.SetActive(!pauseCanvas.activeSelf);
         pauseMenus[currentID].SetActive(false);
         Time.timeScale = 1;
     }
 
-    public void quitButton() {
+    public void QuitButton() {
         SceneManager.LoadScene("JLMainMenu", LoadSceneMode.Single);
     }
 
-    public void resolutionChange(int resNumber) { // Set resNumber with Button function in Unity Editor Scene
+    public void ResolutionChange(int resNumber) { // Set resNumber with Button function in Unity Editor Scene
         if (resNumber == 1920) {
             Screen.SetResolution(1920, 1080, true); // True == Fullscreen
         }
