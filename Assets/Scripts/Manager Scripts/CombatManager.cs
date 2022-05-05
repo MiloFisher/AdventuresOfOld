@@ -52,7 +52,7 @@ public class CombatManager : Singleton<CombatManager>
 
     private void Update()
     {
-        if(ready && !changingStyle)
+        if(ready && !changingStyle && CombatOverCheck() == -1)
             AllignPlayerCards();
     }
 
@@ -415,7 +415,8 @@ public class CombatManager : Singleton<CombatManager>
             {
                 foreach (Effect e in debuffs)
                     InflictEffect(c, e);
-            }           
+            }
+            OnPlayerDealDamage(c);
         }, () => {
             // OnComplete
             StartCoroutine(TransitionCombatLayoutStyle(CombatLayoutStyle.DEFAULT, () => {
@@ -703,7 +704,7 @@ public class CombatManager : Singleton<CombatManager>
             {
                 if (turnOrderCombatantList[i].combatantType == CombatantType.PLAYER)
                 {
-                    playerCards[index].GetComponent<UIPlayerCard>().ActivateCrosshair(IsTargetedByMonster(turnOrderCombatantList[i].player) && turnOrderCombatantList[combatTurnMarker].monster != null && !isMonsterTurn && CombatOverCheck() == -1);
+                    playerCards[index].GetComponent<UIPlayerCard>().ActivateCrosshair(IsTargetedByMonster(turnOrderCombatantList[i].player) && turnOrderCombatantList[combatTurnMarker].monster != null && !isMonsterTurn);
                     playerCards[index].GetComponent<UIPlayerCard>().ActivateTurnMarker(combatTurnMarker == i);
                     playerCards[index].GetComponent<UIPlayerCard>().SetVisuals(turnOrderCombatantList[i]);
                     index--;
