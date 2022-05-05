@@ -45,3 +45,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundArray: []
+  masterMixer: {fileID: 24100000, guid: 6a4f5ae3d08d1b640a795a944b1a464a, type: 2}
+  musicMixer: {fileID: 24100000, guid: dfffffeaefd95134da98ebaa4b571ba5, type: 2}
+  effectsMixer: {fileID: 24100000, guid: 7c6c585bcdbdbbd499c864e88bace28d, type: 2}
+  voiceMixer: {fileID: 24100000, guid: bde724a783de5ec49acd55fbed01529c, type: 2}
