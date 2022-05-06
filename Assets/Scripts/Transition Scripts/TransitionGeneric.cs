@@ -55,10 +55,10 @@ public class TransitionGeneric : MonoBehaviour
                 SetAlpha(images[j], i * Global.animRate);
             for (int j = 0; j < texts.Length; j++)
                 SetAlpha(texts[j], i * Global.animRate);
-            yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
+            yield return new WaitForSeconds(fadeLength * Global.animTimeMod * Global.animSpeed);
         }
 
-        yield return new WaitForSeconds(waitTime);
+        yield return new WaitForSeconds(waitTime * Global.animSpeed);
 
         for (int i = Global.animSteps - 1; i >= 0; i--)
         {
@@ -67,7 +67,7 @@ public class TransitionGeneric : MonoBehaviour
                 SetAlpha(images[j], i * Global.animRate);
             for (int j = 0; j < texts.Length; j++)
                 SetAlpha(texts[j], i * Global.animRate);
-            yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
+            yield return new WaitForSeconds(fadeLength * Global.animTimeMod * Global.animSpeed);
         }
 
         gameObject.SetActive(false);

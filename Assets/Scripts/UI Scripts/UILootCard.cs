@@ -128,7 +128,7 @@ public class UILootCard : MonoBehaviour
         for(int i = 1; i <= Global.animSteps; i++)
         {
             SetAlpha(collectCardButton, i * Global.animRate);
-            yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
+            yield return new WaitForSeconds(fadeLength * Global.animTimeMod * Global.animSpeed);
         }
 
         collectButtonActive = true;
@@ -141,7 +141,7 @@ public class UILootCard : MonoBehaviour
         for (int i = Global.animSteps - 1; i >= 0; i--)
         {
             SetAlpha(collectCardButton, i * Global.animRate);
-            yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
+            yield return new WaitForSeconds(fadeLength * Global.animTimeMod * Global.animSpeed);
         }
 
         collectCardButton.SetActive(false);

@@ -51,6 +51,7 @@ public class MenuManager : Singleton<MenuManager>
 
     public void AnimationSpeed(float speed) {
         float animSpeed = Mathf.Abs(speed);
-        Debug.Log(animSpeed);
+        Global.animSpeed = animSpeed;
+        //Debug.Log(animSpeed);
     }
 }

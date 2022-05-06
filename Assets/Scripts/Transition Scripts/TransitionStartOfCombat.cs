@@ -56,14 +56,14 @@ public class TransitionStartOfCombat : MonoBehaviour
             SetAlpha(title, i * Global.animRate);
             SetAlpha(divider, i * Global.animRate);
             SetAlpha(dividerUnderlay, i * Global.animRate);
-            yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
+            yield return new WaitForSeconds(fadeLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Next fade in turn order prompt
         for (int i = 1; i <= Global.animSteps; i++)
         {
             SetAlpha(turnOrderPrompt, i * Global.animRate);
-            yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
+            yield return new WaitForSeconds(fadeLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Next fade in number + player list
@@ -74,7 +74,7 @@ public class TransitionStartOfCombat : MonoBehaviour
             {
                 SetAlpha(numberList[x], i * Global.animRate);
                 SetAlpha(playerList[x], i * Global.animRate);
-                yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
+                yield return new WaitForSeconds(fadeLength * Global.animTimeMod * Global.animSpeed);
             }
         }
 
@@ -88,14 +88,14 @@ public class TransitionStartOfCombat : MonoBehaviour
                 if (!canClose)
                     break;
                 SetAlpha(closePrompt, i * Global.animRate);
-                yield return new WaitForSeconds(pulseLength * Global.animTimeMod);
+                yield return new WaitForSeconds(pulseLength * Global.animTimeMod * Global.animSpeed);
             }
             for (int i = Global.animSteps - 1; i >= 0; i--)
             {
                 if (!canClose)
                     break;
                 SetAlpha(closePrompt, i * Global.animRate);
-                yield return new WaitForSeconds(pulseLength * Global.animTimeMod);
+                yield return new WaitForSeconds(pulseLength * Global.animTimeMod * Global.animSpeed);
             }
         }
     }
@@ -118,10 +118,10 @@ public class TransitionStartOfCombat : MonoBehaviour
                 SetAlpha(playerList[x], i * Global.animRate);
             }
             SetAlpha(closePrompt, i * Global.animRate);
-            yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
+            yield return new WaitForSeconds(fadeLength * Global.animTimeMod * Global.animSpeed);
         }
 
-        yield return new WaitForSeconds(waitTime);
+        yield return new WaitForSeconds(waitTime * Global.animSpeed);
 
         gameObject.SetActive(false);
     }

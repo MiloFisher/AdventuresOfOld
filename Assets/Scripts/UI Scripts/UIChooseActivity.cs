@@ -98,7 +98,7 @@ public class UIChooseActivity : MonoBehaviour
             }
             selection.transform.localPosition = new Vector3(0, startY + (selectionEndY - startY) * i * Global.animRate, 0);
             selection.GetComponent<RectTransform>().sizeDelta = new Vector2(selectionStartWidth + (selectionEndWidth - selectionStartWidth) * i * Global.animRate, selectionStartHeight + (selectionEndHeight - selectionStartHeight) * i * Global.animRate);
-            yield return new WaitForSeconds(selectionShiftLength * Global.animTimeMod);
+            yield return new WaitForSeconds(selectionShiftLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Next fade in playerNames and activities
@@ -111,7 +111,7 @@ public class UIChooseActivity : MonoBehaviour
                 SetAlpha(playerNames.transform.GetChild(j).GetComponent<TMP_Text>(), i * Global.animRate);
                 SetAlpha(activities.transform.GetChild(j).GetComponent<TMP_Text>(), i * Global.animRate);
             }
-            yield return new WaitForSeconds(selectionShiftLength * Global.animTimeMod);
+            yield return new WaitForSeconds(selectionShiftLength * Global.animTimeMod * Global.animSpeed);
         }
 
         PlayManager.Instance.localPlayer.SetValue("EndOfDayActivity", option);
@@ -137,7 +137,7 @@ public class UIChooseActivity : MonoBehaviour
         for (int i = 1; i <= Global.animSteps; i++)
         {
             transform.localScale = new Vector3(startScale + dif * i * Global.animRate, startScale + dif * i * Global.animRate, 1);
-            yield return new WaitForSeconds(growingLength * Global.animTimeMod);
+            yield return new WaitForSeconds(growingLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Next open the scroll
@@ -145,7 +145,7 @@ public class UIChooseActivity : MonoBehaviour
         for (int i = 1; i <= Global.animSteps; i++)
         {
             rt.sizeDelta = new Vector2(startWidth + dif * i * Global.animRate, constHeight);
-            yield return new WaitForSeconds(openingLength * Global.animTimeMod);
+            yield return new WaitForSeconds(openingLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Finally set opened to true
@@ -197,7 +197,7 @@ public class UIChooseActivity : MonoBehaviour
         for (int i = Global.animSteps - 1; i >= 0; i--)
         {
             rt.sizeDelta = new Vector2(startWidth + dif * i * Global.animRate, constHeight);
-            yield return new WaitForSeconds(openingLength * Global.animTimeMod);
+            yield return new WaitForSeconds(openingLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Next shrink the object
@@ -205,10 +205,10 @@ public class UIChooseActivity : MonoBehaviour
         for (int i = Global.animSteps - 1; i >= 0; i--)
         {
             transform.localScale = new Vector3(startScale + dif * i * Global.animRate, startScale + dif * i * Global.animRate, 1);
-            yield return new WaitForSeconds(growingLength * Global.animTimeMod);
+            yield return new WaitForSeconds(growingLength * Global.animTimeMod * Global.animSpeed);
         }
 
-        yield return new WaitForSeconds(waitTime);
+        yield return new WaitForSeconds(waitTime * Global.animSpeed);
 
         gameObject.SetActive(false);
     }

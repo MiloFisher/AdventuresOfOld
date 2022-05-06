@@ -187,7 +187,7 @@ public class UIDefensiveOptions : MonoBehaviour
         for (int i = 1; i <= Global.animSteps; i++)
         {
             transform.localScale = new Vector3(startScale + dif * i * Global.animRate, startScale + dif * i * Global.animRate, 1);
-            yield return new WaitForSeconds(growingLength * Global.animTimeMod);
+            yield return new WaitForSeconds(growingLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Next open the scroll
@@ -195,7 +195,7 @@ public class UIDefensiveOptions : MonoBehaviour
         for (int i = 1; i <= Global.animSteps; i++)
         {
             rt.sizeDelta = new Vector2(startWidth + dif * i * Global.animRate, constHeight);
-            yield return new WaitForSeconds(openingLength * Global.animTimeMod);
+            yield return new WaitForSeconds(openingLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Finally set opened to true
@@ -211,7 +211,7 @@ public class UIDefensiveOptions : MonoBehaviour
         for (int i = Global.animSteps - 1; i >= 0; i--)
         {
             rt.sizeDelta = new Vector2(startWidth + dif * i * Global.animRate, constHeight);
-            yield return new WaitForSeconds(openingLength * Global.animTimeMod);
+            yield return new WaitForSeconds(openingLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Next shrink the object
@@ -219,10 +219,10 @@ public class UIDefensiveOptions : MonoBehaviour
         for (int i = Global.animSteps - 1; i >= 0; i--)
         {
             transform.localScale = new Vector3(startScale + dif * i * Global.animRate, startScale + dif * i * Global.animRate, 1);
-            yield return new WaitForSeconds(growingLength * Global.animTimeMod);
+            yield return new WaitForSeconds(growingLength * Global.animTimeMod * Global.animSpeed);
         }
 
-        yield return new WaitForSeconds(waitTime);
+        yield return new WaitForSeconds(waitTime * Global.animSpeed);
 
         gameObject.SetActive(false);
     }

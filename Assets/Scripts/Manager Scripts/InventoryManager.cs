@@ -204,7 +204,7 @@ public class InventoryManager : Singleton<InventoryManager>
                     cards[j].transform.localPosition = new Vector3(cardStartX + Mathf.Log10(1 + Mathf.Abs(yVal * i * Global.animRate)) / xVal * distX, cardStartY + (y - cardStartY) * i * Global.animRate, 0);
                 }
             }
-            yield return new WaitForSeconds(movementTimeLength * Global.animTimeMod);
+            yield return new WaitForSeconds(movementTimeLength * Global.animTimeMod * Global.animSpeed);
         }
 
         SetGear(newGear);
@@ -284,7 +284,7 @@ public class InventoryManager : Singleton<InventoryManager>
                     SetAlpha(cards[j], (Global.animSteps - i) * Global.animRate);
                 }
             }
-            yield return new WaitForSeconds(movementTimeLength * Global.animTimeMod);
+            yield return new WaitForSeconds(movementTimeLength * Global.animTimeMod * Global.animSpeed);
         }
 
         SetGear(newGear);
@@ -311,7 +311,7 @@ public class InventoryManager : Singleton<InventoryManager>
                     cards[j].transform.localPosition = new Vector3(startPos + (endPos - startPos) * i * Global.animRate, startY + (endY - startY) * i * Global.animRate, 0);
                 }
             }
-            yield return new WaitForSeconds(movementTimeLength * Global.animTimeMod);
+            yield return new WaitForSeconds(movementTimeLength * Global.animTimeMod * Global.animSpeed);
         }
         inAnimation = false;
     }

@@ -141,7 +141,7 @@ public class UIPlayerCard : MonoBehaviour
         {
             SetAlpha(damageNumber.GetComponent<TMP_Text>(), 1 - i * Global.animRate);
             damageNumber.transform.localPosition = startPosition + new Vector3(i * Global.animRate * 50, i * Global.animRate * 100, 0);
-            yield return new WaitForSeconds(damageNumberFadeLength * Global.animTimeMod);
+            yield return new WaitForSeconds(damageNumberFadeLength * Global.animTimeMod * Global.animSpeed);
         }
 
         damageNumber.SetActive(false);

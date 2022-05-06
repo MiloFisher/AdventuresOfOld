@@ -630,7 +630,7 @@ public class PlayManager : Singleton<PlayManager>
         for (int i = 1; i <= Global.animSteps; i++)
         {
             characterDisplays.transform.localPosition = new Vector3(minimizedX + (maximizedX - minimizedX) * i * Global.animRate, 0, 0);
-            yield return new WaitForSeconds(characterSheetOpenLength * Global.animTimeMod);
+            yield return new WaitForSeconds(characterSheetOpenLength * Global.animTimeMod * Global.animSpeed);
         }
     }
 
@@ -648,7 +648,7 @@ public class PlayManager : Singleton<PlayManager>
         for (int i = Global.animSteps - 1; i >= 0; i--)
         {
             characterDisplays.transform.localPosition = new Vector3(minimizedX + (maximizedX - minimizedX) * i * Global.animRate, 0, 0);
-            yield return new WaitForSeconds(characterSheetOpenLength * Global.animTimeMod);
+            yield return new WaitForSeconds(characterSheetOpenLength * Global.animTimeMod * Global.animSpeed);
         }
         characterDisplayMinimizeButton.SetActive(false);
     }

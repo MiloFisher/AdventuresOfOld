@@ -61,7 +61,7 @@ public class UIEncounterElement : MonoBehaviour
         for (int i = 1; i <= Global.animSteps; i++)
         {
             transform.localScale = new Vector3(startScale + dif * i * Global.animRate, startScale + dif * i * Global.animRate, 1);
-            yield return new WaitForSeconds(growingLength * Global.animTimeMod);
+            yield return new WaitForSeconds(growingLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Next open the scroll
@@ -69,7 +69,7 @@ public class UIEncounterElement : MonoBehaviour
         for (int i = 1; i <= Global.animSteps; i++)
         {
             rt.sizeDelta = new Vector2(startWidth + dif * i * Global.animRate, constHeight);
-            yield return new WaitForSeconds(openingLength * Global.animTimeMod);
+            yield return new WaitForSeconds(openingLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Finally set opened to true
@@ -105,7 +105,7 @@ public class UIEncounterElement : MonoBehaviour
         for (int i = 0; i < rollTimes; i++)
         {
             rollDisplay.sprite = diceFaces[Random.Range(0, 6)];
-            yield return new WaitForSeconds(rollLength);
+            yield return new WaitForSeconds(rollLength * Global.animSpeed);
         }
 
         // End on rolled value face
@@ -128,7 +128,7 @@ public class UIEncounterElement : MonoBehaviour
                 break;
         }
 
-        yield return new WaitForSeconds(rollDisplayTime);
+        yield return new WaitForSeconds(rollDisplayTime * Global.animSpeed);
 
         // Start closing scroll
         StartCoroutine(AnimateClosing());
@@ -141,7 +141,7 @@ public class UIEncounterElement : MonoBehaviour
         for (int i = Global.animSteps - 1; i >= 0; i--)
         {
             rt.sizeDelta = new Vector2(startWidth + dif * i * Global.animRate, constHeight);
-            yield return new WaitForSeconds(openingLength * Global.animTimeMod);
+            yield return new WaitForSeconds(openingLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Next shrink the object
@@ -149,10 +149,10 @@ public class UIEncounterElement : MonoBehaviour
         for (int i = Global.animSteps - 1; i >= 0; i--)
         {
             transform.localScale = new Vector3(startScale + dif * i * Global.animRate, startScale + dif * i * Global.animRate, 1);
-            yield return new WaitForSeconds(growingLength * Global.animTimeMod);
+            yield return new WaitForSeconds(growingLength * Global.animTimeMod * Global.animSpeed);
         }
 
-        yield return new WaitForSeconds(waitTime);
+        yield return new WaitForSeconds(waitTime * Global.animSpeed);
 
         gameObject.SetActive(false);
     }

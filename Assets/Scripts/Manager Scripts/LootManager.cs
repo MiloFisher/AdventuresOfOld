@@ -85,7 +85,7 @@ public class LootManager : Singleton<LootManager>
             {
                 SetAlpha(g, i * Global.animRate);
             }
-            yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
+            yield return new WaitForSeconds(fadeLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Then destroy cards
@@ -114,7 +114,7 @@ public class LootManager : Singleton<LootManager>
         for (int i = 1; i <= Global.animSteps; i++)
         {
             lootBanner.transform.localScale = new Vector3(bannerStartScale + dif * i * Global.animRate, bannerStartScale + dif * i * Global.animRate, 1);
-            yield return new WaitForSeconds(bannerGrowingLength * Global.animTimeMod);
+            yield return new WaitForSeconds(bannerGrowingLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Next open the scroll
@@ -122,7 +122,7 @@ public class LootManager : Singleton<LootManager>
         for (int i = 1; i <= Global.animSteps; i++)
         {
             lootBanner.GetComponent<RectTransform>().sizeDelta = new Vector2(bannerStartWidth + dif * i * Global.animRate, bannerConstHeight);
-            yield return new WaitForSeconds(bannerOpeningLength * Global.animTimeMod);
+            yield return new WaitForSeconds(bannerOpeningLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Finally animate cards
@@ -138,7 +138,7 @@ public class LootManager : Singleton<LootManager>
         for (int i = Global.animSteps - 1; i >= 0; i--)
         {
             lootBanner.GetComponent<RectTransform>().sizeDelta = new Vector2(bannerStartWidth + dif * i * Global.animRate, bannerConstHeight);
-            yield return new WaitForSeconds(bannerOpeningLength * Global.animTimeMod);
+            yield return new WaitForSeconds(bannerOpeningLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Then shrink the object
@@ -146,7 +146,7 @@ public class LootManager : Singleton<LootManager>
         for (int i = Global.animSteps - 1; i >= 0; i--)
         {
             lootBanner.transform.localScale = new Vector3(bannerStartScale + dif * i * Global.animRate, bannerStartScale + dif * i * Global.animRate, 1);
-            yield return new WaitForSeconds(bannerGrowingLength * Global.animTimeMod);
+            yield return new WaitForSeconds(bannerGrowingLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Finally deactivate banner
@@ -182,7 +182,7 @@ public class LootManager : Singleton<LootManager>
             // Flip card face halfway through
             if (i == Global.animSteps / 2)
                 travelCard.GetComponent<UILootCard>().ActivateCardBack(false);
-            yield return new WaitForSeconds(travelLength * Global.animTimeMod);
+            yield return new WaitForSeconds(travelLength * Global.animTimeMod * Global.animSpeed);
         }
 
         GameObject card = Instantiate(cardPrefab, travelCard.transform.position, Quaternion.identity, transform.parent);

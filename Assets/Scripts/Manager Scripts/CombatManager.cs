@@ -770,7 +770,7 @@ public class CombatManager : Singleton<CombatManager>
         for(int i = 1; i <= Global.animSteps; i++)
         {
             SetAlpha(combatFadeOverlay.GetComponent<Image>(), i * Global.animRate);
-            yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
+            yield return new WaitForSeconds(fadeLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Activate main layout while screen is obstructed by overlay
@@ -781,14 +781,14 @@ public class CombatManager : Singleton<CombatManager>
         combatBackground.GetComponent<Image>().sprite = monsterCard.background;
 
         // Hold faded in overlay
-        yield return new WaitForSeconds(fadedWaitTime);
+        yield return new WaitForSeconds(fadedWaitTime * Global.animSpeed);
         ready = true;
 
         // Then fade out overlay
         for (int i = Global.animSteps - 1; i >= 0; i--)
         {
             SetAlpha(combatFadeOverlay.GetComponent<Image>(), i * Global.animRate);
-            yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
+            yield return new WaitForSeconds(fadeLength * Global.animTimeMod * Global.animSpeed);
         }
 
         combatFadeOverlay.SetActive(false);
@@ -807,7 +807,7 @@ public class CombatManager : Singleton<CombatManager>
         for (int i = 1; i <= Global.animSteps; i++)
         {
             SetAlpha(combatFadeOverlay.GetComponent<Image>(), i * Global.animRate);
-            yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
+            yield return new WaitForSeconds(fadeLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Deactivate main layout while screen is obstructed by overlay
@@ -815,13 +815,13 @@ public class CombatManager : Singleton<CombatManager>
         combatBackground.SetActive(false);
 
         // Hold faded in overlay
-        yield return new WaitForSeconds(fadedWaitTime);
+        yield return new WaitForSeconds(fadedWaitTime * Global.animSpeed);
 
         // Then fade out overlay
         for (int i = Global.animSteps - 1; i >= 0; i--)
         {
             SetAlpha(combatFadeOverlay.GetComponent<Image>(), i * Global.animRate);
-            yield return new WaitForSeconds(fadeLength * Global.animTimeMod);
+            yield return new WaitForSeconds(fadeLength * Global.animTimeMod * Global.animSpeed);
         }
 
         combatFadeOverlay.SetActive(false);
@@ -924,7 +924,7 @@ public class CombatManager : Singleton<CombatManager>
                 playerCards[j].transform.localScale = playerStartingScales[j] + i * Global.animRate * (playerEndingScales[j] - playerStartingScales[j]);
             }
             enemyCard.SetDisplayPosition(monsterStartingPosition + i * Global.animRate * (monsterEndingPosition - monsterStartingPosition));
-            yield return new WaitForSeconds(layoutChangeLength * Global.animTimeMod);
+            yield return new WaitForSeconds(layoutChangeLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Update current style
@@ -946,7 +946,7 @@ public class CombatManager : Singleton<CombatManager>
         for(int i = 1; i <= Global.animSteps; i++)
         {
             SetAlpha(attackIcon.GetComponent<Image>(), i * Global.animRate);
-            yield return new WaitForSeconds(attackFadeLength * Global.animTimeMod);
+            yield return new WaitForSeconds(attackFadeLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Animate take damage
@@ -957,7 +957,7 @@ public class CombatManager : Singleton<CombatManager>
         for (int i = Global.animSteps - 1; i >= 0; i--)
         {
             SetAlpha(attackIcon.GetComponent<Image>(), i * Global.animRate);
-            yield return new WaitForSeconds(attackFadeLength * Global.animTimeMod);
+            yield return new WaitForSeconds(attackFadeLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Destroy attackIcon
@@ -974,7 +974,7 @@ public class CombatManager : Singleton<CombatManager>
 
         playerCard.ActivateDamaged(true);
         playerCard.DisplayDamageNumber(damage);
-        yield return new WaitForSeconds(attackFlashLength);
+        yield return new WaitForSeconds(attackFlashLength * Global.animSpeed);
         playerCard.ActivateDamaged(false);
     }
 
@@ -989,18 +989,18 @@ public class CombatManager : Singleton<CombatManager>
         for (int i = 1; i <= Global.animSteps; i++)
         {
             SetAlpha(attackIcon.GetComponent<Image>(), i * Global.animRate);
-            yield return new WaitForSeconds(attackFadeLength * Global.animTimeMod);
+            yield return new WaitForSeconds(attackFadeLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Animate take damage
         StartCoroutine(AnimateMonsterTakeDamage(enemyCard, damage, OnAttack));
-        yield return new WaitForSeconds(attackFlashLength);
+        yield return new WaitForSeconds(attackFlashLength * Global.animSpeed);
 
         // Fade out attack icon
         for (int i = Global.animSteps - 1; i >= 0; i--)
         {
             SetAlpha(attackIcon.GetComponent<Image>(), i * Global.animRate);
-            yield return new WaitForSeconds(attackFadeLength * Global.animTimeMod);
+            yield return new WaitForSeconds(attackFadeLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Destroy attackIcon
