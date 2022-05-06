@@ -7,7 +7,7 @@ public class JLCreditsMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+       JLAudioManager.Instance.PlaySound("Death"); 
     }
 
     // Update is called once per frame

@@ -192,7 +192,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 939524095
+    rgba: 218103807
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -329,7 +329,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 134217727
+    rgba: 67108863
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -397,6 +397,100 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 352754526}
   m_CullTransparentMesh: 1
+--- !u!1001 &397452620
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 729780512}
+    m_Modifications:
+    - target: {fileID: 7321469740590159517, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: m_Name
+      value: AudioManager
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159518, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159518, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159518, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159518, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159518, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159518, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159518, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159518, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159518, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159518, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159518, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: soundArray.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: soundArray.Array.data[0].loop
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: soundArray.Array.data[0].name
+      value: Death
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: soundArray.Array.data[0].pitch
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: soundArray.Array.data[0].volume
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: soundArray.Array.data[0].audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: a9d0b154df48e1549b4ffd8fbcde4e0c, type: 3}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: soundArray.Array.data[0].playOnAwake
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: soundArray.Array.data[0].audioMixerGroup
+      value: 
+      objectReference: {fileID: 6840733790449691040, guid: dfffffeaefd95134da98ebaa4b571ba5, type: 2}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+--- !u!4 &397452621 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7321469740590159518, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+  m_PrefabInstance: {fileID: 397452620}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &620677095
 GameObject:
   m_ObjectHideFlags: 0
@@ -462,7 +556,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &622747139
 GameObject:
@@ -524,7 +618,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: '<u>Sound Designer</u>
 
-    Emily''s Friend'
+    Darren Tran'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
   m_sharedMaterial: {fileID: -1907966998218593075, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
@@ -533,7 +627,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 268435455
+    rgba: 2785017855
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -629,7 +723,8 @@ Transform:
   m_LocalPosition: {x: 1171.8169, y: 508.8986, z: 1.5800322}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 397452621}
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -792,7 +887,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 50331647
+    rgba: 771751935
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1015,7 +1110,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 50331647
+    rgba: 4244635647
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1223,10 +1318,10 @@ RectTransform:
   m_Father: {fileID: 1355592850}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1080, y: 50}
+  m_SizeDelta: {x: -840, y: -1030}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1445713805
 MonoBehaviour:
@@ -1248,9 +1343,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<u>Voice Credits</u>\nNathan Altice - Main Narrator\n- Secondary Narrator\nC.
-    Conrad Cady - Crazed Hermit\n - Distressed Villager\n - Fire Elemental\n - Four-Eyed
-    Boy\n"
+  m_text: "<u>Voice Credits</u>\nnathan alice - main narrator\n- secondary narrator\nc.
+    conrad cady - crazed hermit\nemily wen - distressed villager + forest hag\n -
+    fire elemental\nethan michaels - four-eyed boy\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
   m_sharedMaterial: {fileID: -1907966998218593075, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
@@ -1259,7 +1354,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 218103807
+    rgba: 16777215
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1277,13 +1372,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
-  m_fontSizeBase: 72
+  m_fontSize: 62
+  m_fontSizeBase: 62
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 16
+  m_fontStyle: 32
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -1422,7 +1517,7 @@ RectTransform:
   - {fileID: 774836779}
   - {fileID: 1355592850}
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -1498,7 +1593,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 1124073471
+    rgba: 33554431
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1599,10 +1694,10 @@ RectTransform:
   m_Father: {fileID: 1355592850}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 960, y: 50}
+  m_SizeDelta: {x: -960, y: -1030}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1698797790
 MonoBehaviour:
@@ -1624,16 +1719,16 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '- Goblin Prince
+  m_text: '- goblin prince
 
-    - Pablo the Noob
+    - pablo the noob
 
-    - Shifty Peddler
+    remy fisher - shifty peddler
 
-    - Suspicious
-    Horse
+    milo
+    fisher - suspicious horse
 
-    - Veteran Hunter'
+    ethan erh - veteran hunter'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
   m_sharedMaterial: {fileID: -1907966998218593075, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
@@ -1642,7 +1737,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 50331647
+    rgba: 134217727
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1660,13 +1755,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
-  m_fontSizeBase: 72
+  m_fontSize: 64
+  m_fontSizeBase: 64
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 16
+  m_fontStyle: 32
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -1779,7 +1874,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 134217727
+    rgba: 687865855
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1880,10 +1975,10 @@ RectTransform:
   m_Father: {fileID: 1355592850}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 960, y: 50}
+  m_SizeDelta: {x: -960, y: -1030}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2120670642
 MonoBehaviour:
@@ -1907,14 +2002,14 @@ MonoBehaviour:
       m_Calls: []
   m_text: '<u>Additional Credits</u>
 
-    Chequered Ink - BoTW Font
+    chequered ink - botw font
 
-    Canada type
-    - Luminari font
+    canada type
+    - luminari font
 
-    Icons by Icons8
+    icons by icons8
 
-    SFX by Nicole Marie T'
+    sfx by nicole marie t.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
   m_sharedMaterial: {fileID: -1907966998218593075, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
@@ -1923,7 +2018,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 16777215
+    rgba: 33554431
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1941,13 +2036,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 72
-  m_fontSizeBase: 72
+  m_fontSize: 64
+  m_fontSizeBase: 64
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 16
+  m_fontStyle: 32
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
