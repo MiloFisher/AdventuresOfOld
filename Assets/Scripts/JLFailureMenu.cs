@@ -23,6 +23,12 @@ public class JLFailureMenu : MonoBehaviour
         
     }
 
+    public void setPlayerName(GameObject[] players) {
+        foreach (GameObject player in players) {
+            
+        }
+    }
+
     public void quitButton() {
         SceneManager.LoadScene("JLMainMenu", LoadSceneMode.Single);
     }

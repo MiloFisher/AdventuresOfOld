@@ -10,12 +10,6 @@ public class JLPauseMenu : MonoBehaviour
 
     private int currentID;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -58,5 +52,10 @@ public class JLPauseMenu : MonoBehaviour
         else if (resNumber == 2560) {
             Screen.SetResolution(2560, 1440, true);
         }
+    }
+
+    public void AnimationSpeed(float speed) {
+        float animSpeed = Mathf.Abs(speed);
+        Debug.Log(animSpeed);
     }
 }

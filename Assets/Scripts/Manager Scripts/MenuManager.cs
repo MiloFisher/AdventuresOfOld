@@ -27,7 +27,7 @@ public class MenuManager : Singleton<MenuManager>
         menuScenes[id].SetActive(true);
     }
 
-    public void resolutionChange(int resNumber)
+    public void ResolutionChange(int resNumber)
     { // Set resNumber with Button function in Unity Editor Scene
         if (resNumber == 1920)
         {
@@ -39,7 +39,7 @@ public class MenuManager : Singleton<MenuManager>
         }
     }
 
-    public void creditsScene()
+    public void CreditsScene()
     {
         SceneManager.LoadScene("Credits");
     }
@@ -47,5 +47,10 @@ public class MenuManager : Singleton<MenuManager>
     public void CloseApplication()
     {
         Application.Quit();
+    }
+
+    public void AnimationSpeed(float speed) {
+        float animSpeed = Mathf.Abs(speed);
+        Debug.Log(animSpeed);
     }
 }
