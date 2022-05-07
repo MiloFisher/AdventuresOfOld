@@ -9,7 +9,6 @@ using UnityEngine.UI;
 public class JLGameStateMenu : MonoBehaviour
 {
     public GameObject[] gravestones;
-    public TextMeshProUGUI[] graveTexts;
 
     public Player[] players;
 
@@ -17,7 +16,7 @@ public class JLGameStateMenu : MonoBehaviour
     {
         if (SceneManager.GetActiveScene().name == "JLFailureMenu") {
            //players = GameObject.FindGameObjectsWithTag("Player");
-            int playerList = 3;
+            int playerList = 6;
             
             gravestones[playerList - 1].SetActive(true);
             SetPlayerName(playerList);
@@ -33,8 +32,11 @@ public class JLGameStateMenu : MonoBehaviour
     }
 
     private void SetPlayerName(int players) {
+        GameObject graveyard = gravestones[players - 1];
         for (int i = 0; i <= players - 1; i++) {
-            
+            GameObject currGrave = graveyard.transform.GetChild(i).gameObject;
+            TextMeshProUGUI graveText = currGrave.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
+            graveText.text = i + "";
         }
     }
 
