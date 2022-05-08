@@ -56,6 +56,6 @@ public class JLPauseMenu : MonoBehaviour
 
     public void AnimationSpeed(float speed) {
         float animSpeed = Mathf.Abs(speed);
-        Debug.Log(animSpeed);
+        Global.animSpeed = animSpeed;
     }
 }

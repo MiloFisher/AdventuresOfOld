@@ -10,39 +10,38 @@ public class JLGameStateMenu : MonoBehaviour
 {
     public GameObject[] gravestones;
 
-    public Player[] players;
+    public GameObject[] players;
 
-    void Start()
+    void Awake()
     {
         if (SceneManager.GetActiveScene().name == "JLFailureMenu") {
-           //players = GameObject.FindGameObjectsWithTag("Player");
-            int playerList = 6;
+            //int playerList = 6;
+            //gravestones[playerList - 1].SetActive(true);
+            //SetPlayerName(playerList);
             
-            gravestones[playerList - 1].SetActive(true);
-            SetPlayerName(playerList);
-            //gravestones[players.Length - 1].SetActive(true);
-            //SetPlayerName(players);
+            players = GameObject.FindGameObjectsWithTag("Player");
+            gravestones[players.Length - 1].SetActive(true);
+            SetPlayerName(players);
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private void SetPlayerName(int players) {
+    /*private void SetPlayerName(int players) {
         GameObject graveyard = gravestones[players - 1];
         for (int i = 0; i <= players - 1; i++) {
             GameObject currGrave = graveyard.transform.GetChild(i).gameObject;
             TextMeshProUGUI graveText = currGrave.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>();
             graveText.text = i + "";
         }
-    }
+    }*/
 
-    private void SetPlayerName(Player[] players) {
-        foreach (Player player in players) {
-            
+    private void SetPlayerName(GameObject[] players) {
+        GameObject graveyard = gravestones[players.Length - 1];
+        int i = 0;
+        foreach (GameObject player in players) {
+            GameObject currGrave = graveyard.transform.GetChild(i).gameObject; //Obtaining the TMP child
+            TextMeshProUGUI graveText = currGrave.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>(); //Obtaining the text component of child
+            graveText.text = player.GetComponent<Player>().Name.Value + "";
+            i++;
         }
     }
 
