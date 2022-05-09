@@ -53,12 +53,6 @@ public class CharManUI : MonoBehaviour
     public GameObject highborn_text;
     public GameObject holy_text;
     public GameObject powerful_text;
-    public GameObject final_str;
-    public GameObject final_dex;
-    public GameObject final_int;
-    public GameObject final_spd;
-    public GameObject final_con;
-    public GameObject final_eng;
     public GameObject class_confirm_button;
     public GameObject trait_confirm_button;
     public GameObject inputname;
@@ -211,15 +205,8 @@ public class CharManUI : MonoBehaviour
         class_spd_text.GetComponent<TextMeshProUGUI>().color = black;
         class_con_text.GetComponent<TextMeshProUGUI>().color = black;
         class_eng_text.GetComponent<TextMeshProUGUI>().color = black;
-        stat_container.SetActive(false);
         SceneHeader.GetComponent<TextMeshProUGUI>().SetText(createdchar.getChosen_trait().getName() + " "
         + createdchar.getChosen_race().get_name() + " " + createdchar.getChosen_class().getName());
-        final_str.GetComponent<TextMeshProUGUI>().SetText(""+createdchar.getStr());
-        final_dex.GetComponent<TextMeshProUGUI>().SetText(""+createdchar.getDex());
-        final_int.GetComponent<TextMeshProUGUI>().SetText(""+createdchar.getInte());
-        final_spd.GetComponent<TextMeshProUGUI>().SetText(""+createdchar.getSpd());
-        final_con.GetComponent<TextMeshProUGUI>().SetText(""+createdchar.getCon());
-        final_eng.GetComponent<TextMeshProUGUI>().SetText(""+createdchar.getEng());
     }
     public void BackToTrait() {
         BackToClass();
