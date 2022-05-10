@@ -23,8 +23,8 @@ public class CharManUI : MonoBehaviour
     public GameObject class_eng_text;
     public GameObject chosen_class_text;
     public GameObject chosen_class_image;
-    public GameObject chosen_class_icon;
     public GameObject final_race_image;
+    public GameObject final_class_image;
     public Sprite aasimar_image;
     public Sprite centaur_image;
     public Sprite dwarf_image;
@@ -57,6 +57,7 @@ public class CharManUI : MonoBehaviour
     public GameObject class_confirm_button;
     public GameObject trait_confirm_button;
     public GameObject inputname;
+    public GameObject end_fade;
     public bool gamestart = false;
 
 
@@ -89,7 +90,6 @@ public class CharManUI : MonoBehaviour
         //Updating text for next confirmation scene
         createdchar.setChosen_race(race);
         chosen_class_image.SetActive(true);
-        chosen_class_icon.SetActive(true);
 
         //Using a scuffed switch case since I don't want to mess with game_resource files
         //Resource.load is what I would have used here so that I wouldn't have to deal with names
@@ -158,7 +158,6 @@ public class CharManUI : MonoBehaviour
     public void BackToRace() {
         stat_container.SetActive(false);
         chosen_class_image.SetActive(false);
-        chosen_class_icon.SetActive(false);
         SceneHeader.GetComponent<TextMeshProUGUI>().SetText("Race Selection");
     }
 
@@ -213,9 +212,9 @@ public class CharManUI : MonoBehaviour
         class_spd_text.GetComponent<TextMeshProUGUI>().color = black;
         class_con_text.GetComponent<TextMeshProUGUI>().color = black;
         class_eng_text.GetComponent<TextMeshProUGUI>().color = black;
-        chosen_class_icon.SetActive(false);
         SceneHeader.GetComponent<TextMeshProUGUI>().SetText(createdchar.getChosen_trait().getName() + " "
         + createdchar.getChosen_race().get_name() + " " + createdchar.getChosen_class().getName());
+        final_class_image.GetComponent<Image>().sprite = Resources.Load<Sprite>("Icons/Icon_" + createdchar.getChosen_class().getName());
     }
     public void BackToTrait() {
         BackToClass();
@@ -229,7 +228,6 @@ public class CharManUI : MonoBehaviour
         trait_details_container.SetActive(false);
         trait_confirm_button.SetActive(false);
         stat_container.SetActive(true);
-        chosen_class_icon.SetActive(true);
         SceneHeader.GetComponent<TextMeshProUGUI>().SetText("View Abilities");
     }
 
@@ -424,7 +422,6 @@ public class CharManUI : MonoBehaviour
     }
     public void setCharName() {
         createdchar.setName(inputname.GetComponent<TextMeshProUGUI>().text);
-        chosen_class_icon.SetActive(false);
         gamestart = true;
     }
 
