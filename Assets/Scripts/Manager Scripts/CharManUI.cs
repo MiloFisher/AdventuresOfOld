@@ -21,7 +21,7 @@ public class CharManUI : MonoBehaviour
     public GameObject class_spd_text;
     public GameObject class_con_text;
     public GameObject class_eng_text;
-    public GameObject chosen_class_text;
+    public GameObject chosen_race_image;
     public GameObject chosen_class_image;
     public GameObject final_race_image;
     public GameObject final_class_image;
@@ -89,43 +89,43 @@ public class CharManUI : MonoBehaviour
     public void SetRaceDetails(Race race) {
         //Updating text for next confirmation scene
         createdchar.setChosen_race(race);
-        chosen_class_image.SetActive(true);
+        chosen_race_image.SetActive(true);
 
         //Using a scuffed switch case since I don't want to mess with game_resource files
         //Resource.load is what I would have used here so that I wouldn't have to deal with names
         switch (race.get_name()) {
             case "Aasimar":
-            chosen_class_image.GetComponent<Image>().sprite = aasimar_image;
+            chosen_race_image.GetComponent<Image>().sprite = aasimar_image;
             final_race_image.GetComponent<Image>().sprite = aasimar_image;
             createdchar.setImage("portrait_aasimar");
             break;
             case "Centaur":
-            chosen_class_image.GetComponent<Image>().sprite = centaur_image;
+            chosen_race_image.GetComponent<Image>().sprite = centaur_image;
             final_race_image.GetComponent<Image>().sprite = centaur_image;
             createdchar.setImage("portrait_centaur");
             break;
             case "Dwarf":
-            chosen_class_image.GetComponent<Image>().sprite = dwarf_image;
+            chosen_race_image.GetComponent<Image>().sprite = dwarf_image;
             final_race_image.GetComponent<Image>().sprite = dwarf_image;
             createdchar.setImage("portrait_dwarf");
             break;
             case "High Elf":
-            chosen_class_image.GetComponent<Image>().sprite = high_elf_image;
+            chosen_race_image.GetComponent<Image>().sprite = high_elf_image;
             final_race_image.GetComponent<Image>().sprite = high_elf_image;
             createdchar.setImage("portrait_high_elf");
             break;
             case "Night Elf":
-            chosen_class_image.GetComponent<Image>().sprite = night_elf_image;
+            chosen_race_image.GetComponent<Image>().sprite = night_elf_image;
             final_race_image.GetComponent<Image>().sprite = night_elf_image;
             createdchar.setImage("portrait_night_elf");
             break;
             case "Leonin":
-            chosen_class_image.GetComponent<Image>().sprite = leonin_image;
+            chosen_race_image.GetComponent<Image>().sprite = leonin_image;
             final_race_image.GetComponent<Image>().sprite = leonin_image;
             createdchar.setImage("portrait_leonin");
             break;
             default:
-            chosen_class_image.GetComponent<Image>().sprite = human_image;
+            chosen_race_image.GetComponent<Image>().sprite = human_image;
             final_race_image.GetComponent<Image>().sprite = human_image;
             createdchar.setImage("portrait_human");
             break;
@@ -157,12 +157,13 @@ public class CharManUI : MonoBehaviour
 
     public void BackToRace() {
         stat_container.SetActive(false);
+        chosen_race_image.SetActive(false);
         chosen_class_image.SetActive(false);
         SceneHeader.GetComponent<TextMeshProUGUI>().SetText("Race Selection");
     }
 
     public void ConfirmClass() {
-        SceneHeader.GetComponent<TextMeshProUGUI>().SetText("View Abilities");
+        SceneHeader.GetComponent<TextMeshProUGUI>().SetText(createdchar.getChosen_class().getName() + " abilities");
         Color32 black = new Color32(0, 0, 0, 255);
         //Set the color back to black so it is no longer highlighted green from preview
         class_str_text.GetComponent<TextMeshProUGUI>().color = black;
@@ -172,7 +173,6 @@ public class CharManUI : MonoBehaviour
         class_con_text.GetComponent<TextMeshProUGUI>().color = black;
         class_eng_text.GetComponent<TextMeshProUGUI>().color = black;
         
-        chosen_class_text.GetComponent<TextMeshProUGUI>().text = createdchar.getChosen_class().getName();
         ability1_text.GetComponent<TextMeshProUGUI>().SetText(createdchar.getChosen_class().getAbilities()[0].getName());
         
         ability2_text.GetComponent<TextMeshProUGUI>().SetText(createdchar.getChosen_class().getAbilities()[1].getName());
@@ -250,9 +250,11 @@ public class CharManUI : MonoBehaviour
     }
 
     //See changes to player stats before they confirm
-    public void PreviewStat(string classname) {
+    public void PreviewClass(string classname) {
         createdchar.setChosen_class(new Class(classname));
         class_confirm_button.SetActive(true);
+        chosen_class_image.SetActive(true);
+        chosen_class_image.GetComponent<Image>().sprite = Resources.Load<Sprite>("Icons/Icon_" + createdchar.getChosen_class().getName());
         
         class_str_text.GetComponent<TextMeshProUGUI>().SetText("STR: " + (createdchar.getChosen_race().get_stats().get_str() + 
         createdchar.getChosen_class().get_stats().get_str()));
