@@ -38,6 +38,7 @@ public class CharManUI : MonoBehaviour
     public GameObject ability4_text;
     public GameObject ability5_text;
     public GameObject ability6_text;
+    public GameObject confirm_Class_Image;
     public GameObject ability_desc_text;
     public GameObject ability_cost_text;
     public GameObject ability_type_text;
@@ -185,6 +186,13 @@ public class CharManUI : MonoBehaviour
         ability5_text.GetComponent<TextMeshProUGUI>().SetText(createdchar.getChosen_class().getAbilities()[4].getName());
 
         ability6_text.GetComponent<TextMeshProUGUI>().SetText(createdchar.getChosen_class().getAbilities()[5].getName());
+
+        //Updating skill slab background image
+        //By copying the scuffed switch case - Ethan
+        //confirm_Class_Image.GetComponent<Image>().sprite = aasimar_image;'
+        Debug.Log(createdchar.getChosen_class().getName());
+        confirm_Class_Image.GetComponent<Image>().sprite = Resources.Load<Sprite>("Icons/Icon_" + createdchar.getChosen_class().getName());
+
     }
 
     public void BackToClass() {
@@ -202,6 +210,7 @@ public class CharManUI : MonoBehaviour
             createdchar.getChosen_race().get_stats().get_eng());
         ability_desc_panel.SetActive(false);
         class_confirm_button.SetActive(false);
+        chosen_class_image.SetActive(false);
         SceneHeader.GetComponent<TextMeshProUGUI>().SetText("Class Selection");
     }
 
