@@ -69,6 +69,7 @@ public class CharManUI : MonoBehaviour
         racebutton.GetComponent<TextMeshProUGUI>().text = race.get_name();
         racebutton.GetComponent<TextMeshProUGUI>().font = font;
         racebutton.GetComponent<TextMeshProUGUI>().fontSize = 72;
+        racebutton.GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.SmallCaps;
         racebutton.GetComponent<TextMeshProUGUI>().enableAutoSizing = true;
         racebutton.GetComponent<TextMeshProUGUI>().color = new Color32(56,56,56,255);
         racebutton.AddComponent<Button>();
