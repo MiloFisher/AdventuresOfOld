@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Simple Daggers
   rarity: 0
+  image: {fileID: 21300000, guid: d3c0fc5c59ba0444cb8d4b7d35654ccb, type: 3}
   copies: 6
   itemType: Dagger/Dagger
   effectDescription: +4 Damage, Critically hits on 11s and 12s
