@@ -369,8 +369,20 @@ public class InventoryManager : Singleton<InventoryManager>
         else if (l.GetType() == typeof(ArmorCard))
         {
             string armor = p.Armor.Value + "";
+            int eng = (l as ArmorCard).energy;
             p.SetValue("Armor", cardName);
             p.SetValue("Inventory" + (selectedID - 3), armor);
+            if(p.Armor.Value == emptyValue)
+            {
+                p.SetValue("AbilityCharges", PlayManager.Instance.GetAbilityCharges(p) + eng / 2);
+            }
+            else
+            {
+                string armor1 = p.Armor.Value + "";
+                int eng1 = (PlayManager.Instance.itemReference[armor1] as ArmorCard).energy;
+                int newAbilityCharge = PlayManager.Instance.GetAbilityCharges(p) + (eng - eng1) / 2;
+                p.SetValue("AbilityCharges", newAbilityCharge > 0 ? newAbilityCharge : 0);
+            }
         }
         else if (l.GetType() == typeof(RingCard))
         {
@@ -422,6 +434,7 @@ public class InventoryManager : Singleton<InventoryManager>
                 break;
             case 1:
                 location = "Armor";
+                eng = (PlayManager.Instance.itemReference[equipment] as ArmorCard).energy;
                 break;
             case 2:
                 location = "Ring1";

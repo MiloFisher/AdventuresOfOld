@@ -13,6 +13,7 @@ public class Combatant
     public List<Effect> statusEffects;
 
     private int currentHealth;
+    private bool hasHatched;
 
     public Combatant(CombatantType combatantType, Player player)
     {
@@ -77,6 +78,10 @@ public class Combatant
         else
             armor = 0;
 
+        int armorUp = HasArmorUp();
+        if(armorUp > -1)
+            armor += armorUp;
+
         int weakened = IsWeakened();
         if(weakened > -1)
         {
@@ -97,8 +102,15 @@ public class Combatant
         else
             attack = monster.attack + PlayManager.Instance.AttackModifier();
 
+        int attackUp = HasAttackUp();
+        if (attackUp > -1)
+            attack += attackUp;
+
         if (IsEaten())
             attack = HalfRoundedUp(attack);
+
+        if (IsUnhatchedSpiderEgg())
+            attack = 0;
 
         return attack;
     }
@@ -113,18 +125,34 @@ public class Combatant
 
     public int GetPhysicalPower()
     {
+        int power;
+
         if (combatantType == CombatantType.PLAYER)
-            return PlayManager.Instance.GetPhysicalPower(player);
+            power = PlayManager.Instance.GetPhysicalPower(player);
         else
-            return monster.physicalPower + PlayManager.Instance.PowerModifier();
+            power =  monster.physicalPower + PlayManager.Instance.PowerModifier();
+
+        int powerUp = HasPowerUp();
+        if (powerUp > -1)
+            power += powerUp;
+
+        return power;
     }
 
     public int GetMagicalPower()
     {
+        int power;
+
         if (combatantType == CombatantType.PLAYER)
-            return PlayManager.Instance.GetMagicalPower(player);
+            power = PlayManager.Instance.GetMagicalPower(player);
         else
-            return monster.magicalPower + PlayManager.Instance.PowerModifier();
+            power = monster.magicalPower + PlayManager.Instance.PowerModifier();
+
+        int powerUp = HasPowerUp();
+        if (powerUp > -1)
+            power += powerUp;
+
+        return power;
     }
 
     public void TakeDamage(int amount, bool isTrue = false)
@@ -177,8 +205,10 @@ public class Combatant
         if(!alreadyContains)
             statusEffects.Add(e);
 
-        if(combatantType == CombatantType.PLAYER)
+        if (combatantType == CombatantType.PLAYER)
             CombatManager.Instance.GetPlayerCardFromCombatant(this).DrawStatusEffects(statusEffects);
+        else
+            CombatManager.Instance.enemyCard.DrawStatusEffects(statusEffects);
     }
 
     public void RemoveStatusEffect(string effectName)
@@ -194,6 +224,8 @@ public class Combatant
 
         if (combatantType == CombatantType.PLAYER)
             CombatManager.Instance.GetPlayerCardFromCombatant(this).DrawStatusEffects(statusEffects);
+        else
+            CombatManager.Instance.enemyCard.DrawStatusEffects(statusEffects);
     }
 
     public void CycleStatusEffects()
@@ -211,6 +243,8 @@ public class Combatant
 
         if (combatantType == CombatantType.PLAYER)
             CombatManager.Instance.GetPlayerCardFromCombatant(this).DrawStatusEffects(statusEffects);
+        else
+            CombatManager.Instance.enemyCard.DrawStatusEffects(statusEffects);
     }
 
     private int HalfRoundedUp(int x)
@@ -231,6 +265,16 @@ public class Combatant
                 return statusEffects[i].potency;
         }
         return -1;
+    }
+
+    public bool IsUnhatchedSpiderEgg()
+    {
+        return combatantType == CombatantType.MONSTER && monster.cardName == "Spider Egg" && hasHatched == false;
+    }
+
+    public void Hatch()
+    {
+        hasHatched = true;
     }
 
     public bool IsEaten()
@@ -273,5 +317,22 @@ public class Combatant
     public bool IsDazed()
     {
         return HasEffect("Dazed") > -1;
+    }
+
+    // Buffs
+
+    public int HasPowerUp()
+    {
+        return HasEffect("Power Up");
+    }
+
+    public int HasAttackUp()
+    {
+        return HasEffect("Attack Up");
+    }
+
+    public int HasArmorUp()
+    {
+        return HasEffect("Armor Up");
     }
 }

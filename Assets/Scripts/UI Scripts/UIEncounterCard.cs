@@ -195,6 +195,59 @@ public class UIEncounterCard : MonoBehaviour
         }
     }
 
+    public void SetMonsterVisuals(Combatant c)
+    {
+        cardName = c.monster.cardName;
+        eventComponents.SetActive(false);
+        monsterComponents.SetActive(true);
+        monsterImage.sprite = c.monster.image;
+        monsterCardName.text = c.monster.cardName;
+        monsterHealth.text = c.GetHealth() + "";
+        monsterAttack.text = c.GetAttack() + "";
+        monsterSpeed.text = c.GetSpeed() + "";
+        monsterPhysicalPower.text = c.GetPhysicalPower() + "";
+        monsterMagicalPower.text = c.GetMagicalPower() + "";
+        monsterFlavorText.text = c.monster.flavorText;
+        monsterSkillName.text = c.monster.skillName;
+        monsterSkillDescription.text = c.monster.skillDescription;
+        monsterPassiveName.text = c.monster.passiveName;
+        monsterPassiveDescription.text = c.monster.passiveDescription;
+        switch (c.monster.type)
+        {
+            case MonsterType.BASIC:
+                monsterCardFace.sprite = monsterCardFaces[0];
+                monsterGold.gameObject.SetActive(true);
+                monsterXP.gameObject.SetActive(true);
+                monsterGold.text = "10";
+                monsterXP.text = 3 + PlayManager.Instance.XPModifier() + "";
+                break;
+            case MonsterType.ELITE:
+                monsterCardFace.sprite = monsterCardFaces[1];
+                monsterGold.gameObject.SetActive(true);
+                monsterXP.gameObject.SetActive(true);
+                monsterGold.text = "20";
+                monsterXP.text = 6 + PlayManager.Instance.XPModifier() + "";
+                break;
+            case MonsterType.MINIBOSS:
+                monsterCardFace.sprite = monsterCardFaces[2];
+                monsterGold.gameObject.SetActive(true);
+                monsterXP.gameObject.SetActive(true);
+                monsterGold.text = "20";
+                monsterXP.text = 6 + PlayManager.Instance.XPModifier() + "";
+                break;
+            case MonsterType.BOSS:
+                monsterCardFace.sprite = monsterCardFaces[3];
+                monsterGold.gameObject.SetActive(false);
+                monsterXP.gameObject.SetActive(false);
+                break;
+            case MonsterType.MINION:
+                monsterCardFace.sprite = monsterCardFaces[4];
+                monsterGold.gameObject.SetActive(false);
+                monsterXP.gameObject.SetActive(false);
+                break;
+        }
+    }
+
     public void UpdateHealthBar(Combatant monster)
     {
         healthBarText.text = monster.GetHealth() + " / " + monster.GetMaxHealth();
@@ -236,6 +289,9 @@ public class UIEncounterCard : MonoBehaviour
             "Bleeding" => statusEffectIcons[0],
             "Poisoned" => statusEffectIcons[1],
             "Weakened" => statusEffectIcons[2],
+            "Power Up" => statusEffectIcons[3],
+            "Attack Up" => statusEffectIcons[4],
+            "Armor Up" => statusEffectIcons[5],
             _ => null
         };
     }

@@ -87,6 +87,9 @@ public class UIPlayerCard : MonoBehaviour
             "Bleeding" => statusEffectIcons[0],
             "Poisoned" => statusEffectIcons[1],
             "Weakened" => statusEffectIcons[2],
+            "Power Up" => statusEffectIcons[3],
+            "Attack Up" => statusEffectIcons[4],
+            "Armor Up" => statusEffectIcons[5],
             _ => null
         };
     }

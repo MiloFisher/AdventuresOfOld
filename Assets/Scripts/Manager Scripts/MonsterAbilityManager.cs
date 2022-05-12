@@ -27,7 +27,7 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
     private void UglySlime_Passive()
     {
         CombatManager.Instance.OnPlayerDealDamage = (t) => {
-            CombatManager.Instance.InflictEffect(t, new Effect("Weakened", 1, 1));
+            CombatManager.Instance.InflictEffect(t, new Effect("Weakened", 2, 1));
         };
     }
     #endregion
@@ -49,7 +49,7 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
     private void SlimeCongregation_Passive()
     {
         CombatManager.Instance.OnPlayerDealDamage = (t) => {
-            CombatManager.Instance.InflictEffect(t, new Effect("Weakened", 1, 2));
+            CombatManager.Instance.InflictEffect(t, new Effect("Weakened", 2, 2));
         };
     }
     #endregion
@@ -57,24 +57,59 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
     #region Spider Egg
     private void SpiderEgg_Skill()
     {
-        // effect goes here...
+        if(CombatManager.Instance.monster.IsUnhatchedSpiderEgg())
+        {
+            Combatant c = CombatManager.Instance.monster;
+            c.Hatch();
+            CombatManager.Instance.InflictEffect(c, new Effect("Attack Up", -1, 6));
+            CombatManager.Instance.InflictEffect(c, new Effect("Power Up", -1, 1));
+        }
+        CombatManager.Instance.MonsterEndTurn();
     }
 
     private void SpiderEgg_Passive()
     {
-        // effect goes here...
+        CombatManager.Instance.OnPlayerTakeDamage = (t) => {
+            CombatManager.Instance.waitUntil = true;
+            CombatManager.Instance.MakeStatRoll("CON", 7);
+            CombatManager.Instance.StatRollListener((a) => {
+                if(a != 1)
+                {
+                    CombatManager.Instance.InflictEffect(t, new Effect("Poisoned", -1, 1));
+                }
+                CombatManager.Instance.waitUntil = false;
+            });
+        };
     }
     #endregion
 
     #region Giant Spider
     private void GiantSpider_Skill()
     {
-        // effect goes here...
+        CombatManager.Instance.MakeStatRoll("DEX", 8);
+        CombatManager.Instance.StatRollListener((a) => {
+            if (a == -1)
+            {
+                CombatManager.Instance.AttackPlayer(target, CombatManager.Instance.MonsterEndTurn, new List<Effect> { new Effect("Enwebbed", 1) });
+            }
+            else
+                CombatManager.Instance.MonsterEndTurn();
+        });
     }
 
     private void GiantSpider_Passive()
     {
-        // effect goes here...
+        CombatManager.Instance.OnPlayerTakeDamage = (t) => {
+            CombatManager.Instance.waitUntil = true;
+            CombatManager.Instance.MakeStatRoll("CON", 8);
+            CombatManager.Instance.StatRollListener((a) => {
+                if (a != 1)
+                {
+                    CombatManager.Instance.InflictEffect(t, new Effect("Poisoned", -1, 2));
+                }
+                CombatManager.Instance.waitUntil = false;
+            });
+        };
     }
     #endregion
 

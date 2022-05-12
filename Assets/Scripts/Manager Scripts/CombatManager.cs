@@ -42,8 +42,10 @@ public class CombatManager : Singleton<CombatManager>
     public bool fleeingPrevented;
     public CombatLayoutStyle combatLayoutStyle;
     public int attackerId;
+    public bool waitUntil;
 
     public Action<Combatant> OnPlayerDealDamage;
+    public Action<Combatant> OnPlayerTakeDamage;
     public OnAttacked OnPlayerBeingAttacked;
 
     private bool ready;
@@ -52,7 +54,7 @@ public class CombatManager : Singleton<CombatManager>
 
     private void Update()
     {
-        if(ready && !changingStyle && CombatOverCheck() == -1)
+        if(ready && !changingStyle)
             AllignPlayerCards();
     }
 
@@ -416,7 +418,8 @@ public class CombatManager : Singleton<CombatManager>
                 foreach (Effect e in debuffs)
                     InflictEffect(c, e);
             }
-            OnPlayerDealDamage(c);
+            if(OnPlayerDealDamage != default)
+                OnPlayerDealDamage(c);
         }, () => {
             // OnComplete
             StartCoroutine(TransitionCombatLayoutStyle(CombatLayoutStyle.DEFAULT, () => {
@@ -554,13 +557,23 @@ public class CombatManager : Singleton<CombatManager>
                             foreach (Effect e in debuffs)
                                 InflictEffect(c, e);
                         }
-                    }, OnComplete));
+                    }, () => { StartCoroutine(OnTakeDamage(c, OnComplete)); }));
                 }
 
                 // Visualize player attack for all other players
                 PlayManager.Instance.localPlayer.VisualizeAttackForOthers();
             }
         });
+    }
+
+    IEnumerator OnTakeDamage(Combatant c, Action OnComplete)
+    {
+        if(OnPlayerTakeDamage != default)
+            OnPlayerTakeDamage(c);
+
+        yield return new WaitUntil(() => !waitUntil);
+
+        OnComplete();
     }
 
     public void InflictEffect(Combatant c, Effect e)
@@ -700,11 +713,13 @@ public class CombatManager : Singleton<CombatManager>
                 playerCards[i].SetActive(false);
             }
             int index = playerAmount - 1;
+            if (index < 0)
+                index = 0;
             for (i = 0; i < turnOrderCombatantList.Count; i++)
             {
                 if (turnOrderCombatantList[i].combatantType == CombatantType.PLAYER)
                 {
-                    playerCards[index].GetComponent<UIPlayerCard>().ActivateCrosshair(IsTargetedByMonster(turnOrderCombatantList[i].player) && turnOrderCombatantList[combatTurnMarker].monster != null && !isMonsterTurn);
+                    playerCards[index].GetComponent<UIPlayerCard>().ActivateCrosshair(IsTargetedByMonster(turnOrderCombatantList[i].player) && turnOrderCombatantList[combatTurnMarker].monster != null && !isMonsterTurn && CombatOverCheck() == -1);
                     playerCards[index].GetComponent<UIPlayerCard>().ActivateTurnMarker(combatTurnMarker == i);
                     playerCards[index].GetComponent<UIPlayerCard>().SetVisuals(turnOrderCombatantList[i]);
                     index--;
@@ -712,7 +727,7 @@ public class CombatManager : Singleton<CombatManager>
                 else
                 {
                     enemyCard.ActivateTurnMarker(combatTurnMarker == i);
-                    enemyCard.SetVisuals(turnOrderCombatantList[i].monster.cardName);
+                    enemyCard.SetMonsterVisuals(turnOrderCombatantList[i]);
                     enemyCard.UpdateHealthBar(turnOrderCombatantList[i]);
                     enemyCard.SetDisplayPosition(new Vector3(0, 0, 0));
                 }
@@ -754,7 +769,7 @@ public class CombatManager : Singleton<CombatManager>
                 else
                 {
                     enemyCard.ActivateTurnMarker(combatTurnMarker == i);
-                    enemyCard.SetVisuals(turnOrderCombatantList[i].monster.cardName);
+                    enemyCard.SetMonsterVisuals(turnOrderCombatantList[i]);
                     enemyCard.UpdateHealthBar(turnOrderCombatantList[i]);
                     enemyCard.SetDisplayPosition(new Vector3(470, 0, 0));
                 }
@@ -1154,6 +1169,7 @@ public class CombatManager : Singleton<CombatManager>
 
     private void ResetCombat()
     {
+        waitUntil = false;
         changingStyle = false;
         fleeingPrevented = false;
         OnPlayerDealDamage = default;
