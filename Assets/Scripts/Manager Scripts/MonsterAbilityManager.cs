@@ -160,24 +160,66 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
     #region Giant Rat
     private void GiantRat_Skill()
     {
-        // effect goes here...
+        CombatManager.Instance.MakeStatRoll("DEX", 9);
+        CombatManager.Instance.StatRollListener((a) => {
+            if (a == -1)
+            {
+                CombatManager.Instance.AttackPlayer(target, CombatManager.Instance.MonsterEndTurn);
+            }
+            else
+                CombatManager.Instance.MonsterEndTurn();
+        });
     }
 
     private void GiantRat_Passive()
     {
-        // effect goes here...
+        CombatManager.Instance.OnPlayerTakeDamage = (t) => {
+            CombatManager.Instance.waitUntil = true;
+            CombatManager.Instance.MakeStatRoll("CON", 8);
+            CombatManager.Instance.StatRollListener((a) => {
+                if (a != 1)
+                {
+                    if(CombatManager.Instance.IsThisCombatantsTurn(t))
+                        CombatManager.Instance.InflictEffect(t, new Effect("Plagued", 2));
+                    else
+                        CombatManager.Instance.InflictEffect(t, new Effect("Plagued", 1));
+                }
+                CombatManager.Instance.waitUntil = false;
+            });
+        };
     }
     #endregion
 
     #region Giant Fiery Rat
     private void GiantFieryRat_Skill()
     {
-        // effect goes here...
+        CombatManager.Instance.MakeStatRoll("DEX", 10);
+        CombatManager.Instance.StatRollListener((a) => {
+            if (a == -1)
+            {
+                CombatManager.Instance.AttackPlayer(target, CombatManager.Instance.MonsterEndTurn);
+            }
+            else
+                CombatManager.Instance.MonsterEndTurn();
+        });
     }
 
     private void GiantFieryRat_Passive()
     {
-        // effect goes here...
+        CombatManager.Instance.OnPlayerTakeDamage = (t) => {
+            CombatManager.Instance.waitUntil = true;
+            CombatManager.Instance.MakeStatRoll("CON", 11);
+            CombatManager.Instance.StatRollListener((a) => {
+                if (a != 1)
+                {
+                    if (CombatManager.Instance.IsThisCombatantsTurn(t))
+                        CombatManager.Instance.InflictEffect(t, new Effect("Plagued", 2));
+                    else
+                        CombatManager.Instance.InflictEffect(t, new Effect("Plagued", 1));
+                }
+                CombatManager.Instance.waitUntil = false;
+            });
+        };
     }
     #endregion
 

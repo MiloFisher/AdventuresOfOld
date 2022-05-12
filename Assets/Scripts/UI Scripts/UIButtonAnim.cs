@@ -16,7 +16,7 @@ public class UIButtonAnim : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     private RectTransform rt;
     private float defaultWidth;
     private float defaultHeight;
-    private float defaultChildScale;
+    private float defaultChildScale = 1;
 
     void Start()
     {
@@ -25,8 +25,6 @@ public class UIButtonAnim : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         defaultWidth = rt.sizeDelta.x;
         defaultHeight = rt.sizeDelta.y;
         image.alphaHitTestMinimumThreshold = 0.1f;
-        if(transform.childCount > 0)
-            defaultChildScale = 1;
     }
 
     public void OnPointerEnter(PointerEventData eventData)

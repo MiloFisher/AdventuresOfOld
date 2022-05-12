@@ -731,14 +731,17 @@ public class CombatManager : Singleton<CombatManager>
                 playerCards[i].SetActive(false);
             }
             int index = playerAmount - 1;
-            for (i = 0; i < turnOrderCombatantList.Count && index >= 0; i++)
+            for (i = 0; i < turnOrderCombatantList.Count; i++)
             {
                 if (turnOrderCombatantList[i].combatantType == CombatantType.PLAYER)
                 {
-                    playerCards[index].GetComponent<UIPlayerCard>().ActivateCrosshair(IsTargetedByMonster(turnOrderCombatantList[i].player) && turnOrderCombatantList[combatTurnMarker].monster != null && !isMonsterTurn && CombatOverCheck() == -1);
-                    playerCards[index].GetComponent<UIPlayerCard>().ActivateTurnMarker(combatTurnMarker == i);
-                    playerCards[index].GetComponent<UIPlayerCard>().SetVisuals(turnOrderCombatantList[i]);
-                    index--;
+                    if(index >= 0)
+                    {
+                        playerCards[index].GetComponent<UIPlayerCard>().ActivateCrosshair(IsTargetedByMonster(turnOrderCombatantList[i].player) && turnOrderCombatantList[combatTurnMarker].monster != null && !isMonsterTurn && CombatOverCheck() == -1);
+                        playerCards[index].GetComponent<UIPlayerCard>().ActivateTurnMarker(combatTurnMarker == i);
+                        playerCards[index].GetComponent<UIPlayerCard>().SetVisuals(turnOrderCombatantList[i]);
+                        index--;
+                    }
                 }
                 else
                 {
@@ -773,14 +776,17 @@ public class CombatManager : Singleton<CombatManager>
                 playerCards[i].SetActive(false);
             }
             int index = playerAmount - 1;
-            for (i = 0; i < turnOrderCombatantList.Count && index >= 0; i++)
+            for (i = 0; i < turnOrderCombatantList.Count; i++)
             {
                 if (turnOrderCombatantList[i].combatantType == CombatantType.PLAYER)
                 {
-                    playerCards[index].GetComponent<UIPlayerCard>().ActivateCrosshair(IsTargetedByMonster(turnOrderCombatantList[i].player) && turnOrderCombatantList[combatTurnMarker].monster != null && !isMonsterTurn && CombatOverCheck() == -1);
-                    playerCards[index].GetComponent<UIPlayerCard>().ActivateTurnMarker(combatTurnMarker == i);
-                    playerCards[index].GetComponent<UIPlayerCard>().SetVisuals(turnOrderCombatantList[i]);
-                    index--;
+                    if (index >= 0)
+                    {
+                        playerCards[index].GetComponent<UIPlayerCard>().ActivateCrosshair(IsTargetedByMonster(turnOrderCombatantList[i].player) && turnOrderCombatantList[combatTurnMarker].monster != null && !isMonsterTurn && CombatOverCheck() == -1);
+                        playerCards[index].GetComponent<UIPlayerCard>().ActivateTurnMarker(combatTurnMarker == i);
+                        playerCards[index].GetComponent<UIPlayerCard>().SetVisuals(turnOrderCombatantList[i]);
+                        index--;
+                    }
                 }
                 else
                 {
@@ -1199,6 +1205,16 @@ public class CombatManager : Singleton<CombatManager>
                 taunters.Add(turnOrderCombatantList[i]);
         }
         return taunters;
+    }
+
+    public bool IsThisCombatantsTurn(Combatant c)
+    {
+        int i = combatTurnMarker;
+        if (turnOrderCombatantList[i].combatantType == CombatantType.PLAYER && c.combatantType == CombatantType.PLAYER && turnOrderCombatantList[i].player.UUID.Value == c.player.UUID.Value)
+            return true;
+        else if (turnOrderCombatantList[i].combatantType == CombatantType.MONSTER && c.combatantType == CombatantType.MONSTER && turnOrderCombatantList[i].monster.cardName == c.monster.cardName)
+            return true;
+        return false;
     }
 
     private void SetAlpha(Image i, float a)
