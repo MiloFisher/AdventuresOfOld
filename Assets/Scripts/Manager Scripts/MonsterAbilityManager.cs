@@ -226,7 +226,15 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
     #region Shy Unfriendly Bandits
     private void ShyUnfriendlyBandits_Skill()
     {
-        // effect goes here...
+        CombatManager.Instance.MakeStatRoll("INT", 10);
+        CombatManager.Instance.StatRollListener((a) => {
+            if (a == -1)
+            {
+                CombatManager.Instance.AttackPlayer(target, CombatManager.Instance.MonsterEndTurn);
+            }
+            else
+                CombatManager.Instance.MonsterEndTurn();
+        });
     }
 
     private void ShyUnfriendlyBandits_Passive()
@@ -238,7 +246,15 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
     #region Beefy Chad Bandits
     private void BeefyChadBandits_Skill()
     {
-        // effect goes here...
+        CombatManager.Instance.MakeStatRoll("INT", 11);
+        CombatManager.Instance.StatRollListener((a) => {
+            if (a == -1)
+            {
+                CombatManager.Instance.AttackPlayer(target, CombatManager.Instance.MonsterEndTurn);
+            }
+            else
+                CombatManager.Instance.MonsterEndTurn();
+        });
     }
 
     private void BeefyChadBandits_Passive()
