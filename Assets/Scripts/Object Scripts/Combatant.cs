@@ -180,7 +180,7 @@ public class Combatant
             currentHealth += amount;
             if (currentHealth > GetMaxHealth())
                 currentHealth = GetMaxHealth();
-            player.UpdateMonsterHealth(currentHealth);
+            PlayManager.Instance.localPlayer.UpdateMonsterHealth(currentHealth);
         }
     }
 

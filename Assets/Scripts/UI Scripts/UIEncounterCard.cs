@@ -50,7 +50,9 @@ public class UIEncounterCard : MonoBehaviour
     public GameObject healthBar;
     public GameObject turnMarker;
     public GameObject monsterDamaged;
+    public GameObject monsterHealed;
     public GameObject damageNumber;
+    public GameObject healNumber;
     public Transform statusEffectsContainer;
     public GameObject statusEffectPrefab;
     public Sprite[] statusEffectIcons;
@@ -322,6 +324,11 @@ public class UIEncounterCard : MonoBehaviour
         monsterDamaged.SetActive(active);
     }
 
+    public void ActivateHealed(bool active)
+    {
+        monsterHealed.SetActive(active);
+    }
+
     public void DisplayDamageNumber(int amount)
     {
         if (amount < 0)
@@ -330,22 +337,33 @@ public class UIEncounterCard : MonoBehaviour
         damageNumber.GetComponent<TMP_Text>().text = "-" + amount;
         damageNumber.SetActive(true);
         SetAlpha(damageNumber.GetComponent<TMP_Text>(), 1);
-        StartCoroutine(AnimateDamageNumber(startPosition));
+        StartCoroutine(AnimateNumber(damageNumber, startPosition));
     }
 
-    IEnumerator AnimateDamageNumber(Vector3 startPosition)
+    IEnumerator AnimateNumber(GameObject number, Vector3 startPosition)
     {
-        damageNumber.transform.localPosition = startPosition;
+        number.transform.localPosition = startPosition;
 
         // Fade in and float number
         for (int i = 1; i <= Global.animSteps; i++)
         {
-            SetAlpha(damageNumber.GetComponent<TMP_Text>(), 1 - i * Global.animRate);
-            damageNumber.transform.localPosition = startPosition + new Vector3(i * Global.animRate * 50, i * Global.animRate * -100, 0);
+            SetAlpha(number.GetComponent<TMP_Text>(), 1 - i * Global.animRate);
+            number.transform.localPosition = startPosition + new Vector3(i * Global.animRate * 50, i * Global.animRate * -100, 0);
             yield return new WaitForSeconds(damageNumberFadeLength * Global.animTimeMod * Global.animSpeed);
         }
 
-        damageNumber.SetActive(false);
+        number.SetActive(false);
+    }
+
+    public void DisplayHealNumber(int amount)
+    {
+        if (amount < 0)
+            amount = 0;
+        Vector3 startPosition = healthBarBack.transform.localPosition + new Vector3(0.2f * (healthBar.GetComponent<RectTransform>().sizeDelta.x / 2 + healthBar.transform.localPosition.x), 0, 0);
+        healNumber.GetComponent<TMP_Text>().text = "+" + amount;
+        healNumber.SetActive(true);
+        SetAlpha(healNumber.GetComponent<TMP_Text>(), 1);
+        StartCoroutine(AnimateNumber(healNumber, startPosition));
     }
 
     public void ActivateOptionCardButton(bool active)

@@ -116,24 +116,44 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
     #region Crazy Wolf
     private void CrazyWolf_Skill()
     {
-        // effect goes here...
+        CombatManager.Instance.MakeStatRoll("STR", 9);
+        CombatManager.Instance.StatRollListener((a) => {
+            if (a == -1)
+            {
+                CombatManager.Instance.AttackPlayer(target, CombatManager.Instance.MonsterEndTurn);
+            }
+            else
+                CombatManager.Instance.MonsterEndTurn();
+        });
     }
 
     private void CrazyWolf_Passive()
     {
-        // effect goes here...
+        CombatManager.Instance.OnPlayerTakeDamage = (t) => {
+            CombatManager.Instance.HealMonster(2);
+        };
     }
     #endregion
 
     #region Ravenous Wolfpack
     private void RavenousWolfpack_Skill()
     {
-        // effect goes here...
+        CombatManager.Instance.MakeStatRoll("STR", 10);
+        CombatManager.Instance.StatRollListener((a) => {
+            if (a == -1)
+            {
+                CombatManager.Instance.AttackPlayer(target, CombatManager.Instance.MonsterEndTurn);
+            }
+            else
+                CombatManager.Instance.MonsterEndTurn();
+        });
     }
 
     private void RavenousWolfpack_Passive()
     {
-        // effect goes here...
+        CombatManager.Instance.OnPlayerTakeDamage = (t) => {
+            CombatManager.Instance.HealMonster(3);
+        };
     }
     #endregion
 

@@ -600,6 +600,14 @@ public class CombatManager : Singleton<CombatManager>
             PlayManager.Instance.localPlayer.MonsterCycleStatusEffects();
     }
 
+    public void HealMonster(int amount)
+    {
+        StartCoroutine(AnimateMonsterHeal(enemyCard, amount, () => {
+            monster.RestoreHealth(amount);
+        }));
+        PlayManager.Instance.localPlayer.VisualizeMonsterHealForOthers(amount);
+    }
+
     // Called from Player.cs
     public void GainStatusEffect(Combatant c, Effect e)
     {
@@ -634,6 +642,16 @@ public class CombatManager : Singleton<CombatManager>
     public void VisualizeMonsterTakeDamage(int amount)
     {
         StartCoroutine(AnimateMonsterTakeDamage(enemyCard, amount));
+    }
+
+    public void VisualizePlayerHeal(Player p, int amount)
+    {
+        StartCoroutine(AnimatePlayerHeal(GetPlayerCardFromCombatant(GetCombatantFromPlayer(p)), amount));
+    }
+
+    public void VisualizeMonsterHeal(int amount)
+    {
+        StartCoroutine(AnimateMonsterHeal(enemyCard, amount));
     }
 
     private int[] GetMonsterTargets()
@@ -713,9 +731,7 @@ public class CombatManager : Singleton<CombatManager>
                 playerCards[i].SetActive(false);
             }
             int index = playerAmount - 1;
-            if (index < 0)
-                index = 0;
-            for (i = 0; i < turnOrderCombatantList.Count; i++)
+            for (i = 0; i < turnOrderCombatantList.Count && index >= 0; i++)
             {
                 if (turnOrderCombatantList[i].combatantType == CombatantType.PLAYER)
                 {
@@ -757,7 +773,7 @@ public class CombatManager : Singleton<CombatManager>
                 playerCards[i].SetActive(false);
             }
             int index = playerAmount - 1;
-            for (i = 0; i < turnOrderCombatantList.Count; i++)
+            for (i = 0; i < turnOrderCombatantList.Count && index >= 0; i++)
             {
                 if (turnOrderCombatantList[i].combatantType == CombatantType.PLAYER)
                 {
@@ -831,6 +847,7 @@ public class CombatManager : Singleton<CombatManager>
 
         // Hold faded in overlay
         yield return new WaitForSeconds(fadedWaitTime * Global.animSpeed);
+        ready = false;
 
         // Then fade out overlay
         for (int i = Global.animSteps - 1; i >= 0; i--)
@@ -1034,6 +1051,28 @@ public class CombatManager : Singleton<CombatManager>
         card.DisplayDamageNumber(damage);
         yield return new WaitForSeconds(attackFlashLength);
         card.ActivateDamaged(false);
+    }
+
+    IEnumerator AnimatePlayerHeal(UIPlayerCard playerCard, int heal, Action OnHeal = default)
+    {
+        // Call OnAttack function
+        OnHeal();
+
+        playerCard.ActivateHealed(true);
+        playerCard.DisplayHealNumber(heal);
+        yield return new WaitForSeconds(attackFlashLength * Global.animSpeed);
+        playerCard.ActivateHealed(false);
+    }
+
+    IEnumerator AnimateMonsterHeal(UIEncounterCard card, int heal, Action OnHeal = default)
+    {
+        // Call OnAttack function
+        OnHeal();
+
+        card.ActivateHealed(true);
+        card.DisplayHealNumber(heal);
+        yield return new WaitForSeconds(attackFlashLength * Global.animSpeed);
+        card.ActivateHealed(false);
     }
 
     public void SetTurnOrderCombatantList(FixedString64Bytes[] arr)

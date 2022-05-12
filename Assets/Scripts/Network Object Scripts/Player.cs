@@ -1409,6 +1409,74 @@ namespace AdventuresOfOldMultiplayer
                 }
             }
         }
+
+        public void VisualizeHealForOthers(int amount)
+        {
+            FixedString64Bytes uuid = UUID.Value;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value != uuid)
+                        p.VisualizeHealForOthersClientRPC(uuid, amount);
+                }
+            }
+            else
+                VisualizeHealForOthersServerRPC(uuid, amount);
+        }
+        [ServerRpc]
+        private void VisualizeHealForOthersServerRPC(FixedString64Bytes uuid, int amount, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+            {
+                if (p.UUID.Value != uuid)
+                    p.VisualizeHealForOthersClientRPC(uuid, amount);
+            }
+        }
+        [ClientRpc]
+        public void VisualizeHealForOthersClientRPC(FixedString64Bytes uuid, int amount, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value == uuid)
+                        CombatManager.Instance.VisualizePlayerHeal(p, amount);
+                }
+            }
+        }
+
+        public void VisualizeMonsterHealForOthers(int amount)
+        {
+            FixedString64Bytes uuid = UUID.Value;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value != uuid)
+                        p.VisualizeMonsterHealForOthersClientRPC(amount);
+                }
+            }
+            else
+                VisualizeMonsterHealForOthersServerRPC(uuid, amount);
+        }
+        [ServerRpc]
+        private void VisualizeMonsterHealForOthersServerRPC(FixedString64Bytes uuid, int amount, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+            {
+                if (p.UUID.Value != uuid)
+                    p.VisualizeMonsterHealForOthersClientRPC(amount);
+            }
+        }
+        [ClientRpc]
+        public void VisualizeMonsterHealForOthersClientRPC(int amount, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                CombatManager.Instance.VisualizeMonsterHeal(amount);
+            }
+        }
         #endregion
     }
 }
