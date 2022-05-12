@@ -21,6 +21,7 @@ public class JLPauseMenu : MonoBehaviour
             else {
                 ResumeButton();
             }
+            JLAudioManager.Instance.PlaySound("PageTurn");
         }
     }
 
@@ -41,7 +42,8 @@ public class JLPauseMenu : MonoBehaviour
     }
 
     public void QuitButton() {
-        SceneManager.LoadScene("JLMainMenu", LoadSceneMode.Single);
+        Time.timeScale = 1;
+        PlayManager.Instance.DisconnectFromGame();
     }
 
     public void ResolutionChange(int resNumber) { // Set resNumber with Button function in Unity Editor Scene

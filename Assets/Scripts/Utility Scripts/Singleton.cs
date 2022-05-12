@@ -21,9 +21,9 @@ public class Singleton<T> : MonoBehaviour where T : Component
                 }
                 if(_instance == null)
                 {
-                    GameObject obj = new GameObject();
-                    obj.name = string.Format("_{0}", typeof(T).Name);
-                    _instance = obj.AddComponent<T>();
+                    //GameObject obj = new GameObject();
+                    //obj.name = string.Format("_{0}", typeof(T).Name);
+                    //_instance = obj.AddComponent<T>();
                 }
             }
             return _instance;

@@ -20,11 +20,18 @@ namespace AdventuresOfOldMultiplayer
         public GameObject[] removeButtonList;
 
         public GameObject botPlayerPrefab;
+        public GameObject networkManagerPrefab;
 
         private bool inLobby;
 
         public int playersInLobby;
         public string lobbyType;
+
+        private void Awake()
+        {
+            if (GameObject.FindGameObjectWithTag("Network Manager") == null)
+                Instantiate(networkManagerPrefab);
+        }
 
         void Start()
         {
@@ -117,17 +124,30 @@ namespace AdventuresOfOldMultiplayer
 
             hostingInProgress.SetActive(true);
 
-            if (RelayManager.Instance.IsRelayEnabled)
-                await RelayManager.Instance.SetupRelay();
+            bool joinedRelay = true;
+            try
+            {
+                if (RelayManager.Instance.IsRelayEnabled)
+                    await RelayManager.Instance.SetupRelay();
+            }
+            catch (Exception)
+            {
+                joinedRelay = false;
+                hostingInProgress.SetActive(false);
+                inLobby = false;
+            }
 
-            StartCoroutine(HostingProcedure());
+            if (joinedRelay)
+            {
+                StartCoroutine(HostingProcedure());
+                NetworkManager.Singleton.StartHost();
+            }
         }
 
         IEnumerator HostingProcedure()
         {
             for (int i = 0; i < 10; i++)
             {
-                NetworkManager.Singleton.StartHost();
                 yield return new WaitForSeconds(.5f);
                 if (NetworkManager.Singleton.IsHost)
                 {

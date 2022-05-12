@@ -51,8 +51,8 @@ public class UICombatOptions : MonoBehaviour
 
     public void AttackAbility()
     {
-        if (lockInput || !opened)
-            return;
+        //if (lockInput || !opened)
+        //    return;
 
     }
 

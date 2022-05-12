@@ -6,6 +6,7 @@ using Unity.Netcode;
 using System;
 using Unity.Collections;
 using TMPro;
+using UnityEngine.SceneManagement;
 using AdventuresOfOldMultiplayer;
 
 public class PlayManager : Singleton<PlayManager>
@@ -204,6 +205,10 @@ public class PlayManager : Singleton<PlayManager>
         {
             DrawPlayerPieces();
             UpdateCharacterPanels();
+            if ((!NetworkManager.Singleton.IsConnectedClient && !NetworkManager.Singleton.IsHost) || PlayerDisconnected())
+            {
+                DisconnectFromGame();
+            }
         }
     }
 
@@ -1335,4 +1340,21 @@ public class PlayManager : Singleton<PlayManager>
         return GetStrength(p) >= 14;
     }
     #endregion
+
+    public void DisconnectFromGame()
+    {
+        if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsConnectedClient)
+            NetworkManager.Singleton.Shutdown();
+        SceneManager.LoadScene("JLMainMenu");
+    }
+
+    public bool PlayerDisconnected()
+    {
+        for(int i = 0; i < playerList.Count; i++)
+        {
+            if (playerList[i] == null)
+                return true;
+        }
+        return false;
+    }
 }
