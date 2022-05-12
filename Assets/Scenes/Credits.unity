@@ -185,14 +185,14 @@ MonoBehaviour:
 
     Banned Bandits Studios'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
-  m_sharedMaterial: {fileID: -1907966998218593075, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
+  m_sharedMaterial: {fileID: -3865223766179326254, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 218103807
+    rgba: 100663295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -322,14 +322,14 @@ MonoBehaviour:
 
     Justin Lao'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
-  m_sharedMaterial: {fileID: -1907966998218593075, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
+  m_sharedMaterial: {fileID: -3865223766179326254, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 67108863
+    rgba: 771751935
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -620,14 +620,14 @@ MonoBehaviour:
 
     Darren Tran'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
-  m_sharedMaterial: {fileID: -1907966998218593075, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
+  m_sharedMaterial: {fileID: -3865223766179326254, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 2785017855
+    rgba: 268435455
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -880,14 +880,14 @@ MonoBehaviour:
 
     Julian Cady'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
-  m_sharedMaterial: {fileID: -1907966998218593075, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
+  m_sharedMaterial: {fileID: -3865223766179326254, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 771751935
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1103,14 +1103,14 @@ MonoBehaviour:
 
     ETHAN ERH'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
-  m_sharedMaterial: {fileID: -1907966998218593075, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
+  m_sharedMaterial: {fileID: -3865223766179326254, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4244635647
+    rgba: 16777215
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1318,10 +1318,10 @@ RectTransform:
   m_Father: {fileID: 1355592850}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -840, y: -1030}
+  m_SizeDelta: {x: 1180, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1445713805
 MonoBehaviour:
@@ -1343,18 +1343,18 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "<u>Voice Credits</u>\nnathan alice - main narrator\n- secondary narrator\nc.
-    conrad cady - crazed hermit\nemily wen - distressed villager + forest hag\n -
-    fire elemental\nethan michaels - four-eyed boy\n"
+  m_text: "<u>Voice Credits</u>\nNathan Altice - Main Narrator\nEthan Michaels -
+    Secondary Narrator, Four-Eyed Boy\nC. Conrad Cady - Crazed Hermit\nEmily Wen
+    - Forest Hag\n - Fire Elemental\n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
-  m_sharedMaterial: {fileID: -1907966998218593075, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
+  m_sharedMaterial: {fileID: -3865223766179326254, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 16777215
+    rgba: 268435455
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1378,7 +1378,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 32
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -1586,14 +1586,14 @@ MonoBehaviour:
 
     Brandon Wong'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
-  m_sharedMaterial: {fileID: -1907966998218593075, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
+  m_sharedMaterial: {fileID: -3865223766179326254, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 33554431
+    rgba: 16777215
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1723,21 +1723,21 @@ MonoBehaviour:
 
     - pablo the noob
 
-    remy fisher - shifty peddler
+    Remy Fisher - Shifty Peddler
 
-    milo
-    fisher - suspicious horse
+    Milo
+    Fisher - Suspicious Horse
 
-    ethan erh - veteran hunter'
+    Ethan Erh - Veteran Hunter'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
-  m_sharedMaterial: {fileID: -1907966998218593075, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
+  m_sharedMaterial: {fileID: -3865223766179326254, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 134217727
+    rgba: 2365587455
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1761,7 +1761,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 32
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -1867,14 +1867,14 @@ MonoBehaviour:
 
     Milo Fisher'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
-  m_sharedMaterial: {fileID: -1907966998218593075, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
+  m_sharedMaterial: {fileID: -3865223766179326254, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 687865855
+    rgba: 536870911
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -2002,23 +2002,21 @@ MonoBehaviour:
       m_Calls: []
   m_text: '<u>Additional Credits</u>
 
-    chequered ink - botw font
+    Canada Type - Luminari Font
 
-    canada type
-    - luminari font
+    Icons
+    by Icons8
 
-    icons by icons8
-
-    sfx by nicole marie t.'
+    SFX by Nicole Marie T.'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
-  m_sharedMaterial: {fileID: -1907966998218593075, guid: 8aa1a531b43636f47aa51a5f6cec7369, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
+  m_sharedMaterial: {fileID: -3865223766179326254, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 33554431
+    rgba: 1526726655
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -2042,7 +2040,7 @@ MonoBehaviour:
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 32
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535

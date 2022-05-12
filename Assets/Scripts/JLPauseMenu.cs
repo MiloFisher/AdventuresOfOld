@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro;
 
 public class JLPauseMenu : MonoBehaviour
 {
@@ -57,5 +56,25 @@ public class JLPauseMenu : MonoBehaviour
     public void AnimationSpeed(float speed) {
         float animSpeed = Mathf.Abs(speed);
         Global.animSpeed = animSpeed;
+
+        GameObject animObject = GameObject.FindGameObjectWithTag("AnimHolder");
+        TextMeshProUGUI animText = animObject.GetComponent<TextMeshProUGUI>();
+        switch (animSpeed) {
+            case >= 0.75f:
+                animText.text = "Normal";
+                break;
+            case >= 0.50f:
+                animText.text = "Quick";
+                break;
+            case >= 0.25f:
+                animText.text = "Fast";
+                break;
+            case >= 0f:
+                animText.text = "Speedrun";
+                break;
+            default:
+                animText.text = "Not Working";
+                break;
+        }
     }
 }
