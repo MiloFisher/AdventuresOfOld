@@ -51429,6 +51429,22 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: musicSlider
+      value: 
+      objectReference: {fileID: 1957516732}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: voiceSlider
+      value: 
+      objectReference: {fileID: 1882099978}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: masterSlider
+      value: 
+      objectReference: {fileID: 1090864932}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: effectsSlider
+      value: 
+      objectReference: {fileID: 401544540}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
       propertyPath: soundArray.Array.size
       value: 1
       objectReference: {fileID: 0}
