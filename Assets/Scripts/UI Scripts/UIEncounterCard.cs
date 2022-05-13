@@ -111,9 +111,9 @@ public class UIEncounterCard : MonoBehaviour
             monsterPhysicalPower.text = m.physicalPower + PlayManager.Instance.PowerModifier() + "";
             monsterMagicalPower.text = m.magicalPower + PlayManager.Instance.PowerModifier() + "";
             monsterFlavorText.text = m.flavorText;
-            monsterSkillName.text = m.skillName;
+            monsterSkillName.text = "Skill: " + m.skillName;
             monsterSkillDescription.text = m.skillDescription;
-            monsterPassiveName.text = m.passiveName;
+            monsterPassiveName.text = "Passive: " + m.passiveName;
             monsterPassiveDescription.text = m.passiveDescription;
             switch (m.type)
             {
@@ -210,9 +210,9 @@ public class UIEncounterCard : MonoBehaviour
         monsterPhysicalPower.text = c.GetPhysicalPower() + "";
         monsterMagicalPower.text = c.GetMagicalPower() + "";
         monsterFlavorText.text = c.monster.flavorText;
-        monsterSkillName.text = c.monster.skillName;
+        monsterSkillName.text = "Skill: " + c.monster.skillName;
         monsterSkillDescription.text = c.monster.skillDescription;
-        monsterPassiveName.text = c.monster.passiveName;
+        monsterPassiveName.text = "Passive: " + c.monster.passiveName;
         monsterPassiveDescription.text = c.monster.passiveDescription;
         switch (c.monster.type)
         {

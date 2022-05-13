@@ -6,7 +6,7 @@ public class UILootSelection : MonoBehaviour, IPointerEnterHandler
 {
     public GameObject display;
     public Vector3 displayPosition;
-    public float displayScale;
+    public Vector3 displayScale;
 
     private GameObject copy;
 
@@ -16,7 +16,7 @@ public class UILootSelection : MonoBehaviour, IPointerEnterHandler
             return;
 
         copy = Instantiate(display, display.transform.parent);
-        copy.transform.localScale = new Vector3(displayScale, displayScale, 1);
+        copy.transform.localScale = displayScale;
         copy.transform.localPosition = displayPosition;
         InventoryManager.Instance.ShowOptions(GetComponentInParent<UILootCard>().slot);
     }

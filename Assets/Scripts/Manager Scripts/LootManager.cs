@@ -188,6 +188,7 @@ public class LootManager : Singleton<LootManager>
         GameObject card = Instantiate(cardPrefab, travelCard.transform.position, Quaternion.identity, transform.parent);
         card.GetComponent<UILootCard>().SetVisuals(cardsToDraw[current]);
         card.GetComponent<UILootCard>().ActivateCardButton(false);
+        card.GetComponent<UILootCard>().ActivateZoomSelector(true);
         card.GetComponent<UILootCard>().ActivateCollectCardButton(true);
         displayCards.Add(card);
         Destroy(travelCard);

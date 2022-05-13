@@ -19,6 +19,7 @@ public class UILootCard : MonoBehaviour
     public TMP_Text rarity;
     public TMP_Text buyCost;
     public TMP_Text sellCost;
+    public GameObject zoomSelector;
 
     [Header("Weapon Components")]
     public GameObject weaponComponents;
@@ -111,6 +112,11 @@ public class UILootCard : MonoBehaviour
     public void ActivateCardButton(bool active)
     {
         cardButton.SetActive(active);
+    }
+
+    public void ActivateZoomSelector(bool active)
+    {
+        zoomSelector.SetActive(active);
     }
 
     public void ActivateCollectCardButton(bool active)
