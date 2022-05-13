@@ -62708,6 +62708,8 @@ MonoBehaviour:
   - {fileID: 138702826}
   - {fileID: 936898999}
   - {fileID: 311098996}
+  animSlider: {fileID: 706906313}
+  animText: {fileID: 1520938691}
 --- !u!4 &1637026287
 Transform:
   m_ObjectHideFlags: 0

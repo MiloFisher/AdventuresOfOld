@@ -12837,6 +12837,8 @@ MonoBehaviour:
   - {fileID: 252133593}
   - {fileID: 437812419}
   - {fileID: 175649980}
+  animSlider: {fileID: 521412293}
+  animText: {fileID: 684696780}
 --- !u!1 &1650039628
 GameObject:
   m_ObjectHideFlags: 0

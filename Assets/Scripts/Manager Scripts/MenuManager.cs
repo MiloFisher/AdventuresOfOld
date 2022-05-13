@@ -1,10 +1,13 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.UI;
 
 public class MenuManager : Singleton<MenuManager>
 {
     public GameObject[] menuScenes;
+    public Slider animSlider;
+    public TextMeshProUGUI animText;
 
     private void Awake()
     {
@@ -17,7 +20,11 @@ public class MenuManager : Singleton<MenuManager>
 
     private void Start()
     {
-
+        if (animSlider)
+        {
+            animSlider.value = -1 * Global.animSpeed;
+            AnimationSpeed(Global.animSpeed);
+        }
     }
 
     public void SwapScene(int id)
@@ -55,8 +62,6 @@ public class MenuManager : Singleton<MenuManager>
         float animSpeed = Mathf.Abs(speed);
         Global.animSpeed = animSpeed;
 
-        GameObject animObject = GameObject.FindGameObjectWithTag("AnimHolder");
-        TextMeshProUGUI animText = animObject.GetComponent<TextMeshProUGUI>();
         switch (animSpeed) {
             case >= 0.75f:
                 animText.text = "Normal";

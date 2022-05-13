@@ -1,13 +1,22 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.UI;
 
 public class JLPauseMenu : MonoBehaviour
 {
     public GameObject pauseCanvas;
     public GameObject[] pauseMenus;
+    public Slider animSlider;
+    public TextMeshProUGUI animText;
 
     private int currentID;
+
+    private void Start()
+    {
+        animSlider.value = -1 * Global.animSpeed;
+        AnimationSpeed(Global.animSpeed);
+    }
 
     // Update is called once per frame
     void Update()
@@ -59,8 +68,6 @@ public class JLPauseMenu : MonoBehaviour
         float animSpeed = Mathf.Abs(speed);
         Global.animSpeed = animSpeed;
 
-        GameObject animObject = GameObject.FindGameObjectWithTag("AnimHolder");
-        TextMeshProUGUI animText = animObject.GetComponent<TextMeshProUGUI>();
         switch (animSpeed) {
             case >= 0.75f:
                 animText.text = "Normal";
