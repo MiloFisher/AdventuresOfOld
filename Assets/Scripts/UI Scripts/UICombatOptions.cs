@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class UICombatOptions : MonoBehaviour
 {
@@ -19,8 +20,11 @@ public class UICombatOptions : MonoBehaviour
     public Color enabledColor;
     public Color disabledColor;
     public GameObject fleeRoll;
+    public GameObject toggleShowButton;
+    public Vector3 hiddenPosition;
     public int resolution;
 
+    private bool isHidden;
     private RectTransform rt;
     private bool opened;
     private bool lockInput;
@@ -115,6 +119,8 @@ public class UICombatOptions : MonoBehaviour
         for (int i = 1; i <= Global.animSteps; i++)
         {
             rt.sizeDelta = new Vector2(startWidth + dif * i * Global.animRate, constHeight);
+            if (toggleShowButton)
+                SetAlpha(toggleShowButton, i * Global.animRate);
             yield return new WaitForSeconds(openingLength * Global.animTimeMod * Global.animSpeed);
         }
 
@@ -131,6 +137,8 @@ public class UICombatOptions : MonoBehaviour
         for (int i = Global.animSteps - 1; i >= 0; i--)
         {
             rt.sizeDelta = new Vector2(startWidth + dif * i * Global.animRate, constHeight);
+            if (toggleShowButton)
+                SetAlpha(toggleShowButton, i * Global.animRate);
             yield return new WaitForSeconds(openingLength * Global.animTimeMod * Global.animSpeed);
         }
 
@@ -157,5 +165,56 @@ public class UICombatOptions : MonoBehaviour
         rt = GetComponent<RectTransform>();
         transform.localScale = new Vector3(startScale, startScale, 1);
         rt.sizeDelta = new Vector2(startWidth, constHeight);
+        transform.localPosition = Vector3.zero;
+        if (toggleShowButton)
+        {
+            SetAlpha(toggleShowButton, 0);
+            toggleShowButton.GetComponentInChildren<TMP_Text>().text = "Hide";
+        }
+    }
+
+    public void ToggleShow()
+    {
+        if (!opened || lockInput)
+            return;
+
+        if (isHidden)
+            StartCoroutine(Maximize());
+        else
+            StartCoroutine(Minimize());
+    }
+
+    IEnumerator Minimize()
+    {
+        lockInput = true;
+        for (int i = 1; i <= Global.animSteps; i++)
+        {
+            transform.localPosition = i * Global.animRate * hiddenPosition;
+            yield return new WaitForSeconds(openingLength * Global.animTimeMod * Global.animSpeed);
+        }
+        lockInput = false;
+        isHidden = true;
+        toggleShowButton.GetComponentInChildren<TMP_Text>().text = "Show";
+    }
+
+    IEnumerator Maximize()
+    {
+        lockInput = true;
+        for (int i = Global.animSteps - 1; i >= 0; i--)
+        {
+            transform.localPosition = i * Global.animRate * hiddenPosition;
+            yield return new WaitForSeconds(openingLength * Global.animTimeMod * Global.animSpeed);
+        }
+        lockInput = false;
+        isHidden = false;
+        toggleShowButton.GetComponentInChildren<TMP_Text>().text = "Hide";
+    }
+
+    private void SetAlpha(GameObject g, float a)
+    {
+        Image i = g.GetComponent<Image>();
+        TMP_Text t = g.GetComponentInChildren<TMP_Text>();
+        i.color = new Color(i.color.r, i.color.g, i.color.b, a);
+        t.color = new Color(t.color.r, t.color.g, t.color.b, a);
     }
 }

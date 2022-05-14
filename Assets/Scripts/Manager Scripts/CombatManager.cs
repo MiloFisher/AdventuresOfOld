@@ -437,7 +437,7 @@ public class CombatManager : Singleton<CombatManager>
         // Remove from turn order combatant list
         for (int i = 0; i < turnOrderCombatantList.Count; i++)
         {
-            if ((turnOrderCombatantList[i].combatantType == CombatantType.PLAYER && turnOrderCombatantList[i].player.UUID.Value == c.player.UUID.Value) || (turnOrderCombatantList[i].combatantType == CombatantType.MONSTER && turnOrderCombatantList[i].monster.cardName == c.monster.cardName))
+            if (turnOrderCombatantList[i].combatantType == c.combatantType && ((turnOrderCombatantList[i].combatantType == CombatantType.PLAYER && turnOrderCombatantList[i].player.UUID.Value == c.player.UUID.Value) || (turnOrderCombatantList[i].combatantType == CombatantType.MONSTER && turnOrderCombatantList[i].monster.cardName == c.monster.cardName)))
             {
                 turnOrderCombatantList.RemoveAt(i);
                 break;

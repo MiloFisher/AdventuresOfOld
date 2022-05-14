@@ -8,8 +8,22 @@ public class UIPlayerSelection : MonoBehaviour, IPointerClickHandler, IPointerEx
     public GameObject playerDisplay;
     public Vector3 normalScale;
     public Vector3 zoomScale;
+    public Tooltip[] tooltips;
+
+    private void Start()
+    {
+        for (int i = 0; i < tooltips.Length; i++)
+        {
+            tooltips[i].OnClick = OnClick;
+        }
+    }
 
     public void OnPointerClick(PointerEventData eventData)
+    {
+        OnClick();
+    }
+
+    public void OnClick()
     {
         if (playerDisplay.transform.localScale != zoomScale)
             playerDisplay.transform.localScale = zoomScale;
@@ -19,7 +33,7 @@ public class UIPlayerSelection : MonoBehaviour, IPointerClickHandler, IPointerEx
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        HideSelection();
+        StartCoroutine(Close());
     }
 
     private void OnDisable()
@@ -30,5 +44,22 @@ public class UIPlayerSelection : MonoBehaviour, IPointerClickHandler, IPointerEx
     public void HideSelection()
     {
         playerDisplay.transform.localScale = normalScale;
+    }
+
+    IEnumerator Close()
+    {
+        yield return new WaitForEndOfFrame();
+        if (!TooltipOpen())
+            HideSelection();
+    }
+
+    private bool TooltipOpen()
+    {
+        for (int i = 0; i < tooltips.Length; i++)
+        {
+            if (tooltips[i].IsOpen())
+                return true;
+        }
+        return false;
     }
 }

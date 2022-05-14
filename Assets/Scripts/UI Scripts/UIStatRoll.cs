@@ -23,8 +23,12 @@ public class UIStatRoll : MonoBehaviour
     public float waitTime = 0.5f;
     public GameObject successText;
     public GameObject failureText;
+    public GameObject toggleShowButton;
+    public Vector3 hiddenPosition;
     public int success;
 
+    private bool lockInput;
+    private bool isHidden;
     private int hiddenSuccess;
     private RectTransform rt;
     private bool opened;
@@ -66,11 +70,13 @@ public class UIStatRoll : MonoBehaviour
             yield return new WaitForSeconds(growingLength * Global.animTimeMod * Global.animSpeed);
         }
 
-        // Next open the scroll
+        // Next open the scroll and fade in toggle show button
         dif = endWidth - startWidth;
         for (int i = 1; i <= Global.animSteps; i++)
         {
             rt.sizeDelta = new Vector2(startWidth + dif * i * Global.animRate, constHeight);
+            if (toggleShowButton)
+                SetAlpha(toggleShowButton, i * Global.animRate);
             yield return new WaitForSeconds(openingLength * Global.animTimeMod * Global.animSpeed);
         }
 
@@ -88,14 +94,23 @@ public class UIStatRoll : MonoBehaviour
         rollButton.SetActive(true);
         successText.SetActive(false);
         failureText.SetActive(false);
+        isHidden = false;
+        lockInput = false;
+        transform.localPosition = Vector3.zero;
+        if (toggleShowButton)
+        {
+            SetAlpha(toggleShowButton, 0);
+            toggleShowButton.GetComponentInChildren<TMP_Text>().text = "Hide";
+        } 
     }
 
     public void RollDice()
     {
-        // Return if the scroll hasn't opened yet
-        if (!opened)
+        // Return if the scroll hasn't opened yet or if input is locked
+        if (!opened || lockInput)
             return;
 
+        lockInput = true;
         rollButton.SetActive(false);
         roll1 = Random.Range(1, 7);
         roll2 = Random.Range(1, 7);
@@ -147,11 +162,15 @@ public class UIStatRoll : MonoBehaviour
 
     IEnumerator AnimateClosing()
     {
-        // First close the scroll
+        opened = false;
+
+        // First close the scroll and fade out toggle show button
         float dif = endWidth - startWidth;
         for (int i = Global.animSteps - 1; i >= 0; i--)
         {
             rt.sizeDelta = new Vector2(startWidth + dif * i * Global.animRate, constHeight);
+            if(toggleShowButton)
+                SetAlpha(toggleShowButton, i * Global.animRate);
             yield return new WaitForSeconds(openingLength * Global.animTimeMod * Global.animSpeed);
         }
 
@@ -166,5 +185,50 @@ public class UIStatRoll : MonoBehaviour
         yield return new WaitForSeconds(waitTime * Global.animSpeed);
 
         gameObject.SetActive(false);
+    }
+
+    public void ToggleShow()
+    {
+        if (!opened || lockInput)
+            return;
+
+        if(isHidden)
+            StartCoroutine(Maximize());
+        else
+            StartCoroutine(Minimize());
+    }
+
+    IEnumerator Minimize()
+    {
+        lockInput = true;
+        for (int i = 1; i <= Global.animSteps; i++)
+        {
+            transform.localPosition =  i * Global.animRate * hiddenPosition;
+            yield return new WaitForSeconds(openingLength * Global.animTimeMod * Global.animSpeed);
+        }
+        lockInput = false;
+        isHidden = true;
+        toggleShowButton.GetComponentInChildren<TMP_Text>().text = "Show";
+    }
+
+    IEnumerator Maximize()
+    {
+        lockInput = true;
+        for (int i = Global.animSteps - 1; i >= 0; i--)
+        {
+            transform.localPosition = i * Global.animRate * hiddenPosition;
+            yield return new WaitForSeconds(openingLength * Global.animTimeMod * Global.animSpeed);
+        }
+        lockInput = false;
+        isHidden = false;
+        toggleShowButton.GetComponentInChildren<TMP_Text>().text = "Hide";
+    }
+
+    private void SetAlpha(GameObject g, float a)
+    {
+        Image i = g.GetComponent<Image>();
+        TMP_Text t = g.GetComponentInChildren<TMP_Text>();
+        i.color = new Color(i.color.r, i.color.g, i.color.b, a);
+        t.color = new Color(t.color.r, t.color.g, t.color.b, a);
     }
 }
