@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System;
 
 public class UILootCard : MonoBehaviour
 {
@@ -10,6 +11,9 @@ public class UILootCard : MonoBehaviour
     public string cardName;
     public int slot;
     public GameObject collectCardButton;
+    public GameObject buyCardButton;
+    public Color buyCardEnabled;
+    public Color buyCardDisabled;
     public GameObject cardButton;
     public GameObject cardBack;
     public Image displayRarityBack;
@@ -35,6 +39,26 @@ public class UILootCard : MonoBehaviour
     public float fadeLength = 0.004f;
 
     private bool collectButtonActive;
+    private bool buyButtonActive;
+
+    private LootCard lootCard;
+
+    private void Update()
+    {
+        if(buyButtonActive && lootCard != null)
+        {
+            if(PlayManager.Instance.GetGold(PlayManager.Instance.localPlayer) >= lootCard.buyCost)
+            {
+                buyCardButton.GetComponent<Button>().enabled = true;
+                buyCardButton.GetComponent<Image>().color = buyCardEnabled;
+            }
+            else
+            {
+                buyCardButton.GetComponent<Button>().enabled = false;
+                buyCardButton.GetComponent<Image>().color = buyCardDisabled;
+            }
+        }
+    }
 
     public void ClickCard()
     {
@@ -48,15 +72,23 @@ public class UILootCard : MonoBehaviour
             LootManager.Instance.AddCardToInventory(gameObject);
     }
 
-    public void SetVisuals(string card)
+    public void BuyCard()
     {
+        if(buyButtonActive)
+            LootManager.Instance.BuyCard(gameObject, lootCard.buyCost, slot);
+    }
+
+    public void SetVisuals(string card, int _slot = -1)
+    {
+        if (_slot > -1)
+            slot = _slot;
         cardName = card;
         if (!PlayManager.Instance.itemReference.ContainsKey(card))
             return;
-        LootCard loot = PlayManager.Instance.itemReference[card];
-        if (loot.GetType() == typeof(WeaponCard))
+        lootCard = PlayManager.Instance.itemReference[card];
+        if (lootCard.GetType() == typeof(WeaponCard))
         {
-            WeaponCard w = loot as WeaponCard;
+            WeaponCard w = lootCard as WeaponCard;
             weaponComponents.SetActive(true);
             lootComponents.SetActive(false);
             weaponEffect.text = w.effectDescription;
@@ -67,10 +99,10 @@ public class UILootCard : MonoBehaviour
         {
             weaponComponents.SetActive(false);
             lootComponents.SetActive(true);
-            lootEffect.text = loot.effectDescription;
-            lootType.text = loot.itemType;
+            lootEffect.text = lootCard.effectDescription;
+            lootType.text = lootCard.itemType;
         }
-        switch(loot.rarity)
+        switch(lootCard.rarity)
         {
             case Rarity.COMMON:
                 rarity.text = "Common";
@@ -98,10 +130,10 @@ public class UILootCard : MonoBehaviour
                 displayRarityBack.color = rarityColors[4];
                 break;
         }
-        displayImage.sprite = loot.image;
-        displayName.text = loot.cardName;
-        buyCost.text = loot.buyCost + "";
-        sellCost.text = loot.sellCost + "";
+        displayImage.sprite = lootCard.image;
+        displayName.text = lootCard.cardName;
+        buyCost.text = lootCard.buyCost + "";
+        sellCost.text = lootCard.sellCost + "";
     }
 
     public void ActivateCardBack(bool active)
@@ -122,35 +154,47 @@ public class UILootCard : MonoBehaviour
     public void ActivateCollectCardButton(bool active)
     {
         if (active)
-            StartCoroutine(FadeInButton());
+            StartCoroutine(FadeInButton(collectCardButton, () => { collectButtonActive = true; }));
         else
-            StartCoroutine(FadeOutButton());
+        {
+            collectButtonActive = false;
+            StartCoroutine(FadeOutButton(collectCardButton));
+        }   
     }
 
-    IEnumerator FadeInButton()
+    public void ActivateBuyCardButton(bool active)
     {
-        collectCardButton.SetActive(true);
+        if (active)
+            StartCoroutine(FadeInButton(buyCardButton, () => { buyButtonActive = true; }));
+        else
+        {
+            buyButtonActive = false;
+            StartCoroutine(FadeOutButton(buyCardButton));
+        }    
+    }
+
+    IEnumerator FadeInButton(GameObject button, Action OnComplete)
+    {
+        button.SetActive(true);
 
         for(int i = 1; i <= Global.animSteps; i++)
         {
-            SetAlpha(collectCardButton, i * Global.animRate);
+            SetAlpha(button, i * Global.animRate);
             yield return new WaitForSeconds(fadeLength * Global.animTimeMod * Global.animSpeed);
         }
 
-        collectButtonActive = true;
+        OnComplete();
     }
 
-    IEnumerator FadeOutButton()
+    IEnumerator FadeOutButton(GameObject button)
     {
-        collectButtonActive = false;
-
         for (int i = Global.animSteps - 1; i >= 0; i--)
         {
-            SetAlpha(collectCardButton, i * Global.animRate);
+            SetAlpha(button, i * Global.animRate);
             yield return new WaitForSeconds(fadeLength * Global.animTimeMod * Global.animSpeed);
         }
 
-        collectCardButton.SetActive(false);
+        button.SetActive(false);
     }
 
     private void SetAlpha(GameObject g, float a)

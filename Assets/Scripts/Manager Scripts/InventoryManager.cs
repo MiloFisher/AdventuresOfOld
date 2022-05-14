@@ -480,34 +480,35 @@ public class InventoryManager : Singleton<InventoryManager>
 
     public void Discard()
     {
+        Player p = PlayManager.Instance.localPlayer;
         switch (selectedID)
         {
             case 0:
-                PlayManager.Instance.localPlayer.SetValue("Weapon", emptyValue);
+                p.SetValue("Weapon", emptyValue);
                 break;
             case 1:
-                PlayManager.Instance.localPlayer.SetValue("Armor", emptyValue);
+                p.SetValue("Armor", emptyValue);
                 break;
             case 2:
-                PlayManager.Instance.localPlayer.SetValue("Ring1", emptyValue);
+                p.SetValue("Ring1", emptyValue);
                 break;
             case 3:
-                PlayManager.Instance.localPlayer.SetValue("Ring2", emptyValue);
+                p.SetValue("Ring2", emptyValue);
                 break;
             case 4:
-                PlayManager.Instance.localPlayer.SetValue("Inventory1", emptyValue);
+                p.SetValue("Inventory1", emptyValue);
                 break;
             case 5:
-                PlayManager.Instance.localPlayer.SetValue("Inventory2", emptyValue);
+                p.SetValue("Inventory2", emptyValue);
                 break;
             case 6:
-                PlayManager.Instance.localPlayer.SetValue("Inventory3", emptyValue);
+                p.SetValue("Inventory3", emptyValue);
                 break;
             case 7:
-                PlayManager.Instance.localPlayer.SetValue("Inventory4", emptyValue);
+                p.SetValue("Inventory4", emptyValue);
                 break;
             case 8:
-                PlayManager.Instance.localPlayer.SetValue("Inventory5", emptyValue);
+                p.SetValue("Inventory5", emptyValue);
                 break;
         }
         if (forcedDiscard.activeInHierarchy)
@@ -523,6 +524,41 @@ public class InventoryManager : Singleton<InventoryManager>
 
     public void Sell()
     {
+        string cardName = cards[selectedID].GetComponent<UILootCard>().cardName;
+        LootCard l = PlayManager.Instance.itemReference[cardName];
+        Player p = PlayManager.Instance.localPlayer;
 
+        p.GainGold(l.sellCost);
+
+        switch (selectedID)
+        {
+            case 0:
+                p.SetValue("Weapon", emptyValue);
+                break;
+            case 1:
+                p.SetValue("Armor", emptyValue);
+                break;
+            case 2:
+                p.SetValue("Ring1", emptyValue);
+                break;
+            case 3:
+                p.SetValue("Ring2", emptyValue);
+                break;
+            case 4:
+                p.SetValue("Inventory1", emptyValue);
+                break;
+            case 5:
+                p.SetValue("Inventory2", emptyValue);
+                break;
+            case 6:
+                p.SetValue("Inventory3", emptyValue);
+                break;
+            case 7:
+                p.SetValue("Inventory4", emptyValue);
+                break;
+            case 8:
+                p.SetValue("Inventory5", emptyValue);
+                break;
+        }
     }
 }

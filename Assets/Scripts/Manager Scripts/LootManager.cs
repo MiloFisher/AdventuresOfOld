@@ -25,20 +25,25 @@ public class LootManager : Singleton<LootManager>
     public float fadeLength = 0.004f;
     public List<string> cardsToDraw = new List<string>();
     public GameObject discardCardsButton;
+    public GameObject leaveStoreButton;
     public bool treasureTile;
+
     private List<GameObject> displayCards = new List<GameObject>();
     private bool endTurnAfter;
+    private bool forStore;
 
     public void AddLootCardToDraw(string cardName)
     {
         cardsToDraw.Add(cardName);
     }
 
-    public void DrawCard(int amount, bool _endTurnAfter)
+    public void DrawCard(int amount, bool _endTurnAfter, bool _forStore)
     {
         if(amount > 0 && !lootBanner.activeInHierarchy)
         {
             endTurnAfter = _endTurnAfter;
+            forStore = _forStore;
+            PlayManager.Instance.inStore = forStore;
             StartCoroutine(AnimateOpening(amount));
         }
     }
@@ -64,6 +69,61 @@ public class LootManager : Singleton<LootManager>
         }
     }
 
+    public void BuyCard(GameObject card, int cost, int slot)
+    {
+        if (InventoryManager.Instance.AddDrawnCardToInventory(card))
+        {
+            PlayManager.Instance.localPlayer.LoseGold(cost);
+            PlayManager.Instance.localPlayer.RemoveStoreCardForOthers(slot);
+
+            Debug.Log("Successfully Bought Card!");
+            displayCards[slot] = null;
+            Destroy(card);
+        }
+        else
+        {
+            Debug.Log("Inventory is full!");
+        }
+    }
+
+    public void LeaveStore()
+    {
+        PlayManager.Instance.inStore = false;
+        leaveStoreButton.SetActive(false);
+        for(int i = 0; i < displayCards.Count; i++)
+        {
+            if(displayCards[i] == null)
+            {
+                displayCards.RemoveAt(i);
+                i--;
+            }
+        }
+        StartCoroutine(FadeRemainingCards());
+    }
+
+    public void RemoveStoreCard(int slot)
+    {
+        StartCoroutine(FadeStoreCard(slot));
+    }
+
+    IEnumerator FadeStoreCard(int slot)
+    {
+        GameObject card = displayCards[slot];
+
+        // First disable buy button
+        card.GetComponent<UILootCard>().ActivateBuyCardButton(false);
+
+        // Next fade out card
+        for (int i = Global.animSteps - 1; i >= 0; i--)
+        {
+            SetAlpha(card, i * Global.animRate);
+            yield return new WaitForSeconds(fadeLength * Global.animTimeMod * Global.animSpeed);
+        }
+
+        displayCards = null;
+        Destroy(card);
+    }
+
     public void DiscardRemaining()
     {
         discardCardsButton.SetActive(false);
@@ -75,7 +135,10 @@ public class LootManager : Singleton<LootManager>
         // First disable collect buttons
         foreach (GameObject g in displayCards)
         {
-            g.GetComponent<UILootCard>().ActivateCollectCardButton(false);
+            if(forStore)
+                g.GetComponent<UILootCard>().ActivateBuyCardButton(false);
+            else
+                g.GetComponent<UILootCard>().ActivateCollectCardButton(false);
         }
 
         // Next fade out cards
@@ -106,6 +169,8 @@ public class LootManager : Singleton<LootManager>
         // First setup banner
         lootBanner.SetActive(true);
         lootBannerText.text = treasureTile ? "Choose a Card" : "Drawn Cards";
+        if (forStore)
+            lootBannerText.text = "Store";
         lootBanner.GetComponent<RectTransform>().sizeDelta = new Vector2(bannerStartWidth, bannerConstHeight);
         lootBanner.transform.localScale = new Vector3(bannerStartScale, bannerStartScale, 1);
 
@@ -131,6 +196,7 @@ public class LootManager : Singleton<LootManager>
 
     IEnumerator AnimateClosing()
     {
+        leaveStoreButton.SetActive(false);
         discardCardsButton.SetActive(false);
 
         // First close the scroll
@@ -155,12 +221,15 @@ public class LootManager : Singleton<LootManager>
 
         if (endTurnAfter)
             PlayManager.Instance.EndTurn();
+
+        if (forStore)
+            PlayManager.Instance.localPlayer.ReadyUp();
     }
 
     IEnumerator AnimateCardDraw(int current, int amount)
     {
         GameObject travelCard = Instantiate(cardPrefab, transform.parent);
-        travelCard.GetComponent<UILootCard>().SetVisuals(cardsToDraw[current]);
+        travelCard.GetComponent<UILootCard>().SetVisuals(cardsToDraw[current], current);
         travelCard.GetComponent<UILootCard>().ActivateCardButton(false);
         travelCard.GetComponent<UILootCard>().ActivateCardBack(true);
 
@@ -189,7 +258,10 @@ public class LootManager : Singleton<LootManager>
         card.GetComponent<UILootCard>().SetVisuals(cardsToDraw[current]);
         card.GetComponent<UILootCard>().ActivateCardButton(false);
         card.GetComponent<UILootCard>().ActivateZoomSelector(true);
-        card.GetComponent<UILootCard>().ActivateCollectCardButton(true);
+        if(forStore)
+            card.GetComponent<UILootCard>().ActivateBuyCardButton(true);
+        else
+            card.GetComponent<UILootCard>().ActivateCollectCardButton(true);
         displayCards.Add(card);
         Destroy(travelCard);
 
@@ -198,7 +270,16 @@ public class LootManager : Singleton<LootManager>
         else
         {
             cardsToDraw.Clear();
-            discardCardsButton.SetActive(true);
+            if(forStore)
+            {
+                leaveStoreButton.SetActive(true);
+                discardCardsButton.SetActive(false);
+            }
+            else
+            {
+                leaveStoreButton.SetActive(false);
+                discardCardsButton.SetActive(true);
+            }
         }  
     }
 

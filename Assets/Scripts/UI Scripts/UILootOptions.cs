@@ -114,8 +114,8 @@ public class UILootOptions : MonoBehaviour
         {
             discardButton.GetComponentInChildren<TMP_Text>().text = tradeOption;
 
-            // If there is another player in the store to trade with, enable Trading
-            if(PlayManager.Instance.HasAllyInStore())
+            // If there is another player in the store to trade with and this item is unequipped, enable Trading
+            if(PlayManager.Instance.HasAllyInStore() && useButton.GetComponentInChildren<TMP_Text>().text == equipOption)
             {
                 discardButton.GetComponent<Button>().enabled = true;
                 discardButton.GetComponent<Image>().color = enabledColor;
@@ -133,10 +133,10 @@ public class UILootOptions : MonoBehaviour
             discardButton.GetComponentInChildren<TMP_Text>().text = discardOption;
             discardButton.GetComponent<Button>().enabled = true;
             discardButton.GetComponent<Image>().color = enabledColor;
-        }
 
-        // If first option is "Unequip", set option 2 inactive
-        discardButton.SetActive(useButton.GetComponentInChildren<TMP_Text>().text != unequipOption);
+            // If first option is "Unequip", set option 2 inactive
+            discardButton.SetActive(useButton.GetComponentInChildren<TMP_Text>().text != unequipOption);
+        }
 
         // Third option is "Sell"
         sellButton.GetComponentInChildren<TMP_Text>().text = sellOption;

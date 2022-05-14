@@ -388,6 +388,81 @@ public class PlayManager : Singleton<PlayManager>
         CallEndOfDayElement(0);
     }
 
+    // (Host Only)
+    public void SendPlayersToEndOfDayActivities()
+    {
+        Player storeMaster = null;
+        List<Player> shrineGoers = new List<Player>();
+        foreach (Player p in playerList)
+        {
+            p.Unready();
+            switch (p.EndOfDayActivity.Value)
+            {
+                case 0:
+                    storeMaster = p;
+                    break;
+                case 1:
+                    p.TakeShortRestClientRPC();
+                    break;
+                case 2:
+                    p.TakeLongRestClientRPC();
+                    break;
+                case 3:
+                    shrineGoers.Add(p);
+                    break;
+            }
+        }
+
+        // Implement Shrine later
+        foreach (Player p in shrineGoers)
+        {
+            p.ReadyUp();
+        }
+
+        if (storeMaster != null)
+            storeMaster.SetupStore();
+
+        StartCoroutine(WaitForPlayersToEndDay());
+    }
+
+    public void TakeShortRest(Player p)
+    {
+        // Restores 1 Ability Charge and recovers Health equal to 3x the Chaos Tier
+        p.RestoreAbilityCharges(1);
+        p.RestoreHealth(3 * ChaosTier());
+
+        p.ReadyUp();            
+    }
+
+    public void TakeLongRest(Player p)
+    {
+        // Fully restores a Character’s Ability Charges and Health.  Increases the Chaos Counter by 1 for every player that chooses this action
+        p.RestoreAbilityCharges(999);
+        p.RestoreHealth(999);
+        p.IncreaseChaos(1);
+
+        p.ReadyUp();
+    }
+
+    IEnumerator WaitForPlayersToEndDay()
+    {
+        yield return new WaitUntil(() => {
+            bool allReady = true;
+            foreach (Player p in playerList)
+            {
+                if (!p.Ready.Value)
+                    allReady = false;
+            }
+            return allReady;
+        });
+        foreach (Player p in playerList)
+        {
+            p.Unready();
+        }
+        localPlayer.IncreaseChaos(1);
+        StartOfDay();
+    }
+
     public void StartTurn()
     {
         // Set the variable to mark it is this player's turn

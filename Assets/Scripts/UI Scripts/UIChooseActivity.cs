@@ -53,7 +53,7 @@ public class UIChooseActivity : MonoBehaviour
     {
         if (NetworkManager.Singleton && NetworkManager.Singleton.IsHost)
         {
-            PlayManager.Instance.StartOfDay();
+            PlayManager.Instance.SendPlayersToEndOfDayActivities();
         }
     }
 

@@ -444,11 +444,17 @@ namespace AdventuresOfOldMultiplayer
             }
         }
         [ClientRpc]
-        private void DrawLootCardsClientRPC(int amount, bool endTurnAfter, ClientRpcParams clientRpcParams = default)
+        private void DrawLootCardsClientRPC(int amount, bool endTurnAfter, bool forStore = default, ClientRpcParams clientRpcParams = default)
         {
-            if (IsOwner && !isBot)
+            if (IsOwner)
             {
-                LootManager.Instance.DrawCard(amount, endTurnAfter);
+                if(isBot)
+                {
+                    if (forStore)
+                        ReadyUp();
+                }
+                else
+                    LootManager.Instance.DrawCard(amount, endTurnAfter, forStore);
             }
         }
 
@@ -1475,6 +1481,94 @@ namespace AdventuresOfOldMultiplayer
             if (IsOwner && !isBot)
             {
                 CombatManager.Instance.VisualizeMonsterHeal(amount);
+            }
+        }
+
+        [ClientRpc]
+        public void TakeShortRestClientRPC(ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner)
+            {
+                PlayManager.Instance.TakeShortRest(this);
+            }
+        }
+
+        [ClientRpc]
+        public void TakeLongRestClientRPC(ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner)
+            {
+                PlayManager.Instance.TakeLongRest(this);
+            }
+        }
+
+        public void SetupStore()
+        {
+            int storeSize = 5;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                List<string> cards = new List<string>();
+                for (int i = 0; i < storeSize; i++)
+                    cards.Add(PlayManager.Instance.DrawFromLootDeck());
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if(p.EndOfDayActivity.Value == 0)
+                    {
+                        for (int i = 0; i < storeSize; i++)
+                            p.AddLootCardsToDrawClientRPC(cards[i]);
+                        p.DrawLootCardsClientRPC(storeSize, false, true);
+                    }
+                }
+            }
+            else
+                SetupStoreServerRPC(storeSize);
+        }
+        [ServerRpc]
+        private void SetupStoreServerRPC(int storeSize, ServerRpcParams rpcParams = default)
+        {
+            List<string> cards = new List<string>();
+            for (int i = 0; i < storeSize; i++)
+                cards.Add(PlayManager.Instance.DrawFromLootDeck());
+            foreach (Player p in PlayManager.Instance.playerList)
+            {
+                if (p.EndOfDayActivity.Value == 0)
+                {
+                    for (int i = 0; i < storeSize; i++)
+                        p.AddLootCardsToDrawClientRPC(cards[i]);
+                    p.DrawLootCardsClientRPC(storeSize, false, true);
+                }
+            }
+        }
+
+        public void RemoveStoreCardForOthers(int slot)
+        {
+            FixedString64Bytes uuid = UUID.Value;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value != uuid)
+                        p.RemoveStoreCardForOthersClientRPC(slot);
+                }
+            }
+            else
+                RemoveStoreCardForOthersServerRPC(uuid, slot);
+        }
+        [ServerRpc]
+        private void RemoveStoreCardForOthersServerRPC(FixedString64Bytes uuid, int slot, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+            {
+                if (p.UUID.Value != uuid)
+                    p.RemoveStoreCardForOthersClientRPC(slot);
+            }
+        }
+        [ClientRpc]
+        public void RemoveStoreCardForOthersClientRPC(int slot, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                LootManager.Instance.RemoveStoreCard(slot);
             }
         }
         #endregion
