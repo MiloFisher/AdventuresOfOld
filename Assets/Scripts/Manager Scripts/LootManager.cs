@@ -209,7 +209,7 @@ public class LootManager : Singleton<LootManager>
         TMP_Text[] texts = card.GetComponentsInChildren<TMP_Text>();
         foreach (Image img in images)
         {
-            if (!img.GetComponent<Button>())
+            if (!img.GetComponent<Button>() && !img.GetComponent<Tooltip>())
                 img.color = new Color(img.color.r, img.color.g, img.color.b, a);
         }
         foreach (TMP_Text txt in texts)

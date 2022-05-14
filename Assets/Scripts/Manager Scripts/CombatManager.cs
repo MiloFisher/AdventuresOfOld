@@ -26,6 +26,7 @@ public class CombatManager : Singleton<CombatManager>
     public MonsterCard monsterCard;
     public Combatant monster;
     public GameObject attackIconPrefab;
+    public UICombatCharacterPanel[] characterPanels;
     
     public float fadeLength = 0.01f;
     public float fadedWaitTime = 0.5f;
@@ -55,7 +56,10 @@ public class CombatManager : Singleton<CombatManager>
     private void Update()
     {
         if(ready && !changingStyle)
+        {
             AllignPlayerCards();
+            UpdateCharacterPanels();
+        }
     }
 
     public void LoadIntoCombat()
@@ -737,7 +741,7 @@ public class CombatManager : Singleton<CombatManager>
                 {
                     if(index >= 0)
                     {
-                        playerCards[index].GetComponent<UIPlayerCard>().ActivateCrosshair(IsTargetedByMonster(turnOrderCombatantList[i].player) && turnOrderCombatantList[combatTurnMarker].monster != null && !isMonsterTurn && CombatOverCheck() == -1);
+                        playerCards[index].GetComponent<UIPlayerCard>().ActivateCrosshair(IsTargetedByMonster(turnOrderCombatantList[i].player) && turnOrderCombatantList[combatTurnMarker % turnOrderCombatantList.Count].monster != null && !isMonsterTurn && CombatOverCheck() == -1);
                         playerCards[index].GetComponent<UIPlayerCard>().ActivateTurnMarker(combatTurnMarker == i);
                         playerCards[index].GetComponent<UIPlayerCard>().SetVisuals(turnOrderCombatantList[i]);
                         index--;
@@ -796,6 +800,14 @@ public class CombatManager : Singleton<CombatManager>
                     enemyCard.SetDisplayPosition(new Vector3(470, 0, 0));
                 }
             }
+        }
+    }
+
+    private void UpdateCharacterPanels()
+    {
+        for(int i = 0; i < characterPanels.Length; i++)
+        {
+            characterPanels[i].UpdatePanel(turnOrderCombatantList[(combatTurnMarker + i) % turnOrderCombatantList.Count]);
         }
     }
 
