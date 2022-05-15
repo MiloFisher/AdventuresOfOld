@@ -26,6 +26,8 @@ public class UIChooseActivity : MonoBehaviour
     public GameObject playerNames;
     public GameObject activities;
     public float waitTime = 0.5f;
+    public Color enabledColor;
+    public Color disabledColor;
 
     private RectTransform rt;
     private bool opened;
@@ -46,6 +48,17 @@ public class UIChooseActivity : MonoBehaviour
             {
                 activities.transform.GetChild(i).GetComponent<TMP_Text>().text = ParseActivity(PlayManager.Instance.turnOrderPlayerList[i]);
             }
+        }
+        // Update visit shrine button to only be available if there is a dead ally and if the player has >= 50 gold
+        if(PlayManager.Instance.HasDeadAlly(PlayManager.Instance.localPlayer) && PlayManager.Instance.GetGold(PlayManager.Instance.localPlayer) >= 50)
+        {
+            buttons[3].GetComponent<Button>().enabled = true;
+            buttons[3].color = new Color(enabledColor.r, enabledColor.g, enabledColor.b, buttons[3].color.a);
+        }
+        else
+        {
+            buttons[3].GetComponent<Button>().enabled = false;
+            buttons[3].color = new Color(disabledColor.r, disabledColor.g, disabledColor.b, buttons[3].color.a);
         }
     }
 

@@ -59,6 +59,8 @@ public class PlayManager : Singleton<PlayManager>
 
     public GameObject endOfDayElements;
 
+    public GameObject utilityMenus;
+
     public GameObject notifications;
 
     public GameObject[] playerPieces;
@@ -392,31 +394,27 @@ public class PlayManager : Singleton<PlayManager>
     public void SendPlayersToEndOfDayActivities()
     {
         Player storeMaster = null;
-        List<Player> shrineGoers = new List<Player>();
         foreach (Player p in playerList)
         {
-            p.Unready();
-            switch (p.EndOfDayActivity.Value)
+            if(GetHealth(p) > 0)
             {
-                case 0:
-                    storeMaster = p;
-                    break;
-                case 1:
-                    p.TakeShortRestClientRPC();
-                    break;
-                case 2:
-                    p.TakeLongRestClientRPC();
-                    break;
-                case 3:
-                    shrineGoers.Add(p);
-                    break;
+                p.Unready();
+                switch (p.EndOfDayActivity.Value)
+                {
+                    case 0:
+                        storeMaster = p;
+                        break;
+                    case 1:
+                        p.TakeShortRestClientRPC();
+                        break;
+                    case 2:
+                        p.TakeLongRestClientRPC();
+                        break;
+                    case 3:
+                        p.GoToShrineClientRPC();
+                        break;
+                }
             }
-        }
-
-        // Implement Shrine later
-        foreach (Player p in shrineGoers)
-        {
-            p.ReadyUp();
         }
 
         if (storeMaster != null)
@@ -442,6 +440,28 @@ public class PlayManager : Singleton<PlayManager>
         p.IncreaseChaos(1);
 
         p.ReadyUp();
+    }
+
+    public void GoToShrine(Player player)
+    {
+        if(!player.isBot)
+        {
+            TargetPlayerSelection("Choose Players to Revive", false, true, false, (p) => {
+                // This player spends gold and target player is revived
+                player.LoseGold(50);
+                p.Resurrect();
+            }, (p) => {
+                // Requirement is this player has 50 Gold and player is dead
+                return GetGold(player) >= 50 && GetHealth(p) <= 0;
+            }, true, "Leave Shrine", () => {
+                // On Leave
+                player.ReadyUp();
+            });
+        }
+        else
+        {
+            player.ReadyUp();
+        }
     }
 
     IEnumerator WaitForPlayersToEndDay()
@@ -600,6 +620,11 @@ public class PlayManager : Singleton<PlayManager>
     public void CallEndOfDayElement(int id)
     {
         endOfDayElements.transform.GetChild(id).gameObject.SetActive(true);
+    }
+
+    public void TargetPlayerSelection(string bannerDisplayText, bool closeAfterSelect, bool updatePlayerDisplays, bool includeSelf, Action<Player> OnSelect, Func<Player, bool> MeetsRequirement, bool showCancelButton, string cancelButtonText = "Cancel", Action OnClose = default)
+    {
+        utilityMenus.transform.GetChild(0).GetComponent<UITargetPlayer>().Setup(bannerDisplayText, closeAfterSelect, updatePlayerDisplays, includeSelf, OnSelect, MeetsRequirement, showCancelButton, cancelButtonText, OnClose);
     }
 
     public void SetTurnOrderPlayerList(FixedString64Bytes[] arr)
@@ -1182,7 +1207,25 @@ public class PlayManager : Singleton<PlayManager>
     }
     public bool HasAllyInStore()
     {
-        return true;
+        for(int i = 0; i < playerList.Count; i++)
+        {
+            if (playerList[i].UUID.Value != localPlayer.UUID.Value && WentToStore(playerList[i]))
+                return true;
+        }
+        return false;
+    }
+    public bool HasDeadAlly(Player p)
+    {
+        for (int i = 0; i < playerList.Count; i++)
+        {
+            if (playerList[i].UUID.Value != p.UUID.Value && GetHealth(playerList[i]) <= 0)
+                return true;
+        }
+        return false;
+    }
+    public bool WentToStore(Player p)
+    {
+        return p.EndOfDayActivity.Value == 0;
     }
     public bool CanUseWeapon(Player p, WeaponCard w)
     {

@@ -115,7 +115,7 @@ public class UILootOptions : MonoBehaviour
             discardButton.GetComponentInChildren<TMP_Text>().text = tradeOption;
 
             // If there is another player in the store to trade with and this item is unequipped, enable Trading
-            if(PlayManager.Instance.HasAllyInStore() && useButton.GetComponentInChildren<TMP_Text>().text == equipOption)
+            if(PlayManager.Instance.HasAllyInStore() && useButton.GetComponentInChildren<TMP_Text>().text != unequipOption)
             {
                 discardButton.GetComponent<Button>().enabled = true;
                 discardButton.GetComponent<Image>().color = enabledColor;
@@ -126,6 +126,8 @@ public class UILootOptions : MonoBehaviour
                 discardButton.GetComponent<Button>().enabled = false;
                 discardButton.GetComponent<Image>().color = disabledColor;
             }
+
+            discardButton.SetActive(true);
         }
         // Otherwise, second option is "Discard"
         else
@@ -140,8 +142,18 @@ public class UILootOptions : MonoBehaviour
 
         // Third option is "Sell"
         sellButton.GetComponentInChildren<TMP_Text>().text = sellOption;
-        sellButton.GetComponent<Button>().enabled = true;
-        sellButton.GetComponent<Image>().color = enabledColor;
+
+        // If the first option is not unequip, enable sell button
+        if (useButton.GetComponentInChildren<TMP_Text>().text != unequipOption)
+        {
+            sellButton.GetComponent<Button>().enabled = true;
+            sellButton.GetComponent<Image>().color = enabledColor;
+        }
+        else
+        {
+            sellButton.GetComponent<Button>().enabled = false;
+            sellButton.GetComponent<Image>().color = disabledColor;
+        }
 
         // If in store, set sell button active
         sellButton.SetActive(PlayManager.Instance.IsInStore());
@@ -161,23 +173,27 @@ public class UILootOptions : MonoBehaviour
         {
             case useOption:
                 InventoryManager.Instance.Use();
+                InventoryManager.Instance.HideOptions();
                 break;
             case equipOption:
                 InventoryManager.Instance.Equip();
+                InventoryManager.Instance.HideOptions();
                 break;
             case unequipOption:
                 InventoryManager.Instance.Unequip();
+                InventoryManager.Instance.HideOptions();
                 break;
             case discardOption:
                 InventoryManager.Instance.Discard();
+                InventoryManager.Instance.HideOptions();
                 break;
             case tradeOption:
                 InventoryManager.Instance.Trade();
                 break;
             case sellOption:
                 InventoryManager.Instance.Sell();
+                InventoryManager.Instance.HideOptions();
                 break;
         }
-        InventoryManager.Instance.HideOptions();
     }
 }

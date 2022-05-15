@@ -57,7 +57,7 @@ public class UIPlayerSelection : MonoBehaviour, IPointerClickHandler, IPointerEx
     {
         for (int i = 0; i < tooltips.Length; i++)
         {
-            if (tooltips[i].IsOpen())
+            if (tooltips[i].IsHoveringOver())
                 return true;
         }
         return false;

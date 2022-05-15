@@ -350,6 +350,30 @@ public class InventoryManager : Singleton<InventoryManager>
         return gear;
     }
 
+    public void SetFirstEmptySlotInInventory(Player p, string equipment)
+    {
+        if (p.Inventory1.Value == emptyValue)
+        {
+            p.SetValue("Inventory1", equipment);
+        }
+        else if (p.Inventory2.Value == emptyValue)
+        {
+            p.SetValue("Inventory2", equipment);
+        }
+        else if (p.Inventory3.Value == emptyValue)
+        {
+            p.SetValue("Inventory3", equipment);
+        }
+        else if (p.Inventory4.Value == emptyValue)
+        {
+            p.SetValue("Inventory4", equipment);
+        }
+        else if (p.Inventory5.Value == emptyValue)
+        {
+            p.SetValue("Inventory5", equipment);
+        }
+    }
+
     public void Use()
     {
 
@@ -519,7 +543,16 @@ public class InventoryManager : Singleton<InventoryManager>
 
     public void Trade()
     {
-
+        PlayManager.Instance.TargetPlayerSelection("Choose Trade Partner", true, false, false, (p) => {
+            // Trade to player p
+            SetFirstEmptySlotInInventory(p, cards[selectedID].GetComponent<UILootCard>().cardName);
+            Discard();
+        }, (p) => {
+            // Requirement is being in the store and having an empty slot in inventory
+            return PlayManager.Instance.WentToStore(p) && HasSpaceInventory(p);
+        }, true, "Cancel", () => {
+            HideOptions();
+        });
     }
 
     public void Sell()

@@ -130,7 +130,7 @@ public class UIDefensiveOptions : MonoBehaviour
     public void EnableOptions()
     {
         // Enable dodge button if player meets requirement and has not used dodge yet
-        if(PlayManager.Instance.MeetsDodgeRequirement(PlayManager.Instance.localPlayer) && !dodgeUsed)
+        if(PlayManager.Instance.MeetsDodgeRequirement(PlayManager.Instance.localPlayer) && !dodgeUsed && !hadSuccess)
         {
             dodgeButton.GetComponent<Button>().enabled = true;
             dodgeButton.GetComponent<Image>().color = enabledColor;
@@ -141,7 +141,7 @@ public class UIDefensiveOptions : MonoBehaviour
             dodgeButton.GetComponent<Image>().color = disabledColor;
         }
         // Enable request taunt button if player has an ally who can taunt and has not requested a taunt yet
-        if (CombatManager.Instance.GetAlliesWhoCanTaunt(PlayManager.Instance.localPlayer).Count > 0 && !requestUsed)
+        if (CombatManager.Instance.GetAlliesWhoCanTaunt(PlayManager.Instance.localPlayer).Count > 0 && !requestUsed && !hadSuccess)
         {
             requestTauntButton.GetComponent<Button>().enabled = true;
             requestTauntButton.GetComponent<Image>().color = enabledColor;
@@ -161,7 +161,7 @@ public class UIDefensiveOptions : MonoBehaviour
                 case OnAttacked.PAY_20_GOLD: payUpButton.GetComponentInChildren<TMP_Text>().text = "<Pay 20 Gold>"; break;
             }
             // Enable pay up button if player has not use pay up or dodge yet and has enough money
-            if(!payUpUsed && !dodgeUsed && ((CombatManager.Instance.OnPlayerBeingAttacked == OnAttacked.PAY_10_GOLD && PlayManager.Instance.GetGold(PlayManager.Instance.localPlayer) >= 10) || (CombatManager.Instance.OnPlayerBeingAttacked == OnAttacked.PAY_20_GOLD && PlayManager.Instance.GetGold(PlayManager.Instance.localPlayer) >= 20)))
+            if(!payUpUsed && !dodgeUsed && !hadSuccess && ((CombatManager.Instance.OnPlayerBeingAttacked == OnAttacked.PAY_10_GOLD && PlayManager.Instance.GetGold(PlayManager.Instance.localPlayer) >= 10) || (CombatManager.Instance.OnPlayerBeingAttacked == OnAttacked.PAY_20_GOLD && PlayManager.Instance.GetGold(PlayManager.Instance.localPlayer) >= 20)))
             {
                 payUpButton.GetComponent<Button>().enabled = true;
                 payUpButton.GetComponent<Image>().color = enabledColor;

@@ -26,6 +26,7 @@ public class LootManager : Singleton<LootManager>
     public List<string> cardsToDraw = new List<string>();
     public GameObject discardCardsButton;
     public GameObject leaveStoreButton;
+    public GameObject goldDisplay;
     public bool treasureTile;
 
     private List<GameObject> displayCards = new List<GameObject>();
@@ -90,6 +91,7 @@ public class LootManager : Singleton<LootManager>
     {
         PlayManager.Instance.inStore = false;
         leaveStoreButton.SetActive(false);
+        goldDisplay.SetActive(false);
         for(int i = 0; i < displayCards.Count; i++)
         {
             if(displayCards[i] == null)
@@ -197,6 +199,7 @@ public class LootManager : Singleton<LootManager>
     IEnumerator AnimateClosing()
     {
         leaveStoreButton.SetActive(false);
+        goldDisplay.SetActive(false);
         discardCardsButton.SetActive(false);
 
         // First close the scroll
@@ -229,7 +232,7 @@ public class LootManager : Singleton<LootManager>
     IEnumerator AnimateCardDraw(int current, int amount)
     {
         GameObject travelCard = Instantiate(cardPrefab, transform.parent);
-        travelCard.GetComponent<UILootCard>().SetVisuals(cardsToDraw[current], current);
+        travelCard.GetComponent<UILootCard>().SetVisuals(cardsToDraw[current]);
         travelCard.GetComponent<UILootCard>().ActivateCardButton(false);
         travelCard.GetComponent<UILootCard>().ActivateCardBack(true);
 
@@ -255,7 +258,7 @@ public class LootManager : Singleton<LootManager>
         }
 
         GameObject card = Instantiate(cardPrefab, travelCard.transform.position, Quaternion.identity, transform.parent);
-        card.GetComponent<UILootCard>().SetVisuals(cardsToDraw[current]);
+        card.GetComponent<UILootCard>().SetVisuals(cardsToDraw[current], current);
         card.GetComponent<UILootCard>().ActivateCardButton(false);
         card.GetComponent<UILootCard>().ActivateZoomSelector(true);
         if(forStore)
@@ -273,11 +276,13 @@ public class LootManager : Singleton<LootManager>
             if(forStore)
             {
                 leaveStoreButton.SetActive(true);
+                goldDisplay.SetActive(true);
                 discardCardsButton.SetActive(false);
             }
             else
             {
                 leaveStoreButton.SetActive(false);
+                goldDisplay.SetActive(false);
                 discardCardsButton.SetActive(true);
             }
         }  

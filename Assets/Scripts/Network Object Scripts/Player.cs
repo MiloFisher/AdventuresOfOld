@@ -692,9 +692,12 @@ namespace AdventuresOfOldMultiplayer
             int cap = PlayManager.Instance.GetMaxHealth(this);
             if (NetworkManager.Singleton.IsServer)
             {
-                Health.Value += amount;
-                if (Health.Value > cap)
-                    Health.Value = cap;
+                if(Health.Value > 0)
+                {
+                    Health.Value += amount;
+                    if (Health.Value > cap)
+                        Health.Value = cap;
+                }
             }
             else
                 RestoreRestoreHealthServerRPC(amount, cap);
@@ -702,9 +705,12 @@ namespace AdventuresOfOldMultiplayer
         [ServerRpc]
         private void RestoreRestoreHealthServerRPC(int amount, int cap, ServerRpcParams rpcParams = default)
         {
-            Health.Value += amount;
-            if (Health.Value > cap)
-                Health.Value = cap;
+            if (Health.Value > 0)
+            {
+                Health.Value += amount;
+                if (Health.Value > cap)
+                    Health.Value = cap;
+            }
         }
 
         public void LoseAbilityCharges(int amount)
@@ -817,7 +823,13 @@ namespace AdventuresOfOldMultiplayer
                 Intelligence.Value += temporaryIntelligence;
                 Speed.Value += temporarySpeed;
                 Constitution.Value += temporaryConstitution;
+                Health.Value += temporaryConstitution * 2;
+                if(Energy.Value % 2 == 0)
+                    AbilityCharges.Value += Mathf.FloorToInt(temporaryEnergy / 2f);
+                else
+                    AbilityCharges.Value += Mathf.CeilToInt(temporaryEnergy / 2f);
                 Energy.Value += temporaryEnergy;
+                
 
                 LevelUpPoints.Value -= temporaryStrength + temporaryDexterity + temporaryIntelligence + temporarySpeed + temporaryConstitution + temporaryEnergy;
             }
@@ -832,6 +844,11 @@ namespace AdventuresOfOldMultiplayer
             Intelligence.Value += temporaryIntelligence;
             Speed.Value += temporarySpeed;
             Constitution.Value += temporaryConstitution;
+            Health.Value += temporaryConstitution * 2;
+            if (Energy.Value % 2 == 0)
+                AbilityCharges.Value += Mathf.FloorToInt(temporaryEnergy / 2f);
+            else
+                AbilityCharges.Value += Mathf.CeilToInt(temporaryEnergy / 2f);
             Energy.Value += temporaryEnergy;
 
             LevelUpPoints.Value -= temporaryStrength + temporaryDexterity + temporaryIntelligence + temporarySpeed + temporaryConstitution + temporaryEnergy;
@@ -1502,6 +1519,15 @@ namespace AdventuresOfOldMultiplayer
             }
         }
 
+        [ClientRpc]
+        public void GoToShrineClientRPC(ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner)
+            {
+                PlayManager.Instance.GoToShrine(this);
+            }
+        }
+
         public void SetupStore()
         {
             int storeSize = 5;
@@ -1570,6 +1596,21 @@ namespace AdventuresOfOldMultiplayer
             {
                 LootManager.Instance.RemoveStoreCard(slot);
             }
+        }
+
+        public void Resurrect(int health = 1)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                Health.Value = health;
+            }
+            else
+                ResurrectServerRPC(health);
+        }
+        [ServerRpc]
+        private void ResurrectServerRPC(int health, ServerRpcParams rpcParams = default)
+        {
+            Health.Value = health;
         }
         #endregion
     }
