@@ -178,8 +178,17 @@ public class Combatant
         else
         {
             currentHealth -= amount;
-            if (currentHealth < 0)
-                currentHealth = 0;
+            if (currentHealth <= 0)
+            {
+                if(HasPowerFantasy())
+                {
+                    CombatManager.Instance.RemoveStatusEffect(this, "Power Fantasy");
+                    CombatManager.Instance.InflictEffect(this, new Effect("Power Up", -1, 1));
+                    currentHealth = 1;
+                }
+                else
+                    currentHealth = 0;
+            }
             PlayManager.Instance.localPlayer.UpdateMonsterHealth(currentHealth);
         }
     }
@@ -357,5 +366,10 @@ public class Combatant
     public int HasPowerDown()
     {
         return HasEffect("Power Down");
+    }
+
+    public bool HasPowerFantasy()
+    {
+        return HasEffect("Power Fantasy") > -1;
     }
 }

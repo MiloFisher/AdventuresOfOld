@@ -617,15 +617,7 @@ namespace AdventuresOfOldMultiplayer
             if (NetworkManager.Singleton.IsServer)
             {
                 XP.Value += total;
-                if(XP.Value > PlayManager.Instance.GetNeededXP(this))
-                {
-                    XP.Value -= PlayManager.Instance.GetNeededXP(this);
-                    Level.Value++;
-                    LevelUpPoints.Value += 3;
-                    if (Level.Value == 5)
-                        XP.Value = PlayManager.Instance.GetNeededXP(this);
-                    PlayManager.Instance.LevelUpNotification();
-                }
+                LevelUpCheckClientRPC();
             }
             else
                 GainXPServerRPC(total);
@@ -634,15 +626,44 @@ namespace AdventuresOfOldMultiplayer
         private void GainXPServerRPC(int total, ServerRpcParams rpcParams = default)
         {
             XP.Value += total;
-            if (XP.Value > PlayManager.Instance.GetNeededXP(this))
+            LevelUpCheckClientRPC();
+        }
+        [ClientRpc]
+        private void LevelUpCheckClientRPC(ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner)
             {
-                XP.Value -= PlayManager.Instance.GetNeededXP(this);
+                if (XP.Value > PlayManager.Instance.GetNeededXP(this))
+                {
+                    LevelUp(PlayManager.Instance.GetNeededXP(this));
+                    PlayManager.Instance.LevelUpNotification();
+                }
+            }
+        }
+
+        public void LevelUp(int neededXP)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                XP.Value -= neededXP;
                 Level.Value++;
+                AbilityCharges.Value++;
                 LevelUpPoints.Value += 3;
                 if (Level.Value == 5)
-                    XP.Value = PlayManager.Instance.GetNeededXP(this);
-                PlayManager.Instance.LevelUpNotification();
+                    XP.Value = neededXP;
             }
+            else
+                LevelUpServerRPC(neededXP);
+        }
+        [ServerRpc]
+        private void LevelUpServerRPC(int neededXP, ServerRpcParams rpcParams = default)
+        {
+            XP.Value -= neededXP;
+            Level.Value++;
+            AbilityCharges.Value++;
+            LevelUpPoints.Value += 3;
+            if (Level.Value == 5)
+                XP.Value = neededXP;
         }
 
         public void GainGold(int amount)
@@ -974,28 +995,28 @@ namespace AdventuresOfOldMultiplayer
             }
         }
 
-        public void SetTurnOrderCombatantList(FixedString64Bytes[] arr)
+        public void SetTurnOrderCombatantList(FixedString64Bytes[] arr, bool keepMonster)
         {
             if (NetworkManager.Singleton.IsServer)
             {
                 foreach (Player p in PlayManager.Instance.playerList)
-                    p.SetTurnOrderCombatantListClientRPC(arr);
+                    p.SetTurnOrderCombatantListClientRPC(arr, keepMonster);
             }
             else
-                SetTurnOrderCombatantListServerRPC(arr);
+                SetTurnOrderCombatantListServerRPC(arr, keepMonster);
         }
         [ServerRpc]
-        private void SetTurnOrderCombatantListServerRPC(FixedString64Bytes[] arr, ServerRpcParams rpcParams = default)
+        private void SetTurnOrderCombatantListServerRPC(FixedString64Bytes[] arr, bool keepMonster, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
-                p.SetTurnOrderCombatantListClientRPC(arr);
+                p.SetTurnOrderCombatantListClientRPC(arr, keepMonster);
         }
         [ClientRpc]
-        public void SetTurnOrderCombatantListClientRPC(FixedString64Bytes[] arr, ClientRpcParams clientRpcParams = default)
+        public void SetTurnOrderCombatantListClientRPC(FixedString64Bytes[] arr, bool keepMonster, ClientRpcParams clientRpcParams = default)
         {
             if (IsOwner && !isBot)
             {
-                CombatManager.Instance.SetTurnOrderCombatantList(arr);
+                CombatManager.Instance.SetTurnOrderCombatantList(arr, keepMonster);
             }
         }
 

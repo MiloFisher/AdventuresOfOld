@@ -91,15 +91,9 @@ public class CombatManager : Singleton<CombatManager>
                     arr[i] = turnOrderCombatantList[i].monster.cardName;
             }
             combatTurnMarker = 0;
-            PlayManager.Instance.localPlayer.SetTurnOrderCombatantList(arr);
+            PlayManager.Instance.localPlayer.SetTurnOrderCombatantList(arr, false);
             PlayManager.Instance.localPlayer.UpdateCombatTurnMarker(combatTurnMarker);
             StartCombatantsTurn();
-
-            // Extra
-            if (monster.GetName() == "Spooky Spider" && !PlayManager.Instance.localPlayer.GrabbedHorse.Value)
-            {
-                InflictEffect(monster, new Effect("Power Down", -1, 2));
-            }
         }
     }
 
@@ -605,7 +599,7 @@ public class CombatManager : Singleton<CombatManager>
                 arr[i] = turnOrderCombatantList[i].monster.cardName;
         }
         // Update turn order combatant list for all players
-        PlayManager.Instance.localPlayer.SetTurnOrderCombatantList(arr);
+        PlayManager.Instance.localPlayer.SetTurnOrderCombatantList(arr, true);
 
         // If still players in combat
         if (PlayersStillInCombat())
@@ -716,6 +710,25 @@ public class CombatManager : Singleton<CombatManager>
                 PlayManager.Instance.localPlayer.VisualizeAttackForOthers();
             }
         });
+    }
+
+    public void InstantKill(Combatant c, Action OnComplete = default)
+    {
+        int instantKillDamage = 999;
+        if(c.combatantType == CombatantType.PLAYER)
+        {
+            StartCoroutine(AnimatePlayerTakeDamage(GetPlayerCardFromCombatant(c), instantKillDamage, () => {
+                c.TakeDamage(instantKillDamage, true);
+            }, OnComplete));
+            PlayManager.Instance.localPlayer.VisualizeTakeDamageForOthers(instantKillDamage);
+        }
+        else
+        {
+            StartCoroutine(AnimateMonsterTakeDamage(enemyCard, instantKillDamage, () => {
+                c.TakeDamage(instantKillDamage, true);
+            }, OnComplete));
+            PlayManager.Instance.localPlayer.VisualizeMonsterTakeDamageForOthers(instantKillDamage);
+        }
     }
 
     IEnumerator OnTakeDamage(Combatant c, Action OnComplete)
@@ -1165,15 +1178,20 @@ public class CombatManager : Singleton<CombatManager>
         OnComplete();
     }
 
-    IEnumerator AnimatePlayerTakeDamage(UIPlayerCard playerCard, int damage, Action OnAttack = default)
+    IEnumerator AnimatePlayerTakeDamage(UIPlayerCard playerCard, int damage, Action OnAttack = default, Action OnComplete = default)
     {
         // Call OnAttack function
-        OnAttack();
+        if (OnAttack != default)
+            OnAttack();
 
         playerCard.ActivateDamaged(true);
         playerCard.DisplayDamageNumber(damage);
         yield return new WaitForSeconds(attackFlashLength * Global.animSpeed);
         playerCard.ActivateDamaged(false);
+
+        // Call OnComplete function
+        if(OnComplete != default)
+            OnComplete();
     }
 
     IEnumerator AnimateMonsterAttacked(Combatant attacker, int damage, Action OnAttack = default, Action OnComplete = default)
@@ -1208,15 +1226,20 @@ public class CombatManager : Singleton<CombatManager>
         OnComplete();
     }
 
-    IEnumerator AnimateMonsterTakeDamage(UIEncounterCard card, int damage, Action OnAttack = default)
+    IEnumerator AnimateMonsterTakeDamage(UIEncounterCard card, int damage, Action OnAttack = default, Action OnComplete = default)
     {
         // Call OnAttack function
-        OnAttack();
+        if (OnAttack != default)
+            OnAttack();
 
         card.ActivateDamaged(true);
         card.DisplayDamageNumber(damage);
         yield return new WaitForSeconds(attackFlashLength);
         card.ActivateDamaged(false);
+
+        // Call OnComplete function
+        if (OnComplete != default)
+            OnComplete();
     }
 
     IEnumerator AnimatePlayerHeal(UIPlayerCard playerCard, int heal, Action OnHeal = default)
@@ -1241,27 +1264,36 @@ public class CombatManager : Singleton<CombatManager>
         card.ActivateHealed(false);
     }
 
-    public void SetTurnOrderCombatantList(FixedString64Bytes[] arr)
+    public void SetTurnOrderCombatantList(FixedString64Bytes[] arr, bool keepMonster)
     {
         turnOrderCombatantList = new List<Combatant>();
         for (int i = 0; i < arr.Length; i++)
         {
             if (PlayManager.Instance.encounterReference.ContainsKey(arr[i] + ""))
             {
-                monsterCard = PlayManager.Instance.encounterReference[arr[i] + ""] as MonsterCard;
-                monster = new Combatant(CombatantType.MONSTER, monsterCard);
+                if(keepMonster)
+                {
+                    monsterCard = PlayManager.Instance.encounterReference[arr[i] + ""] as MonsterCard;
+                    monster = new Combatant(CombatantType.MONSTER, monsterCard);
+                }
                 turnOrderCombatantList.Add(monster);
             }
             else if (PlayManager.Instance.miniBossDeck.ContainsKey(arr[i] + ""))
             {
-                monsterCard = PlayManager.Instance.miniBossDeck[arr[i] + ""];
-                monster = new Combatant(CombatantType.MONSTER, monsterCard);
+                if (keepMonster)
+                {
+                    monsterCard = PlayManager.Instance.miniBossDeck[arr[i] + ""];
+                    monster = new Combatant(CombatantType.MONSTER, monsterCard);
+                }
                 turnOrderCombatantList.Add(monster);
             }
             else if (PlayManager.Instance.chapterBoss.cardName == arr[i] + "")
             {
-                monsterCard = PlayManager.Instance.chapterBoss;
-                monster = new Combatant(CombatantType.MONSTER, monsterCard);
+                if (keepMonster)
+                {
+                    monsterCard = PlayManager.Instance.chapterBoss;
+                    monster = new Combatant(CombatantType.MONSTER, monsterCard);
+                }
                 turnOrderCombatantList.Add(monster);
             }
             else

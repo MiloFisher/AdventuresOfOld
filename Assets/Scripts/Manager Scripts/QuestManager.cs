@@ -41,6 +41,7 @@ public class QuestManager : Singleton<QuestManager>
     private int currentChunk;
     private bool buttonOnCooldown;
     private string audioFileName;
+    private bool onLastChunk;
 
     public void LoadIntoQuest(bool isYourTurn, List<Action> chunks, Action OnComplete)
     {
@@ -76,7 +77,7 @@ public class QuestManager : Singleton<QuestManager>
     {
         audioFileName = name;
         JLAudioManager.Instance.PlaySound(name, startTime, endTime);
-        if(endTime > startTime)
+        if(endTime > startTime && isYourTurn)
             StartCoroutine(ContinueAudio(currentChunk, endTime - startTime));
     }
 
@@ -84,7 +85,12 @@ public class QuestManager : Singleton<QuestManager>
     {
         yield return new WaitForSeconds(duration);
         if (currentChunk == lastChunk)
-            PlayManager.Instance.localPlayer.SetNextDialogueChunk();
+        {
+            if(onLastChunk)
+                PlayManager.Instance.localPlayer.EndDialogue();
+            else
+                PlayManager.Instance.localPlayer.SetNextDialogueChunk();
+        }
     }
 
     public void SetDialogue(string text)
@@ -208,6 +214,10 @@ public class QuestManager : Singleton<QuestManager>
 
     public void SetButtonDisplay(ButtonDisplay buttonDisplay)
     {
+        // Set onLastChunk if it is finish button
+        if (buttonDisplay == ButtonDisplay.FINISH)
+            onLastChunk = true;
+
         // Disable buttons if its not your encounter
         if (!isYourTurn)
             buttonDisplay = ButtonDisplay.NONE;
@@ -297,6 +307,11 @@ public class QuestManager : Singleton<QuestManager>
             txt.color = new Color(txt.color.r, txt.color.g, txt.color.b, a);
     }
 
+    private void SetAlpha(Image i, float a)
+    {
+        i.color = new Color(i.color.r, i.color.g, i.color.b, a);
+    }
+
     private void ResetValues()
     {
         continueButton.SetActive(false);
@@ -310,6 +325,9 @@ public class QuestManager : Singleton<QuestManager>
         currentChunk = 0;
         buttonOnCooldown = false;
         buttonFading = false;
+        onLastChunk = false;
+        SetAlpha(locationImage, 1);
+        SetAlpha(npcImage, 1);
     }
 
     // Continue Button

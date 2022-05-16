@@ -13145,7 +13145,7 @@ MonoBehaviour:
   - {r: 0.32941177, g: 0.19607843, b: 0.38039216, a: 1}
   - {r: 0.7490196, g: 0.47058824, b: 0.16078432, a: 1}
   testingCard: {fileID: 11400000, guid: ba3aa7a47f8c945dd8b65900c5f63d7d, type: 2}
-  testingCard1: {fileID: 11400000, guid: fb50bd045a11b4a44826eaa789e799de, type: 2}
+  testingCard1: {fileID: 11400000, guid: 5249da00e0b14437eaff790b4ee359f4, type: 2}
   startOrEndOfDay: 0
   inStore: 0
 --- !u!1 &335566404

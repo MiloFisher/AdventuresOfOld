@@ -268,72 +268,149 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
     #region Discord Kitten
     private void DiscordKitten_Skill()
     {
-        // effect goes here...
+        CombatManager.Instance.MakeStatRoll("STR", 3);
+        CombatManager.Instance.StatRollListener((a) => {
+            if (a == -1)
+            {
+                CombatManager.Instance.InstantKill(target, CombatManager.Instance.MonsterEndTurn);
+            }
+            else
+                CombatManager.Instance.MonsterEndTurn();
+        });
     }
 
     private void DiscordKitten_Passive()
     {
-        // effect goes here...
+        CombatManager.Instance.OnPlayerTakeDamage = (t) => {
+            if (CombatManager.Instance.IsThisCombatantsTurn(t))
+                CombatManager.Instance.InflictEffect(t, new Effect("Weakened", 2, 1));
+            else
+                CombatManager.Instance.InflictEffect(t, new Effect("Weakened", 1, 1));
+        };
     }
     #endregion
 
     #region Raging Discord Kitten
     private void RagingDiscordKitten_Skill()
     {
-        // effect goes here...
+        CombatManager.Instance.MakeStatRoll("STR", 11);
+        CombatManager.Instance.StatRollListener((a) => {
+            if (a == -1)
+            {
+                CombatManager.Instance.AttackPlayer(target, CombatManager.Instance.MonsterEndTurn);
+            }
+            else
+                CombatManager.Instance.MonsterEndTurn();
+        });
     }
 
     private void RagingDiscordKitten_Passive()
     {
-        // effect goes here...
+        CombatManager.Instance.OnPlayerTakeDamage = (t) => {
+            if (CombatManager.Instance.IsThisCombatantsTurn(t))
+                CombatManager.Instance.InflictEffect(t, new Effect("Plagued", 2));
+            else
+                CombatManager.Instance.InflictEffect(t, new Effect("Plagued", 1));
+        };
     }
     #endregion
 
     #region Rainbow Slime
     private void RainbowSlime_Skill()
     {
-        // effect goes here...
+        CombatManager.Instance.MakeStatRoll("INT", 9);
+        CombatManager.Instance.StatRollListener((a) => {
+            if (a == -1)
+            {
+                CombatManager.Instance.AttackPlayer(target, CombatManager.Instance.MonsterEndTurn, new List<Effect> { new Effect("Eaten", 1) });
+            }
+            else
+                CombatManager.Instance.MonsterEndTurn();
+        });
     }
 
     private void RainbowSlime_Passive()
     {
-        // effect goes here...
+        CombatManager.Instance.OnPlayerDealDamage = (t) => {
+            CombatManager.Instance.InflictEffect(t, new Effect("Weakened", 2, 3));
+        };
     }
     #endregion
 
     #region Bandit Weeb Lord
     private void BanditWeebLord_Skill()
     {
-        // effect goes here...
+        CombatManager.Instance.MakeStatRoll("INT", 10);
+        CombatManager.Instance.StatRollListener((a) => {
+            if (a == -1)
+            {
+                CombatManager.Instance.AttackPlayer(target, CombatManager.Instance.MonsterEndTurn);
+            }
+            else
+                CombatManager.Instance.MonsterEndTurn();
+        });
     }
 
     private void BanditWeebLord_Passive()
     {
-        // effect goes here...
+        if(PlayManager.Instance.isYourTurn)
+        {
+            CombatManager.Instance.InflictEffect(CombatManager.Instance.monster, new Effect("Power Fantasy", -1));
+        }
     }
     #endregion
 
     #region Spooky Spider
     private void SpookySpider_Skill()
     {
-        // effect goes here...
+        CombatManager.Instance.MakeStatRoll("DEX", 8);
+        CombatManager.Instance.StatRollListener((a) => {
+            if (a == -1)
+            {
+                CombatManager.Instance.AttackPlayer(target, CombatManager.Instance.MonsterEndTurn, new List<Effect> { new Effect("Enwebbed", 1) });
+            }
+            else
+                CombatManager.Instance.MonsterEndTurn();
+        });
     }
 
     private void SpookySpider_Passive()
     {
-        // effect goes here...
+        if (PlayManager.Instance.isYourTurn && !PlayManager.Instance.localPlayer.GrabbedHorse.Value)
+        {
+            CombatManager.Instance.InflictEffect(CombatManager.Instance.monster, new Effect("Power Down", -1, 2));
+        }
+        CombatManager.Instance.OnPlayerTakeDamage = (t) => {
+            CombatManager.Instance.waitUntil = true;
+            CombatManager.Instance.MakeStatRoll("CON", 8);
+            CombatManager.Instance.StatRollListener((a) => {
+                if (a != 1)
+                {
+                    CombatManager.Instance.InflictEffect(t, new Effect("Poisoned", -1, 3));
+                }
+                CombatManager.Instance.waitUntil = false;
+            });
+        };
     }
     #endregion
 
     #region Goblin Horde
     private void GoblinHorde_Skill()
     {
-        // effect goes here...
+        CombatManager.Instance.MakeStatRoll("STR", 8);
+        CombatManager.Instance.StatRollListener((a) => {
+            if (a == -1)
+            {
+                CombatManager.Instance.AttackPlayer(target, CombatManager.Instance.MonsterEndTurn);
+            }
+            else
+                CombatManager.Instance.MonsterEndTurn();
+        });
     }
 
     private void GoblinHorde_Passive()
     {
-        // effect goes here...
+        CombatManager.Instance.fleeingPrevented = true;
     }
     #endregion
 
