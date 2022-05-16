@@ -13145,7 +13145,7 @@ MonoBehaviour:
   - {r: 0.32941177, g: 0.19607843, b: 0.38039216, a: 1}
   - {r: 0.7490196, g: 0.47058824, b: 0.16078432, a: 1}
   testingCard: {fileID: 11400000, guid: ba3aa7a47f8c945dd8b65900c5f63d7d, type: 2}
-  testingCard1: {fileID: 11400000, guid: d2b51b80eda754a0f956c8ce90fea638, type: 2}
+  testingCard1: {fileID: 11400000, guid: fb50bd045a11b4a44826eaa789e799de, type: 2}
   startOrEndOfDay: 0
   inStore: 0
 --- !u!1 &335566404
@@ -38241,10 +38241,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: The ring on his finger slips as he dies, you pick it up just in case. 
-    As you help the young goblin up, he looks at you confused by your kindness. 
-    Nevertheless, he leans against you and points north, beckoning you to continue
-    heading in that direction.
+  m_text: You turn around slowly to see a gigantic, ghastly white spider descending
+    from the canopy above.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a8dcbf322d1104a599ad7f192eddaa0c, type: 2}
   m_sharedMaterial: {fileID: -2024710304679377605, guid: a8dcbf322d1104a599ad7f192eddaa0c, type: 2}
@@ -78914,6 +78912,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 34d87de53fce6ec43b24e316c51d4679, type: 3}
   - {fileID: 21300000, guid: 47f551f15700ecb4abef636fea57caec, type: 3}
   - {fileID: 21300000, guid: 934035d83242d104b951c7effb316579, type: 3}
+  - {fileID: 21300000, guid: b630087cea5f6a14ebb1f776e22a432e, type: 3}
+  - {fileID: 21300000, guid: b630087cea5f6a14ebb1f776e22a432e, type: 3}
   - {fileID: 21300000, guid: b630087cea5f6a14ebb1f776e22a432e, type: 3}
   speakerText: {fileID: 891764180}
   dialogueText: {fileID: 935360665}

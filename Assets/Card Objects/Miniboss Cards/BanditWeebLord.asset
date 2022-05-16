@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98ae6defad4554d89845a2d068cf7734, type: 3}
   m_Name: BanditWeebLord
   m_EditorClassIdentifier: 
-  cardName: Badnit Weeb Lord
+  cardName: Bandit Weeb Lord
   image: {fileID: 21300000, guid: 6d7780d6c48fa1748bd186b935c2e001, type: 3}
   flavorText: Searching for his discord kitten!
   type: 2

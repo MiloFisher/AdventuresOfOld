@@ -316,6 +316,7 @@ public class PlayManager : Singleton<PlayManager>
         // *** Testing Only ***
         encounterDeck[0] = testingCard;
         quests[0] = testingCard1;
+        localPlayer.UpdateQuests(quests);
 
         // 6) Miniboss and minion decks already set up
 
@@ -2014,37 +2015,697 @@ public class PlayManager : Singleton<PlayManager>
 
     public void AbandonedOutpost()
     {
-        DefaultTile(); // Temporary
+        if (HasQuest("Goblin Hunt", 1))
+        {
+            MakeChoice("Follow Quest", "Ignore Quest", true, true);
+            ChoiceListener((a) => {
+                if (a == 1)
+                {
+                    ResetEncounterFails();
+                    localPlayer.LoadIntoQuest("AbandonedOutpostGoblinHunt");
+                }
+                else
+                    DefaultTile();
+            });
+        }
+        else
+            DefaultTile();
+    }
+
+    public void AbandonedOutpostGoblinHunt()
+    {
+        Action OnComplete = default;
+        if (isYourTurn)
+        {
+            OnComplete = () => {
+                foreach (QuestCard q in quests)
+                {
+                    if (q.cardName == "Goblin Hunt")
+                    {
+                        localPlayer.GainXP(q.objectiveXPRewards[q.questStep]);
+                        q.questStep++;
+                    }
+                }
+                localPlayer.UpdateQuests(quests);
+                EndTurn();
+            };
+        }
+
+        QuestManager.Instance.LoadIntoQuest(isYourTurn, new List<Action> {
+            () => {
+                // Chunk 1 (Intro)
+                QuestManager.Instance.SetImage("Abandoned Outpost");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("What once seemed to have been a very busy forest outpost, is now empty and void of life.  Everything seems to have been picked up and moved in a hurry, with items scattered about from frantic packing and traveling.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 2
+                QuestManager.Instance.SetImage("Abandoned Outpost");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("As you take a closer look at the outpost, you notice signs of recent activity.  Footsteps caked in the mud, and the smell of blood lingering in the air.  You also see some signs of a struggle, with the trail of broken branches and small blood splatters leading towards a small campsite.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+            }
+        }, OnComplete);
     }
 
     public void AncientSpring()
     {
-        DefaultTile(); // Temporary
+        if (HasQuest("Bringin' the Bath Water", 1))
+        {
+            MakeChoice("Follow Quest", "Ignore Quest", true, true);
+            ChoiceListener((a) => {
+                if (a == 1)
+                {
+                    ResetEncounterFails();
+                    localPlayer.LoadIntoQuest("AncientSpringBrininTheBathWater");
+                }
+                else
+                    DefaultTile();
+            });
+        }
+        else
+            DefaultTile();
+    }
+
+    public void AncientSpringBrininTheBathWater()
+    {
+        Action OnComplete = default;
+        if (isYourTurn)
+        {
+            OnComplete = () => {
+                foreach (QuestCard q in quests)
+                {
+                    if (q.cardName == "Bringin' the Bath Water")
+                    {
+                        localPlayer.GainXP(q.objectiveXPRewards[q.questStep]);
+                        q.questStep++;
+                    }
+                }
+                localPlayer.UpdateQuests(quests);
+                EndTurn();
+            };
+        }
+
+        QuestManager.Instance.LoadIntoQuest(isYourTurn, new List<Action> {
+            () => {
+                // Chunk 1 (Intro)
+                QuestManager.Instance.SetImage("Ancient Spring");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("This spring seems to be rather untouched by the Chaos of the surrounding region.  The pools combine beautiful smooth stones with a vibrant flora.  An aura of steam looms over the springs, creating a very tranquil and almost spa-like atmosphere.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 2
+                QuestManager.Instance.SetImage("Ancient Spring");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("In the distance you think you hear what might even be laughter...");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 3
+                QuestManager.Instance.SetImage("Ancient Spring");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("As you approach the hot spring, you can barely make out what seems to be a red-orange glowing light behind a thick wall of steam.  You walk towards the light and it begins to grow, until it finally begins to take form.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 4
+                QuestManager.Instance.SetImage("Fire Elemental");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("You take a couple more steps forward until a female fire elemental is standing before you.  You stand there unsure of what to say, but the elemental speaks first,");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 5
+                QuestManager.Instance.SetImage("Fire Elemental");
+                QuestManager.Instance.SetSpeaker("Fire Elemental");
+                QuestManager.Instance.SetDialogue("Welcome to the Witch Stream!  Since the Chaos has been destroying the area we need to move streams, but the elementals at Utoob Stream want us to pay money first before we move in,");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 6
+                QuestManager.Instance.SetImage("Fire Elemental");
+                QuestManager.Instance.SetSpeaker("Fire Elemental");
+                QuestManager.Instance.SetDialogue("...so we have to charge you 20 Gold for any water you want.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetChoices(2, new string[2]{ "Pay the fee", "Refuse to pay"}, new Action[2]{
+                    () => {
+                        // Paid the fee
+                        localPlayer.LoseGold(20);
+                        foreach(Player p in playerList)
+                            p.SetValue("HasBathWater", true);
+                    }, () => {
+                        // Refused to pay
+                    }
+                }, new Func<bool>[2] {
+                    () => {
+                        // Requires 20 gold
+                        return GetGold(localPlayer) >= 20;
+                    }, () => {
+                        // No requirement
+                        return true;
+                    }
+                });
+            },
+            () => {
+                // Chunk 7
+                if(localPlayer.HasBathWater.Value)
+                {
+                    QuestManager.Instance.SetImage("Fire Elemental");
+                    QuestManager.Instance.SetSpeaker("Fire Elemental");
+                    QuestManager.Instance.SetDialogue("Great!  Follow me over here...");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+                }
+                else
+                {
+                    QuestManager.Instance.SetImage("Fire Elemental");
+                    QuestManager.Instance.SetSpeaker("Narrator");
+                    QuestManager.Instance.SetDialogue("You inform the fire elemental that 20 Gold is a bit too pricey.");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+                }
+            },
+            () => {
+                // Chunk 8
+                if(localPlayer.HasBathWater.Value)
+                {
+                    QuestManager.Instance.SetImage("Fire Elemental");
+                    QuestManager.Instance.SetSpeaker("Narrator");
+                    QuestManager.Instance.SetDialogue("exclaims the fire elemental.  She then leads you over to a hidden pool in the back, where there are 2 other female elementals soaking in the pool.  Your guide elemental then grabs a glass jar and scoops up some of the water from the pool.");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+                }
+                else
+                {
+                    QuestManager.Instance.SetImage("Fire Elemental");
+                    QuestManager.Instance.SetSpeaker("Fire Elemental");
+                    QuestManager.Instance.SetDialogue("It’s literally only 20 gold, everyone has 20 gold!");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+                }
+            },
+            () => {
+                // Chunk 9
+                if(localPlayer.HasBathWater.Value)
+                {
+                    QuestManager.Instance.SetImage("Fire Elemental");
+                    QuestManager.Instance.SetSpeaker("Fire Elemental");
+                    QuestManager.Instance.SetDialogue("Here you go, and remember you can find us at Utoob!");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+                }
+                else
+                {
+                    QuestManager.Instance.SetImage("Fire Elemental");
+                    QuestManager.Instance.SetSpeaker("Fire Elemental");
+                    QuestManager.Instance.SetDialogue("she replies.  You tell her that you are just gonna take some of the other water.  She frustratedly turns around and leaves you to your devices.  You find some spring water and fill up a jar with it.");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+                }
+            },
+            () => {
+                // Chunk 10
+                if(localPlayer.HasBathWater.Value)
+                {
+                    QuestManager.Instance.SetImage("Fire Elemental");
+                    QuestManager.Instance.SetSpeaker("Narrator");
+                    QuestManager.Instance.SetDialogue("You walk away with a confused expression on your face.");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+                }
+            }
+        }, OnComplete);
     }
 
     public void BanditHideout()
     {
-        DefaultTile(); // Temporary
+        if (HasQuest("Isekai!", 1))
+        {
+            MakeChoice("Follow Quest", "Ignore Quest", true, true);
+            ChoiceListener((a) => {
+                if (a == 1)
+                {
+                    ResetEncounterFails();
+                    localPlayer.LoadIntoQuest("BanditHideoutIsekai");
+                }
+                else
+                    DefaultTile();
+            });
+        }
+        else
+            DefaultTile();
+    }
+
+    public void BanditHideoutIsekai()
+    {
+        Action OnComplete = default;
+        if (isYourTurn)
+        {
+            OnComplete = () => {
+                CombatManager.Instance.monsterCard = miniBossDeck["Bandit Weeb Lord"];
+                localPlayer.SendCombatNotifications();
+                localPlayer.SetValue("ParticipatingInCombat", 1);
+                CallEncounterElement(7);
+            };
+        }
+
+        QuestManager.Instance.LoadIntoQuest(isYourTurn, new List<Action> {
+            () => {
+                // Chunk 1 (Intro)
+                QuestManager.Instance.SetImage("Bandit Hideout");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("The bandit hideout is against a mountain wall, crates and equipment strewn about.  It's a large space and in the middle of it, a battle is occurring.  A boy with glasses is fighting off waves of bandits...");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 2
+                QuestManager.Instance.SetImage("Bandit Hideout");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("...and by fighting off, he’s actually curled up on a ball and everytime a bandit attacks him, a wave of force sends them flying.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 3
+                QuestManager.Instance.SetImage("Bandit Hideout");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("As you rush in to save the boy, your vision darkens and a frighteningly wide smile appears before you.  It exclaims,");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 4
+                QuestManager.Instance.SetImage("Shifty Peddler");
+                QuestManager.Instance.SetSpeaker("Shifty Peddler");
+                QuestManager.Instance.SetDialogue("This is so much fun! So many things to play with!  Let’s see how well you do!,");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 5
+                QuestManager.Instance.SetImage("Bandit Hideout");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("Your vision returns but things have changed, the bandits are no more and instead, the boy with glasses is staring at a dark version of himself floating in the air.  The boy runs away as the dark version turns to face you and attacks!");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+            }
+        }, OnComplete);
     }
 
     public void HowlingCave()
     {
-        DefaultTile(); // Temporary
+        if (HasQuest("Goblin Hunt", 3))
+        {
+            MakeChoice("Follow Quest", "Ignore Quest", true, true);
+            ChoiceListener((a) => {
+                if (a == 1)
+                {
+                    ResetEncounterFails();
+                    localPlayer.LoadIntoQuest("HowlingCaveGoblinHunt");
+                }
+                else
+                    DefaultTile();
+            });
+        }
+        else
+            DefaultTile();
+    }
+
+    public void HowlingCaveGoblinHunt()
+    {
+        Action OnComplete = default;
+        if (isYourTurn)
+        {
+            OnComplete = () => {
+                if(localPlayer.KilledGoblin.Value)
+                {
+                    CombatManager.Instance.monsterCard = miniBossDeck["Goblin Horde"];
+                    localPlayer.SendCombatNotifications();
+                    localPlayer.SetValue("ParticipatingInCombat", 1);
+                    CallEncounterElement(7);
+                }
+                else
+                {
+                    foreach (QuestCard q in quests)
+                    {
+                        if (q.cardName == "Goblin Hunt")
+                        {
+                            localPlayer.GainXP(q.objectiveXPRewards[q.questStep] + 6);
+                            localPlayer.ReduceChaos(-1 * q.rewardChaos);
+                            foreach (Player p in playerList)
+                                p.GainGold(q.rewardGold);
+                            q.questStep++;
+                        }
+                    }
+                    localPlayer.UpdateQuests(quests);
+                    localPlayer.DrawLootCards(2, localPlayer.UUID.Value, true);
+                }
+            };
+        }
+
+        QuestManager.Instance.LoadIntoQuest(isYourTurn, new List<Action> {
+            () => {
+                // Chunk 1 (Intro)
+                QuestManager.Instance.SetImage("Howling Cave");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("The cave forms like a jagged mouth protruding from a rocky overhang.  Sharp rocks line the entrance of the cave on all sides.  If the appearance wasn’t inviting enough, distant sounds of wailing and screaming seem to echo from the depths.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 2
+                if(localPlayer.KilledGoblin.Value)
+                {
+                    QuestManager.Instance.SetImage("Howling Cave");
+                    QuestManager.Instance.SetSpeaker("Narrator");
+                    QuestManager.Instance.SetDialogue("You approach alongside the hunter, when suddenly the walls of the cave are lit up and an army of goblins stands before you.  The hunter laughs to himself, ready to kill every single last one of them.");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+                }
+                else
+                {
+                    QuestManager.Instance.SetImage("Howling Cave");
+                    QuestManager.Instance.SetSpeaker("Narrator");
+                    QuestManager.Instance.SetDialogue("You approach alongside the young goblin, when suddenly the walls of the cave are lit up and an army of goblins stands before you.  Before they can attack you, the young goblin raises his hands and says something in their language.");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+                }
+            },
+            () => {
+                // Chunk 3
+                if(localPlayer.KilledGoblin.Value)
+                {
+                    QuestManager.Instance.SetImage("Howling Cave");
+                    QuestManager.Instance.SetSpeaker("Narrator");
+                    QuestManager.Instance.SetDialogue("He opens his mouth as if to give a speech but is suddenly stopped as an arrow forces its way into his head.  The finger of the young goblin falls out of his pocket, and the goblins stare at it.  After they realize what it is, they launch their attack.");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+                }
+                else
+                {
+                    QuestManager.Instance.SetImage("Howling Cave");
+                    QuestManager.Instance.SetSpeaker("Narrator");
+                    QuestManager.Instance.SetDialogue("They lower their weapons and begin talking amongst themselves.  A large goblin walks past the horde and comes face to face with you,");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+                }
+            },
+            () => {
+                // Chunk 4
+                if(!localPlayer.KilledGoblin.Value)
+                {
+                    QuestManager.Instance.SetImage("Goblin Prince");
+                    QuestManager.Instance.SetSpeaker("Goblin Prince");
+                    QuestManager.Instance.SetDialogue("You save...  prince.  You are...  friend of...  goblins.");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+                }
+            },
+            () => {
+                // Chunk 5
+                if(!localPlayer.KilledGoblin.Value)
+                {
+                    QuestManager.Instance.SetImage("Goblin Prince");
+                    QuestManager.Instance.SetSpeaker("Narrator");
+                    QuestManager.Instance.SetDialogue("The young goblin looks towards you and nods in agreement as he begins walking towards his people.  You give him the ring of the dead hunter and the young goblin prince speaks,");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+                }
+            },
+            () => {
+                // Chunk 6
+                if(!localPlayer.KilledGoblin.Value)
+                {
+                    QuestManager.Instance.SetImage("Goblin Prince");
+                    QuestManager.Instance.SetSpeaker("Goblin Prince");
+                    QuestManager.Instance.SetDialogue("Bad man... hunt goblin... years.  All we want... peace.");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+                }
+            },
+            () => {
+                // Chunk 7
+                if(!localPlayer.KilledGoblin.Value)
+                {
+                    QuestManager.Instance.SetImage("Goblin Prince");
+                    QuestManager.Instance.SetSpeaker("Narrator");
+                    QuestManager.Instance.SetDialogue("You prepare to leave but are given valuable treasure and parting words as thanks for saving the prince.");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+                }
+            },
+            () => {
+                // Chunk 8
+                if(!localPlayer.KilledGoblin.Value)
+                {
+                    QuestManager.Instance.SetImage("Goblin Prince");
+                    QuestManager.Instance.SetSpeaker("Goblin Prince");
+                    QuestManager.Instance.SetDialogue("May the... peace... be with you.");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+                }
+            }
+        }, OnComplete);
     }
 
     public void OminousClearing()
     {
-        DefaultTile(); // Temporary
+        if (HasQuest("DisharMEOWny", 1))
+        {
+            MakeChoice("Follow Quest", "Ignore Quest", true, true);
+            ChoiceListener((a) =>
+            {
+                if (a == 1)
+                {
+                    ResetEncounterFails();
+                    localPlayer.LoadIntoQuest("OminousClearingDisharMEOWNy1");
+                }
+                else
+                    DefaultTile();
+            });
+        }
+        else
+        {
+            if (HasQuest("DisharMEOWny", 3))
+            {
+                MakeChoice("Follow Quest", "Ignore Quest", true, true);
+                ChoiceListener((a) => {
+                    if (a == 1)
+                    {
+                        ResetEncounterFails();
+                        localPlayer.LoadIntoQuest("OminousClearingDisharMEOWNy2");
+                    }
+                    else
+                        DefaultTile();
+                });
+            }
+            else
+                DefaultTile();
+        }
+    }
+
+    public void OminousClearingDisharMEOWNy1()
+    {
+        Action OnComplete = default;
+        if (isYourTurn)
+        {
+            OnComplete = () => {
+                CombatManager.Instance.monsterCard = miniBossDeck["Discord Kitten"];
+                localPlayer.SendCombatNotifications();
+                localPlayer.SetValue("ParticipatingInCombat", 1);
+                CallEncounterElement(7);
+            };
+        }
+
+        QuestManager.Instance.LoadIntoQuest(isYourTurn, new List<Action> {
+            () => {
+                // Chunk 1 (Intro)
+                QuestManager.Instance.SetImage("Ominous Clearing");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("You approach the forest clearing, a seemingly unremarkable patch of land aside from the clearly out-of-place throne in the middle of it.  As you get closer to the throne, a spine-chilling aura emanates from it that fills you with dread.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 2
+                QuestManager.Instance.SetImage("Ominous Clearing");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("You approach the throne, taking notice of the small paw prints along the ground.  As you get closer, a small feline appears on the throne, and eyes you suspiciously.  It begins purring and stretches across the length of the throne, it’s not until you get closer that it leaps at you!");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+            }
+        }, OnComplete);
+    }
+
+    public void OminousClearingDisharMEOWNy2()
+    {
+        Action OnComplete = default;
+        if (isYourTurn)
+        {
+            OnComplete = () => {
+                CombatManager.Instance.monsterCard = miniBossDeck["Raging Discord Kitten"];
+                localPlayer.SendCombatNotifications();
+                localPlayer.SetValue("ParticipatingInCombat", 1);
+                CallEncounterElement(7);
+            };
+        }
+
+        QuestManager.Instance.LoadIntoQuest(isYourTurn, new List<Action> {
+            () => {
+                // Chunk 1
+                QuestManager.Instance.SetImage("Ominous Clearing");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("You return to the area, the sounds of a very ominous purring echoing across the land.  You almost believe it’s nighttime when a large shadow begins to cover the sun, you look up only to come across the largest feline you’ve ever seen.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 2
+                QuestManager.Instance.SetImage("Ominous Clearing");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("Clearly corrupted with Chaos, the feline stares at you with only murderous intent in it’s eyes, you have made it very angwy.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+            }
+        }, OnComplete);
     }
 
     public void OvergrownTemple()
     {
-        DefaultTile(); // Temporary
+        if (HasQuest("Double Rainbow", 1))
+        {
+            MakeChoice("Follow Quest", "Ignore Quest", true, true);
+            ChoiceListener((a) => {
+                if (a == 1)
+                {
+                    ResetEncounterFails();
+                    localPlayer.LoadIntoQuest("OvergrownTempleDoubleRainbow");
+                }
+                else
+                    DefaultTile();
+            });
+        }
+        else
+            DefaultTile();
+    }
+
+    public void OvergrownTempleDoubleRainbow()
+    {
+        Action OnComplete = default;
+        if (isYourTurn)
+        {
+            OnComplete = () => {
+                CombatManager.Instance.monsterCard = miniBossDeck["Rainbow Slime"];
+                localPlayer.SendCombatNotifications();
+                localPlayer.SetValue("ParticipatingInCombat", 1);
+                CallEncounterElement(7);
+            };
+        }
+
+        QuestManager.Instance.LoadIntoQuest(isYourTurn, new List<Action> {
+            () => {
+                // Chunk 1 (Intro)
+                QuestManager.Instance.SetImage("Overgrown Temple");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("The temple is in a state of decay, its once magnificent designs falling into ruin as nature reclaims its land.  Leaves and vines wrap around the columns, patches of dirt and soil sprout from the floor, and nothing but the smell of dew fills the air.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 2
+                QuestManager.Instance.SetImage("Overgrown Temple");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("The sound of plopping fills the temple, becoming more and more viscous as you come closer to the main hall.  As you reach the middle ground of the temple, a Rainbow Slime drops from the air.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 3
+                QuestManager.Instance.SetImage("Overgrown Temple");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("Its eyes are filled with anger as it prepares to attack you, but you spot something else in its eyes … fear?  You notice two tiny crimson slippers within the slime's body, and begin to wonder if the slime was the pet or whoever the owner of the slippers were.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 4
+                QuestManager.Instance.SetImage("Overgrown Temple");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("Before you can ponder any longer, the slime's body glows with magnificent brightness, it’s prepared to fight.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+            }
+        }, OnComplete);
     }
 
     public void WebbedForest()
     {
-        DefaultTile(); // Temporary
+        if (HasQuest("The Abandoned Path", 2))
+        {
+            MakeChoice("Follow Quest", "Ignore Quest", true, true);
+            ChoiceListener((a) => {
+                if (a == 1)
+                {
+                    ResetEncounterFails();
+                    localPlayer.LoadIntoQuest("WebbedForestAbandonedPath");
+                }
+                else
+                    DefaultTile();
+            });
+        }
+        else
+            DefaultTile();
+    }
+
+    public void WebbedForestAbandonedPath()
+    {
+        Action OnComplete = default;
+        if (isYourTurn)
+        {
+            OnComplete = () => {
+                CombatManager.Instance.monsterCard = miniBossDeck["Spooky Spider"];
+                localPlayer.SendCombatNotifications();
+                localPlayer.SetValue("ParticipatingInCombat", 1);
+                CallEncounterElement(7);
+            };
+        }
+
+        QuestManager.Instance.LoadIntoQuest(isYourTurn, new List<Action> {
+            () => {
+                // Chunk 1 (Intro)
+                QuestManager.Instance.SetImage("Webbed Forest");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("The trees are littered with cobwebs stretching from trunk to trunk, the same can be said as you walk across the forest ground.  You hear the constant rustling of leaves and bushes and occasionally, you can catch red-eyes staring at you from the shadows in the forest before they disappear.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 2
+                QuestManager.Instance.SetImage("Webbed Forest");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("You begin to approach the location where the hermit claimed to live, yet all you see are eerie spiderwebs caking the surrounding trees.  You advance further until you hear the faintest of noises behind you.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 3
+                QuestManager.Instance.SetImage("Webbed Forest");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("You turn around slowly to see a gigantic, ghastly white spider descending from the canopy above.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+            }
+        }, OnComplete);
     }
 
     #region Chaos Counter Functions

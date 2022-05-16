@@ -134,6 +134,14 @@ public class QuestManager : Singleton<QuestManager>
                 isLocation = false;
                 npcImage.sprite = npcImages[4];
                 break;
+            case "Fire Elemental":
+                isLocation = false;
+                npcImage.sprite = npcImages[8];
+                break;
+            case "Goblin Prince":
+                isLocation = false;
+                npcImage.sprite = npcImages[9];
+                break;
             case "Abandoned Outpost":
                 isLocation = true;
                 locationImage.sprite = locationImages[0];

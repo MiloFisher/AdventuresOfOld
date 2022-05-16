@@ -136,6 +136,14 @@ public class Combatant
         if (powerUp > -1)
             power += powerUp;
 
+        int powerDown = HasPowerDown();
+        if (powerDown > -1)
+        {
+            power -= powerDown;
+            if (power < 0)
+                power = 0;
+        }
+
         return power;
     }
 
@@ -151,6 +159,14 @@ public class Combatant
         int powerUp = HasPowerUp();
         if (powerUp > -1)
             power += powerUp;
+
+        int powerDown = HasPowerDown();
+        if (powerDown > -1)
+        {
+            power -= powerDown;
+            if (power < 0)
+                power = 0;
+        }
 
         return power;
     }
@@ -334,5 +350,12 @@ public class Combatant
     public int HasArmorUp()
     {
         return HasEffect("Armor Up");
+    }
+
+    // Extra
+
+    public int HasPowerDown()
+    {
+        return HasEffect("Power Down");
     }
 }

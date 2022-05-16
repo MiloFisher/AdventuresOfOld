@@ -94,6 +94,12 @@ public class CombatManager : Singleton<CombatManager>
             PlayManager.Instance.localPlayer.SetTurnOrderCombatantList(arr);
             PlayManager.Instance.localPlayer.UpdateCombatTurnMarker(combatTurnMarker);
             StartCombatantsTurn();
+
+            // Extra
+            if (monster.GetName() == "Spooky Spider" && !PlayManager.Instance.localPlayer.GrabbedHorse.Value)
+            {
+                InflictEffect(monster, new Effect("Power Down", -1, 2));
+            }
         }
     }
 
@@ -138,6 +144,77 @@ public class CombatManager : Singleton<CombatManager>
                                 currentTurnPlayer.DrawLootCards(1, currentTurnPlayer.UUID.Value, true);
                                 currentTurnPlayer.GainXP(6);
                                 currentTurnPlayer.GainGold(20);
+
+                                // Quest Progress Check
+                                if(monster.GetName() == "Bandit Weeb Lord")
+                                {
+                                    foreach (QuestCard q in PlayManager.Instance.quests)
+                                    {
+                                        if (q.cardName == "Isekai!")
+                                            q.questStep++;
+                                    }
+                                }
+                                else if(monster.GetName() == "Goblin Horde")
+                                {
+                                    foreach (QuestCard q in PlayManager.Instance.quests)
+                                    {
+                                        if (q.cardName == "Goblin Hunt")
+                                        {
+                                            PlayManager.Instance.localPlayer.ReduceChaos(-1 * q.rewardChaos);
+                                            foreach (Player p in PlayManager.Instance.playerList)
+                                                p.GainGold(q.rewardGold);
+                                            q.questStep++;
+                                        }
+                                    }
+                                }
+                                else if (monster.GetName() == "Discord Kitten")
+                                {
+                                    foreach (QuestCard q in PlayManager.Instance.quests)
+                                    {
+                                        if (q.cardName == "DisharMEOWny")
+                                            q.questStep++;
+                                    }
+                                }
+                                else if (monster.GetName() == "Raging Discord Kitten")
+                                {
+                                    foreach (QuestCard q in PlayManager.Instance.quests)
+                                    {
+                                        if (q.cardName == "DisharMEOWny")
+                                        {
+                                            PlayManager.Instance.localPlayer.ReduceChaos(-1 * q.rewardChaos);
+                                            foreach (Player p in PlayManager.Instance.playerList)
+                                                p.GainGold(q.rewardGold);
+                                            q.questStep++;
+                                        }
+                                    }
+                                }
+                                else if (monster.GetName() == "Rainbow Slime")
+                                {
+                                    foreach (QuestCard q in PlayManager.Instance.quests)
+                                    {
+                                        if (q.cardName == "Double Rainbow")
+                                        {
+                                            PlayManager.Instance.localPlayer.ReduceChaos(-1 * q.rewardChaos);
+                                            foreach (Player p in PlayManager.Instance.playerList)
+                                                p.GainGold(q.rewardGold);
+                                            q.questStep++;
+                                        }
+                                    }
+                                }
+                                else if (monster.GetName() == "Spooky Spider")
+                                {
+                                    foreach (QuestCard q in PlayManager.Instance.quests)
+                                    {
+                                        if (q.cardName == "The Abandoned Path")
+                                        {
+                                            PlayManager.Instance.localPlayer.ReduceChaos(-1 * q.rewardChaos);
+                                            foreach (Player p in PlayManager.Instance.playerList)
+                                                p.GainGold(q.rewardGold);
+                                            q.questStep++;
+                                        }
+                                    }
+                                }
+                                PlayManager.Instance.localPlayer.UpdateQuests(PlayManager.Instance.quests);
                                 break;
                             case MonsterType.BOSS:
                                 // Win the game
@@ -167,6 +244,77 @@ public class CombatManager : Singleton<CombatManager>
                                 chosenOne.DrawLootCards(1, chosenOne.UUID.Value, false);
                                 chosenOne.GainXP(6, true);
                                 chosenOne.GainGold(20);
+
+                                // Quest Progress Check
+                                if (monster.GetName() == "Bandit Weeb Lord")
+                                {
+                                    foreach (QuestCard q in PlayManager.Instance.quests)
+                                    {
+                                        if (q.cardName == "Isekai!")
+                                            q.questStep++;
+                                    }
+                                }
+                                else if (monster.GetName() == "Goblin Horde")
+                                {
+                                    foreach (QuestCard q in PlayManager.Instance.quests)
+                                    {
+                                        if (q.cardName == "Goblin Hunt")
+                                        {
+                                            PlayManager.Instance.localPlayer.ReduceChaos(-1 * q.rewardChaos);
+                                            foreach (Player p in PlayManager.Instance.playerList)
+                                                p.GainGold(q.rewardGold);
+                                            q.questStep++;
+                                        }
+                                    }
+                                }
+                                else if (monster.GetName() == "Discord Kitten")
+                                {
+                                    foreach (QuestCard q in PlayManager.Instance.quests)
+                                    {
+                                        if (q.cardName == "DisharMEOWny")
+                                            q.questStep++;
+                                    }
+                                }
+                                else if (monster.GetName() == "Raging Discord Kitten")
+                                {
+                                    foreach (QuestCard q in PlayManager.Instance.quests)
+                                    {
+                                        if (q.cardName == "DisharMEOWny")
+                                        {
+                                            PlayManager.Instance.localPlayer.ReduceChaos(-1 * q.rewardChaos);
+                                            foreach (Player p in PlayManager.Instance.playerList)
+                                                p.GainGold(q.rewardGold);
+                                            q.questStep++;
+                                        }
+                                    }
+                                }
+                                else if (monster.GetName() == "Rainbow Slime")
+                                {
+                                    foreach (QuestCard q in PlayManager.Instance.quests)
+                                    {
+                                        if (q.cardName == "Double Rainbow")
+                                        {
+                                            PlayManager.Instance.localPlayer.ReduceChaos(-1 * q.rewardChaos);
+                                            foreach (Player p in PlayManager.Instance.playerList)
+                                                p.GainGold(q.rewardGold);
+                                            q.questStep++;
+                                        }
+                                    }
+                                }
+                                else if (monster.GetName() == "Spooky Spider")
+                                {
+                                    foreach (QuestCard q in PlayManager.Instance.quests)
+                                    {
+                                        if (q.cardName == "The Abandoned Path")
+                                        {
+                                            PlayManager.Instance.localPlayer.ReduceChaos(-1 * q.rewardChaos);
+                                            foreach (Player p in PlayManager.Instance.playerList)
+                                                p.GainGold(q.rewardGold);
+                                            q.questStep++;
+                                        }
+                                    }
+                                }
+                                PlayManager.Instance.localPlayer.UpdateQuests(PlayManager.Instance.quests);
                                 break;
                             case MonsterType.BOSS:
                                 // Win the game
@@ -1101,6 +1249,18 @@ public class CombatManager : Singleton<CombatManager>
             if (PlayManager.Instance.encounterReference.ContainsKey(arr[i] + ""))
             {
                 monsterCard = PlayManager.Instance.encounterReference[arr[i] + ""] as MonsterCard;
+                monster = new Combatant(CombatantType.MONSTER, monsterCard);
+                turnOrderCombatantList.Add(monster);
+            }
+            else if (PlayManager.Instance.miniBossDeck.ContainsKey(arr[i] + ""))
+            {
+                monsterCard = PlayManager.Instance.miniBossDeck[arr[i] + ""];
+                monster = new Combatant(CombatantType.MONSTER, monsterCard);
+                turnOrderCombatantList.Add(monster);
+            }
+            else if (PlayManager.Instance.chapterBoss.cardName == arr[i] + "")
+            {
+                monsterCard = PlayManager.Instance.chapterBoss;
                 monster = new Combatant(CombatantType.MONSTER, monsterCard);
                 turnOrderCombatantList.Add(monster);
             }
