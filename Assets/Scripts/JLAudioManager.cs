@@ -61,13 +61,16 @@ public class JLAudioManager : Singleton<JLAudioManager>
                 voiceSlider.value = Mathf.Clamp(Mathf.Pow(10, mixerValue / 20), 0.0001f, 4f);
         }
     }
-    
+
     // FUNCTIONS TO USE FOR BUTTONS RATHER THAN SCRIPTS
-    public void PlaySound(string soundName) {
+    public void PlaySound(string soundName, float startTime = 0, float endTime = -1) {
         JLSoundClass s = Array.Find(soundArray, sound => sound.name == soundName);
         if (s == null)
             return;
+        s.audioSource.time = startTime;
         s.audioSource.Play();
+        if(endTime > startTime)
+            s.audioSource.SetScheduledEndTime(AudioSettings.dspTime + (endTime - startTime));
     }
 
     public void PlayOneShotSound(string soundName) {

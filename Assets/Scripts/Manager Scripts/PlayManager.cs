@@ -887,9 +887,62 @@ public class PlayManager : Singleton<PlayManager>
         gameboard[localPlayer.Position.Value].DisableTreasureToken();
     }
 
+    public void LoadQuestEncounter(string questName)
+    {
+        Invoke(questName, 0);
+    }
+
     public void CrazedHermit()
     {
-        DefaultTile(); // Temporary
+        //DefaultTile(); // Temporary
+        CrazedHermitAbandonedPath();
+    }
+
+    public void CrazedHermitAbandonedPath()
+    {
+        Action OnComplete = default;
+        if(isYourTurn)
+        {
+            OnComplete = () => {
+                localPlayer.GainXP(4);
+                EndTurn();
+            };
+        }
+
+        QuestManager.Instance.LoadIntoQuest(isYourTurn, new List<Action> {
+            () => {
+                // Chunk 1 (Intro)
+                QuestManager.Instance.SetImage("Crazed Hermit");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("An old man is standing about, using a rickety cane to stand. He’s covered in old, torn rags that are covered with dirt and grime. Any area close to him seems to almost be dying as moves about, the grass turning gray and disappearing and the trees almost shaking with discomfort.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 2
+                QuestManager.Instance.SetImage("Crazed Hermit");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("The hermit runs up to you and starts loudly speaking,");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 3
+                QuestManager.Instance.SetImage("Crazed Hermit");
+                QuestManager.Instance.SetSpeaker("Crazed Hermit");
+                QuestManager.Instance.SetDialogue("Hello… HELLO… heLLo… heeeellloo my friend.  I, yes I, seem to have lost my horse when traveling down this path, this most beautiful path.  Would you be willing to help an old, normal man, I am a very normal man, get his very special horse back?");
+                QuestManager.Instance.PlayAudio("CrazedHermitAbandonedPath", 0f, 26.5f);
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 4
+                QuestManager.Instance.SetImage("Crazed Hermit");
+                QuestManager.Instance.SetSpeaker("Crazed Hermit");
+                QuestManager.Instance.SetDialogue("I will pay you good money, such good, very good, lots of money.  Once you get the horse, bring it to my home which is just beyond those trees over there.");
+                QuestManager.Instance.PlayAudio("CrazedHermitAbandonedPath", 26.5f, 40f);
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+            }
+        }, OnComplete);
     }
 
     public void DistressedVillager()

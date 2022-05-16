@@ -1612,6 +1612,63 @@ namespace AdventuresOfOldMultiplayer
         {
             Health.Value = health;
         }
+
+        public void SetNextDialogueChunk()
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.SetNextDialogueChunkClientRPC();
+            }
+            else
+                SetNextDialogueChunkServerRPC();
+        }
+        [ServerRpc]
+        private void SetNextDialogueChunkServerRPC(ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.SetNextDialogueChunkClientRPC();
+        }
+        [ClientRpc]
+        public void SetNextDialogueChunkClientRPC(ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                QuestManager.Instance.SetNextChunk();
+            }
+        }
+
+        public void LoadOthersIntoQuest(string questName)
+        {
+            FixedString64Bytes uuid = UUID.Value;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if(p.UUID.Value != uuid)
+                        p.LoadOthersIntoQuestClientRPC(questName);
+                }
+            }
+            else
+                LoadOthersIntoQuestServerRPC(uuid, questName);
+        }
+        [ServerRpc]
+        private void LoadOthersIntoQuestServerRPC(FixedString64Bytes uuid, FixedString64Bytes questName, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+            {
+                if (p.UUID.Value != uuid)
+                    p.LoadOthersIntoQuestClientRPC(questName);
+            }
+        }
+        [ClientRpc]
+        public void LoadOthersIntoQuestClientRPC(FixedString64Bytes questName, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                PlayManager.Instance.LoadQuestEncounter(questName + "");
+            }
+        }
         #endregion
     }
 }
