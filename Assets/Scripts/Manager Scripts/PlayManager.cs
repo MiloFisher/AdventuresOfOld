@@ -234,11 +234,11 @@ public class PlayManager : Singleton<PlayManager>
             quests.Add(questDeck[i]);
         }
 
+        // Update Quest Cards
+        localPlayer.UpdateQuests(quests);
+
         foreach (Player p in playerList)
         {
-            // Update Quest Cards
-            p.UpdateQuests(quests);
-
             // 1) Set the Chaos Counter to 1 for (all players)
             p.SetChaosCounterClientRPC(1);
 
@@ -904,7 +904,15 @@ public class PlayManager : Singleton<PlayManager>
         if(isYourTurn)
         {
             OnComplete = () => {
-                localPlayer.GainXP(4);
+                foreach(QuestCard q in quests)
+                {
+                    if (q.cardName == "The Abandoned Path")
+                    {
+                        localPlayer.GainXP(q.objectiveXPRewards[q.questStep]);
+                        q.questStep++;
+                    }
+                }
+                localPlayer.UpdateQuests(quests);
                 EndTurn();
             };
         }
@@ -931,7 +939,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Crazed Hermit");
                 QuestManager.Instance.SetSpeaker("Crazed Hermit");
                 QuestManager.Instance.SetDialogue("Hello… HELLO… heLLo… heeeellloo my friend.  I, yes I, seem to have lost my horse when traveling down this path, this most beautiful path.  Would you be willing to help an old, normal man, I am a very normal man, get his very special horse back?");
-                QuestManager.Instance.PlayAudio("CrazedHermitAbandonedPath", 0f, 26.5f);
+                QuestManager.Instance.PlayAudio("CrazedHermitAbandonedPath", 0.5f, 26.5f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {

@@ -7,6 +7,7 @@ public class QuestCard : ScriptableObject
     public Sprite image;
     public int questStep;
     public string[] objectiveNames;
+    public int[] objectiveXPRewards;
     public int rewardGold;
     public int rewardChaos;
 }

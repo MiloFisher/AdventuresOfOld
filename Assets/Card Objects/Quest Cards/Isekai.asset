@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: Isekai
   m_EditorClassIdentifier: 
   cardName: Isekai!
+  image: {fileID: 0}
   questStep: 0
   objectiveNames:
-  - Talk to the <i>Shifty Peddler</i> (4 XP)
+  - Talk to the <i>Shifty Peddler</i>
   - Go to the <i>Bandit Hideout</i>
-  - Talk to the <i>Four-Eyed Boy</i> (4 XP)
+  - Talk to the <i>Four-Eyed Boy</i>
+  objectiveXPRewards: 040000000000000004000000
   rewardGold: 90
   rewardChaos: -2

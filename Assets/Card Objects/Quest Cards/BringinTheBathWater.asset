@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: BringinTheBathWater
   m_EditorClassIdentifier: 
   cardName: Bringin' the Bath Water
+  image: {fileID: 0}
   questStep: 0
   objectiveNames:
-  - Talk to the <i>Four-Eyed Boy</i> (4 XP)
-  - Go to the <i>Ancestral Spring</i> (4 XP)
-  - Talk to the <i>Four-Eyed Boy</i> (4 XP)
+  - Talk to the <i>Four-Eyed Boy</i>
+  - Go to the <i>Ancestral Spring</i>
+  - Talk to the <i>Four-Eyed Boy</i>
+  objectiveXPRewards: 040000000400000004000000
   rewardGold: 150
   rewardChaos: 0

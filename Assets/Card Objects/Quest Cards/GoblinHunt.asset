@@ -13,11 +13,13 @@ MonoBehaviour:
   m_Name: GoblinHunt
   m_EditorClassIdentifier: 
   cardName: Goblin Hunt
+  image: {fileID: 0}
   questStep: 0
   objectiveNames:
-  - Talk to the <i>Distressed Villager</i> (3 XP)
-  - Explore the <i>Abandoned Outpost</i> (3 XP)
-  - Talk to the <i>Veteran Hunter</i> (3 XP)
+  - Talk to the <i>Distressed Villager</i>
+  - Explore the <i>Abandoned Outpost</i>
+  - Talk to the <i>Veteran Hunter</i>
   - Explore the <i>Howling Cave</i>
+  objectiveXPRewards: 03000000030000000300000000000000
   rewardGold: 120
   rewardChaos: -1

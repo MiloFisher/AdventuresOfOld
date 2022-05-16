@@ -26,7 +26,12 @@ public class UIQuestCard : MonoBehaviour
             if (quest.questStep > i)
                 objectives += "– Completed –";
             else
+            {
                 objectives += "• " + quest.objectiveNames[i];
+                if (quest.objectiveXPRewards[i] > 0)
+                    objectives += " (" + quest.objectiveXPRewards[i] + " XP)";
+            }
+                
             if (i < quest.objectiveNames.Length - 1)
                 objectives += "\n";
         }

@@ -13,10 +13,12 @@ MonoBehaviour:
   m_Name: TheAbandonedPath
   m_EditorClassIdentifier: 
   cardName: The Abandoned Path
+  image: {fileID: 0}
   questStep: 0
   objectiveNames:
-  - Talk to the <i>Crazed Hermit</i> (4 XP)
-  - Talk to the <i>Suspicious Horse</i> (4 XP)
+  - Talk to the <i>Crazed Hermit</i>
+  - Talk to the <i>Suspicious Horse</i>
   - Explore the <i>Webbed Forest</i>
+  objectiveXPRewards: 040000000400000000000000
   rewardGold: 125
   rewardChaos: -1

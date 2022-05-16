@@ -13,11 +13,13 @@ MonoBehaviour:
   m_Name: DisharMEOWny
   m_EditorClassIdentifier: 
   cardName: DisharMEOWny
+  image: {fileID: 0}
   questStep: 0
   objectiveNames:
-  - Talk to the <i>Pablo the Noob</i> (3 XP)
+  - Talk to the <i>Pablo the Noob</i>
   - Explore the <i>Ominous Clearing</i>
-  - Talk to the <i>Pablo the Noob</i> (3 XP)
+  - Talk to the <i>Pablo the Noob</i>
   - Explore the <i>Ominous Clearing</i>
+  objectiveXPRewards: 03000000000000000300000000000000
   rewardGold: 100
   rewardChaos: -2

@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: DoubleRainbow
   m_EditorClassIdentifier: 
   cardName: Double Rainbow
+  image: {fileID: 0}
   questStep: 0
   objectiveNames:
-  - Talk to the <i>Forest Hag</i> (6 XP)
+  - Talk to the <i>Forest Hag</i>
   - Explore the <i>Overgrown Temple</i>
+  objectiveXPRewards: 0600000000000000
   rewardGold: 80
   rewardChaos: -2
