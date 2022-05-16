@@ -66,6 +66,12 @@ public class QuestManager : Singleton<QuestManager>
             StartCoroutine(FadeOutScene());
     }
 
+    public void EndDialogue()
+    {
+        currentChunk++;
+        StartCoroutine(FadeOutScene());
+    }
+
     public void PlayAudio(string name, float startTime = 0, float endTime = -1)
     {
         audioFileName = name;
@@ -100,6 +106,62 @@ public class QuestManager : Singleton<QuestManager>
                 isLocation = false;
                 npcImage.sprite = npcImages[2];
                 break;
+            case "Distressed Villager":
+                isLocation = false;
+                npcImage.sprite = npcImages[7];
+                break;
+            case "Forest Hag":
+                isLocation = false;
+                npcImage.sprite = npcImages[1];
+                break;
+            case "Four-Eyed Boy":
+                isLocation = false;
+                npcImage.sprite = npcImages[0];
+                break;
+            case "Pablo the Noob":
+                isLocation = false;
+                npcImage.sprite = npcImages[5];
+                break;
+            case "Shifty Peddler":
+                isLocation = false;
+                npcImage.sprite = npcImages[6];
+                break;
+            case "Suspicious Horse":
+                isLocation = false;
+                npcImage.sprite = npcImages[3];
+                break;
+            case "Veteran Hunter":
+                isLocation = false;
+                npcImage.sprite = npcImages[4];
+                break;
+            case "Abandoned Outpost":
+                isLocation = true;
+                locationImage.sprite = locationImages[0];
+                break;
+            case "Ancient Spring":
+                isLocation = true;
+                locationImage.sprite = locationImages[0];
+                break;
+            case "Bandit Hideout":
+                isLocation = true;
+                locationImage.sprite = locationImages[0];
+                break;
+            case "Howling Cave":
+                isLocation = true;
+                locationImage.sprite = locationImages[0];
+                break;
+            case "Ominous Clearing":
+                isLocation = true;
+                locationImage.sprite = locationImages[0];
+                break;
+            case "Overgrown Temple":
+                isLocation = true;
+                locationImage.sprite = locationImages[0];
+                break;
+            case "Webbed Forest":
+                isLocation = true;
+                locationImage.sprite = locationImages[0];
+                break;
         }
         locationImage.gameObject.SetActive(isLocation);
         npcImage.gameObject.SetActive(!isLocation);
@@ -118,7 +180,7 @@ public class QuestManager : Singleton<QuestManager>
             choiceButtons[i] = Instantiate(choiceButtonPrefab, continueButton.transform.parent);
             choiceButtons[i].transform.localPosition = new Vector3(-4000 * (choices - i * 2 - 1), -1700, 0);
             choiceButtons[i].GetComponent<UIQuestChoice>().id = i;
-            choiceButtons[i].GetComponent<TMP_Text>().text = choiceTexts[i];
+            choiceButtons[i].GetComponentInChildren<TMP_Text>().text = choiceTexts[i];
             if(ChoiceRequirements[i]())
             {
                 choiceButtons[i].GetComponent<Button>().enabled = true;
@@ -260,7 +322,7 @@ public class QuestManager : Singleton<QuestManager>
 
         StartCoroutine(ButtonCooldown());
         JLAudioManager.Instance.StopSound(audioFileName);
-        PlayManager.Instance.localPlayer.SetNextDialogueChunk();
+        PlayManager.Instance.localPlayer.EndDialogue();
     }
 
     // Choice Buttons

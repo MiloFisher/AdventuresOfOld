@@ -59,6 +59,12 @@ namespace AdventuresOfOldMultiplayer
         public NetworkVariable<int> EndOfDayActivity = new NetworkVariable<int>();
         public NetworkVariable<int> ParticipatingInCombat = new NetworkVariable<int>();
 
+        // Quest data
+        public NetworkVariable<bool> HasBathWater = new NetworkVariable<bool>();
+        public NetworkVariable<bool> BetrayedBoy = new NetworkVariable<bool>();
+        public NetworkVariable<bool> GrabbedHorse = new NetworkVariable<bool>();
+        public NetworkVariable<bool> KilledGoblin = new NetworkVariable<bool>();
+
         public override void OnNetworkSpawn()
         {
             if (IsOwner)
@@ -189,6 +195,32 @@ namespace AdventuresOfOldMultiplayer
                 case "EndOfDayActivity": EndOfDayActivity.Value = value; break;
                 case "ParticipatingInCombat": ParticipatingInCombat.Value = value; break;
                 case "Color": Color.Value = value; break;
+                default: Debug.LogError("Unknown Value: \"" + valueName + "\""); break;
+            }
+        }
+
+        public void SetValue(string valueName, bool value)
+        {
+            if (NetworkManager.Singleton.IsServer)
+                SetBoolValue(valueName, value);
+            else
+                SetBoolValueServerRPC(valueName, value);
+        }
+
+        [ServerRpc]
+        private void SetBoolValueServerRPC(FixedString64Bytes valueName, bool value, ServerRpcParams rpcParams = default)
+        {
+            SetBoolValue(valueName + "", value);
+        }
+
+        private void SetBoolValue(string valueName, bool value)
+        {
+            switch (valueName)
+            {
+                case "HasBathWater": HasBathWater.Value = value; break;
+                case "BetrayedBoy": BetrayedBoy.Value = value; break;
+                case "GrabbedHorse": GrabbedHorse.Value = value; break;
+                case "KilledGoblin": KilledGoblin.Value = value; break;
                 default: Debug.LogError("Unknown Value: \"" + valueName + "\""); break;
             }
         }
@@ -1638,31 +1670,49 @@ namespace AdventuresOfOldMultiplayer
             }
         }
 
-        public void LoadOthersIntoQuest(string questName)
+        public void EndDialogue()
         {
-            FixedString64Bytes uuid = UUID.Value;
             if (NetworkManager.Singleton.IsServer)
             {
                 foreach (Player p in PlayManager.Instance.playerList)
-                {
-                    if(p.UUID.Value != uuid)
-                        p.LoadOthersIntoQuestClientRPC(questName);
-                }
+                    p.EndDialogueClientRPC();
             }
             else
-                LoadOthersIntoQuestServerRPC(uuid, questName);
+                EndDialogueServerRPC();
         }
         [ServerRpc]
-        private void LoadOthersIntoQuestServerRPC(FixedString64Bytes uuid, FixedString64Bytes questName, ServerRpcParams rpcParams = default)
+        private void EndDialogueServerRPC(ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
-            {
-                if (p.UUID.Value != uuid)
-                    p.LoadOthersIntoQuestClientRPC(questName);
-            }
+                p.EndDialogueClientRPC();
         }
         [ClientRpc]
-        public void LoadOthersIntoQuestClientRPC(FixedString64Bytes questName, ClientRpcParams clientRpcParams = default)
+        public void EndDialogueClientRPC(ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                QuestManager.Instance.EndDialogue();
+            }
+        }
+
+        public void LoadIntoQuest(string questName)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.LoadIntoQuestClientRPC(questName);
+            }
+            else
+                LoadIntoQuestServerRPC(questName);
+        }
+        [ServerRpc]
+        private void LoadIntoQuestServerRPC(FixedString64Bytes questName, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.LoadIntoQuestClientRPC(questName);
+        }
+        [ClientRpc]
+        public void LoadIntoQuestClientRPC(FixedString64Bytes questName, ClientRpcParams clientRpcParams = default)
         {
             if (IsOwner && !isBot)
             {

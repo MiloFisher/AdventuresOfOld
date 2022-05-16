@@ -84,7 +84,9 @@ public class PlayManager : Singleton<PlayManager>
 
     public Color[] playerColors;
 
+    // *** Testing Only ***
     public EncounterCard testingCard;
+    public QuestCard testingCard1;
 
     public bool startOrEndOfDay;
 
@@ -313,6 +315,7 @@ public class PlayManager : Singleton<PlayManager>
 
         // *** Testing Only ***
         encounterDeck[0] = testingCard;
+        quests[0] = testingCard1;
 
         // 6) Miniboss and minion decks already set up
 
@@ -892,10 +895,33 @@ public class PlayManager : Singleton<PlayManager>
         Invoke(questName, 0);
     }
 
+    public bool HasQuest(string questName, int questStep)
+    {
+        foreach (QuestCard q in quests)
+        {
+            if (q.cardName == questName && q.questStep == questStep)
+                return true;
+        }
+        return false;
+    }
+
     public void CrazedHermit()
     {
-        //DefaultTile(); // Temporary
-        CrazedHermitAbandonedPath();
+        if(HasQuest("The Abandoned Path", 0))
+        {
+            MakeChoice("Follow Quest", "Ignore Quest", true, true);
+            ChoiceListener((a) => {
+                if(a == 1)
+                {
+                    ResetEncounterFails();
+                    localPlayer.LoadIntoQuest("CrazedHermitAbandonedPath");
+                }
+                else
+                    DefaultTile();
+            });
+        }
+        else
+            DefaultTile();
     }
 
     public void CrazedHermitAbandonedPath()
@@ -922,7 +948,7 @@ public class PlayManager : Singleton<PlayManager>
                 // Chunk 1 (Intro)
                 QuestManager.Instance.SetImage("Crazed Hermit");
                 QuestManager.Instance.SetSpeaker("Narrator");
-                QuestManager.Instance.SetDialogue("An old man is standing about, using a rickety cane to stand. He’s covered in old, torn rags that are covered with dirt and grime. Any area close to him seems to almost be dying as moves about, the grass turning gray and disappearing and the trees almost shaking with discomfort.");
+                QuestManager.Instance.SetDialogue("An old man is standing about, using a rickety cane to stand.  He’s covered in old, torn rags that are covered with dirt and grime.  Any area close to him seems to almost be dying as moves about, the grass turning gray and disappearing and the trees almost shaking with discomfort.");
                 QuestManager.Instance.PlayAudio("");
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
@@ -955,37 +981,1035 @@ public class PlayManager : Singleton<PlayManager>
 
     public void DistressedVillager()
     {
-        DefaultTile(); // Temporary
+        if (HasQuest("Goblin Hunt", 0))
+        {
+            MakeChoice("Follow Quest", "Ignore Quest", true, true);
+            ChoiceListener((a) => {
+                if (a == 1)
+                {
+                    ResetEncounterFails();
+                    localPlayer.LoadIntoQuest("DistressedVillagerGoblinHunt");
+                }
+                else
+                    DefaultTile();
+            });
+        }
+        else
+            DefaultTile();
+    }
+
+    public void DistressedVillagerGoblinHunt()
+    {
+        Action OnComplete = default;
+        if (isYourTurn)
+        {
+            OnComplete = () => {
+                foreach (QuestCard q in quests)
+                {
+                    if (q.cardName == "Goblin Hunt")
+                    {
+                        localPlayer.GainXP(q.objectiveXPRewards[q.questStep]);
+                        q.questStep++;
+                    }
+                }
+                localPlayer.UpdateQuests(quests);
+                EndTurn();
+            };
+        }
+
+        QuestManager.Instance.LoadIntoQuest(isYourTurn, new List<Action> {
+            () => {
+                // Chunk 1 (Intro)
+                QuestManager.Instance.SetImage("Distressed Villager");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("A young woman is looking around frantically.  She is covered in dirt and seems to be wounded.  You see tears forming around her eyes and a look of desperation consumes her face.  You can tell something has terribly frightened this woman.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 2
+                QuestManager.Instance.SetImage("Distressed Villager");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("The young woman sees you approaching and rushes over to you.  She frantically cries,");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 3
+                QuestManager.Instance.SetImage("Distressed Villager");
+                QuestManager.Instance.SetSpeaker("Distressed Villager");
+                QuestManager.Instance.SetDialogue("Please, you have to help me!  I saw an army of goblins making camp nearby!  They spotted me spying on them so I ran as fast as I could, but what if they track me down!  Please, adventurer, you have to kill them before they get to me!");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+            }
+        }, OnComplete);
     }
 
     public void ForestHag()
     {
-        DefaultTile(); // Temporary
+        if (HasQuest("Double Rainbow", 0))
+        {
+            MakeChoice("Follow Quest", "Ignore Quest", true, true);
+            ChoiceListener((a) => {
+                if (a == 1)
+                {
+                    ResetEncounterFails();
+                    localPlayer.LoadIntoQuest("ForestHagDoubleRainbow");
+                }
+                else
+                    DefaultTile();
+            });
+        }
+        else
+            DefaultTile();
+    }
+
+    public void ForestHagDoubleRainbow()
+    {
+        Action OnComplete = default;
+        if (isYourTurn)
+        {
+            OnComplete = () => {
+                foreach (QuestCard q in quests)
+                {
+                    if (q.cardName == "Double Rainbow")
+                    {
+                        localPlayer.GainXP(q.objectiveXPRewards[q.questStep]);
+                        q.questStep++;
+                    }
+                }
+                localPlayer.UpdateQuests(quests);
+                EndTurn();
+            };
+        }
+
+        QuestManager.Instance.LoadIntoQuest(isYourTurn, new List<Action> {
+            () => {
+                // Chunk 1 (Intro)
+                QuestManager.Instance.SetImage("Forest Hag");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("An old lady using a wooden stick to stand is beside her desolate shack.  Her skin is an odd shade of green, her nose is long and pimply, and the rags she uses as clothes are ridden with dirt and grime.  Her voice is coarse as she sings to herself while stirring her pot of... meat?");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 2
+                QuestManager.Instance.SetImage("Forest Hag");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("The hag turns and calls out to you.  As you walk over, she cackles to herself and begins asking you for a favor,");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 3
+                QuestManager.Instance.SetImage("Forest Hag");
+                QuestManager.Instance.SetSpeaker("Forest Hag");
+                QuestManager.Instance.SetDialogue("One of my little pets escaped from my home, can you be a sweet little dear and capture it for me?  When you do find it, don’t forget to give it a good spanking for being... so so disobedient hehehe!  I won’t mind if you kill it either, I can always find new pets!");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 4
+                QuestManager.Instance.SetImage("Forest Hag");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("She points her wooden stick towards the Overgrown Temple, and suddenly a brick road the color of egg yolk appears.  The hag cackles again and exclaims to follow the road as she returns to stirring her pot of meat.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+            }
+        }, OnComplete);
     }
 
     public void FourEyedBoy()
     {
-        DefaultTile(); // Temporary
+        if (HasQuest("Isekai!", 2))
+        {
+            MakeChoice("Follow Quest", "Ignore Quest", true, true);
+            ChoiceListener((a) =>
+            {
+                if (a == 1)
+                {
+                    ResetEncounterFails();
+                    localPlayer.LoadIntoQuest("FourEyedBoyIsekai");
+                }
+                else
+                    DefaultTile();
+            });
+        }
+        else
+        {
+            if (HasQuest("Bringin' the Bath Water", 0))
+            {
+                MakeChoice("Follow Quest", "Ignore Quest", true, true);
+                ChoiceListener((a) =>
+                {
+                    if (a == 1)
+                    {
+                        ResetEncounterFails();
+                        localPlayer.LoadIntoQuest("FourEyedBoyBringinTheBathWater1");
+                    }
+                    else
+                        DefaultTile();
+                });
+            }
+            else
+            {
+                if (HasQuest("Bringin' the Bath Water", 2))
+                {
+                    MakeChoice("Follow Quest", "Ignore Quest", true, true);
+                    ChoiceListener((a) => {
+                        if (a == 1)
+                        {
+                            ResetEncounterFails();
+                            localPlayer.LoadIntoQuest("FourEyedBoyBringinTheBathWater2");
+                        }
+                        else
+                            DefaultTile();
+                    });
+                }
+                else
+                    DefaultTile();
+            }
+        }
+    }
+
+    public void FourEyedBoyIsekai()
+    {
+        Action OnComplete = default;
+        if (isYourTurn)
+        {
+            OnComplete = () => {
+                foreach (QuestCard q in quests)
+                {
+                    if (q.cardName == "Isekai!")
+                    {
+                        localPlayer.GainXP(q.objectiveXPRewards[q.questStep]);
+                        localPlayer.ReduceChaos(-1 * q.rewardChaos);
+                        foreach (Player p in playerList)
+                            p.GainGold(q.rewardGold);
+                        q.questStep++;
+                    }
+                }
+                localPlayer.UpdateQuests(quests);
+                EndTurn();
+            };
+        }
+
+        QuestManager.Instance.LoadIntoQuest(isYourTurn, new List<Action> {
+            () => {
+                // Chunk 1 (Intro)
+                QuestManager.Instance.SetImage("Four-Eyed Boy");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("A small boy appears before you, his glasses are cracked and he talks to himself.  Something is off about this boy though, his body distorts and the image of himself seems to split.  It happens so quickly you question if it’s just your mind playing tricks...");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 2
+                QuestManager.Instance.SetImage("Four-Eyed Boy");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("The boy faces towards you, his eyes are filled with tears.  He asks if you’re here to finish him off.  You shake your head and he states,");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 3
+                QuestManager.Instance.SetImage("Four-Eyed Boy");
+                QuestManager.Instance.SetSpeaker("Four-Eyed Boy");
+                QuestManager.Instance.SetDialogue("I don’t even know why I’m here!  I was just sitting in my room talking to my discord kitten and suddenly I’m in this strange land!  I hope my little kitten is okay, I have to get back and tell her...");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 4
+                QuestManager.Instance.SetImage("Four-Eyed Boy");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("As he was about to finish his sentence, the sky turns dark and hovering in the clouds is a frightening smile and a pair of red eyes, it laughs as the  boy’s body begins to distort violently.  The boy screams for help but just as fast as it started, the boy’s body freezes and he looks at you.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 5
+                QuestManager.Instance.SetImage("Four-Eyed Boy");
+                QuestManager.Instance.SetSpeaker("Four-Eyed Boy");
+                QuestManager.Instance.SetDialogue("Wow you’re an adventurer aren’t you!  Back at the village I would tell everyone I was going to be an adventurer too!");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 6
+                QuestManager.Instance.SetImage("Four-Eyed Boy");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("He keeps talking, seemingly unaware of what happened moments ago.  You leave confused, but in the back of your mind the smile appears again and your hand forcibly checks your pockets, someone or something rewards you for completing your task.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+            }
+        }, OnComplete);
+    }
+
+    public void FourEyedBoyBringinTheBathWater1()
+    {
+        Action OnComplete = default;
+        if (isYourTurn)
+        {
+            OnComplete = () => {
+                foreach (QuestCard q in quests)
+                {
+                    if (q.cardName == "Bringin' the Bath Water")
+                    {
+                        localPlayer.GainXP(q.objectiveXPRewards[q.questStep]);
+                        q.questStep++;
+                    }
+                }
+                localPlayer.UpdateQuests(quests);
+                EndTurn();
+            };
+        }
+
+        QuestManager.Instance.LoadIntoQuest(isYourTurn, new List<Action> {
+            () => {
+                // Chunk 1 (Intro)
+                QuestManager.Instance.SetImage("Four-Eyed Boy");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("A small boy appears before you, his glasses are cracked and he talks to himself.  Something is off about this boy though, his body distorts and the image of himself seems to split.  It happens so quickly you question if it’s just your mind playing tricks...");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 2
+                QuestManager.Instance.SetImage("Four-Eyed Boy");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("As you begin to approach the boy, his body distorts again and you hear him mumbling to himself,");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 3
+                QuestManager.Instance.SetImage("Four-Eyed Boy");
+                QuestManager.Instance.SetSpeaker("Four-Eyed Boy");
+                QuestManager.Instance.SetDialogue("It’s somewhere around here, where is it...  where is it!");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 4
+                QuestManager.Instance.SetImage("Four-Eyed Boy");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("Before you can get any closer the boy notices you and his eyes sparkle with opportunity,");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 5
+                QuestManager.Instance.SetImage("Four-Eyed Boy");
+                QuestManager.Instance.SetSpeaker("Four-Eyed Boy");
+                QuestManager.Instance.SetDialogue("Hey adventurer!  Could you help me out?  I heard there was a spring here with mystical forbidden waters, and if you drink it you will have the power of over 9000 men and no one will be able to resist you!  Doesn’t that sound great?");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 6
+                QuestManager.Instance.SetImage("Four-Eyed Boy");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("He shows you a poorly drawn map,");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 7
+                QuestManager.Instance.SetImage("Four-Eyed Boy");
+                QuestManager.Instance.SetSpeaker("Four-Eyed Boy");
+                QuestManager.Instance.SetDialogue("It’s somewhere around here, but I was never really good at reading, or fighting, or even walking.  Can you help me out?  I’ll reward you!");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 8
+                QuestManager.Instance.SetImage("Four-Eyed Boy");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("You agree and begin looking for the location on the map.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+            }
+        }, OnComplete);
+    }
+
+    public void FourEyedBoyBringinTheBathWater2()
+    {
+        Action OnComplete = default;
+        if (isYourTurn)
+        {
+            OnComplete = () => {
+                foreach (QuestCard q in quests)
+                {
+                    if (q.cardName == "Bringin' the Bath Water")
+                    {
+                        localPlayer.GainXP(q.objectiveXPRewards[q.questStep]);
+                        localPlayer.ReduceChaos(-1 * q.rewardChaos);
+                        foreach (Player p in playerList)
+                            p.GainGold(q.rewardGold);
+                        q.questStep++;
+                    }
+                }
+                localPlayer.UpdateQuests(quests);
+                if (localPlayer.BetrayedBoy.Value)
+                    localPlayer.IncreaseChaos(1);
+                EndTurn();
+            };
+        }
+
+        QuestManager.Instance.LoadIntoQuest(isYourTurn, new List<Action> {
+            () => {
+                // Chunk 1
+                QuestManager.Instance.SetImage("Four-Eyed Boy");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("The boy notices you approaching almost immediately.  He shoots up from his sorry looking state, and seems incredibly excited, shaking with anticipation.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 2
+                QuestManager.Instance.SetImage("Four-Eyed Boy");
+                QuestManager.Instance.SetSpeaker("Four-Eyed Boy");
+                QuestManager.Instance.SetDialogue("D-did you get it?");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 3
+                QuestManager.Instance.SetImage("Four-Eyed Boy");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("he asks.  You tell him that you got some special water from the spring.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetChoices(2, new string[2]{ "Give him \"Good Stuff\"", "Give him some water"}, new Action[2]{
+                    () => {
+                        // Gave him good stuff
+                    }, () => {
+                        // Gave him bad water (betrayed)
+                        foreach(Player p in playerList)
+                            p.SetValue("BetrayedBoy", true);
+                    }
+                }, new Func<bool>[2] {
+                    () => {
+                        // Requires bathwater
+                        return localPlayer.HasBathWater.Value;
+                    }, () => {
+                        // No requirement
+                        return true;
+                    }
+                });
+            },
+            () => {
+                // Chunk 4
+                if(localPlayer.BetrayedBoy.Value)
+                {
+                    QuestManager.Instance.SetImage("Four-Eyed Boy");
+                    QuestManager.Instance.SetSpeaker("Narrator");
+                    QuestManager.Instance.SetDialogue("You hand over the jar of water to the boy.  He inspects it, then removes the lid and inhales deeply.  The boy looks at you and says");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+                }
+                else
+                {
+                    QuestManager.Instance.SetImage("Four-Eyed Boy");
+                    QuestManager.Instance.SetSpeaker("Narrator");
+                    QuestManager.Instance.SetDialogue("You hand the jar over to the boy and he squeals in excitement.  You begin to ask for your reward when all of a sudden, the boy opens the lid of the jar and begins chugging the water at an ungodly rate.");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+                }
+            },
+            () => {
+                // Chunk 5
+                if(localPlayer.BetrayedBoy.Value)
+                {
+                    QuestManager.Instance.SetImage("Four-Eyed Boy");
+                    QuestManager.Instance.SetSpeaker("Four-Eyed Boy");
+                    QuestManager.Instance.SetDialogue("Something isn’t right, I don’t smell their wonderful scent.  Is this just regular spring water?");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+                }
+                else
+                {
+                    QuestManager.Instance.SetImage("Four-Eyed Boy");
+                    QuestManager.Instance.SetSpeaker("Narrator");
+                    QuestManager.Instance.SetDialogue("You’re taken aback by the display, but you continue to ask about the reward.  Once he is done, he looks at you and grins,");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+                }
+            },
+            () => {
+                // Chunk 6
+                if(localPlayer.BetrayedBoy.Value)
+                {
+                    QuestManager.Instance.SetImage("Four-Eyed Boy");
+                    QuestManager.Instance.SetSpeaker("Narrator");
+                    QuestManager.Instance.SetDialogue("You look at him quizzically.  Could this boy really smell the difference between spring water and spring water that an elemental had been in?  You tell the boy that this is the special water he ordered so he better pay up.");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+                }
+                else
+                {
+                    QuestManager.Instance.SetImage("Four-Eyed Boy");
+                    QuestManager.Instance.SetSpeaker("Four-Eyed Boy");
+                    QuestManager.Instance.SetDialogue("I have the strength of over 9000 men and you think you have the power to make demands of me?!");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+                }
+            },
+            () => {
+                // Chunk 7
+                if(localPlayer.BetrayedBoy.Value)
+                {
+                    QuestManager.Instance.SetImage("Four-Eyed Boy");
+                    QuestManager.Instance.SetSpeaker("Narrator");
+                    QuestManager.Instance.SetDialogue("The boy angrily eyes you, then takes his jar and then throws your reward on the ground.  (+1 Chaos)");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+                }
+                else
+                {
+                    QuestManager.Instance.SetImage("Four-Eyed Boy");
+                    QuestManager.Instance.SetSpeaker("Narrator");
+                    QuestManager.Instance.SetDialogue("He sprints full speed towards you, you calmly pull out your weapon and sigh, smacking the boy with the blunt end of your weapon, knocking him out.  You loot the boy’s body and leave.");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+                }
+            }
+        }, OnComplete);
     }
 
     public void PabloTheNoob()
     {
-        DefaultTile(); // Temporary
+        if (HasQuest("DisharMEOWny", 0))
+        {
+            MakeChoice("Follow Quest", "Ignore Quest", true, true);
+            ChoiceListener((a) =>
+            {
+                if (a == 1)
+                {
+                    ResetEncounterFails();
+                    localPlayer.LoadIntoQuest("PabloTheNoobDisharMEOWNy1");
+                }
+                else
+                    DefaultTile();
+            });
+        }
+        else
+        {
+            if (HasQuest("DisharMEOWny", 2))
+            {
+                MakeChoice("Follow Quest", "Ignore Quest", true, true);
+                ChoiceListener((a) => {
+                    if (a == 1)
+                    {
+                        ResetEncounterFails();
+                        localPlayer.LoadIntoQuest("PabloTheNoobDisharMEOWNy2");
+                    }
+                    else
+                        DefaultTile();
+                });
+            }
+            else
+                DefaultTile();
+        }
+    }
+
+    public void PabloTheNoobDisharMEOWNy1()
+    {
+        Action OnComplete = default;
+        if (isYourTurn)
+        {
+            OnComplete = () => {
+                foreach (QuestCard q in quests)
+                {
+                    if (q.cardName == "DisharMEOWny")
+                    {
+                        localPlayer.GainXP(q.objectiveXPRewards[q.questStep]);
+                        q.questStep++;
+                    }
+                }
+                localPlayer.UpdateQuests(quests);
+                EndTurn();
+            };
+        }
+
+        QuestManager.Instance.LoadIntoQuest(isYourTurn, new List<Action> {
+            () => {
+                // Chunk 1 (Intro)
+                QuestManager.Instance.SetImage("Pablo the Noob");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("A young man, barely in his teens, stands before you.  His small frame and loose armor makes it seem like he weighs less than a single gold piece.  He’s panting and covered in visible scratches and bruises.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 2
+                QuestManager.Instance.SetImage("Pablo the Noob");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("Under his breath you can clearly tell he’s cursing to himself... something about wanting his mom to come get him?");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 3
+                QuestManager.Instance.SetImage("Pablo the Noob");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("You ask him if he has seen any notable monsters or Chaos activity around the area.  His eyes perk up almost immediately as he points you towards the Ominous Clearing and exclaims,");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 4
+                QuestManager.Instance.SetImage("Pablo the Noob");
+                QuestManager.Instance.SetSpeaker("Pablo the Noob");
+                QuestManager.Instance.SetDialogue("I was attacked by the scariest monster I’ve ever seen over there!  My mom was right, I should never have left home!  I hate touching all this grass, it gets everywhere!");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+            }
+        }, OnComplete);
+    }
+
+    public void PabloTheNoobDisharMEOWNy2()
+    {
+        Action OnComplete = default;
+        if (isYourTurn)
+        {
+            OnComplete = () => {
+                foreach (QuestCard q in quests)
+                {
+                    if (q.cardName == "DisharMEOWny")
+                    {
+                        localPlayer.GainXP(q.objectiveXPRewards[q.questStep]);
+                        q.questStep++;
+                    }
+                }
+                localPlayer.UpdateQuests(quests);
+                EndTurn();
+            };
+        }
+
+        QuestManager.Instance.LoadIntoQuest(isYourTurn, new List<Action> {
+            () => {
+                // Chunk 1
+                QuestManager.Instance.SetImage("Pablo the Noob");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("You begin chiding Pablo for making you fight such a small feline.  He looks at you confused,");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 2
+                QuestManager.Instance.SetImage("Pablo the Noob");
+                QuestManager.Instance.SetSpeaker("Pablo the Noob");
+                QuestManager.Instance.SetDialogue("Small cat... did you...  did you kill Mr. Whiskers?!  That wasn’t the monster, that was my cat!  I was trying to save him from the monster!");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 3
+                QuestManager.Instance.SetImage("Pablo the Noob");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("Just as he says that, a loud roar can be heard at the Ominous Clearing, something is very angwy...");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+            }
+        }, OnComplete);
     }
 
     public void ShiftyPeddler()
     {
-        DefaultTile(); // Temporary
+        if (HasQuest("Isekai!", 0))
+        {
+            MakeChoice("Follow Quest", "Ignore Quest", true, true);
+            ChoiceListener((a) => {
+                if (a == 1)
+                {
+                    ResetEncounterFails();
+                    localPlayer.LoadIntoQuest("ShiftyPeddlerIsekai");
+                }
+                else
+                    DefaultTile();
+            });
+        }
+        else
+            DefaultTile();
+    }
+
+    public void ShiftyPeddlerIsekai()
+    {
+        Action OnComplete = default;
+        if (isYourTurn)
+        {
+            OnComplete = () => {
+                foreach (QuestCard q in quests)
+                {
+                    if (q.cardName == "Isekai!")
+                    {
+                        localPlayer.GainXP(q.objectiveXPRewards[q.questStep]);
+                        q.questStep++;
+                    }
+                }
+                localPlayer.UpdateQuests(quests);
+                EndTurn();
+            };
+        }
+
+        QuestManager.Instance.LoadIntoQuest(isYourTurn, new List<Action> {
+            () => {
+                // Chunk 1 (Intro)
+                QuestManager.Instance.SetImage("Shifty Peddler");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("A man is leaning against a tree at the side of the forest trail. His long coat and large hat are out of place in the surrounding area, but he seems unbothered by it all.  He whispers to himself and large grins stretch almost forcibly across his face.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 2
+                QuestManager.Instance.SetImage("Shifty Peddler");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("The peddler approaches you, his grin going from cheek to cheek in an almost terrifying manner.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 3
+                QuestManager.Instance.SetImage("Shifty Peddler");
+                QuestManager.Instance.SetSpeaker("Shifty Peddler");
+                QuestManager.Instance.SetDialogue("Hello there stranger, enjoying the sights?  It’s all marvelous isn’t it, this strange land?  Almost like it was crafted for us.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 4
+                QuestManager.Instance.SetImage("Shifty Peddler");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("His smile somehow grows even wider and in a blink of an eye, he disappears from your sight and you hear his voice deep within the forest.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 5
+                QuestManager.Instance.SetImage("Shifty Peddler");
+                QuestManager.Instance.SetSpeaker("Shifty Peddler");
+                QuestManager.Instance.SetDialogue("We oughta help each other, after all we are both travelers here heh heh heh...");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 6
+                QuestManager.Instance.SetImage("Shifty Peddler");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("Your head begins to forcibly turn towards an almost invisible path,");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 7
+                QuestManager.Instance.SetImage("Shifty Peddler");
+                QuestManager.Instance.SetSpeaker("Shifty Peddler");
+                QuestManager.Instance.SetDialogue("Now now, don’t worry.  All I need from you is to have a little fun with someone down that road.  Simple isn’t it?  He he he...");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 4
+                QuestManager.Instance.SetImage("Shifty Peddler");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("Your mind fills with the information of your task, and the voice in the forest retreats.  Still though... in the back of your mind you see the image of a large grin.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+            }
+        }, OnComplete);
     }
 
     public void SuspiciousHorse()
     {
-        DefaultTile(); // Temporary
+        if (HasQuest("The Abandoned Path", 1))
+        {
+            MakeChoice("Follow Quest", "Ignore Quest", true, true);
+            ChoiceListener((a) => {
+                if (a == 1)
+                {
+                    ResetEncounterFails();
+                    localPlayer.LoadIntoQuest("SuspiciousHorseAbandonedPath");
+                }
+                else
+                    DefaultTile();
+            });
+        }
+        else
+            DefaultTile();
+    }
+
+    public void SuspiciousHorseAbandonedPath()
+    {
+        Action OnComplete = default;
+        if (isYourTurn)
+        {
+            OnComplete = () => {
+                foreach (QuestCard q in quests)
+                {
+                    if (q.cardName == "The Abandoned Path")
+                    {
+                        localPlayer.GainXP(q.objectiveXPRewards[q.questStep]);
+                        q.questStep++;
+                    }
+                }
+                localPlayer.UpdateQuests(quests);
+                EndTurn();
+            };
+        }
+
+        QuestManager.Instance.LoadIntoQuest(isYourTurn, new List<Action> {
+            () => {
+                // Chunk 1 (Intro)
+                QuestManager.Instance.SetImage("Suspicious Horse");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("A horse stands in the middle of an open clearing, jumping about and enjoying its freedom.  As it spots you, it turns as still as a statue and begins staring you down.  It’s eyes, red and almost human-like, following your every movement.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 2
+                QuestManager.Instance.SetImage("Suspicious Horse");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("You approach the horse...");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetChoices(2, new string[2]{ "Grab the Horse", "Speak to the Horse"}, new Action[2]{
+                    () => {
+                        // Grabbed the Horse
+                        foreach(Player p in playerList)
+                            p.SetValue("GrabbedHorse", true);
+                    }, () => {
+                        // Spoke to the Horse (Animalkin)
+                    }
+                }, new Func<bool>[2] {
+                    () => {
+                        // No requirement
+                        return true;
+                    }, () => {
+                        // Requires animalkin
+                        return Animalkin(localPlayer);
+                    }
+                });
+            },
+            () => {
+                // Chunk 3
+                if(localPlayer.GrabbedHorse.Value)
+                {
+                    QuestManager.Instance.SetImage("Suspicious Horse");
+                    QuestManager.Instance.SetSpeaker("Narrator");
+                    QuestManager.Instance.SetDialogue("You grab the reins of the horse and you start leading it back to the hermit’s home.");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+                }
+                else
+                {
+                    QuestManager.Instance.SetImage("Suspicious Horse");
+                    QuestManager.Instance.SetSpeaker("Suspicious Horse");
+                    QuestManager.Instance.SetDialogue("DON’T BRING ME BACK TO THAT CRAZY MAN, HE WANTS TO FEED ME TO THAT SPIDER!");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetChoices(2, new string[2]{ "Ignore the Horse", "Trust the Horse"}, new Action[2]{
+                    () => {
+                        // Ignored the Horse
+                        foreach(Player p in playerList)
+                            p.SetValue("GrabbedHorse", true);
+                    }, () => {
+                        // Trusted the Horse
+                    }
+                }, new Func<bool>[2] {
+                    () => {
+                        // No requirement
+                        return true;
+                    }, () => {
+                        // No requirement
+                        return true;
+                    }
+                });
+                }
+            },
+            () => {
+                // Chunk 4
+                if(localPlayer.GrabbedHorse.Value)
+                {
+                    QuestManager.Instance.SetImage("Suspicious Horse");
+                    QuestManager.Instance.SetSpeaker("Narrator");
+                    QuestManager.Instance.SetDialogue("You tell the horse he’s crazy and take him back anyway.");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+                }
+                else
+                {
+                    QuestManager.Instance.SetImage("Suspicious Horse");
+                    QuestManager.Instance.SetSpeaker("Narrator");
+                    QuestManager.Instance.SetDialogue("You heed the horse’s warning and head back cautiously, leaving the horse behind.");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+                }
+            }
+        }, OnComplete);
     }
 
     public void VeteranHunter()
     {
-        DefaultTile(); // Temporary
+        if (HasQuest("Goblin Hunt", 2))
+        {
+            MakeChoice("Follow Quest", "Ignore Quest", true, true);
+            ChoiceListener((a) => {
+                if (a == 1)
+                {
+                    ResetEncounterFails();
+                    localPlayer.LoadIntoQuest("VeteranHunterGoblinHunt");
+                }
+                else
+                    DefaultTile();
+            });
+        }
+        else
+            DefaultTile();
+    }
+
+    public void VeteranHunterGoblinHunt()
+    {
+        Action OnComplete = default;
+        if (isYourTurn)
+        {
+            OnComplete = () => {
+                foreach (QuestCard q in quests)
+                {
+                    if (q.cardName == "Goblin Hunt")
+                    {
+                        localPlayer.GainXP(q.objectiveXPRewards[q.questStep]);
+                        q.questStep++;
+                    }
+                }
+                localPlayer.UpdateQuests(quests);
+                EndTurn();
+            };
+        }
+
+        QuestManager.Instance.LoadIntoQuest(isYourTurn, new List<Action> {
+            () => {
+                // Chunk 1 (Intro)
+                QuestManager.Instance.SetImage("Veteran Hunter");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("A hooded figure seems to be stomping over something on the ground.  A large black coat and gray mask obstruct any view of the person underneath.  They seem to pay you no mind.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 2
+                QuestManager.Instance.SetImage("Veteran Hunter");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("You approach the hunter and ask if they know anything about the goblin horde in the area.  The hunter turns to you and gives a wide grin.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 3
+                QuestManager.Instance.SetImage("Veteran Hunter");
+                QuestManager.Instance.SetSpeaker("Veteran Hunter");
+                QuestManager.Instance.SetDialogue("Oh you want to kill Goblins too?  Good, they all deserve to die!");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 4
+                QuestManager.Instance.SetImage("Veteran Hunter");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("His grin widens as he reveals what he was stomping on, a young goblin on the brink of death.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 5
+                QuestManager.Instance.SetImage("Veteran Hunter");
+                QuestManager.Instance.SetSpeaker("Veteran Hunter");
+                QuestManager.Instance.SetDialogue("How about you come over and finish this little one off huh?  I mean, how am I supposed to trust you if you can’t even kill this measly little runt?");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 6
+                QuestManager.Instance.SetImage("Veteran Hunter");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("The young goblin locks eyes with you as you approach, pleading for its life.");
+                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetChoices(2, new string[2]{ "Kill the Goblin", "Kill the Hunter"}, new Action[2]{
+                    () => {
+                        // Killed the Goblin
+                        foreach(Player p in playerList)
+                            p.SetValue("KilledGoblin", true);
+                    }, () => {
+                        // Killed the Hunter
+                    }
+                }, new Func<bool>[2] {
+                    () => {
+                        // No requirement
+                        return true;
+                    }, () => {
+                        // No requirement
+                        return true;
+                    }
+                });
+            },
+            () => {
+                // Chunk 7
+                if(localPlayer.KilledGoblin.Value)
+                {
+                    QuestManager.Instance.SetImage("Veteran Hunter");
+                    QuestManager.Instance.SetSpeaker("Narrator");
+                    QuestManager.Instance.SetDialogue("You swing your weapon down, taking whatever miniscule amount of life was left in the young goblin.  The hunter crouches and proceeds to cut the goblin’s finger off.");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+                }
+                else
+                {
+                    QuestManager.Instance.SetImage("Veteran Hunter");
+                    QuestManager.Instance.SetSpeaker("Narrator");
+                    QuestManager.Instance.SetDialogue("You strike the Veteran Hunter and as they fall to the ground they shout,");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+                }
+            },
+            () => {
+                // Chunk 8
+                if(localPlayer.KilledGoblin.Value)
+                {
+                    QuestManager.Instance.SetImage("Veteran Hunter");
+                    QuestManager.Instance.SetSpeaker("Veteran Hunter");
+                    QuestManager.Instance.SetDialogue("Ruthless, I like that.  We’re going to need that ruthlessness when we exterminate them from the face of this world.  They’re a pest!  No, they’re even worse than that...");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+                }
+                else
+                {
+                    QuestManager.Instance.SetImage("Veteran Hunter");
+                    QuestManager.Instance.SetSpeaker("Veteran Hunter");
+                    QuestManager.Instance.SetDialogue("You’re siding with those scum?  You’re no better than them, all of you deserve to burn in the Chaos!");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+                }
+            },
+            () => {
+                // Chunk 9
+                if(localPlayer.KilledGoblin.Value)
+                {
+                    QuestManager.Instance.SetImage("Veteran Hunter");
+                    QuestManager.Instance.SetSpeaker("Narrator");
+                    QuestManager.Instance.SetDialogue("The hunter continues his ramblings as he begins walking north, you follow closely behind.");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+                }
+                else
+                {
+                    QuestManager.Instance.SetImage("Veteran Hunter");
+                    QuestManager.Instance.SetSpeaker("Narrator");
+                    QuestManager.Instance.SetDialogue("The ring on his finger slips as he dies, you pick it up just in case.  As you help the young goblin up, he looks at you confused by your kindness.  Nevertheless, he leans against you and points north, beckoning you to continue heading in that direction.");
+                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+                }
+            }
+        }, OnComplete);
     }
 
     public void AbandonedOutpost()
