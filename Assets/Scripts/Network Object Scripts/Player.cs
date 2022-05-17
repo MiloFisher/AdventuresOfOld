@@ -1761,6 +1761,31 @@ namespace AdventuresOfOldMultiplayer
         {
             PlayManager.Instance.GameOver(state);
         }
+
+        public void SetBoss(string cardName)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.SetBossClientRPC(cardName);
+            }
+            else
+                SetBossServerRPC(cardName);
+        }
+        [ServerRpc]
+        private void SetBossServerRPC(FixedString64Bytes cardName, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.SetBossClientRPC(cardName);
+        }
+        [ClientRpc]
+        public void SetBossClientRPC(FixedString64Bytes cardName, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                PlayManager.Instance.SetBoss(cardName + "");
+            }
+        }
         #endregion
     }
 }

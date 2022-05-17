@@ -325,7 +325,7 @@ public class PlayManager : Singleton<PlayManager>
 
         // 4) Deal Chapter Boss Card (host only)
         ShuffleDeck(chapterBossDeck);
-        chapterBoss = chapterBossDeck[0];
+        localPlayer.SetBoss(chapterBossDeck[0].cardName);
 
         // 5) Setup Loot and Encounter Decks (host only)
         foreach (LootCard lc in lootCardObjects)
@@ -364,6 +364,15 @@ public class PlayManager : Singleton<PlayManager>
     private void LoadGameSetup()
     {
 
+    }
+
+    public void SetBoss(string cardName)
+    {
+        foreach(MonsterCard m in chapterBossDeck)
+        {
+            if (m.cardName == cardName)
+                chapterBoss = m;
+        }
     }
 
     public void ShuffleDeck<T>(List<T> deck)
@@ -574,8 +583,12 @@ public class PlayManager : Singleton<PlayManager>
         // First Parse tile landed on
         Vector3Int tilePos = gameboard[localPlayer.Position.Value].position;
 
-        // Check NPC tiles first
-        if (tilePos == new Vector3Int(13, 0, -13))
+        // Check Boss tile first
+        if (tilePos == new Vector3Int(17, 7, -24))
+            BossFight();
+
+        // Check NPC tiles next
+        else if (tilePos == new Vector3Int(13, 0, -13))
             CrazedHermit();
         else if (tilePos == new Vector3Int(15, -4, -11))
             DistressedVillager();
@@ -855,7 +868,7 @@ public class PlayManager : Singleton<PlayManager>
 
     public void CombatNotificationOnComplete()
     {
-        MakeChoice("Assist in Combat", "Spectate Combat", InAssistingRange(turnOrderPlayerList[turnMarker], localPlayer, GetRange(localPlayer)), true);
+        MakeChoice("Assist in Combat", "Spectate Combat", InAssistingRange(turnOrderPlayerList[turnMarker], localPlayer, GetRange(localPlayer)) && GetHealth(localPlayer) > 0, true);
         ChoiceListener((a) => {
             if(a == 1)
             {
@@ -923,6 +936,38 @@ public class PlayManager : Singleton<PlayManager>
         localPlayer.DrawLootCards(3, localPlayer.UUID.Value, true);
         ResetEncounterFails();
         gameboard[localPlayer.Position.Value].DisableTreasureToken();
+    }
+
+    public void BossFight()
+    {
+        if (AllAlivePlayerOnBossTile())
+        {
+            MakeChoice("Start Fight", "Ignore Fight", true, true);
+            ChoiceListener((a) => {
+                if (a == 1)
+                {
+                    ResetEncounterFails();
+                    CombatManager.Instance.monsterCard = chapterBoss;
+                    localPlayer.SendCombatNotifications();
+                    localPlayer.SetValue("ParticipatingInCombat", 1);
+                    CallEncounterElement(7);
+                }
+                else
+                    DefaultTile();
+            });
+        }
+        else
+            DefaultTile();
+    }
+
+    public bool AllAlivePlayerOnBossTile()
+    {
+        for(int i = 0; i < playerList.Count; i++)
+        {
+            if (playerList[i].Position.Value != new Vector3Int(17, 7, -24) && GetHealth(playerList[i]) > 0)
+                return false;
+        }
+        return true;
     }
 
     public void LoadQuestEncounter(string questName)
@@ -3057,6 +3102,19 @@ public class PlayManager : Singleton<PlayManager>
             "Sorcerer" => true,
             "Necromancer" => true,
             _ => false,
+        };
+    }
+    public string GetPrimaryStat(Player p)
+    {
+        return (p.Class.Value + "") switch
+        {
+            "Warrior" => "STR",
+            "Paladin" => "STR",
+            "Ranger" => "DEX",
+            "Rogue" => "DEX",
+            "Sorcerer" => "INT",
+            "Necromancer" => "INT",
+            _ => "",
         };
     }
     #endregion

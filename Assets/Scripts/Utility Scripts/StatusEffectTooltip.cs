@@ -117,7 +117,7 @@ public class StatusEffectTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
             "Eaten" => 3,
             "Enwebbed" => 1,
             "Plagued" => 1,
-            "Poisoned" => 3,
+            "Poisoned" => 4,
             "Weakened" => 1,
             "Bleeding" => 2,
             "Burning" => 2,

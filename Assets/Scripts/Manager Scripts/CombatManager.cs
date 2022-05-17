@@ -47,6 +47,7 @@ public class CombatManager : Singleton<CombatManager>
 
     public Action<Combatant> OnPlayerDealDamage;
     public Action<Combatant> OnPlayerTakeDamage;
+    public Action<Combatant> OnPlayerSpendAbilityCharge;
     public OnAttacked OnPlayerBeingAttacked;
 
     private bool ready;

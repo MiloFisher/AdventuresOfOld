@@ -419,12 +419,25 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
     #region Corrupted Tree Spirit
     private void CorruptedTreeSpirit_Skill()
     {
-        // effect goes here...
+        CombatManager.Instance.MakeStatRoll(PlayManager.Instance.GetPrimaryStat(PlayManager.Instance.localPlayer), 12);
+        CombatManager.Instance.StatRollListener((a) => {
+            if (a == -1)
+            {
+                CombatManager.Instance.AttackPlayer(target, CombatManager.Instance.MonsterEndTurn, new List<Effect> { new Effect("Plagued", 1), new Effect("Poisoned", -1, 3) });
+            }
+            else
+                CombatManager.Instance.MonsterEndTurn();
+        });
     }
 
     private void CorruptedTreeSpirit_Passive()
     {
-        // effect goes here...
+        CombatManager.Instance.OnPlayerSpendAbilityCharge = (t) => {
+            if (CombatManager.Instance.IsThisCombatantsTurn(t))
+                CombatManager.Instance.InflictEffect(t, new Effect("Weakened", 2, 3));
+            else
+                CombatManager.Instance.InflictEffect(t, new Effect("Weakened", 1, 3));
+        };
     }
     #endregion
 
