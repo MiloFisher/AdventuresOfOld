@@ -1439,6 +1439,10 @@ public class CombatManager : Singleton<CombatManager>
         ready = false;
         combatLayout.SetActive(false);
         combatBackground.SetActive(false);
+        foreach(GameObject g in playerCards)
+        {
+            g.GetComponent<UIPlayerCard>().DrawStatusEffects(new List<Effect>());
+        }
     }
 
     #region Stat Roll

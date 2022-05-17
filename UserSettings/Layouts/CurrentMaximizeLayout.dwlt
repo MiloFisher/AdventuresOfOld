@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 20
+  controlID: 42528
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -141,7 +141,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 21
+  controlID: 42529
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -166,7 +166,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 22
+  controlID: 42530
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -606,10 +606,10 @@ MonoBehaviour:
     m_SaveData: []
   m_SceneHierarchy:
     m_TreeViewState:
-      scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: ee890000
-      m_LastClickedID: 0
-      m_ExpandedIDs: 5cd9fbff263efcffc0dbfcffece0fcff3428fdffe059fdffba8dfdffd892fdff2ac3fdff88fdfdff5a31feff8c63feffa868feffca9dfeff00defeff3410ffff1247ffff9678ffff32aaffff4eafffff2cfbfffff4ffffffe2690000006d0000aa6f0000dc7a00004a8301004c970100583d0200764002002a41020020430200524e02005c5102007a5402002e55020056620200a8360300c6390300703c0300a2470300ecaa0300a0bc03003efd03005c00040006030400
+      scrollPos: {x: 0, y: 286}
+      m_SelectedIDs: 449cf8ff
+      m_LastClickedID: -484284
+      m_ExpandedIDs: 449cf8ff4e9cf8ff569cf8ff1cbdf8fff2bdf8ff6ceaf8ff069bf9ff42a0f9ff6855faffbcbffaffb8f0faff7831fbffa036fbff0667fbff5cd9fbff263efcffc0dbfcffece0fcff3428fdffe059fdffba8dfdffd892fdff2ac3fdff88fdfdff5a31feff8c63feffa868feffca9dfeff00defeff3410ffff1247ffff9678ffff32aaffff4eafffff2cfbfffff4ffffffe2690000006d0000aa6f0000dc7a00004a8301004c970100583d0200764002002a41020020430200524e02005c5102007a5402002e55020056620200a8360300c6390300703c0300a2470300ecaa0300a0bc03003efd03005c00040006030400c2e005008ae60500bcf10500d6f4050030400600c4500600a61f070082630700c46b07003e7007007e72070016740700b4760700
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -643,7 +643,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: ProjectBrowser
+  m_Name: ConsoleWindow
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -652,14 +652,14 @@ MonoBehaviour:
     y: 623
     width: 1328
     height: 407
-  m_MinSize: {x: 231, y: 271}
-  m_MaxSize: {x: 10001, y: 10021}
-  m_ActualView: {fileID: 11}
+  m_MinSize: {x: 101, y: 121}
+  m_MaxSize: {x: 4001, y: 4021}
+  m_ActualView: {fileID: 12}
   m_Panes:
   - {fileID: 11}
   - {fileID: 12}
-  m_Selected: 0
-  m_LastSelected: 1
+  m_Selected: 1
+  m_LastSelected: 0
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -701,21 +701,21 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scenes
+    - Assets/Prefabs
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scenes
+  - Assets/Prefabs
   m_LastFoldersGridSize: -1
   m_LastProjectPath: /Users/milo/Documents/GitHub/Adventures of Old 2022
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 386}
-    m_SelectedIDs: ce890000
-    m_LastClickedID: 35278
+    scrollPos: {x: 0, y: 466.58655}
+    m_SelectedIDs: cc890000
+    m_LastClickedID: 35276
     m_ExpandedIDs: 000000006489000066890000688900006a8900006c8900006e8900007089000072890000748900007689000078890000c4890000be8b000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -744,7 +744,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000006489000066890000688900006a8900006c8900006e8900007089000072890000748900007689000078890000
+    m_ExpandedIDs: 000000006489000066890000688900006a8900006c8900006e8900007089000072890000748900007689000078890000c4890000be8b000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -769,26 +769,26 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: ee890000
-    m_LastClickedInstanceID: 35310
+    m_SelectedInstanceIDs: 
+    m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000a81e0300
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: Core Game
-      m_OriginalName: Core Game
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 35304
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 1
-      m_ClientGUIView: {fileID: 10}
+      m_ClientGUIView: {fileID: 0}
     m_CreateAssetUtility:
       m_EndAction: {fileID: 0}
       m_InstanceID: 0

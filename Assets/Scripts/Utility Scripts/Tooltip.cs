@@ -76,7 +76,8 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler,
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        OnClick();
+        if(OnClick != default)
+            OnClick();
         display.SetActive(false);
     }
 }

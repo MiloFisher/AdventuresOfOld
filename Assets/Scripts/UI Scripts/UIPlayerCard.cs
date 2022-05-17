@@ -76,6 +76,7 @@ public class UIPlayerCard : MonoBehaviour
         {
             GameObject g = Instantiate(statusEffectPrefab, statusEffectsContainer);
             g.GetComponent<Image>().sprite = GetEffectSprite(effects[i]);
+            g.GetComponentInChildren<StatusEffectTooltip>().SetupDisplay(effects[i]);
             g.transform.localPosition = new Vector3(0, -50 * i, 0);
             statusEffectList.Add(g);
         }
@@ -92,6 +93,13 @@ public class UIPlayerCard : MonoBehaviour
             "Power Up" => statusEffectIcons[3],
             "Attack Up" => statusEffectIcons[4],
             "Armor Up" => statusEffectIcons[5],
+            "Burning" => statusEffectIcons[6],
+            "Dazed" => statusEffectIcons[7],
+            "Eaten" => statusEffectIcons[8],
+            "Enwebbed" => statusEffectIcons[9],
+            "Plagued" => statusEffectIcons[10],
+            "Power Down" => statusEffectIcons[11],
+            "Power Fantasy" => statusEffectIcons[12],
             _ => null
         };
     }

@@ -1886,6 +1886,13 @@ MonoBehaviour:
   - {fileID: 21300000, guid: ad883969045b44b32a0e40343191270a, type: 3}
   - {fileID: 21300000, guid: 3a4362ef2982c4d89951eeb74a3e4e38, type: 3}
   - {fileID: 21300000, guid: 140ba9af99b8a4ec4b4b872e882f80a9, type: 3}
+  - {fileID: 21300000, guid: a93ad83ada4434247ae799ef702d1a85, type: 3}
+  - {fileID: 21300000, guid: 023fb419e0e1c4490abda0af7f0711c5, type: 3}
+  - {fileID: 21300000, guid: 37206a9162cb242d0b5ed61bdcf16c1b, type: 3}
+  - {fileID: 21300000, guid: 9ca0fe177b37a42edafa106fc64a89ae, type: 3}
+  - {fileID: 21300000, guid: 8ba51a79d503143ada259cbb4e09247c, type: 3}
+  - {fileID: 21300000, guid: 5702a5870bbc5484c8e80beb24b2327f, type: 3}
+  - {fileID: 21300000, guid: f0ae18d70ae014163ad7350565590fae, type: 3}
   damageNumberFadeLength: 0.004
 --- !u!1 &6275235851317461027
 GameObject:
