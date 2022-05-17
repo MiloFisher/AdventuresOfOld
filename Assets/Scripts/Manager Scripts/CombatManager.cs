@@ -53,6 +53,7 @@ public class CombatManager : Singleton<CombatManager>
     private bool ready;
     private bool combatantListSet;
     private bool changingStyle;
+    private bool usedItemThisTurn;
 
     private void Update()
     {
@@ -382,6 +383,7 @@ public class CombatManager : Singleton<CombatManager>
         isYourTurn = true;
         if (!PlayManager.Instance.transitions.transform.GetChild(4).gameObject.activeInHierarchy && !combatFadeOverlay.activeInHierarchy)
             PlayManager.Instance.CallTransition(5);
+        usedItemThisTurn = false;
     }
 
     public void StartBotTurn()
@@ -528,7 +530,7 @@ public class CombatManager : Singleton<CombatManager>
                                 damage *= 2;
                             AttackMonster(c, damage);
                         }
-                        else
+                        else if(a == -1)
                         {
                             // monster attacks player
                             AttackPlayer(c, () => {
@@ -539,6 +541,11 @@ public class CombatManager : Singleton<CombatManager>
                                 PlayManager.Instance.localPlayer.TransitionOthersToStyle(CombatLayoutStyle.DEFAULT);
                             });
                         }
+                        else if (a == 99)
+                        {
+                            // Combat Over
+                            EndCombat(CombatOverCheck());
+                        }
                     });
                 }));
                 PlayManager.Instance.localPlayer.TransitionOthersToStyle(CombatLayoutStyle.ATTACKING, attackerId);
@@ -548,9 +555,14 @@ public class CombatManager : Singleton<CombatManager>
                 // Successfully fled
                 RemoveFromCombat(c, isYourTurn);
             }
-            else
+            else if (a == 3)
             {
                 // Attack Ability
+            }
+            else if (a == 99)
+            {
+                // Combat Over
+                EndCombat(CombatOverCheck());
             }
         });
     }
@@ -1435,6 +1447,7 @@ public class CombatManager : Singleton<CombatManager>
 
     private void ResetCombat()
     {
+        usedItemThisTurn = false;
         waitUntil = false;
         changingStyle = false;
         fleeingPrevented = false;
@@ -1552,5 +1565,24 @@ public class CombatManager : Singleton<CombatManager>
     public bool InCombat()
     {
         return combatLayout.activeInHierarchy;
+    }
+
+    public bool UsedItemThisTurn()
+    {
+        return usedItemThisTurn;
+    }
+
+    public void UsedItem()
+    {
+        usedItemThisTurn = true;
+    }
+
+    public void UseBomb()
+    {
+        int damage = 5;
+        StartCoroutine(AnimateMonsterTakeDamage(enemyCard, damage, () => {
+            monster.TakeDamage(5, true);
+        }));
+        PlayManager.Instance.localPlayer.VisualizeMonsterTakeDamageForOthers(damage);
     }
 }

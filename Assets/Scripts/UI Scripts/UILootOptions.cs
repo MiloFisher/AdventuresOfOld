@@ -36,11 +36,65 @@ public class UILootOptions : MonoBehaviour
                 useButton.GetComponent<Button>().enabled = false;
                 useButton.GetComponent<Image>().color = disabledColor;
             }
-            // Otherwise enable use
+            // Otherwise check use condition
             else
             {
-                useButton.GetComponent<Button>().enabled = true;
-                useButton.GetComponent<Image>().color = enabledColor;
+                switch((l as ConsumableCard).useCondition)
+                {
+                    case UseCondition.ANYTIME:
+                        // If not in combat, enable
+                        if (!CombatManager.Instance.InCombat())
+                        {
+                            useButton.GetComponent<Button>().enabled = true;
+                            useButton.GetComponent<Image>().color = enabledColor;
+                        }
+                        // Else if in combat, and its your turn, and you haven't used and item yet, enable
+                        else if (CombatManager.Instance.InCombat() && CombatManager.Instance.isYourTurn && !CombatManager.Instance.UsedItemThisTurn())
+                        {
+                            useButton.GetComponent<Button>().enabled = true;
+                            useButton.GetComponent<Image>().color = enabledColor;
+                        }
+                        // Otherwise, disable
+                        else
+                        {
+                            useButton.GetComponent<Button>().enabled = false;
+                            useButton.GetComponent<Image>().color = disabledColor;
+                        }
+                        break;
+                    case UseCondition.IN_COMBAT:
+                        // If in combat, and its your turn, and you haven't used and item yet, enable
+                        if (CombatManager.Instance.InCombat() && CombatManager.Instance.isYourTurn && !CombatManager.Instance.UsedItemThisTurn())
+                        {
+                            useButton.GetComponent<Button>().enabled = true;
+                            useButton.GetComponent<Image>().color = enabledColor;
+                        }
+                        // Otherwise, disable
+                        else
+                        {
+                            useButton.GetComponent<Button>().enabled = false;
+                            useButton.GetComponent<Image>().color = disabledColor;
+                        }
+                        break;
+                    case UseCondition.OUT_OF_COMBAT:
+                        // If not in combat, enable
+                        if(!CombatManager.Instance.InCombat())
+                        {
+                            useButton.GetComponent<Button>().enabled = true;
+                            useButton.GetComponent<Image>().color = enabledColor;
+                        }
+                        // If in combat, disable
+                        else
+                        {
+                            useButton.GetComponent<Button>().enabled = false;
+                            useButton.GetComponent<Image>().color = disabledColor;
+                        }
+                        break;
+                    case UseCondition.NEVER:
+                        // Disable
+                        useButton.GetComponent<Button>().enabled = false;
+                        useButton.GetComponent<Image>().color = disabledColor;
+                        break;
+                }
             }
         }
         // If card is a Weapon, Ring, or Armor, first option is either "Equip" or "Unequip"
@@ -173,7 +227,6 @@ public class UILootOptions : MonoBehaviour
         {
             case useOption:
                 InventoryManager.Instance.Use();
-                InventoryManager.Instance.HideOptions();
                 break;
             case equipOption:
                 InventoryManager.Instance.Equip();

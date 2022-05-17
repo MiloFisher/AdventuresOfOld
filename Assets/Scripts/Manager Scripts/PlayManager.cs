@@ -90,6 +90,8 @@ public class PlayManager : Singleton<PlayManager>
 
     public bool startOrEndOfDay;
 
+    public bool movePhase;
+
     public bool inStore;
 
     void Start()
@@ -572,10 +574,14 @@ public class PlayManager : Singleton<PlayManager>
             localPlayer.EndDayForPlayers();
     }
 
-    public void MovePhase()
+    public void MovePhase(Vector3Int pos = default)
     {
+        movePhase = true;
         // Activate all tiles within the player's move range
-        gameboard[localPlayer.Position.Value].Activate(GetMod(GetSpeed(localPlayer)));
+        if(pos == default)
+            gameboard[localPlayer.Position.Value].Activate(GetMod(GetSpeed(localPlayer)));
+        else
+            gameboard[pos].Activate(GetMod(GetSpeed(localPlayer)));
     }
 
     public void EncounterPhase()
@@ -648,13 +654,20 @@ public class PlayManager : Singleton<PlayManager>
 
     public void MoveToTile(Vector3Int pos)
     {
+        movePhase = false;
+
         // Deactivate the selected tiles and move the player to the target position
-        foreach (KeyValuePair<Vector3Int, Tile> t in gameboard)
-            t.Value.Deactivate();
+        HideAllTiles();
         localPlayer.SetPosition(pos);
 
         // Call Encounter Phase transition
         CallTransition(2);
+    }
+
+    public void HideAllTiles()
+    {
+        foreach (KeyValuePair<Vector3Int, Tile> t in gameboard)
+            t.Value.Deactivate();
     }
 
     public void CallTransition(int id)
@@ -923,9 +936,23 @@ public class PlayManager : Singleton<PlayManager>
 
     public void DefaultTile()
     {
-        // Either give an encounter if they have 2 fails, otherswise activated prompt to roll for encounter
+        // If they have 2 fails give an encounter 
         if (localPlayer.FailedEncounters.Value == 2)
             GetEncounter();
+        // Else if they have a torch, let them choose to use it or not
+        else if(HasTorch(localPlayer))
+        {
+            MakeChoice("Use Torch", "Roll for Encounter", true, true);
+            ChoiceListener((a) => {
+                if(a == 1)
+                {
+                    InventoryManager.Instance.Use("Torch");
+                }
+                else
+                    CallEncounterElement(0);
+            });
+        }
+        // Otherwise roll for encounter
         else
             CallEncounterElement(0);
     }

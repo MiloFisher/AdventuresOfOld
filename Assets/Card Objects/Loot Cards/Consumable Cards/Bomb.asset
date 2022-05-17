@@ -20,3 +20,4 @@ MonoBehaviour:
   effectDescription: Deal 5 Damage to an Enemy
   buyCost: 20
   sellCost: 10
+  useCondition: 1

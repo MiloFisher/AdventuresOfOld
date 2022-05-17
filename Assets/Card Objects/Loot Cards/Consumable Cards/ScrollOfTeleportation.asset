@@ -20,3 +20,4 @@ MonoBehaviour:
   effectDescription: Teleport to an Ally
   buyCost: 50
   sellCost: 25
+  useCondition: 2

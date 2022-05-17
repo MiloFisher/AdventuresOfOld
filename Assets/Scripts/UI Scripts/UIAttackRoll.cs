@@ -34,6 +34,7 @@ public class UIAttackRoll : MonoBehaviour
     private bool opened;
     private int roll1 = 0;
     private int roll2 = 0;
+    private bool rolling;
 
     private int playerPowerValue;
     private int monsterPowerValue;
@@ -61,6 +62,16 @@ public class UIAttackRoll : MonoBehaviour
         success = hiddenSuccess;
     }
 
+    private void Update()
+    {
+        if (CombatManager.Instance.CombatOverCheck() > -1 && !rolling && opened)
+        {
+            rolling = true;
+            hiddenSuccess = 99;
+            StartCoroutine(AnimateClosing());
+        }
+    }
+
     IEnumerator AnimateOpening()
     {
         // First grow the object
@@ -85,6 +96,7 @@ public class UIAttackRoll : MonoBehaviour
 
     public void ResetSize()
     {
+        rolling = false;
         hiddenSuccess = 0;
         opened = false;
         rt = GetComponent<RectTransform>();
@@ -98,7 +110,7 @@ public class UIAttackRoll : MonoBehaviour
     public void RollDice()
     {
         // Return if the scroll hasn't opened yet
-        if (!opened)
+        if (!opened && !rolling)
             return;
 
         rollButton.SetActive(false);
@@ -109,6 +121,8 @@ public class UIAttackRoll : MonoBehaviour
 
     IEnumerator AnimateDiceRoll()
     {
+        rolling = true;
+
         // Flash through random dice faces
         int rollTimes = Random.Range(80, 121);
         for (int i = 0; i < rollTimes; i++)
@@ -172,6 +186,7 @@ public class UIAttackRoll : MonoBehaviour
 
             yield return new WaitForSeconds(rollDisplayTime * Global.animSpeed);
 
+            rolling = false;
             tieText.SetActive(false);
             rollButton.SetActive(true);
         }

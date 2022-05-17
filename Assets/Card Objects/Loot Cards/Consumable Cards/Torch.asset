@@ -20,3 +20,4 @@ MonoBehaviour:
   effectDescription: Guarantees an Encounter instead of rolling for one
   buyCost: 10
   sellCost: 5
+  useCondition: 3

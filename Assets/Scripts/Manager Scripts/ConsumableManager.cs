@@ -9,31 +9,64 @@ public class ConsumableManager : Singleton<ConsumableManager>
 
     private void Use_Bomb()
     {
-        // effect goes here...
+        CombatManager.Instance.UseBomb();
+        InventoryManager.Instance.Discard();
+        if (CombatManager.Instance.InCombat())
+            CombatManager.Instance.UsedItem();
     }
 
     private void Use_EnergyPotion()
     {
-        // effect goes here...
+        PlayManager.Instance.localPlayer.RestoreAbilityCharges(2);
+        InventoryManager.Instance.Discard();
+        if (CombatManager.Instance.InCombat())
+            CombatManager.Instance.UsedItem();
     }
 
     private void Use_HealthPotion()
     {
-        // effect goes here...
+        PlayManager.Instance.localPlayer.RestoreHealth(10);
+        InventoryManager.Instance.Discard();
+        if (CombatManager.Instance.InCombat())
+            CombatManager.Instance.UsedItem();
     }
 
     private void Use_ScrollOfResurrection()
     {
-        // effect goes here...
+        PlayManager.Instance.TargetPlayerSelection("Choose Player to Revive", true, true, false, (p) => {
+            // Target player is revived and this player discards the card
+            p.Resurrect();
+            InventoryManager.Instance.Discard();
+        }, (p) => {
+            // Requirement is that player is dead
+            return PlayManager.Instance.GetHealth(p) <= 0;
+        }, true, "Cancel", () => {
+            InventoryManager.Instance.HideOptions();
+        });
     }
 
     private void Use_ScrollOfTeleportation()
     {
-        // effect goes here...
+        PlayManager.Instance.TargetPlayerSelection("Choose Destination Player", true, false, false, (p) => {
+            // This player teleports to target player and this player discards the card
+            PlayManager.Instance.localPlayer.SetPosition(p.Position.Value);
+            if(PlayManager.Instance.movePhase)
+            {
+                PlayManager.Instance.HideAllTiles();
+                PlayManager.Instance.MovePhase(p.Position.Value);
+            }
+            InventoryManager.Instance.Discard();
+        }, (p) => {
+            // No requirement
+            return true;
+        }, true, "Cancel", () => {
+            InventoryManager.Instance.HideOptions();
+        });
     }
 
     private void Use_Torch()
     {
-        // effect goes here...
+        PlayManager.Instance.GetEncounter();
+        InventoryManager.Instance.Discard();
     }
 }

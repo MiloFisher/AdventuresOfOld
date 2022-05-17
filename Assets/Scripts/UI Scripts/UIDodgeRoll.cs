@@ -115,7 +115,7 @@ public class UIDodgeRoll : MonoBehaviour
             hiddenSuccess = -1;
         }
 
-        yield return new WaitForSeconds(rollDisplayTime);
+        yield return new WaitForSeconds(rollDisplayTime * Global.animSpeed);
 
         // Start closing scroll
         StartCoroutine(AnimateClosing());

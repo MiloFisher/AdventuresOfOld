@@ -206,7 +206,8 @@ public class UITargetPlayer : MonoBehaviour
         // Finally deactivate banner
         banner.SetActive(false);
 
-        OnClose();
+        if(OnClose != default)
+            OnClose();
 
         gameObject.SetActive(false);
     }

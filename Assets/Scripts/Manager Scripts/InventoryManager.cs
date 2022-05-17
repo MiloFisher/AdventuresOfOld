@@ -374,9 +374,24 @@ public class InventoryManager : Singleton<InventoryManager>
         }
     }
 
-    public void Use()
+    public void Use(string specificCard = default)
     {
-
+        if(specificCard != default)
+        {
+            for(int i = 0; i < cards.Length; i++)
+            {
+                if (cards[i].GetComponent<UILootCard>().cardName == specificCard)
+                    selectedID = i;
+            }
+            if (selectedID == -1)
+            {
+                Debug.Log(specificCard + " not found in inventory!");
+                return;
+            }
+        }
+        string cardName = cards[selectedID].GetComponent<UILootCard>().cardName;
+        ConsumableCard c = PlayManager.Instance.itemReference[cardName] as ConsumableCard;
+        c.UseEffect();
     }
 
     public void Equip()
@@ -533,6 +548,9 @@ public class InventoryManager : Singleton<InventoryManager>
                 break;
             case 8:
                 p.SetValue("Inventory5", emptyValue);
+                break;
+            default:
+                Debug.Log("Invalid discard selectID: " + selectedID);
                 break;
         }
         if (forcedDiscard.activeInHierarchy)

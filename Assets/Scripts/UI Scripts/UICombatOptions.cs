@@ -44,6 +44,16 @@ public class UICombatOptions : MonoBehaviour
         resolution = hiddenResolution;
     }
 
+    private void Update()
+    {
+        if (CombatManager.Instance.CombatOverCheck() > -1 && !lockInput && opened)
+        {
+            lockInput = true;
+            hiddenResolution = 99;
+            StartCoroutine(AnimateClosing());
+        }
+    }
+
     public void BasicAttack()
     {
         if (lockInput || !opened)
