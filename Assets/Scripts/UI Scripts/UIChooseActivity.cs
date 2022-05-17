@@ -80,6 +80,7 @@ public class UIChooseActivity : MonoBehaviour
                 case 1: return "Taking a Short Rest";
                 case 2: return "Taking a Long Rest";
                 case 3: return "Visiting the Shrine";
+                case 4: return "Resting in Peace";
             }
         } 
         return "Waiting...";
@@ -90,11 +91,19 @@ public class UIChooseActivity : MonoBehaviour
         if(!selectionMade && opened)
         {
             selectionMade = true;
-            selection.SetActive(true);
-            selection.transform.localPosition = buttons[option].transform.localPosition;
-            selection.GetComponentInChildren<TMP_Text>().text = buttons[option].GetComponentInChildren<TMP_Text>().text;
-            buttons[option].gameObject.SetActive(false);
-            StartCoroutine(AnimateSelection(option));
+
+            if(option == 4)
+            {
+                StartCoroutine(AnimateSelection(option));
+            }
+            else
+            {
+                selection.SetActive(true);
+                selection.transform.localPosition = buttons[option].transform.localPosition;
+                selection.GetComponentInChildren<TMP_Text>().text = buttons[option].GetComponentInChildren<TMP_Text>().text;
+                buttons[option].gameObject.SetActive(false);
+                StartCoroutine(AnimateSelection(option));
+            }
         }
     }
 
@@ -163,6 +172,10 @@ public class UIChooseActivity : MonoBehaviour
 
         // Finally set opened to true
         opened = true;
+
+        // If the player is dead, choose dead option for them
+        if (PlayManager.Instance.GetHealth(PlayManager.Instance.localPlayer) <= 0)
+            SelectOption(4);
     }
 
     public void ResetSize()

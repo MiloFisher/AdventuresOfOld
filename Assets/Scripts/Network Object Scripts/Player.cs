@@ -439,6 +439,8 @@ namespace AdventuresOfOldMultiplayer
 
         public void DrawLootCards(int amount, FixedString64Bytes uuid, bool endTurnAfter)
         {
+            if (Health.Value <= 0)
+                return;
             if (NetworkManager.Singleton.IsServer)
             {
                 foreach(Player p in PlayManager.Instance.playerList)
@@ -609,7 +611,7 @@ namespace AdventuresOfOldMultiplayer
 
         public void GainXP(int amount, bool halved = false)
         {
-            if (Level.Value == 5)
+            if (Level.Value == 5 || Health.Value <= 0)
                 return;
             int total = PlayManager.Instance.XPModifier() + amount;
             if (halved)
@@ -705,8 +707,11 @@ namespace AdventuresOfOldMultiplayer
             {
                 if (damage > 0)
                     Health.Value -= damage;
-                if (Health.Value < 0)
+                if (Health.Value <= 0)
+                {
                     Health.Value = 0;
+                    XP.Value = 0;
+                }
             }
             else
                 TakeDamageServerRPC(damage);
@@ -716,12 +721,17 @@ namespace AdventuresOfOldMultiplayer
         {
             if (damage > 0)
                 Health.Value -= damage;
-            if (Health.Value < 0)
+            if (Health.Value <= 0)
+            {
                 Health.Value = 0;
+                XP.Value = 0;
+            }
         }
 
         public void RestoreAbilityCharges(int amount)
         {
+            if (Health.Value <= 0)
+                return;
             int cap = PlayManager.Instance.GetMaxAbilityCharges(this);
             if (NetworkManager.Singleton.IsServer)
             {
@@ -742,15 +752,14 @@ namespace AdventuresOfOldMultiplayer
 
         public void RestoreHealth(int amount)
         {
+            if (Health.Value <= 0)
+                return;
             int cap = PlayManager.Instance.GetMaxHealth(this);
             if (NetworkManager.Singleton.IsServer)
             {
-                if(Health.Value > 0)
-                {
-                    Health.Value += amount;
-                    if (Health.Value > cap)
-                        Health.Value = cap;
-                }
+                Health.Value += amount;
+                if (Health.Value > cap)
+                    Health.Value = cap;
             }
             else
                 RestoreRestoreHealthServerRPC(amount, cap);
@@ -758,12 +767,9 @@ namespace AdventuresOfOldMultiplayer
         [ServerRpc]
         private void RestoreRestoreHealthServerRPC(int amount, int cap, ServerRpcParams rpcParams = default)
         {
-            if (Health.Value > 0)
-            {
-                Health.Value += amount;
-                if (Health.Value > cap)
-                    Health.Value = cap;
-            }
+            Health.Value += amount;
+            if (Health.Value > cap)
+                Health.Value = cap;
         }
 
         public void LoseAbilityCharges(int amount)
@@ -1739,6 +1745,21 @@ namespace AdventuresOfOldMultiplayer
             {
                 PlayManager.Instance.LoadQuestEncounter(questName + "");
             }
+        }
+
+        public void GameOver(int state)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                PlayManager.Instance.GameOver(state);
+            }
+            else
+                GameOverServerRPC(state);
+        }
+        [ServerRpc]
+        private void GameOverServerRPC(int state, ServerRpcParams rpcParams = default)
+        {
+            PlayManager.Instance.GameOver(state);
         }
         #endregion
     }

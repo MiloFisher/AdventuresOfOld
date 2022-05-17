@@ -212,6 +212,7 @@ public class CombatManager : Singleton<CombatManager>
                                 break;
                             case MonsterType.BOSS:
                                 // Win the game
+                                currentTurnPlayer.GameOver(1);
                                 break;
                         }
                         currentTurnPlayer.CompleteEncounter(false, currentTurnPlayer.UUID.Value);
@@ -703,7 +704,12 @@ public class CombatManager : Singleton<CombatManager>
                             foreach (Effect e in debuffs)
                                 InflictEffect(c, e);
                         }
-                    }, () => { StartCoroutine(OnTakeDamage(c, OnComplete)); }));
+                    }, () => {
+                        if (c.IsAlive())
+                            StartCoroutine(OnTakeDamage(c, OnComplete));
+                        else
+                            OnComplete();
+                    }));
                 }
 
                 // Visualize player attack for all other players
@@ -1541,4 +1547,9 @@ public class CombatManager : Singleton<CombatManager>
         return attackRoll.GetComponent<UIAttackRoll>().crit;
     }
     #endregion
+
+    public bool InCombat()
+    {
+        return combatLayout.activeInHierarchy;
+    }
 }

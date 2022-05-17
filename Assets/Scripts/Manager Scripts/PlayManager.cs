@@ -213,6 +213,34 @@ public class PlayManager : Singleton<PlayManager>
             {
                 DisconnectFromGame();
             }
+            // Game Over Check
+            if(NetworkManager.Singleton.IsHost && !CombatManager.Instance.InCombat())
+            {
+                // Lose Check
+                bool someoneAlive = false;
+                foreach(Player p in playerList)
+                {
+                    if (GetHealth(p) > 0)
+                        someoneAlive = true;
+                }
+                if (!someoneAlive)
+                    GameOver(0);
+            }
+        }
+    }
+
+    // (Host Only)
+    public void GameOver(int state)
+    {
+        // Lose = 0
+        // Win = 1
+        if(state == 0)
+        {
+            localPlayer.ChangeScene("JLFailureMenu");
+        }
+        else
+        {
+            localPlayer.ChangeScene("JLSuccessMenu");
         }
     }
 
@@ -400,24 +428,25 @@ public class PlayManager : Singleton<PlayManager>
         Player storeMaster = null;
         foreach (Player p in playerList)
         {
-            if(GetHealth(p) > 0)
+            p.Unready();
+            switch (p.EndOfDayActivity.Value)
             {
-                p.Unready();
-                switch (p.EndOfDayActivity.Value)
-                {
-                    case 0:
-                        storeMaster = p;
-                        break;
-                    case 1:
-                        p.TakeShortRestClientRPC();
-                        break;
-                    case 2:
-                        p.TakeLongRestClientRPC();
-                        break;
-                    case 3:
-                        p.GoToShrineClientRPC();
-                        break;
-                }
+                case 0:
+                    storeMaster = p;
+                    break;
+                case 1:
+                    p.TakeShortRestClientRPC();
+                    break;
+                case 2:
+                    p.TakeLongRestClientRPC();
+                    break;
+                case 3:
+                    p.GoToShrineClientRPC();
+                    break;
+                case 4:
+                    // Is Dead
+                    p.ReadyUp();
+                    break;
             }
         }
 
@@ -492,7 +521,12 @@ public class PlayManager : Singleton<PlayManager>
         // Set the variable to mark it is this player's turn
         isYourTurn = true;
         if (!transitions.transform.GetChild(0).gameObject.activeInHierarchy)
-            CallTransition(1);
+        {
+            if (GetHealth(localPlayer) > 0)
+                CallTransition(1);
+            else
+                EndTurn();
+        }
     }
 
     public void StartBotTurn()

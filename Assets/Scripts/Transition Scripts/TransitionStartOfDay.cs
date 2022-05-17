@@ -34,7 +34,12 @@ public class TransitionStartOfDay : MonoBehaviour
     {
         // If it is your turn, after displaying "Start of Day", display "Your Turn"
         if (PlayManager.Instance.isYourTurn)
-            PlayManager.Instance.CallTransition(1);
+        {
+            if (PlayManager.Instance.GetHealth(PlayManager.Instance.localPlayer) > 0)
+                PlayManager.Instance.CallTransition(1);
+            else
+                PlayManager.Instance.EndTurn();
+        }
 
         PlayManager.Instance.startOrEndOfDay = false;
     }
