@@ -2,10 +2,12 @@ using UnityEngine;
 using System;
 using UnityEngine.Audio;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class JLAudioManager : Singleton<JLAudioManager>
 {
     public JLSoundClass[] soundArray;
+    private Dictionary<string, JLSoundClass> soundDictionary;
 
     public Slider masterSlider;
     public Slider musicSlider;
@@ -18,6 +20,9 @@ public class JLAudioManager : Singleton<JLAudioManager>
     public AudioMixer voiceMixer;
 
     void Awake() {
+        // Create empty dictionary
+        soundDictionary = new Dictionary<string, JLSoundClass>();
+
         foreach(JLSoundClass s in soundArray) {
             s.audioSource = gameObject.AddComponent<AudioSource>();
             s.audioSource.clip = s.audioClip;
@@ -28,6 +33,9 @@ public class JLAudioManager : Singleton<JLAudioManager>
             s.audioSource.loop = s.loop;
 
             s.audioSource.outputAudioMixerGroup = s.audioMixerGroup;
+
+            // Add sound to dictionary with name as a key
+            soundDictionary.Add(s.name, s);
         }
     }
 
@@ -64,9 +72,16 @@ public class JLAudioManager : Singleton<JLAudioManager>
 
     // FUNCTIONS TO USE FOR BUTTONS RATHER THAN SCRIPTS
     public void PlaySound(string soundName, float startTime = 0, float endTime = -1) {
-        JLSoundClass s = Array.Find(soundArray, sound => sound.name == soundName);
-        if (s == null)
+        if (!soundDictionary.ContainsKey(soundName))
             return;
+        JLSoundClass s = soundDictionary[soundName];
+
+        // Keeping old way commented out here for reference:
+
+        //JLSoundClass s = Array.Find(soundArray, sound => sound.name == soundName);
+        //if (s == null)
+        //    return;
+
         s.audioSource.time = startTime;
         s.audioSource.Play();
         if(endTime > startTime)
@@ -74,37 +89,37 @@ public class JLAudioManager : Singleton<JLAudioManager>
     }
 
     public void PlaySound(string soundName) {
-        JLSoundClass s = Array.Find(soundArray, sound => sound.name == soundName);
-        if (s == null)
+        if (!soundDictionary.ContainsKey(soundName))
             return;
+        JLSoundClass s = soundDictionary[soundName];
         s.audioSource.Play();
     }
 
     public void PlayOneShotSound(string soundName) {
-        JLSoundClass s = Array.Find(soundArray, sound => sound.name == soundName);
-        if (s == null)
+        if (!soundDictionary.ContainsKey(soundName))
             return;
+        JLSoundClass s = soundDictionary[soundName];
         s.audioSource.PlayOneShot(s.audioClip);
     }
 
     public void StopSound(string soundName) {
-        JLSoundClass s = Array.Find(soundArray, sound => sound.name == soundName);
-        if (s == null)
+        if (!soundDictionary.ContainsKey(soundName))
             return;
+        JLSoundClass s = soundDictionary[soundName];
         s.audioSource.Stop();
     }
 
     public void PauseSound(string soundName) {
-        JLSoundClass s = Array.Find(soundArray, sound => sound.name == soundName);
-        if (s == null)
+        if (!soundDictionary.ContainsKey(soundName))
             return;
+        JLSoundClass s = soundDictionary[soundName];
         s.audioSource.Pause();
     }
 
     public void ResumeSound(string soundName) {
-        JLSoundClass s = Array.Find(soundArray, sound => sound.name == soundName);
-        if (s == null)
+        if (!soundDictionary.ContainsKey(soundName))
             return;
+        JLSoundClass s = soundDictionary[soundName];
         s.audioSource.UnPause();
     }
 
