@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class JLPauseMenu : MonoBehaviour
 {
+    public GameObject mainCanvas;
     public GameObject pauseCanvas;
     public GameObject[] pauseMenus;
     public Slider animSlider;
@@ -59,12 +60,15 @@ public class JLPauseMenu : MonoBehaviour
         PlayManager.Instance.DisconnectFromGame();
     }
 
-    public void ResolutionChange(int resNumber) { // Set resNumber with Button function in Unity Editor Scene
-        if (resNumber == 1920) {
-            Screen.SetResolution(1920, 1080, true); // True == Fullscreen
+    public void ResolutionChange(string viewType)
+    {
+        if (viewType == "Standard") {
+            mainCanvas.GetComponent<CanvasScaler>().matchWidthOrHeight = 0;
+            pauseCanvas.GetComponent<CanvasScaler>().matchWidthOrHeight = 0;
         }
-        else if (resNumber == 2560) {
-            Screen.SetResolution(2560, 1440, true);
+        else if (viewType == "Widescreen") {
+            mainCanvas.GetComponent<CanvasScaler>().matchWidthOrHeight = 1;
+            pauseCanvas.GetComponent<CanvasScaler>().matchWidthOrHeight = 1;
         }
     }
 
