@@ -54,6 +54,16 @@ public class UIDefensiveOptions : MonoBehaviour
         hadSuccess = true;
     }
 
+    private void Update()
+    {
+        if (CombatManager.Instance.isYourTurn && CombatManager.Instance.CombatOverCheck() > -1 && !lockInput && opened)
+        {
+            lockInput = true;
+            hiddenResolution = 99;
+            StartCoroutine(AnimateClosing());
+        }
+    }
+
     public void Dodge()
     {
         if (lockInput || !opened)

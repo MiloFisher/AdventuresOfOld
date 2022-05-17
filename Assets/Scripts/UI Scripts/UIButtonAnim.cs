@@ -11,6 +11,7 @@ public class UIButtonAnim : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public float scaledWidth;
     public float scaledHeight;
     public float childScale;
+    public bool allowClickOnEmptySpace = false;
 
     private Image image;
     private RectTransform rt;
@@ -24,7 +25,8 @@ public class UIButtonAnim : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
         rt = GetComponent<RectTransform>();
         defaultWidth = rt.sizeDelta.x;
         defaultHeight = rt.sizeDelta.y;
-        image.alphaHitTestMinimumThreshold = 0.1f;
+        if(!allowClickOnEmptySpace)
+            image.alphaHitTestMinimumThreshold = 0.1f;
     }
 
     public void OnPointerEnter(PointerEventData eventData)

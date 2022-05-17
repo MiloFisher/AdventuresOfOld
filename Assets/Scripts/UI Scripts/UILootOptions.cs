@@ -25,8 +25,22 @@ public class UILootOptions : MonoBehaviour
         gameObject.SetActive(true);
         LootCard l = PlayManager.Instance.itemReference[card.cardName];
 
+        if (PlayManager.Instance.GetHealth(PlayManager.Instance.localPlayer) <= 0)
+        {
+            useButton.SetActive(false);
+            discardButton.SetActive(false);
+            sellButton.SetActive(false);
+            return;
+        }
+        else
+        {
+            useButton.SetActive(true);
+            discardButton.SetActive(true);
+            sellButton.SetActive(true);
+        }
+
         // If card is a Consumable, first option is "Use"
-        if(l.GetType() == typeof(ConsumableCard))
+        if (l.GetType() == typeof(ConsumableCard))
         {
             useButton.GetComponentInChildren<TMP_Text>().text = useOption;
 

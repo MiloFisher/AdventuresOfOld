@@ -693,7 +693,7 @@ public class CombatManager : Singleton<CombatManager>
                 // Avoided getting attacked
                 OnComplete();
             }
-            else
+            else if(a == -1)
             {
                 // Got attacked
                 if(c.GetArmor() >= monster.GetAttack())
@@ -727,6 +727,11 @@ public class CombatManager : Singleton<CombatManager>
 
                 // Visualize player attack for all other players
                 PlayManager.Instance.localPlayer.VisualizeAttackForOthers();
+            }
+            else if(a == 99)
+            {
+                // Combat Over
+                EndCombat(CombatOverCheck());
             }
         });
     }
@@ -790,6 +795,15 @@ public class CombatManager : Singleton<CombatManager>
             monster.RestoreHealth(amount);
         }));
         PlayManager.Instance.localPlayer.VisualizeMonsterHealForOthers(amount);
+    }
+
+    public void HealPlayer(Player p, int amount)
+    {
+        Combatant c = GetCombatantFromPlayer(p);
+        StartCoroutine(AnimatePlayerHeal(GetPlayerCardFromCombatant(c), amount, () => {
+            c.RestoreHealth(amount);
+        }));
+        PlayManager.Instance.localPlayer.VisualizeHealForOthers(amount);
     }
 
     // Called from Player.cs
@@ -1253,7 +1267,7 @@ public class CombatManager : Singleton<CombatManager>
 
         card.ActivateDamaged(true);
         card.DisplayDamageNumber(damage);
-        yield return new WaitForSeconds(attackFlashLength);
+        yield return new WaitForSeconds(attackFlashLength * Global.animSpeed);
         card.ActivateDamaged(false);
 
         // Call OnComplete function

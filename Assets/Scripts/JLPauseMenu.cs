@@ -22,16 +22,22 @@ public class JLPauseMenu : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.Escape)) {
-            if (!pauseCanvas.activeSelf) {
-                pauseCanvas.SetActive(!pauseCanvas.activeSelf);
-                SwapMenus(0);
-                Time.timeScale = 0;
-            }
-            else {
-                ResumeButton();
-            }
-            JLAudioManager.Instance.PlaySound("PageTurn");
+            Pause();
         }
+    }
+
+    public void Pause()
+    {
+        if (!pauseCanvas.activeSelf)
+        {
+            pauseCanvas.SetActive(!pauseCanvas.activeSelf);
+            SwapMenus(0);
+        }
+        else
+        {
+            ResumeButton();
+        }
+        JLAudioManager.Instance.PlaySound("PageTurn");
     }
 
     public void SwapMenus(int id)
@@ -47,11 +53,9 @@ public class JLPauseMenu : MonoBehaviour
     public void ResumeButton() {
         pauseCanvas.SetActive(!pauseCanvas.activeSelf);
         pauseMenus[currentID].SetActive(false);
-        Time.timeScale = 1;
     }
 
     public void QuitButton() {
-        Time.timeScale = 1;
         PlayManager.Instance.DisconnectFromGame();
     }
 

@@ -25,10 +25,16 @@ public class ConsumableManager : Singleton<ConsumableManager>
 
     private void Use_HealthPotion()
     {
-        PlayManager.Instance.localPlayer.RestoreHealth(10);
         InventoryManager.Instance.Discard();
         if (CombatManager.Instance.InCombat())
+        {
+            CombatManager.Instance.HealPlayer(PlayManager.Instance.localPlayer, 10);
             CombatManager.Instance.UsedItem();
+        }
+        else
+        {
+            PlayManager.Instance.localPlayer.RestoreHealth(10);
+        }
     }
 
     private void Use_ScrollOfResurrection()

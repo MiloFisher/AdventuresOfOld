@@ -376,7 +376,9 @@ public class InventoryManager : Singleton<InventoryManager>
 
     public void Use(string specificCard = default)
     {
-        if(specificCard != default)
+        if (PlayManager.Instance.GetHealth(PlayManager.Instance.localPlayer) <= 0)
+            return;
+        if (specificCard != default)
         {
             for(int i = 0; i < cards.Length; i++)
             {
@@ -396,6 +398,8 @@ public class InventoryManager : Singleton<InventoryManager>
 
     public void Equip()
     {
+        if (PlayManager.Instance.GetHealth(PlayManager.Instance.localPlayer) <= 0)
+            return;
         string cardName = cards[selectedID].GetComponent<UILootCard>().cardName;
         LootCard l = PlayManager.Instance.itemReference[cardName];
         Player p = PlayManager.Instance.localPlayer;
@@ -461,6 +465,8 @@ public class InventoryManager : Singleton<InventoryManager>
 
     public void Unequip()
     {
+        if (PlayManager.Instance.GetHealth(PlayManager.Instance.localPlayer) <= 0)
+            return;
         Player p = PlayManager.Instance.localPlayer;
         string equipment = cards[selectedID].GetComponent<UILootCard>().cardName;
         string location = "";
@@ -519,6 +525,8 @@ public class InventoryManager : Singleton<InventoryManager>
 
     public void Discard()
     {
+        if (PlayManager.Instance.GetHealth(PlayManager.Instance.localPlayer) <= 0)
+            return;
         Player p = PlayManager.Instance.localPlayer;
         switch (selectedID)
         {
@@ -561,6 +569,8 @@ public class InventoryManager : Singleton<InventoryManager>
 
     public void Trade()
     {
+        if (PlayManager.Instance.GetHealth(PlayManager.Instance.localPlayer) <= 0)
+            return;
         PlayManager.Instance.TargetPlayerSelection("Choose Trade Partner", true, false, false, (p) => {
             // Trade to player p
             SetFirstEmptySlotInInventory(p, cards[selectedID].GetComponent<UILootCard>().cardName);
@@ -575,6 +585,8 @@ public class InventoryManager : Singleton<InventoryManager>
 
     public void Sell()
     {
+        if (PlayManager.Instance.GetHealth(PlayManager.Instance.localPlayer) <= 0)
+            return;
         string cardName = cards[selectedID].GetComponent<UILootCard>().cardName;
         LootCard l = PlayManager.Instance.itemReference[cardName];
         Player p = PlayManager.Instance.localPlayer;
