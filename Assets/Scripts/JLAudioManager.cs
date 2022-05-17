@@ -73,6 +73,13 @@ public class JLAudioManager : Singleton<JLAudioManager>
             s.audioSource.SetScheduledEndTime(AudioSettings.dspTime + (endTime - startTime));
     }
 
+    public void PlaySound(string soundName) {
+        JLSoundClass s = Array.Find(soundArray, sound => sound.name == soundName);
+        if (s == null)
+            return;
+        s.audioSource.Play();
+    }
+
     public void PlayOneShotSound(string soundName) {
         JLSoundClass s = Array.Find(soundArray, sound => sound.name == soundName);
         if (s == null)
