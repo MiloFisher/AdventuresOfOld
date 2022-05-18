@@ -52,11 +52,14 @@ public class JLGameStateMenu : MonoBehaviour
             else if (player.GetComponent<Player>().Race.Value + "" == "Centaur") {
                 currPlayer.GetComponent<Image>().sprite = SpriteSheet[2];
             }
-            else if (player.GetComponent<Player>().Race.Value + "" == "Leonin" || player.GetComponent<Player>().Race.Value + "" == "Aasimar") {
+            else if (player.GetComponent<Player>().Race.Value + "" == "Leonin") {
                 currPlayer.GetComponent<Image>().sprite = SpriteSheet[3];
             }
             else if (player.GetComponent<Player>().Race.Value + "" == "High Elf" || player.GetComponent<Player>().Race.Value + "" == "Night Elf") {
                 currPlayer.GetComponent<Image>().sprite = SpriteSheet[4];
+            }
+            else if (player.GetComponent<Player>().Race.Value + "" == "Aasimar") {
+                currPlayer.GetComponent<Image>().sprite = SpriteSheet[5];
             }
             else {
                 currPlayer.GetComponent<Image>().sprite = SpriteSheet[0];
