@@ -13,6 +13,7 @@ public class Skill : ScriptableObject
     public SkillSchool school;
     public string description;
     public void UseSkill() {
+        Debug.Log("Use Skill Called: " + name + " and cost is: " + cost);
         AbilityManager.Instance.UseSkill(name);
         AbilityManager.Instance.PayCost(cost);
     }

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6500931b67d034cfb85dab48a90031ab, type: 3}
   m_Name: QuickShot
   m_EditorClassIdentifier: 
-  skillName: QuickShot
+  skillName: Quick Shot
   requirement: 1
   type: 1
   cost: 1

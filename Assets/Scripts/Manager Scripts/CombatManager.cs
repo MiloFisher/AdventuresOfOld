@@ -1365,36 +1365,47 @@ public class CombatManager : Singleton<CombatManager>
         card.ActivateHealed(false);
     }
 
-    public void SetTurnOrderCombatantList(FixedString64Bytes[] arr, bool keepMonster)
+    public void SetTurnOrderCombatantList(FixedString64Bytes[] arr, bool keepUnits)
     {
+        if(keepUnits)
+        {
+            for (int i = 0; i < turnOrderCombatantList.Count; i++)
+            {
+                bool existsInList = false;
+                for (int j = 0; j < arr.Length; j++)
+                {
+                    if ((turnOrderCombatantList[i].combatantType == CombatantType.PLAYER && arr[j] + "" == turnOrderCombatantList[i].player.UUID.Value) || (turnOrderCombatantList[i].combatantType == CombatantType.MONSTER && arr[j] + "" == turnOrderCombatantList[i].monster.cardName))
+                    {
+                        existsInList = true;
+                    }
+                }
+                if (!existsInList)
+                {
+                    turnOrderCombatantList.RemoveAt(i);
+                    i--;
+                }
+            }
+            return;
+        }
         turnOrderCombatantList = new List<Combatant>();
         for (int i = 0; i < arr.Length; i++)
         {
             if (PlayManager.Instance.encounterReference.ContainsKey(arr[i] + ""))
             {
-                if(keepMonster)
-                {
-                    monsterCard = PlayManager.Instance.encounterReference[arr[i] + ""] as MonsterCard;
-                    monster = new Combatant(CombatantType.MONSTER, monsterCard);
-                }
+                monsterCard = PlayManager.Instance.encounterReference[arr[i] + ""] as MonsterCard;
+                monster = new Combatant(CombatantType.MONSTER, monsterCard);
                 turnOrderCombatantList.Add(monster);
             }
             else if (PlayManager.Instance.miniBossDeck.ContainsKey(arr[i] + ""))
             {
-                if (keepMonster)
-                {
-                    monsterCard = PlayManager.Instance.miniBossDeck[arr[i] + ""];
-                    monster = new Combatant(CombatantType.MONSTER, monsterCard);
-                }
+                monsterCard = PlayManager.Instance.miniBossDeck[arr[i] + ""];
+                monster = new Combatant(CombatantType.MONSTER, monsterCard);
                 turnOrderCombatantList.Add(monster);
             }
             else if (PlayManager.Instance.chapterBoss.cardName == arr[i] + "")
             {
-                if (keepMonster)
-                {
-                    monsterCard = PlayManager.Instance.chapterBoss;
-                    monster = new Combatant(CombatantType.MONSTER, monsterCard);
-                }
+                monsterCard = PlayManager.Instance.chapterBoss;
+                monster = new Combatant(CombatantType.MONSTER, monsterCard);
                 turnOrderCombatantList.Add(monster);
             }
             else

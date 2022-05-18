@@ -164,7 +164,50 @@ public class AbilityManager : Singleton<AbilityManager>
         if (s == default || display == null)
             return;
 
-        display.GetComponentInChildren<TMP_Text>().text = s.description;
+        TMP_Text textContainer = display.GetComponentInChildren<TMP_Text>();
+        textContainer.text = "<b><color=" + FormatColorString(s) + ">" + s.skillName + "</color></b>" + FormatCost(s.cost, s.type) + "\n" + FormatRequirement(s.requirement, s.school) + " " + FormatType(s.type) + "\n" + s.description;
+        textContainer.ForceMeshUpdate(true, true);
+        if(textContainer.textInfo != null)
+            display.GetComponent<RectTransform>().sizeDelta = new Vector2(5000, 580 + 320 * textContainer.textInfo.lineCount);
+    }
+
+    private string FormatCost(int cost, SkillType type)
+    {
+        return type != SkillType.PASSIVE ? ": (Cost " + cost + ")" : "";
+    }
+
+    private string FormatRequirement(int requirement, SkillSchool school)
+    {
+        return school switch
+        {
+            SkillSchool.WARRIOR => "Level " + requirement + " Warrior",
+            SkillSchool.PALADIN => "Level " + requirement + " Paladin",
+            SkillSchool.ROGUE => "Level " + requirement + " Rogue",
+            SkillSchool.RANGER => "Level " + requirement + " Ranger",
+            SkillSchool.SORCERER => "Level " + requirement + " Sorcerer",
+            SkillSchool.NECROMANCER => "Level " + requirement + " Necromancer",
+            SkillSchool.GENERAL_STR => "Strength (" + requirement + ")",
+            SkillSchool.GENERAL_DEX => "Dexterity (" + requirement + ")",
+            SkillSchool.GENERAL_INT => "Intelligence (" + requirement + ")",
+            SkillSchool.TRAIT => "Trait",
+            _ => "Racial"
+        };
+    }
+
+    private string FormatType(SkillType type)
+    {
+        return type switch
+        {
+            SkillType.PASSIVE => "Passive",
+            SkillType.UTILITY => "Utility",
+            SkillType.ATTACK => "Attack",
+            _ => ""
+        };
+    }
+
+    private string FormatColorString(Skill s)
+    {
+        return "#" + ColorUtility.ToHtmlStringRGB(GetSkillColor(s));
     }
 
     public void AttackSkillUsed(Skill s)

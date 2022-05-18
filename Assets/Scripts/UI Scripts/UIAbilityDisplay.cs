@@ -106,6 +106,7 @@ public class UIAbilityDisplay : MonoBehaviour
                 skills[i].transform.GetChild(0).gameObject.SetActive(false);
             }
             // Set button press effect
+            skills[i].GetComponent<Button>().onClick.RemoveAllListeners();
             skills[i].GetComponent<Button>().onClick.AddListener(AbilityManager.Instance.GetAbilityCall(skillList[i]));
             // Set tooltip
             AbilityManager.Instance.FormatTooltip(skills[i].GetComponent<Tooltip>().display, skillList[i]);
