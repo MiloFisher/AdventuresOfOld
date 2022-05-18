@@ -46,7 +46,7 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler,
             counter++;
         }
 
-        if(counter == checks)
+        if(counter == checks && hoveringOver)
         {
             display.SetActive(true);
             float scale = targetScale / GetCompositeParentsScale(transform);

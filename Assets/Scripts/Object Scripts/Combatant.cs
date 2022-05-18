@@ -219,7 +219,7 @@ public class Combatant
         bool alreadyContains = false;
         for(int i = 0; i < statusEffects.Count; i++)
         {
-            if(statusEffects[i].name == e.name)
+            if(statusEffects[i].name == e.name && !e.canHaveMultipleStacks)
             {
                 alreadyContains = true;
                 if (e.potency > statusEffects[i].potency || (e.potency == statusEffects[i].potency && e.duration > statusEffects[i].duration))
@@ -243,7 +243,7 @@ public class Combatant
             if (statusEffects[i].name == effectName)
             {
                 statusEffects.RemoveAt(i);
-                break;
+                i--;
             }
         }
 
@@ -284,11 +284,23 @@ public class Combatant
 
     private int HasEffect(string effectName)
     {
+        int total = 0;
+        bool canHaveMultipleStacks = false;
         for (int i = 0; i < statusEffects.Count; i++)
         {
             if (statusEffects[i].name == effectName)
-                return statusEffects[i].potency;
+            {
+                if (statusEffects[i].canHaveMultipleStacks)
+                {
+                    canHaveMultipleStacks = true;
+                    total += statusEffects[i].potency;
+                }
+                else
+                    return statusEffects[i].potency;
+            }
         }
+        if (canHaveMultipleStacks)
+            return total;
         return -1;
     }
 

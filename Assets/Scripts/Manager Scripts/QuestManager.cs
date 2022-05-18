@@ -42,6 +42,7 @@ public class QuestManager : Singleton<QuestManager>
     private bool buttonOnCooldown;
     private string audioFileName;
     private bool onLastChunk;
+    private bool onChoice;
 
     public void LoadIntoQuest(bool isYourTurn, List<Action> chunks, Action OnComplete)
     {
@@ -84,7 +85,7 @@ public class QuestManager : Singleton<QuestManager>
     IEnumerator ContinueAudio(int lastChunk, float duration)
     {
         yield return new WaitForSeconds(duration);
-        if (currentChunk == lastChunk)
+        if (currentChunk == lastChunk && !onChoice)
         {
             if(onLastChunk)
                 PlayManager.Instance.localPlayer.EndDialogue();
@@ -217,6 +218,14 @@ public class QuestManager : Singleton<QuestManager>
         // Set onLastChunk if it is finish button
         if (buttonDisplay == ButtonDisplay.FINISH)
             onLastChunk = true;
+        else
+            onLastChunk = false;
+
+        // Set onChoice if it is choices button
+        if (buttonDisplay == ButtonDisplay.CHOICES)
+            onChoice = true;
+        else
+            onChoice = false;
 
         // Disable buttons if its not your encounter
         if (!isYourTurn)
@@ -326,6 +335,7 @@ public class QuestManager : Singleton<QuestManager>
         buttonOnCooldown = false;
         buttonFading = false;
         onLastChunk = false;
+        onChoice = false;
         SetAlpha(locationImage, 1);
         SetAlpha(npcImage, 1);
     }

@@ -54,6 +54,7 @@ public class CombatManager : Singleton<CombatManager>
     private bool combatantListSet;
     private bool changingStyle;
     private bool usedItemThisTurn;
+    private bool canUseAttackAbilities;
 
     private void Update()
     {
@@ -72,11 +73,15 @@ public class CombatManager : Singleton<CombatManager>
         // If it is your turn, set turn order combatant list for all players
         if(PlayManager.Instance.isYourTurn)
         {
+            int playersInCombat = 0;
             turnOrderCombatantList = new List<Combatant>();
             foreach(Player p in PlayManager.Instance.playerList)
             {
                 if (p.ParticipatingInCombat.Value == 1)
+                {
+                    playersInCombat++;
                     turnOrderCombatantList.Add(new Combatant(CombatantType.PLAYER, p));
+                }
             }
             monster = new Combatant(CombatantType.MONSTER, monsterCard);
             turnOrderCombatantList.Add(monster);
@@ -96,6 +101,11 @@ public class CombatManager : Singleton<CombatManager>
             PlayManager.Instance.localPlayer.SetTurnOrderCombatantList(arr, false);
             PlayManager.Instance.localPlayer.UpdateCombatTurnMarker(combatTurnMarker);
             StartCombatantsTurn();
+
+            if(AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Lone Wolf")) && playersInCombat == 1)
+            {
+                InflictEffect(GetCombatantFromPlayer(PlayManager.Instance.localPlayer), new Effect("Power Up", -1, 1, true));
+            }
         }
     }
 
@@ -558,6 +568,53 @@ public class CombatManager : Singleton<CombatManager>
             else if (a == 3)
             {
                 // Attack Ability
+                Skill s = combatOptions.GetComponent<UICombatOptions>().skillUsed;
+                Debug.Log("Used Skill: " + s.skillName);
+                // *** Add in fancy ability stuff here ***
+                attackerId = GetIdFromCombatant(c);
+                // Make sure to sync this between all players if we decide to have all players see this
+                StartCoroutine(TransitionCombatLayoutStyle(CombatLayoutStyle.ATTACKING, () => {
+                    int playerPower = 0;
+                    int monsterPower = 0;
+                    if (PlayManager.Instance.IsPhysicalBased(c.player))
+                    {
+                        playerPower = c.GetPhysicalPower();
+                        monsterPower = monster.GetPhysicalPower();
+                    }
+                    else
+                    {
+                        playerPower = c.GetMagicalPower();
+                        monsterPower = monster.GetMagicalPower();
+                    }
+                    MakeAttackRoll(playerPower, monsterPower);
+                    AttackRollListener((a, crit) => {
+                        if (a == 1)
+                        {
+                            // player attacks monster
+                            int damage = c.GetAttack();
+                            if (crit)
+                                damage *= 2;
+                            AttackMonster(c, damage);
+                        }
+                        else if (a == -1)
+                        {
+                            // monster attacks player
+                            AttackPlayer(c, () => {
+                                // OnComplete
+                                StartCoroutine(TransitionCombatLayoutStyle(CombatLayoutStyle.DEFAULT, () => {
+                                    EndTurn();
+                                }));
+                                PlayManager.Instance.localPlayer.TransitionOthersToStyle(CombatLayoutStyle.DEFAULT);
+                            });
+                        }
+                        else if (a == 99)
+                        {
+                            // Combat Over
+                            EndCombat(CombatOverCheck());
+                        }
+                    });
+                }));
+                PlayManager.Instance.localPlayer.TransitionOthersToStyle(CombatLayoutStyle.ATTACKING, attackerId);
             }
             else if (a == 99)
             {
@@ -691,7 +748,8 @@ public class CombatManager : Singleton<CombatManager>
             if(a == 1)
             {
                 // Avoided getting attacked
-                OnComplete();
+                if (OnComplete != default)
+                    OnComplete();
             }
             else if(a == -1)
             {
@@ -720,7 +778,7 @@ public class CombatManager : Singleton<CombatManager>
                     }, () => {
                         if (c.IsAlive())
                             StartCoroutine(OnTakeDamage(c, OnComplete));
-                        else
+                        else if (OnComplete != default)
                             OnComplete();
                     }));
                 }
@@ -762,7 +820,8 @@ public class CombatManager : Singleton<CombatManager>
 
         yield return new WaitUntil(() => !waitUntil);
 
-        OnComplete();
+        if (OnComplete != default)
+            OnComplete();
     }
 
     public void InflictEffect(Combatant c, Effect e)
@@ -1071,7 +1130,8 @@ public class CombatManager : Singleton<CombatManager>
         combatFadeOverlay.SetActive(false);
 
         // Call OnComplete
-        OnComplete();
+        if (OnComplete != default)
+            OnComplete();
     }
 
     public void TransitionToStyle(CombatLayoutStyle style, int attackerId)
@@ -1176,7 +1236,8 @@ public class CombatManager : Singleton<CombatManager>
         changingStyle = false;
 
         // Call OnComplete
-        OnComplete();
+        if (OnComplete != default)
+            OnComplete();
     }
 
     IEnumerator AnimatePlayerAttacked(Combatant target, Action OnAttack = default, Action OnComplete = default)
@@ -1208,7 +1269,11 @@ public class CombatManager : Singleton<CombatManager>
         Destroy(attackIcon);
 
         // Call OnComplete function
-        OnComplete();
+        if(OnComplete != default)
+        {
+            OnCharacterIsAttacked(target);
+            OnComplete();
+        }
     }
 
     IEnumerator AnimatePlayerTakeDamage(UIPlayerCard playerCard, int damage, Action OnAttack = default, Action OnComplete = default)
@@ -1256,7 +1321,8 @@ public class CombatManager : Singleton<CombatManager>
         Destroy(attackIcon);
 
         // Call OnComplete function
-        OnComplete();
+        if (OnComplete != default)
+            OnComplete();
     }
 
     IEnumerator AnimateMonsterTakeDamage(UIEncounterCard card, int damage, Action OnAttack = default, Action OnComplete = default)
@@ -1278,7 +1344,8 @@ public class CombatManager : Singleton<CombatManager>
     IEnumerator AnimatePlayerHeal(UIPlayerCard playerCard, int heal, Action OnHeal = default)
     {
         // Call OnAttack function
-        OnHeal();
+        if (OnHeal != default)
+            OnHeal();
 
         playerCard.ActivateHealed(true);
         playerCard.DisplayHealNumber(heal);
@@ -1289,7 +1356,8 @@ public class CombatManager : Singleton<CombatManager>
     IEnumerator AnimateMonsterHeal(UIEncounterCard card, int heal, Action OnHeal = default)
     {
         // Call OnAttack function
-        OnHeal();
+        if (OnHeal != default)
+            OnHeal();
 
         card.ActivateHealed(true);
         card.DisplayHealNumber(heal);
@@ -1438,7 +1506,7 @@ public class CombatManager : Singleton<CombatManager>
         List<Combatant> taunters = new List<Combatant>();
         for (int i = 0; i < turnOrderCombatantList.Count; i++)
         {
-            if (turnOrderCombatantList[i].combatantType == CombatantType.PLAYER && turnOrderCombatantList[i].player.UUID.Value != p.UUID.Value && PlayManager.Instance.MeetsTauntRequirement(turnOrderCombatantList[i].player))
+            if (turnOrderCombatantList[i].combatantType == CombatantType.PLAYER && turnOrderCombatantList[i].player.UUID.Value != p.UUID.Value && AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Taunt"), turnOrderCombatantList[i].player))
                 taunters.Add(turnOrderCombatantList[i]);
         }
         return taunters;
@@ -1461,6 +1529,7 @@ public class CombatManager : Singleton<CombatManager>
 
     private void ResetCombat()
     {
+        canUseAttackAbilities = false;
         usedItemThisTurn = false;
         waitUntil = false;
         changingStyle = false;
@@ -1591,6 +1660,21 @@ public class CombatManager : Singleton<CombatManager>
         usedItemThisTurn = true;
     }
 
+    public void SetCanUseAttackAbilities(bool active)
+    {
+        canUseAttackAbilities = active;
+    }
+
+    public bool CanUseAttackAbilities()
+    {
+        return canUseAttackAbilities;
+    }
+
+    public void UsedAttackAbility()
+    {
+        canUseAttackAbilities = false;
+    }
+
     public void UseBomb()
     {
         int damage = 5;
@@ -1598,5 +1682,17 @@ public class CombatManager : Singleton<CombatManager>
             monster.TakeDamage(5, true);
         }));
         PlayManager.Instance.localPlayer.VisualizeMonsterTakeDamageForOthers(damage);
+    }
+
+    public void OnCharacterIsAttacked(Combatant c)
+    {
+        if(c.combatantType == CombatantType.PLAYER)
+        {
+            if(AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Battle Roar"),c.player))
+            {
+                InflictEffect(c, new Effect("Attack Up", isYourTurn ? 2 : 1, 4, true));
+                InflictEffect(c, new Effect("Armor Up", isYourTurn ? 2 : 1, 2, true));
+            }
+        }
     }
 }

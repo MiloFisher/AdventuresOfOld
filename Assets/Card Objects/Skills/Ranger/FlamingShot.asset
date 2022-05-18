@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6500931b67d034cfb85dab48a90031ab, type: 3}
+  m_Name: FlamingShot
+  m_EditorClassIdentifier: 
+  skillName: Flaming Shot
+  requirement: 2
+  type: 2
+  cost: 1
+  school: 3
+  description: Your next attack has +1 Power and inflicts <b><color=#ED1C24>Burning
+    (3)</color></b>.

@@ -23,10 +23,11 @@ public class UICombatOptions : MonoBehaviour
     public GameObject toggleShowButton;
     public Vector3 hiddenPosition;
     public int resolution;
+    public Skill skillUsed;
 
     private bool isHidden;
     private RectTransform rt;
-    private bool opened;
+    public bool opened;
     private bool lockInput;
     private int hiddenResolution;
 
@@ -65,9 +66,21 @@ public class UICombatOptions : MonoBehaviour
 
     public void AttackAbility()
     {
-        //if (lockInput || !opened)
-        //    return;
+        if (lockInput || !opened)
+            return;
+        lockInput = true;
 
+        AbilityManager.Instance.ShowAbilityDisplay();
+        CombatManager.Instance.SetCanUseAttackAbilities(true);
+    }
+
+    public void AttackAbilityUsed(Skill s)
+    {
+        CombatManager.Instance.UsedAttackAbility();
+        lockInput = true;
+        skillUsed = s;
+        hiddenResolution = 3;
+        StartCoroutine(AnimateClosing());
     }
 
     public void Flee()
@@ -167,6 +180,7 @@ public class UICombatOptions : MonoBehaviour
 
     public void ResetSize()
     {
+        skillUsed = default;
         resolution = 0;
         hiddenResolution = 0;
         opened = false;

@@ -61,8 +61,8 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
         {
             Combatant c = CombatManager.Instance.monster;
             c.Hatch();
-            CombatManager.Instance.InflictEffect(c, new Effect("Attack Up", -1, 6));
-            CombatManager.Instance.InflictEffect(c, new Effect("Power Up", -1, 1));
+            CombatManager.Instance.InflictEffect(c, new Effect("Attack Up", -1, 6, true));
+            CombatManager.Instance.InflictEffect(c, new Effect("Power Up", -1, 1, true));
         }
         CombatManager.Instance.MonsterEndTurn();
     }
@@ -378,7 +378,7 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
     {
         if (PlayManager.Instance.isYourTurn && !PlayManager.Instance.localPlayer.GrabbedHorse.Value)
         {
-            CombatManager.Instance.InflictEffect(CombatManager.Instance.monster, new Effect("Power Down", -1, 2));
+            CombatManager.Instance.InflictEffect(CombatManager.Instance.monster, new Effect("Power Down", -1, 2, true));
         }
         CombatManager.Instance.OnPlayerTakeDamage = (t) => {
             CombatManager.Instance.waitUntil = true;

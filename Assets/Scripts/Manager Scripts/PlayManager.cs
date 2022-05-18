@@ -94,6 +94,8 @@ public class PlayManager : Singleton<PlayManager>
 
     public bool inStore;
 
+    public Player playerMovingWithYou;
+
     void Start()
     {
         // Activate loadingScreen
@@ -314,6 +316,10 @@ public class PlayManager : Singleton<PlayManager>
                     p.SetValue("Weapon", "Simple Wand & Shield");
                     break;
             }
+
+            // If player is human, give them 2 level up points
+            if (p.Race.Value == "Human")
+                p.SetValue("LevelUpPoints", 2);
 
             // Fill all of their ability charges
             p.RestoreAbilityCharges(999);
@@ -576,12 +582,47 @@ public class PlayManager : Singleton<PlayManager>
 
     public void MovePhase(Vector3Int pos = default)
     {
+        playerMovingWithYou = default;
         movePhase = true;
         // Activate all tiles within the player's move range
-        if(pos == default)
-            gameboard[localPlayer.Position.Value].Activate(GetMod(GetSpeed(localPlayer)));
+        if (pos == default)
+        {
+            if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Horseback Riding")) && HasAllyOnTileOrAdjacent(localPlayer))
+            {
+                MakeChoice("Take ally on move", "Move alone", true, true);
+                ChoiceListener((a) => {
+                    if (a == 1)
+                    {
+                        TargetPlayerSelection("Choose ally to take with", true, false, false, (p) => {
+                            // On Select
+                            playerMovingWithYou = p;
+                            gameboard[localPlayer.Position.Value].Activate(GetMod(GetSpeed(localPlayer)));
+                        }, (p) => {
+                            // Requirement is being on the same or adjacent tile to localplayer
+                            return InAssistingRange(localPlayer, p, 1);
+                        }, false);
+                    }
+                    else
+                    {
+                        gameboard[localPlayer.Position.Value].Activate(GetMod(GetSpeed(localPlayer)));
+                    }
+                });
+            }
+            else
+                gameboard[localPlayer.Position.Value].Activate(GetMod(GetSpeed(localPlayer)));
+        }
         else
             gameboard[pos].Activate(GetMod(GetSpeed(localPlayer)));
+    }
+
+    public bool HasAllyOnTileOrAdjacent(Player p)
+    {
+        for (int i = 0; i < playerList.Count; i++)
+        {
+            if (p.UUID.Value != playerList[i].UUID.Value && InAssistingRange(p, playerList[i], 1))
+                return true;
+        }
+        return false;
     }
 
     public void EncounterPhase()
@@ -659,6 +700,11 @@ public class PlayManager : Singleton<PlayManager>
         // Deactivate the selected tiles and move the player to the target position
         HideAllTiles();
         localPlayer.SetPosition(pos);
+        if (playerMovingWithYou != default)
+        {
+            playerMovingWithYou.SetPosition(pos);
+            playerMovingWithYou = default;
+        }
 
         // Call Encounter Phase transition
         CallTransition(2);
@@ -824,16 +870,20 @@ public class PlayManager : Singleton<PlayManager>
 
     public int GetStatModFromType(string statRollType)
     {
+        int result = 0;
         switch (statRollType)
         {
-            case "STR": return GetMod(GetStrength(localPlayer));
-            case "DEX": return GetMod(GetDexterity(localPlayer));
-            case "INT": return GetMod(GetIntelligence(localPlayer));
-            case "SPD": return GetMod(GetSpeed(localPlayer));
-            case "CON": return GetMod(GetConstitution(localPlayer));
-            case "ENG": return GetMod(GetEnergy(localPlayer));
-            default: Debug.LogError("Unknown Stat Roll Type: " + statRollType); return 0;
+            case "STR": result = GetMod(GetStrength(localPlayer)); break;
+            case "DEX": result = GetMod(GetDexterity(localPlayer)); break;
+            case "INT": result = GetMod(GetIntelligence(localPlayer)); break;
+            case "SPD": result = GetMod(GetSpeed(localPlayer)); break;
+            case "CON": result = GetMod(GetConstitution(localPlayer)); break;
+            case "ENG": result = GetMod(GetEnergy(localPlayer)); break;
+            default: Debug.LogError("Unknown Stat Roll Type: " + statRollType); break;
         }
+        if (result < 0 && AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Elven Knowledge")))
+            result = 0;
+        return result;
     }
 
     public void UpdateQuests(FixedString64Bytes[] questNames, int[] questSteps)
@@ -3241,6 +3291,8 @@ public class PlayManager : Singleton<PlayManager>
         int x = 0;
         if (itemReference.ContainsKey(p.Weapon.Value + ""))
             x += (itemReference[p.Weapon.Value + ""] as WeaponCard).damage;
+        if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Heaven's Paragon"), p) && GetHealth(p) == GetMaxHealth(p))
+            x += 2;
         return x;
     }
     public int GetCrit(Player p)
@@ -3257,6 +3309,8 @@ public class PlayManager : Singleton<PlayManager>
             x += (itemReference[p.Weapon.Value + ""] as WeaponCard).armor;
         if (itemReference.ContainsKey(p.Armor.Value + ""))
             x += (itemReference[p.Armor.Value + ""] as ArmorCard).armor;
+        if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Dwarven Defense"), p))
+            x += 1;
         return x;
     }
     public int GetPhysicalPower(Player p)
@@ -3312,15 +3366,6 @@ public class PlayManager : Singleton<PlayManager>
     public string GetPlayerColorString(Player p)
     {
         return "#" + ColorUtility.ToHtmlStringRGB(playerColors[p.Color.Value]);
-    }
-
-    public bool MeetsDodgeRequirement(Player p)
-    {
-        return GetDexterity(p) >= 14;
-    }
-    public bool MeetsTauntRequirement(Player p)
-    {
-        return GetStrength(p) >= 14;
     }
     #endregion
 

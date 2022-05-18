@@ -755,6 +755,10 @@ namespace AdventuresOfOldMultiplayer
             if (Health.Value <= 0)
                 return;
             int cap = PlayManager.Instance.GetMaxHealth(this);
+
+            if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Heaven's Paragon"), this))
+                amount += 2;
+
             if (NetworkManager.Singleton.IsServer)
             {
                 Health.Value += amount;

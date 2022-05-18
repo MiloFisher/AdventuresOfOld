@@ -142,7 +142,7 @@ public class StatusEffectTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
             "Weakened" => "#A1A2A5",
             "Bleeding" => "#ED1C24",
             "Burning" => "#F7941D",
-            "Dazed" => "#fff200",
+            "Dazed" => "#FFF200",
             "Power Up" => "#00A14B",
             "Attack Up" => "#00A14B",
             "Armor Up" => "#00A14B",

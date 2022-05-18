@@ -140,7 +140,7 @@ public class UIDefensiveOptions : MonoBehaviour
     public void EnableOptions()
     {
         // Enable dodge button if player meets requirement and has not used dodge yet
-        if(PlayManager.Instance.MeetsDodgeRequirement(PlayManager.Instance.localPlayer) && !dodgeUsed && !hadSuccess)
+        if(AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Dodge"), PlayManager.Instance.localPlayer) && !dodgeUsed && !hadSuccess)
         {
             dodgeButton.GetComponent<Button>().enabled = true;
             dodgeButton.GetComponent<Image>().color = enabledColor;
