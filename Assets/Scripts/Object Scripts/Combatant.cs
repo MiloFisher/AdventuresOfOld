@@ -182,7 +182,7 @@ public class Combatant
             {
                 if(HasPowerFantasy())
                 {
-                    CombatManager.Instance.RemoveStatusEffect(this, "Power Fantasy");
+                    CombatManager.Instance.CleanseEffect(this, "Power Fantasy");
                     CombatManager.Instance.InflictEffect(this, new Effect("Power Up", -1, 1));
                     currentHealth = 1;
                 }
@@ -222,7 +222,7 @@ public class Combatant
             if(statusEffects[i].name == e.name && !e.canHaveMultipleStacks)
             {
                 alreadyContains = true;
-                if (e.potency > statusEffects[i].potency || (e.potency == statusEffects[i].potency && e.duration > statusEffects[i].duration))
+                if (e.potency > statusEffects[i].potency || (e.potency == statusEffects[i].potency && e.duration > statusEffects[i].duration && e.counter >= statusEffects[i].counter))
                     statusEffects[i] = e;
                 break;
             }
@@ -263,6 +263,27 @@ public class Combatant
             {
                 statusEffects.RemoveAt(i);
                 i--;
+            }
+        }
+
+        if (combatantType == CombatantType.PLAYER)
+            CombatManager.Instance.GetPlayerCardFromCombatant(this).DrawStatusEffects(statusEffects);
+        else
+            CombatManager.Instance.enemyCard.DrawStatusEffects(statusEffects);
+    }
+
+    public void UseStatusEffect(string effectName)
+    {
+        for (int i = 0; i < statusEffects.Count; i++)
+        {
+            if (statusEffects[i].name == effectName)
+            {
+                statusEffects[i].counter--;
+                if(statusEffects[i].counter <= 0)
+                {
+                    statusEffects.RemoveAt(i);
+                    i--;
+                }
             }
         }
 
@@ -338,8 +359,6 @@ public class Combatant
     {
         return HasEffect("Weakened");
     }
-
-    // Need to implement functionality still vvv
 
     public int IsBleeding()
     {

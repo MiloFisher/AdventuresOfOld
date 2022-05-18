@@ -1272,6 +1272,37 @@ namespace AdventuresOfOldMultiplayer
             }
         }
 
+        public void UseStatusEffect(string effectName)
+        {
+            FixedString64Bytes uuid = UUID.Value;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.UseStatusEffectClientRPC(uuid, effectName);
+            }
+            else
+                UseStatusEffectServerRPC(uuid, effectName);
+        }
+        [ServerRpc]
+        private void UseStatusEffectServerRPC(FixedString64Bytes uuid, FixedString64Bytes effectName, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.UseStatusEffectClientRPC(uuid, effectName);
+        }
+        [ClientRpc]
+        public void UseStatusEffectClientRPC(FixedString64Bytes uuid, FixedString64Bytes effectName, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value == uuid)
+                        CombatManager.Instance.UseStatusEffect(CombatManager.Instance.GetCombatantFromPlayer(p), effectName + "");
+                }
+
+            }
+        }
+
         public void MonsterGainStatusEffect(string name, int duration, int potency)
         {
             if (NetworkManager.Singleton.IsServer)
@@ -1344,6 +1375,31 @@ namespace AdventuresOfOldMultiplayer
             if (IsOwner && !isBot)
             {
                 CombatManager.Instance.CycleStatusEffects(CombatManager.Instance.monster);
+            }
+        }
+
+        public void MonsterUseStatusEffect(string effectName)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.MonsterUseStatusEffectClientRPC(effectName);
+            }
+            else
+                MonsterUseStatusEffectServerRPC(effectName);
+        }
+        [ServerRpc]
+        private void MonsterUseStatusEffectServerRPC(FixedString64Bytes effectName, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.MonsterUseStatusEffectClientRPC(effectName);
+        }
+        [ClientRpc]
+        public void MonsterUseStatusEffectClientRPC(FixedString64Bytes effectName, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                CombatManager.Instance.UseStatusEffect(CombatManager.Instance.monster, effectName + "");
             }
         }
 

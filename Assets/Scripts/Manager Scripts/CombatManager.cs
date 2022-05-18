@@ -629,6 +629,12 @@ public class CombatManager : Singleton<CombatManager>
         // Attack animation + effect + end monster turn
         StartCoroutine(AnimateMonsterAttacked(c, damage,() => {
             // OnAttack
+            int bleeding = monster.IsBleeding();
+            if (bleeding > -1)
+            {
+                damage += bleeding;
+                UseStatusEffect(monster, "Bleeding");
+            }
             monster.TakeDamage(damage);
             if(debuffs != default)
             {
@@ -743,6 +749,13 @@ public class CombatManager : Singleton<CombatManager>
 
     public void AttackPlayer(Combatant c, Action OnComplete, List<Effect> debuffs = default)
     {
+        if(monster.IsDazed())
+        {
+            if (OnComplete != default)
+                OnComplete();
+            CleanseEffect(monster, "Dazed");
+            return;
+        }
         EnableDefensiveOptions();
         DefensiveOptionsListener((a) => {
             if(a == 1)
@@ -848,10 +861,21 @@ public class CombatManager : Singleton<CombatManager>
             PlayManager.Instance.localPlayer.MonsterCycleStatusEffects();
     }
 
+    public void UseEffect(Combatant c, string effectName)
+    {
+        if (c.combatantType == CombatantType.PLAYER)
+            c.player.UseStatusEffect(effectName);
+        else
+            PlayManager.Instance.localPlayer.MonsterUseStatusEffect(effectName);
+    }
+
     public void HealMonster(int amount)
     {
+        if (monster.IsPlagued())
+            return;
         StartCoroutine(AnimateMonsterHeal(enemyCard, amount, () => {
             monster.RestoreHealth(amount);
+            CleanseEffect(monster, "Poisoned");
         }));
         PlayManager.Instance.localPlayer.VisualizeMonsterHealForOthers(amount);
     }
@@ -859,8 +883,11 @@ public class CombatManager : Singleton<CombatManager>
     public void HealPlayer(Player p, int amount)
     {
         Combatant c = GetCombatantFromPlayer(p);
+        if (c.IsPlagued())
+            return;
         StartCoroutine(AnimatePlayerHeal(GetPlayerCardFromCombatant(c), amount, () => {
             c.RestoreHealth(amount);
+            CleanseEffect(c, "Poisoned");
         }));
         PlayManager.Instance.localPlayer.VisualizeHealForOthers(amount);
     }
@@ -879,6 +906,11 @@ public class CombatManager : Singleton<CombatManager>
     public void CycleStatusEffects(Combatant c)
     {
         c.CycleStatusEffects();
+    }
+    // Called from Player.cs
+    public void UseStatusEffect(Combatant c, string effectName)
+    {
+        c.UseStatusEffect(effectName);
     }
 
     public void VisualizePlayerAttacked(Player p)
