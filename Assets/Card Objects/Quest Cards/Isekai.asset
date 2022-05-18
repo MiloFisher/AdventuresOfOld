@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Isekai
   m_EditorClassIdentifier: 
   cardName: Isekai!
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: 7c8ae23f136d095429f06c9ee150784e, type: 3}
   questStep: 0
   objectiveNames:
   - Talk to the <i>Shifty Peddler</i>

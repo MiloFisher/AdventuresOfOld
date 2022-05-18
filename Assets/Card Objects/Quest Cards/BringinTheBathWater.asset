@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BringinTheBathWater
   m_EditorClassIdentifier: 
   cardName: Bringin' the Bath Water
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: c2e66da3c6499fc42a45f027632f2499, type: 3}
   questStep: 0
   objectiveNames:
   - Talk to the <i>Four-Eyed Boy</i>

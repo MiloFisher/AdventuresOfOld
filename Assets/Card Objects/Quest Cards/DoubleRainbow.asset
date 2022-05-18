@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DoubleRainbow
   m_EditorClassIdentifier: 
   cardName: Double Rainbow
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: fe3431b1f7ffc7446a99bc97d0052db6, type: 3}
   questStep: 0
   objectiveNames:
   - Talk to the <i>Forest Hag</i>

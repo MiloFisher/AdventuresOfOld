@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: TheAbandonedPath
   m_EditorClassIdentifier: 
   cardName: The Abandoned Path
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: 85de262dddd0aee448d11f4a8a8c2ba9, type: 3}
   questStep: 0
   objectiveNames:
   - Talk to the <i>Crazed Hermit</i>

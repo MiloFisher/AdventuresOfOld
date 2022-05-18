@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DisharMEOWny
   m_EditorClassIdentifier: 
   cardName: DisharMEOWny
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: d032ee372c473064ab15346aaead53e4, type: 3}
   questStep: 0
   objectiveNames:
   - Talk to the <i>Pablo the Noob</i>
