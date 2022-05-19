@@ -795,7 +795,8 @@ namespace AdventuresOfOldMultiplayer
                 return;
             int cap = PlayManager.Instance.GetMaxHealth(this);
 
-            if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Heaven's Paragon"), this))
+            // Have to be not in combat because combatmanager heal function already adds bonus
+            if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Heaven's Paragon"), this) && !CombatManager.Instance.InCombat())
                 amount += 2;
 
             if (NetworkManager.Singleton.IsServer)

@@ -513,7 +513,7 @@ public class AbilityManager : Singleton<AbilityManager>
 
     private void HeavensParagon()
     {
-        // Done in Player RestoreHealth(int amount) and in PlayManager GetAttack(Player p)
+        // Done in Player RestoreHealth(int amount) and in PlayManager GetAttack(Player p) and in CombatManager HealPlayer(Player p, int amount)
     }
 
     private void HorsebackRiding()

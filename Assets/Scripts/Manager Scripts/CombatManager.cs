@@ -1024,6 +1024,8 @@ public class CombatManager : Singleton<CombatManager>
         Combatant c = GetCombatantFromPlayer(p);
         if (c.IsPlagued())
             return;
+        if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Heaven's Paragon"), p))
+            amount += 2;
         StartCoroutine(AnimatePlayerHeal(GetPlayerCardFromCombatant(c), amount, () => {
             c.RestoreHealth(amount);
             CleanseEffect(c, "Poisoned");

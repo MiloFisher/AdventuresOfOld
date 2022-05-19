@@ -47,7 +47,7 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler,
 
     IEnumerator ShowTooltip()
     {
-        float timerSeconds = 0.5f;
+        float timerSeconds = 0.3f;
         int checks = 10;
         int counter = 0;
         while(hoveringOver && counter < checks)
