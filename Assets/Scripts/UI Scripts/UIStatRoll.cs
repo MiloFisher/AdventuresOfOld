@@ -18,6 +18,7 @@ public class UIStatRoll : MonoBehaviour
     public Image rollDisplay2;
     public GameObject rollButton;
     public TMP_Text title;
+    public TMP_Text subtitle;
     public float rollLength = 0.01f;
     public float rollDisplayTime = 1f;
     public float waitTime = 0.5f;
@@ -60,7 +61,8 @@ public class UIStatRoll : MonoBehaviour
     IEnumerator AnimateOpening()
     {
         // Set title
-        title.text = statRollType + " Roll (" + statRollValue + ") " + FormatStat(PlayManager.Instance.GetStatModFromType(statRollType));
+        title.text = statRollType + " Roll (" + statRollValue + ")";
+        subtitle.text = "Your current stat modifier: " + FormatStat(PlayManager.Instance.GetStatModFromType(statRollType));
 
         // Then grow the object
         float dif = endScale - startScale;
