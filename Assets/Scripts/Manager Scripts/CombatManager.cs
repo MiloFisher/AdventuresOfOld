@@ -1100,7 +1100,7 @@ public class CombatManager : Singleton<CombatManager>
             case Target.HIGHEST_HEALTH:
                 return new int[] { GetHighestHealthPlayerIndex() };
         };
-        return new int[0];
+        return default;
     }
 
     private int GetLowestHealthPlayerIndex()
@@ -1711,6 +1711,7 @@ public class CombatManager : Singleton<CombatManager>
 
     private void ResetCombat()
     {
+        monsterTargets = default;
         OnPlayerDealDamage = default;
         OnPlayerTakeDamage = default;
         OnPlayerSpendAbilityCharge = default;
