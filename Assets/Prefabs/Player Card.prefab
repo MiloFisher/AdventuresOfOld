@@ -31,7 +31,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5204690659133762651}
-  m_RootOrder: 17
+  m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -375,7 +375,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5204690659133762651}
-  m_RootOrder: 18
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -491,7 +491,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5204690659133762651}
-  m_RootOrder: 16
+  m_RootOrder: 17
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -761,7 +761,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5204690659133762651}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1410,7 +1410,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5204690659133762651}
-  m_RootOrder: 15
+  m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1756,7 +1756,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5204690659133762651}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -1894,6 +1894,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 5702a5870bbc5484c8e80beb24b2327f, type: 3}
   - {fileID: 21300000, guid: f0ae18d70ae014163ad7350565590fae, type: 3}
   damageNumberFadeLength: 0.004
+  statusEffectDebuffColor: {r: 1, g: 0, b: 0, a: 0.39215687}
+  statusEffectBuffColor: {r: 0, g: 1, b: 0, a: 0.39215687}
 --- !u!1 &6275235851317461027
 GameObject:
   m_ObjectHideFlags: 0
@@ -3229,12 +3231,12 @@ RectTransform:
   - {fileID: 6533212624180462887}
   - {fileID: 1086234260679225569}
   - {fileID: 9197677785223156000}
+  - {fileID: 2667044961997569669}
   - {fileID: 7917852226492942507}
   - {fileID: 5447306001180737087}
   - {fileID: 6222080325914352258}
   - {fileID: 4953755545437692138}
   - {fileID: 4311842898865667555}
-  - {fileID: 2667044961997569669}
   - {fileID: 2111380586474243500}
   - {fileID: 4491998864463654937}
   - {fileID: 6319876170321759722}

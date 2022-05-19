@@ -1298,6 +1298,7 @@ MonoBehaviour:
   scaledWidth: 600
   scaledHeight: 110
   childScale: 1.075
+  allowClickOnEmptySpace: 0
 --- !u!1 &1392388777765406132
 GameObject:
   m_ObjectHideFlags: 0
@@ -3758,6 +3759,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 5702a5870bbc5484c8e80beb24b2327f, type: 3}
   - {fileID: 21300000, guid: f0ae18d70ae014163ad7350565590fae, type: 3}
   damageNumberFadeLength: 0.004
+  statusEffectDebuffColor: {r: 1, g: 0, b: 0, a: 0.39215687}
+  statusEffectBuffColor: {r: 0, g: 1, b: 0, a: 0.39215687}
 --- !u!1 &3843077075136225253
 GameObject:
   m_ObjectHideFlags: 0
@@ -5047,6 +5050,7 @@ MonoBehaviour:
   scaledWidth: 600
   scaledHeight: 110
   childScale: 1.075
+  allowClickOnEmptySpace: 0
 --- !u!1 &6409967238419410201
 GameObject:
   m_ObjectHideFlags: 0

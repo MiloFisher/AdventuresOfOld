@@ -57,6 +57,8 @@ public class UIEncounterCard : MonoBehaviour
     public GameObject statusEffectPrefab;
     public Sprite[] statusEffectIcons;
     public float damageNumberFadeLength = 0.004f;
+    public Color statusEffectDebuffColor;
+    public Color statusEffectBuffColor;
 
     private bool actionButtonActive;
 
@@ -277,12 +279,34 @@ public class UIEncounterCard : MonoBehaviour
         for (int i = 0; i < effects.Count; i++)
         {
             GameObject g = Instantiate(statusEffectPrefab, statusEffectsContainer);
-            g.GetComponent<Image>().sprite = GetEffectSprite(effects[i]);
+            g.GetComponent<Image>().color = IsDebuff(effects[i]) ? statusEffectDebuffColor : statusEffectBuffColor;
+            g.transform.GetChild(0).GetComponent<Image>().sprite = GetEffectSprite(effects[i]);
             g.GetComponentInChildren<StatusEffectTooltip>().SetupDisplay(effects[i]);
             g.transform.localPosition = new Vector3(0, -50 * i, 0);
             statusEffectList.Add(g);
         }
 
+    }
+
+    public bool IsDebuff(Effect e)
+    {
+        return e.name switch
+        {
+            "Bleeding" => true,
+            "Poisoned" => true,
+            "Weakened" => true,
+            "Power Up" => false,
+            "Attack Up" => false,
+            "Armor Up" => false,
+            "Burning" => true,
+            "Dazed" => true,
+            "Eaten" => true,
+            "Enwebbed" => true,
+            "Plagued" => true,
+            "Power Down" => true,
+            "Power Fantasy" => false,
+            _ => true
+        };
     }
 
     public Sprite GetEffectSprite(Effect e)

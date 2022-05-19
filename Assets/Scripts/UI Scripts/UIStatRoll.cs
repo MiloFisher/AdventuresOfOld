@@ -60,7 +60,7 @@ public class UIStatRoll : MonoBehaviour
     IEnumerator AnimateOpening()
     {
         // Set title
-        title.text = statRollType + " Roll (" + statRollValue + ")";
+        title.text = statRollType + " Roll (" + statRollValue + ") " + FormatStat(PlayManager.Instance.GetStatModFromType(statRollType));
 
         // Then grow the object
         float dif = endScale - startScale;
@@ -82,6 +82,16 @@ public class UIStatRoll : MonoBehaviour
 
         // Finally set opened to true
         opened = true;
+    }
+
+    private string FormatStat(int value)
+    {
+        if (value > 0)
+            return "<b><color=#267833>+" + value + "</color></b>";
+        else if (value < 0)
+            return "<b><color=#902E2E>" + value + "</color></b>";
+        else
+            return "<b><color=white>+" + value + "</color></b>";
     }
 
     public void ResetSize()
