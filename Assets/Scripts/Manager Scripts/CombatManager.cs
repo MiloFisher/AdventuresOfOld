@@ -17,6 +17,7 @@ public class CombatManager : Singleton<CombatManager>
     public GameObject combatBackground;
     public GameObject combatLayout;
     public GameObject statRoll;
+    public GameObject choice;
     public GameObject attackRoll;
     public GameObject defensiveOptions;
     public GameObject combatOptions;
@@ -44,6 +45,8 @@ public class CombatManager : Singleton<CombatManager>
     public CombatLayoutStyle combatLayoutStyle;
     public int attackerId;
     public bool waitUntil;
+    public bool usedHoly;
+    public bool receivedLoneWolf;
 
     public Action<Combatant> OnPlayerDealDamage;
     public Action<Combatant> OnPlayerTakeDamage;
@@ -73,15 +76,11 @@ public class CombatManager : Singleton<CombatManager>
         // If it is your turn, set turn order combatant list for all players
         if(PlayManager.Instance.isYourTurn)
         {
-            int playersInCombat = 0;
             turnOrderCombatantList = new List<Combatant>();
             foreach(Player p in PlayManager.Instance.playerList)
             {
                 if (p.ParticipatingInCombat.Value == 1)
-                {
-                    playersInCombat++;
                     turnOrderCombatantList.Add(new Combatant(CombatantType.PLAYER, p));
-                }
             }
             monster = new Combatant(CombatantType.MONSTER, monsterCard);
             turnOrderCombatantList.Add(monster);
@@ -101,11 +100,6 @@ public class CombatManager : Singleton<CombatManager>
             PlayManager.Instance.localPlayer.SetTurnOrderCombatantList(arr, false);
             PlayManager.Instance.localPlayer.UpdateCombatTurnMarker(combatTurnMarker);
             StartCombatantsTurn();
-
-            if(AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Lone Wolf")) && playersInCombat == 1)
-            {
-                InflictEffect(GetCombatantFromPlayer(PlayManager.Instance.localPlayer), new Effect("Power Up", -1, 1, true));
-            }
         }
     }
 
@@ -131,23 +125,33 @@ public class CombatManager : Singleton<CombatManager>
                             otherPlayersInCombat.Add(c.player);
                     }
 
+                    int cardsDrawn = 0;
                     // If the current turn player is a combatant, and they are alive, give them their rewards
-                    if(IsCombatant(currentTurnPlayer) && GetCombatantFromPlayer(currentTurnPlayer).IsAlive())
+                    if (IsCombatant(currentTurnPlayer) && GetCombatantFromPlayer(currentTurnPlayer).IsAlive())
                     {
-                        switch(monsterCard.type)
+                        switch (monsterCard.type)
                         {
                             case MonsterType.BASIC:
-                                currentTurnPlayer.DrawLootCards(1, currentTurnPlayer.UUID.Value, true);
+                                cardsDrawn = 1;
+                                if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Looter"), currentTurnPlayer))
+                                    cardsDrawn += 1;
+                                currentTurnPlayer.DrawLootCards(cardsDrawn, currentTurnPlayer.UUID.Value, true);
                                 currentTurnPlayer.GainXP(3);
                                 currentTurnPlayer.GainGold(10);
                                 break;
                             case MonsterType.ELITE:
-                                currentTurnPlayer.DrawLootCards(2, currentTurnPlayer.UUID.Value, true);
+                                cardsDrawn = 2;
+                                if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Looter"), currentTurnPlayer))
+                                    cardsDrawn += 1;
+                                currentTurnPlayer.DrawLootCards(cardsDrawn, currentTurnPlayer.UUID.Value, true);
                                 currentTurnPlayer.GainXP(6);
                                 currentTurnPlayer.GainGold(20);
                                 break;
                             case MonsterType.MINIBOSS:
-                                currentTurnPlayer.DrawLootCards(1, currentTurnPlayer.UUID.Value, true);
+                                cardsDrawn = 1;
+                                if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Looter"), currentTurnPlayer))
+                                    cardsDrawn += 1;
+                                currentTurnPlayer.DrawLootCards(cardsDrawn, currentTurnPlayer.UUID.Value, true);
                                 currentTurnPlayer.GainXP(6);
                                 currentTurnPlayer.GainGold(20);
 
@@ -238,17 +242,26 @@ public class CombatManager : Singleton<CombatManager>
                         switch (monsterCard.type)
                         {
                             case MonsterType.BASIC:
-                                chosenOne.DrawLootCards(1, chosenOne.UUID.Value, false);
+                                cardsDrawn = 1;
+                                if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Looter"), chosenOne))
+                                    cardsDrawn += 1;
+                                chosenOne.DrawLootCards(cardsDrawn, chosenOne.UUID.Value, false);
                                 chosenOne.GainXP(3, true);
                                 chosenOne.GainGold(10);
                                 break;
                             case MonsterType.ELITE:
-                                chosenOne.DrawLootCards(2, chosenOne.UUID.Value, false);
+                                cardsDrawn = 2;
+                                if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Looter"), chosenOne))
+                                    cardsDrawn += 1;
+                                chosenOne.DrawLootCards(cardsDrawn, chosenOne.UUID.Value, false);
                                 chosenOne.GainXP(6, true);
                                 chosenOne.GainGold(20);
                                 break;
                             case MonsterType.MINIBOSS:
-                                chosenOne.DrawLootCards(1, chosenOne.UUID.Value, false);
+                                cardsDrawn = 1;
+                                if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Looter"), chosenOne))
+                                    cardsDrawn += 1;
+                                chosenOne.DrawLootCards(cardsDrawn, chosenOne.UUID.Value, false);
                                 chosenOne.GainXP(6, true);
                                 chosenOne.GainGold(20);
 
@@ -344,7 +357,10 @@ public class CombatManager : Singleton<CombatManager>
                         case MonsterType.MINIBOSS:
                             foreach (Player p in otherPlayersInCombat)
                             {
-                                p.DrawLootCards(1, p.UUID.Value, false);
+                                cardsDrawn = 1;
+                                if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Looter"), p))
+                                    cardsDrawn += 1;
+                                p.DrawLootCards(cardsDrawn, p.UUID.Value, false);
                                 p.GainXP(6, true);
                             }
                             break;
@@ -455,6 +471,8 @@ public class CombatManager : Singleton<CombatManager>
             int burning = monster.IsBurning();
             if (burning > -1)
             {
+                bool goingToDie = monster.GetHealth() <= burning;
+
                 StartCoroutine(AnimateMonsterTakeDamage(enemyCard, burning, () => {
                     monster.TakeDamage(burning);
                 }));
@@ -463,7 +481,7 @@ public class CombatManager : Singleton<CombatManager>
                 PlayManager.Instance.localPlayer.VisualizeMonsterTakeDamageForOthers(burning);
 
                 // Check if still alive with incoming poison damage
-                if (monster.GetHealth() <= burning)
+                if (goingToDie)
                 {
                     EndCombat(1);
                     return;
@@ -478,6 +496,12 @@ public class CombatManager : Singleton<CombatManager>
     {
         Combatant c = GetCombatantFromPlayer(PlayManager.Instance.localPlayer);
 
+        if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Lone Wolf")) && turnOrderCombatantList.Count == 2 && !receivedLoneWolf)
+        {
+            receivedLoneWolf = true;
+            InflictEffect(c, new Effect("Power Up", -1, 1, true));
+        }
+
         // Check if still alive
         if (!c.IsAlive())
         {
@@ -489,6 +513,8 @@ public class CombatManager : Singleton<CombatManager>
         int poisoned = c.IsPoisoned();
         if (poisoned > -1)
         {
+            bool goingToDie = c.GetHealth() <= poisoned && !c.player.IronWill.Value;
+
             StartCoroutine(AnimatePlayerTakeDamage(GetPlayerCardFromCombatant(c), poisoned, () => {
                 c.TakeDamage(poisoned, true);
             }));
@@ -497,7 +523,7 @@ public class CombatManager : Singleton<CombatManager>
             PlayManager.Instance.localPlayer.VisualizeTakeDamageForOthers(poisoned);
 
             // Check if still alive with incoming poison damage
-            if (c.GetHealth() <= poisoned)
+            if (goingToDie)
             {
                 EndTurn();
                 return;
@@ -570,7 +596,9 @@ public class CombatManager : Singleton<CombatManager>
                 // Attack Ability
                 Skill s = combatOptions.GetComponent<UICombatOptions>().skillUsed;
                 Debug.Log("Used Skill: " + s.skillName);
+
                 // *** Add in fancy ability stuff here ***
+
                 attackerId = GetIdFromCombatant(c);
                 // Make sure to sync this between all players if we decide to have all players see this
                 StartCoroutine(TransitionCombatLayoutStyle(CombatLayoutStyle.ATTACKING, () => {
@@ -594,11 +622,34 @@ public class CombatManager : Singleton<CombatManager>
                             int damage = c.GetAttack();
                             if (crit)
                                 damage *= 2;
-                            AttackMonster(c, damage);
+
+                            switch(s.skillName)
+                            {
+                                case "Sap Energy":
+                                    AttackMonster(c, 0, default, () => {
+                                        c.player.RestoreAbilityCharges(2);
+                                    });
+                                    break;
+                                case "Balanced Strike":
+                                    AttackMonster(c, damage + PlayManager.Instance.GetMod(PlayManager.Instance.GetStrength(c.player)));
+                                    break;
+                                case "Crushing Blow":
+                                    AttackMonster(c, damage, new List<Effect> { new Effect("Dazed", -1) });
+                                    break;
+                                default:
+                                    AttackMonster(c, damage);
+                                    break;
+                            }
                         }
                         else if (a == -1)
                         {
                             // monster attacks player
+                            switch (s.skillName)
+                            {
+                                case "Balanced Strike":
+                                    InflictEffect(c, new Effect("Armor Up", 1, 3, true));
+                                    break;
+                            }
                             AttackPlayer(c, () => {
                                 // OnComplete
                                 StartCoroutine(TransitionCombatLayoutStyle(CombatLayoutStyle.DEFAULT, () => {
@@ -624,7 +675,7 @@ public class CombatManager : Singleton<CombatManager>
         });
     }
 
-    public void AttackMonster(Combatant c, int damage, List<Effect> debuffs = default)
+    public void AttackMonster(Combatant c, int damage, List<Effect> debuffs = default, Action OnAttack = default)
     {
         // Attack animation + effect + end monster turn
         StartCoroutine(AnimateMonsterAttacked(c, damage,() => {
@@ -639,10 +690,12 @@ public class CombatManager : Singleton<CombatManager>
             if(debuffs != default)
             {
                 foreach (Effect e in debuffs)
-                    InflictEffect(c, e);
+                    InflictEffect(monster, e);
             }
             if(OnPlayerDealDamage != default)
                 OnPlayerDealDamage(c);
+            if (OnAttack != default)
+                OnAttack();
         }, () => {
             // OnComplete
             StartCoroutine(TransitionCombatLayoutStyle(CombatLayoutStyle.DEFAULT, () => {
@@ -757,7 +810,7 @@ public class CombatManager : Singleton<CombatManager>
             return;
         }
         EnableDefensiveOptions();
-        DefensiveOptionsListener((a) => {
+        DefensiveOptionsListener((a, p) => {
             if(a == 1)
             {
                 // Avoided getting attacked
@@ -766,38 +819,78 @@ public class CombatManager : Singleton<CombatManager>
             }
             else if(a == -1)
             {
-                // Got attacked
-                if(c.GetArmor() >= monster.GetAttack())
+                if (p != default)
                 {
-                    // No damage will be taken, therefore avoid debuffs
-                    StartCoroutine(AnimatePlayerAttacked(c,
-                    () => {
-                        // OnAttack
-                        c.TakeDamage(monster.GetAttack());
-                    }, OnComplete));
+                    c = GetCombatantFromPlayer(p);
+                    RegularAttacked(c, OnComplete, debuffs);
                 }
                 else
                 {
-                    // Attack animation + effect + end monster turn
-                    StartCoroutine(AnimatePlayerAttacked(c,
-                    () => {
-                        // OnAttack
-                        c.TakeDamage(monster.GetAttack());
-                        if (debuffs != default)
+                    Skill revenge = AbilityManager.Instance.GetSkill("Revenge");
+                    if (AbilityManager.Instance.HasAbilityUnlocked(revenge) && PlayManager.Instance.GetAbilityCharges(c.player) >= revenge.cost && isYourTurn)
+                    {
+                        MakeChoice("Use Revenge", "Take Damage", true, true);
+                        ChoiceListener((a) =>
                         {
-                            foreach (Effect e in debuffs)
-                                InflictEffect(c, e);
-                        }
-                    }, () => {
-                        if (c.IsAlive())
-                            StartCoroutine(OnTakeDamage(c, OnComplete));
-                        else if (OnComplete != default)
-                            OnComplete();
-                    }));
-                }
+                            if (a == 1)
+                            {
+                                revenge.UseSkill();
+                                InflictEffect(c, new Effect("Power Up", 2, 1, true));
+                                // Got attacked
+                                if (c.GetArmor() >= monster.GetAttack())
+                                {
+                                    // No damage will be taken, therefore avoid debuffs
+                                    StartCoroutine(AnimatePlayerAttacked(c,
+                                    () => {
+                                        // OnAttack
+                                        c.TakeDamage(monster.GetAttack());
+                                       
+                                        StartCoroutine(AnimateMonsterTakeDamage(enemyCard, c.GetAttack(), () => {
+                                            monster.TakeDamage(c.GetAttack());
+                                        }));
 
-                // Visualize player attack for all other players
-                PlayManager.Instance.localPlayer.VisualizeAttackForOthers();
+                                        // Visualize player taking damage for all other players
+                                        PlayManager.Instance.localPlayer.VisualizeMonsterTakeDamageForOthers(c.GetAttack());
+                                    }, OnComplete));
+                                }
+                                else
+                                {
+                                    // Attack animation + effect + end monster turn
+                                    StartCoroutine(AnimatePlayerAttacked(c,
+                                    () => {
+                                        // OnAttack
+                                        c.TakeDamage(monster.GetAttack());
+
+                                        StartCoroutine(AnimateMonsterTakeDamage(enemyCard, c.GetAttack(), () => {
+                                            monster.TakeDamage(c.GetAttack());
+                                        }));
+
+                                        // Visualize player taking damage for all other players
+                                        PlayManager.Instance.localPlayer.VisualizeMonsterTakeDamageForOthers(c.GetAttack());
+
+                                        if (debuffs != default)
+                                        {
+                                            foreach (Effect e in debuffs)
+                                                InflictEffect(c, e);
+                                        }
+                                    }, () => {
+                                        if (c.IsAlive())
+                                            StartCoroutine(OnTakeDamage(c, OnComplete));
+                                        else if (OnComplete != default)
+                                            OnComplete();
+                                    }));
+                                }
+
+                                // Visualize player attack for all other players
+                                PlayManager.Instance.localPlayer.VisualizeAttackForOthers(c.player);
+                            }
+                            else
+                                RegularAttacked(c, OnComplete, debuffs);
+                        });
+                    }
+                    else
+                        RegularAttacked(c, OnComplete, debuffs);
+                }
             }
             else if(a == 99)
             {
@@ -805,6 +898,42 @@ public class CombatManager : Singleton<CombatManager>
                 EndCombat(CombatOverCheck());
             }
         });
+    }
+
+    private void RegularAttacked(Combatant c, Action OnComplete, List<Effect> debuffs = default)
+    {
+        // Got attacked
+        if (c.GetArmor() >= monster.GetAttack())
+        {
+            // No damage will be taken, therefore avoid debuffs
+            StartCoroutine(AnimatePlayerAttacked(c,
+            () => {
+                // OnAttack
+                c.TakeDamage(monster.GetAttack());
+            }, OnComplete));
+        }
+        else
+        {
+            // Attack animation + effect + end monster turn
+            StartCoroutine(AnimatePlayerAttacked(c,
+            () => {
+                // OnAttack
+                c.TakeDamage(monster.GetAttack());
+                if (debuffs != default)
+                {
+                    foreach (Effect e in debuffs)
+                        InflictEffect(c, e);
+                }
+            }, () => {
+                if (c.IsAlive())
+                    StartCoroutine(OnTakeDamage(c, OnComplete));
+                else if (OnComplete != default)
+                    OnComplete();
+            }));
+        }
+
+        // Visualize player attack for all other players
+        PlayManager.Instance.localPlayer.VisualizeAttackForOthers(c.player);
     }
 
     public void InstantKill(Combatant c, Action OnComplete = default)
@@ -840,7 +969,7 @@ public class CombatManager : Singleton<CombatManager>
     public void InflictEffect(Combatant c, Effect e)
     {
         if (c.combatantType == CombatantType.PLAYER)
-            c.player.GainStatusEffect(e.name, e.duration, e.potency);
+            c.player.GainStatusEffect(e.name, e.duration, e.potency, e.canStack, e.counter);
         else
             PlayManager.Instance.localPlayer.MonsterGainStatusEffect(e.name, e.duration, e.potency);
     }
@@ -867,6 +996,16 @@ public class CombatManager : Singleton<CombatManager>
             c.player.UseStatusEffect(effectName);
         else
             PlayManager.Instance.localPlayer.MonsterUseStatusEffect(effectName);
+    }
+
+    public void CleanseAllEffectsFromPlayer(Player p)
+    {
+        Combatant c = GetCombatantFromPlayer(p);
+        CleanseEffect(c, "Eaten");
+        CleanseEffect(c, "Enwebbed");
+        CleanseEffect(c, "Plagued");
+        CleanseEffect(c, "Poisoned");
+        CleanseEffect(c, "Weakened");
     }
 
     public void HealMonster(int amount)
@@ -1572,6 +1711,13 @@ public class CombatManager : Singleton<CombatManager>
 
     private void ResetCombat()
     {
+        OnPlayerDealDamage = default;
+        OnPlayerTakeDamage = default;
+        OnPlayerSpendAbilityCharge = default;
+        OnPlayerBeingAttacked = default;
+
+        receivedLoneWolf = false;
+        usedHoly = false;
         canUseAttackAbilities = false;
         usedItemThisTurn = false;
         waitUntil = false;
@@ -1589,6 +1735,7 @@ public class CombatManager : Singleton<CombatManager>
         {
             g.GetComponent<UIPlayerCard>().DrawStatusEffects(new List<Effect>());
         }
+        PlayManager.Instance.localPlayer.SetValue("IronWill", AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Iron Will")));
     }
 
     #region Stat Roll
@@ -1614,16 +1761,39 @@ public class CombatManager : Singleton<CombatManager>
     }
     #endregion
 
+    #region Choice
+    public void ChoiceListener(Action<int> Response)
+    {
+        StartCoroutine(WaitForChoice(Response));
+    }
+
+    IEnumerator WaitForChoice(Action<int> Response)
+    {
+        yield return new WaitUntil(() => FetchChoiceResult() != 0);
+        Response(FetchChoiceResult());
+    }
+
+    public void MakeChoice(string choice1, string choice2, bool condition1, bool condition2)
+    {
+        choice.GetComponent<UIChoice>().MakeChoice(choice1, choice2, condition1, condition2);
+    }
+
+    public int FetchChoiceResult()
+    {
+        return choice.GetComponent<UIChoice>().choice;
+    }
+    #endregion
+
     #region Defensive Options
-    public void DefensiveOptionsListener(Action<int> Response)
+    public void DefensiveOptionsListener(Action<int, Player> Response)
     {
         StartCoroutine(WaitForDefensiveOptions(Response));
     }
 
-    IEnumerator WaitForDefensiveOptions(Action<int> Response)
+    IEnumerator WaitForDefensiveOptions(Action<int, Player> Response)
     {
         yield return new WaitUntil(() => FetchDefensiveOptionsResult() != 0);
-        Response(FetchDefensiveOptionsResult());
+        Response(FetchDefensiveOptionsResult(), FetchDefensiveOptionsTargetPlayer());
     }
 
     public void EnableDefensiveOptions()
@@ -1634,6 +1804,11 @@ public class CombatManager : Singleton<CombatManager>
     private int FetchDefensiveOptionsResult()
     {
         return defensiveOptions.GetComponent<UIDefensiveOptions>().resolution;
+    }
+
+    private Player FetchDefensiveOptionsTargetPlayer()
+    {
+        return defensiveOptions.GetComponent<UIDefensiveOptions>().targetPlayer;
     }
     #endregion
 
@@ -1727,6 +1902,12 @@ public class CombatManager : Singleton<CombatManager>
         PlayManager.Instance.localPlayer.VisualizeMonsterTakeDamageForOthers(damage);
     }
 
+    public void UseHoly(Player p)
+    {
+        usedHoly = true;
+        HealPlayer(p, PlayManager.Instance.GetLevel(p) * 2);
+    }
+
     public void OnCharacterIsAttacked(Combatant c)
     {
         if(c.combatantType == CombatantType.PLAYER)
@@ -1737,5 +1918,16 @@ public class CombatManager : Singleton<CombatManager>
                 InflictEffect(c, new Effect("Armor Up", isYourTurn ? 2 : 1, 2, true));
             }
         }
+    }
+
+    public bool PlayerRequestedTaunt()
+    {
+        bool requested = false;
+        foreach (Player p in PlayManager.Instance.playerList)
+        {
+            if (p.RequestedTaunt.Value)
+                requested = true;
+        }
+        return requested;
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using AdventuresOfOldMultiplayer;
 
 public class UIDefensiveOptions : MonoBehaviour
 {
@@ -25,6 +26,7 @@ public class UIDefensiveOptions : MonoBehaviour
     public GameObject toggleShowButton;
     public Vector3 hiddenPosition;
     public int resolution;
+    public Player targetPlayer;
 
     private bool isHidden;
     private RectTransform rt;
@@ -87,7 +89,22 @@ public class UIDefensiveOptions : MonoBehaviour
             SetLockInput(false);
         });
 
-        // Actually send notification to all eligible players...
+        PlayManager.Instance.localPlayer.SetValue("RequestedTaunt", true);
+        PlayManager.Instance.localPlayer.SendRequestTauntNotifications();
+    }
+
+    public void TauntReceived()
+    {
+        foreach(Player p in PlayManager.Instance.playerList)
+        {
+            if (p.Taunting.Value)
+            {
+                targetPlayer = p;
+                p.SetValue("Taunting", false);
+            }
+        }
+        hadSuccess = true;
+        EnableOptions();
     }
 
     public void PayUp()
@@ -219,6 +236,7 @@ public class UIDefensiveOptions : MonoBehaviour
 
     IEnumerator AnimateClosing()
     {
+        PlayManager.Instance.localPlayer.SetValue("RequestedTaunt", false);
         opened = false;
 
         // First close the scroll
@@ -246,6 +264,7 @@ public class UIDefensiveOptions : MonoBehaviour
 
     public void ResetSize()
     {
+        targetPlayer = default;
         resolution = 0;
         hiddenResolution = 0;
         hadSuccess = false;

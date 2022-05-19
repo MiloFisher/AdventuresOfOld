@@ -17,6 +17,16 @@ public class Tooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler,
         display.SetActive(false);
     }
 
+    private void Update()
+    {
+        if (display.activeInHierarchy)
+        {
+            float scale = targetScale / GetCompositeParentsScale(transform);
+            display.transform.localScale = new Vector3(scale, scale, 1);
+            display.transform.localPosition = new Vector3(0, GetComponent<RectTransform>().sizeDelta.y * 0.5f + display.GetComponent<RectTransform>().sizeDelta.y * 0.5f * scale + gap * scale, 0);
+        }
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         hoveringOver = true;

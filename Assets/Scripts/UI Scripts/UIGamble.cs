@@ -53,7 +53,7 @@ public class UIGamble : MonoBehaviour
         for (int i = 1; i <= Global.animSteps; i++)
         {
             transform.localScale = new Vector3(startScale + dif * i * Global.animRate, startScale + dif * i * Global.animRate, 1);
-            yield return new WaitForSeconds(growingLength * Global.animTimeMod);
+            yield return new WaitForSeconds(growingLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Next open the scroll
@@ -61,7 +61,7 @@ public class UIGamble : MonoBehaviour
         for (int i = 1; i <= Global.animSteps; i++)
         {
             rt.sizeDelta = new Vector2(startWidth + dif * i * Global.animRate, constHeight);
-            yield return new WaitForSeconds(openingLength * Global.animTimeMod);
+            yield return new WaitForSeconds(openingLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Finally set opened to true
@@ -99,20 +99,20 @@ public class UIGamble : MonoBehaviour
         for (int i = 0; i < rollTimes; i++)
         {
             rollDisplay1.sprite = diceFaces[Random.Range(0, 6)];
-            yield return new WaitForSeconds(rollLength);
+            yield return new WaitForSeconds(rollLength * Global.animSpeed);
         }
 
         // End dice 1 first
         rollDisplay1.sprite = diceFaces[roll1 - 1];
 
-        yield return new WaitForSeconds(rollDisplayTime * 0.5f);
+        yield return new WaitForSeconds(rollDisplayTime * 0.5f * Global.animSpeed);
 
         // Animate dice 2
         rollTimes = Random.Range(80, 121);
         for (int i = 0; i < rollTimes; i++)
         {
             rollDisplay2.sprite = diceFaces[Random.Range(0, 6)];
-            yield return new WaitForSeconds(rollLength);
+            yield return new WaitForSeconds(rollLength * Global.animSpeed);
         }
 
         // End dice 2
@@ -130,7 +130,7 @@ public class UIGamble : MonoBehaviour
             hiddenSuccess = -1;
         }
 
-        yield return new WaitForSeconds(rollDisplayTime);
+        yield return new WaitForSeconds(rollDisplayTime * Global.animSpeed);
 
         // Start closing scroll
         StartCoroutine(AnimateClosing());
@@ -143,7 +143,7 @@ public class UIGamble : MonoBehaviour
         for (int i = Global.animSteps - 1; i >= 0; i--)
         {
             rt.sizeDelta = new Vector2(startWidth + dif * i * Global.animRate, constHeight);
-            yield return new WaitForSeconds(openingLength * Global.animTimeMod);
+            yield return new WaitForSeconds(openingLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // Next shrink the object
@@ -151,7 +151,7 @@ public class UIGamble : MonoBehaviour
         for (int i = Global.animSteps - 1; i >= 0; i--)
         {
             transform.localScale = new Vector3(startScale + dif * i * Global.animRate, startScale + dif * i * Global.animRate, 1);
-            yield return new WaitForSeconds(growingLength * Global.animTimeMod);
+            yield return new WaitForSeconds(growingLength * Global.animTimeMod * Global.animSpeed);
         }
 
         yield return new WaitForSeconds(waitTime);

@@ -350,9 +350,13 @@ public class PlayManager : Singleton<PlayManager>
         ShuffleDeck(encounterDeck);
 
         // *** Testing Only ***
-        encounterDeck[0] = testingCard;
-        quests[0] = testingCard1;
-        localPlayer.UpdateQuests(quests);
+        if(testingCard != default)
+            encounterDeck[0] = testingCard;
+        if (testingCard1 != default)
+        {
+            quests[0] = testingCard1;
+            localPlayer.UpdateQuests(quests);
+        }
 
         // 6) Miniboss and minion decks already set up
 
@@ -619,7 +623,7 @@ public class PlayManager : Singleton<PlayManager>
     {
         for (int i = 0; i < playerList.Count; i++)
         {
-            if (p.UUID.Value != playerList[i].UUID.Value && InAssistingRange(p, playerList[i], 1))
+            if (p.UUID.Value != playerList[i].UUID.Value && InAssistingRange(p, playerList[i], 0))
                 return true;
         }
         return false;
@@ -881,6 +885,8 @@ public class PlayManager : Singleton<PlayManager>
             case "ENG": result = GetMod(GetEnergy(localPlayer)); break;
             default: Debug.LogError("Unknown Stat Roll Type: " + statRollType); break;
         }
+        if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Generalist")))
+            result += 1;
         if (result < 0 && AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Elven Knowledge")))
             result = 0;
         return result;
@@ -931,20 +937,60 @@ public class PlayManager : Singleton<PlayManager>
 
     public void CombatNotificationOnComplete()
     {
-        MakeChoice("Assist in Combat", "Spectate Combat", InAssistingRange(turnOrderPlayerList[turnMarker], localPlayer, GetRange(localPlayer)) && GetHealth(localPlayer) > 0, true);
-        ChoiceListener((a) => {
-            if(a == 1)
-            {
-                // Assist functionality
-                localPlayer.SetValue("ParticipatingInCombat", 1);
-            }
-            else
-            {
-                // Spectate functionality
-                localPlayer.SetValue("ParticipatingInCombat", 0);
-            }
-            CallEncounterElement(7);
-        });
+        bool inRange = InAssistingRange(turnOrderPlayerList[turnMarker], localPlayer, GetRange(localPlayer));
+        bool inBattleChargeRange = InAssistingRange(turnOrderPlayerList[turnMarker], localPlayer, 2);
+        Skill battleCharge = AbilityManager.Instance.GetSkill("Battle Charge");
+        if (inRange)
+        {
+            MakeChoice("Assist in Combat", "Spectate Combat", GetHealth(localPlayer) > 0, true);
+            ChoiceListener((a) => {
+                if (a == 1)
+                {
+                    // Assist functionality
+                    localPlayer.SetValue("ParticipatingInCombat", 1);
+                }
+                else
+                {
+                    // Spectate functionality
+                    localPlayer.SetValue("ParticipatingInCombat", 0);
+                }
+                CallEncounterElement(7);
+            });
+        }
+        else if(inBattleChargeRange && AbilityManager.Instance.HasAbilityUnlocked(battleCharge))
+        {
+            MakeChoice("Assist with Battle Charge", "Spectate Combat", GetAbilityCharges(localPlayer) >= battleCharge.cost && GetHealth(localPlayer) > 0, true);
+            ChoiceListener((a) => {
+                if (a == 1)
+                {
+                    // Assist functionality
+                    battleCharge.UseSkill();
+                }
+                else
+                {
+                    // Spectate functionality
+                    localPlayer.SetValue("ParticipatingInCombat", 0);
+                }
+                CallEncounterElement(7);
+            });
+        }
+        else
+        {
+            MakeChoice("Assist in Combat", "Spectate Combat", false, true);
+            ChoiceListener((a) => {
+                if (a == 1)
+                {
+                    // Assist functionality
+                    localPlayer.SetValue("ParticipatingInCombat", 1);
+                }
+                else
+                {
+                    // Spectate functionality
+                    localPlayer.SetValue("ParticipatingInCombat", 0);
+                }
+                CallEncounterElement(7);
+            });
+        }
     }
 
     public void CombatNotification()
@@ -952,6 +998,19 @@ public class PlayManager : Singleton<PlayManager>
         string description = "<color=" + GetPlayerColorString(turnOrderPlayerList[turnMarker]) + ">" + turnOrderPlayerList[turnMarker].Name.Value + "</color> is fighting " + EncounterManager.Instance.GetEncounter().cardName + "!";
         Action action = CombatNotificationOnComplete;
         SendNotification(1, description, action);
+    }
+
+    public void RequestTauntNotification()
+    {
+        string description = "You may use the ability \"Taunt\" to intercept the incoming monster attack!";
+        SendNotification(2, description);
+    }
+
+    public void TauntReceivedNotification()
+    {
+        CombatManager.Instance.defensiveOptions.GetComponent<UIDefensiveOptions>().TauntReceived();
+        string description = "Another player has taunted for you!";
+        SendNotification(5, description);
     }
 
     public void ContinueToCombat()
@@ -1011,7 +1070,6 @@ public class PlayManager : Singleton<PlayManager>
     {
         LootManager.Instance.treasureTile = true;
         localPlayer.DrawLootCards(3, localPlayer.UUID.Value, true);
-        ResetEncounterFails();
         gameboard[localPlayer.Position.Value].DisableTreasureToken();
     }
 
@@ -3293,6 +3351,8 @@ public class PlayManager : Singleton<PlayManager>
             x += (itemReference[p.Weapon.Value + ""] as WeaponCard).damage;
         if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Heaven's Paragon"), p) && GetHealth(p) == GetMaxHealth(p))
             x += 2;
+        if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Battlelust"), p) && GetHealth(p) < GetMaxHealth(p) * 0.5f)
+            x += GetLevel(p);
         return x;
     }
     public int GetCrit(Player p)

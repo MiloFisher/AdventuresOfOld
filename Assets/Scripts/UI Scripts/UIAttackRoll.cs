@@ -35,6 +35,7 @@ public class UIAttackRoll : MonoBehaviour
     private int roll1 = 0;
     private int roll2 = 0;
     private bool rolling;
+    private bool focusUsed;
 
     private int playerPowerValue;
     private int monsterPowerValue;
@@ -96,6 +97,7 @@ public class UIAttackRoll : MonoBehaviour
 
     public void ResetSize()
     {
+        focusUsed = false;
         rolling = false;
         hiddenSuccess = 0;
         opened = false;
@@ -154,6 +156,125 @@ public class UIAttackRoll : MonoBehaviour
             crit = true;
             successText.SetActive(true);
             hiddenSuccess = 1;
+
+            yield return new WaitForSeconds(rollDisplayTime * Global.animSpeed);
+
+            // Start closing scroll
+            StartCoroutine(AnimateClosing());
+        }
+        else if (roll1 == 1 && roll2 == 1)
+        {
+            failureText.SetActive(true);
+            hiddenSuccess = -1;
+
+            yield return new WaitForSeconds(rollDisplayTime * Global.animSpeed);
+
+            // Start closing scroll
+            StartCoroutine(AnimateClosing());
+        }
+        else if (roll1 + roll2 + playerPowerValue > monsterPowerValue)
+        {
+            successText.SetActive(true);
+            hiddenSuccess = 1;
+
+            yield return new WaitForSeconds(rollDisplayTime * Global.animSpeed);
+
+            // Start closing scroll
+            StartCoroutine(AnimateClosing());
+        }
+        else if (roll1 + roll2 + playerPowerValue < monsterPowerValue)
+        {
+            if(AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Focus")) && (roll1 == 1 || roll2 == 1) && !focusUsed)
+            {
+                focusUsed = true;
+                PlayManager.Instance.SendNotification(6, "Your (1) is being re-rolled!", () => {
+                    StartCoroutine(Reroll1(roll1 == 1));
+                });
+            }
+            else
+            {
+                failureText.SetActive(true);
+                hiddenSuccess = -1;
+
+                yield return new WaitForSeconds(rollDisplayTime * Global.animSpeed);
+
+                // Start closing scroll
+                StartCoroutine(AnimateClosing());
+            }
+        }
+        else
+        {
+            if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Focus")) && (roll1 == 1 || roll2 == 1) && !focusUsed)
+            {
+                focusUsed = true;
+                PlayManager.Instance.SendNotification(6, "Your (1) is being re-rolled!", () => {
+                    StartCoroutine(Reroll1(roll1 == 1));
+                });
+            }
+            else
+            {
+                tieText.SetActive(true);
+
+                yield return new WaitForSeconds(rollDisplayTime * Global.animSpeed);
+
+                rolling = false;
+                tieText.SetActive(false);
+                rollButton.SetActive(true);
+            }
+        }
+    }
+
+    IEnumerator Reroll1(bool targetRoll1)
+    {
+        int rollTimes = Random.Range(80, 121);
+
+        if (targetRoll1)
+        {
+            roll1 = Random.Range(1, 7);
+
+            // Flash through random dice faces
+            for (int i = 0; i < rollTimes; i++)
+            {
+                rollDisplay1.sprite = diceFaces[Random.Range(0, 6)];
+                yield return new WaitForSeconds(rollLength * Global.animSpeed);
+            }
+
+            // End dice 1
+            rollDisplay1.sprite = diceFaces[roll1 - 1];
+        }
+        else
+        {
+            roll2 = Random.Range(1, 7);
+
+            // Flash through random dice faces
+            for (int i = 0; i < rollTimes; i++)
+            {
+                rollDisplay2.sprite = diceFaces[Random.Range(0, 6)];
+                yield return new WaitForSeconds(rollLength * Global.animSpeed);
+            }
+
+            // End dice 2
+            rollDisplay2.sprite = diceFaces[roll2 - 1];
+        }
+
+        int playerCritValue = PlayManager.Instance.GetCrit(PlayManager.Instance.localPlayer);
+
+        // Display success or failure
+        if (roll1 + roll2 >= playerCritValue)
+        {
+            crit = true;
+            successText.SetActive(true);
+            hiddenSuccess = 1;
+
+            yield return new WaitForSeconds(rollDisplayTime * Global.animSpeed);
+
+            // Start closing scroll
+            StartCoroutine(AnimateClosing());
+        }
+        else if (roll1 == 1 && roll2 == 1)
+        {
+            failureText.SetActive(true);
+            hiddenSuccess = -1;
 
             yield return new WaitForSeconds(rollDisplayTime * Global.animSpeed);
 

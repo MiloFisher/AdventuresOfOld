@@ -183,12 +183,15 @@ public class UIAbilityDisplay : MonoBehaviour
             yield return new WaitForSeconds(openingLength * Global.animTimeMod * Global.animSpeed);
         }
 
+        if (combatOptions.opened)
+        {
+            combatOptions.SetLockInput(true);
+            CombatManager.Instance.SetCanUseAttackAbilities(true);
+        }
+        
         // Finally set opened to true
         opened = true;
         animating = false;
-
-        if (combatOptions.opened)
-            combatOptions.SetLockInput(false);
     }
 
     IEnumerator AnimateClosing(Action OnComplete = default)
@@ -216,6 +219,9 @@ public class UIAbilityDisplay : MonoBehaviour
 
         gameObject.SetActive(false);
         animating = false;
+
+        if (combatOptions.opened)
+            combatOptions.SetLockInput(false);
 
         if (OnComplete != default)
             OnComplete();

@@ -192,7 +192,7 @@ public class UICharacterSheet : MonoBehaviour
                 energyMod.text = plus + PlayManager.Instance.GetMod(PlayManager.Instance.GetEnergy(p) + temporaryEnergy);
         }
 
-        if(PlayManager.Instance.GetLevelUpPoints(p) > 0)
+        if(PlayManager.Instance.GetLevelUpPoints(p) > 0 && p.UUID.Value == PlayManager.Instance.localPlayer.UUID.Value)
         {
             strengthIncrementButton.SetActive(true);
             strengthDecrementButton.SetActive(true);

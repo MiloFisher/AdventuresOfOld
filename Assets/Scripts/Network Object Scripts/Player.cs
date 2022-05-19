@@ -65,6 +65,11 @@ namespace AdventuresOfOldMultiplayer
         public NetworkVariable<bool> GrabbedHorse = new NetworkVariable<bool>();
         public NetworkVariable<bool> KilledGoblin = new NetworkVariable<bool>();
 
+        // Ability data
+        public NetworkVariable<bool> RequestedTaunt = new NetworkVariable<bool>();
+        public NetworkVariable<bool> Taunting = new NetworkVariable<bool>();
+        public NetworkVariable<bool> IronWill = new NetworkVariable<bool>();
+
         public override void OnNetworkSpawn()
         {
             if (IsOwner)
@@ -221,6 +226,9 @@ namespace AdventuresOfOldMultiplayer
                 case "BetrayedBoy": BetrayedBoy.Value = value; break;
                 case "GrabbedHorse": GrabbedHorse.Value = value; break;
                 case "KilledGoblin": KilledGoblin.Value = value; break;
+                case "RequestedTaunt": RequestedTaunt.Value = value; break;
+                case "Taunting": Taunting.Value = value; break;
+                case "IronWill": IronWill.Value = value; break;
                 default: Debug.LogError("Unknown Value: \"" + valueName + "\""); break;
             }
         }
@@ -639,6 +647,8 @@ namespace AdventuresOfOldMultiplayer
                 {
                     LevelUp(PlayManager.Instance.GetNeededXP(this));
                     PlayManager.Instance.LevelUpNotification();
+                    if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Highborn"), this))
+                        GainGold(10);
                 }
             }
         }
@@ -711,6 +721,16 @@ namespace AdventuresOfOldMultiplayer
                 {
                     Health.Value = 0;
                     XP.Value = 0;
+                    if(CombatManager.Instance.InCombat())
+                    {
+                        CombatManager.Instance.CleanseAllEffectsFromPlayer(this);
+                        if (IronWill.Value)
+                        {
+                            Health.Value = 1;
+                            IronWill.Value = false;
+                            IronWillClientRPC();
+                        }
+                    }
                 }
             }
             else
@@ -725,6 +745,25 @@ namespace AdventuresOfOldMultiplayer
             {
                 Health.Value = 0;
                 XP.Value = 0;
+                if (CombatManager.Instance.InCombat())
+                {
+                    CombatManager.Instance.CleanseAllEffectsFromPlayer(this);
+                    if (IronWill.Value)
+                    {
+                        Health.Value = 1;
+                        IronWill.Value = false;
+                        IronWillClientRPC();
+                    }
+                }
+            }
+        }
+
+        [ClientRpc]
+        private void IronWillClientRPC(ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                PlayManager.Instance.SendNotification(7, "You have been revived\nwith +1 Health");
             }
         }
 
@@ -1106,27 +1145,42 @@ namespace AdventuresOfOldMultiplayer
             }
         }
 
-        public void VisualizeAttackForOthers()
+        public void VisualizeAttackForOthers(Player differentTarget = default)
         {
             FixedString64Bytes uuid = UUID.Value;
+            FixedString64Bytes uuid2 = default;
+            if (differentTarget != default)
+            {
+                uuid2 = differentTarget.UUID.Value;
+            }
             if (NetworkManager.Singleton.IsServer)
             {
                 foreach (Player p in PlayManager.Instance.playerList)
                 {
                     if (p.UUID.Value != uuid)
-                        p.VisualizeAttackForOthersClientRPC(uuid);
+                    {
+                        if(uuid2 == default)
+                            p.VisualizeAttackForOthersClientRPC(uuid);
+                        else
+                            p.VisualizeAttackForOthersClientRPC(uuid2);
+                    }
                 }
             }
             else
-                VisualizeAttackForOthersServerRPC(uuid);
+                VisualizeAttackForOthersServerRPC(uuid, uuid2);
         }
         [ServerRpc]
-        private void VisualizeAttackForOthersServerRPC(FixedString64Bytes uuid, ServerRpcParams rpcParams = default)
+        private void VisualizeAttackForOthersServerRPC(FixedString64Bytes uuid, FixedString64Bytes uuid2, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
             {
                 if (p.UUID.Value != uuid)
-                    p.VisualizeAttackForOthersClientRPC(uuid);
+                {
+                    if (uuid2 == default)
+                        p.VisualizeAttackForOthersClientRPC(uuid);
+                    else
+                        p.VisualizeAttackForOthersClientRPC(uuid2);
+                }
             }
         }
         [ClientRpc]
@@ -1136,7 +1190,7 @@ namespace AdventuresOfOldMultiplayer
             {
                 foreach (Player p in PlayManager.Instance.playerList)
                 {
-                    if(p.UUID.Value == uuid)
+                    if (p.UUID.Value == uuid)
                         CombatManager.Instance.VisualizePlayerAttacked(p);
                 }
             }
@@ -1178,29 +1232,29 @@ namespace AdventuresOfOldMultiplayer
             }
         }
 
-        public void GainStatusEffect(string name, int duration, int potency)
+        public void GainStatusEffect(string name, int duration, int potency, bool canStack, int counter)
         {
             FixedString64Bytes uuid = UUID.Value;
             if (NetworkManager.Singleton.IsServer)
             {
                 foreach (Player p in PlayManager.Instance.playerList)
-                    p.GainStatusEffectClientRPC(uuid, name, duration, potency);
+                    p.GainStatusEffectClientRPC(uuid, name, duration, potency, canStack, counter);
             }
             else
-                GainStatusEffectServerRPC(uuid, name, duration, potency);
+                GainStatusEffectServerRPC(uuid, name, duration, potency, canStack, counter);
         }
         [ServerRpc]
-        private void GainStatusEffectServerRPC(FixedString64Bytes uuid, FixedString64Bytes name, int duration, int potency, ServerRpcParams rpcParams = default)
+        private void GainStatusEffectServerRPC(FixedString64Bytes uuid, FixedString64Bytes name, int duration, int potency, bool canStack, int counter, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
-                p.GainStatusEffectClientRPC(uuid, name, duration, potency);
+                p.GainStatusEffectClientRPC(uuid, name, duration, potency, canStack, counter);
         }
         [ClientRpc]
-        public void GainStatusEffectClientRPC(FixedString64Bytes uuid, FixedString64Bytes name, int duration, int potency, ClientRpcParams clientRpcParams = default)
+        public void GainStatusEffectClientRPC(FixedString64Bytes uuid, FixedString64Bytes name, int duration, int potency, bool canStack, int counter, ClientRpcParams clientRpcParams = default)
         {
             if (IsOwner && !isBot)
             {
-                Effect e = new Effect(name + "", duration, potency);
+                Effect e = new Effect(name + "", duration, potency, canStack, counter);
                 foreach(Player p in PlayManager.Instance.playerList)
                 {
                     if(p.UUID.Value == uuid)
@@ -1844,6 +1898,80 @@ namespace AdventuresOfOldMultiplayer
             if (IsOwner && !isBot)
             {
                 PlayManager.Instance.SetBoss(cardName + "");
+            }
+        }
+
+        public void SendRequestTauntNotifications()
+        {
+            FixedString64Bytes uuid = UUID.Value;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value != uuid && AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Taunt"), p))
+                        p.SendRequestTauntNotificationsClientRPC();
+                }
+            }
+            else
+                SendRequestTauntNotificationsServerRPC(uuid);
+        }
+        [ServerRpc]
+        private void SendRequestTauntNotificationsServerRPC(FixedString64Bytes uuid, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+            {
+                if (p.UUID.Value != uuid && AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Taunt"), p))
+                    p.SendRequestTauntNotificationsClientRPC();
+            }
+        }
+        [ClientRpc]
+        private void SendRequestTauntNotificationsClientRPC(ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner)
+            {
+                if (!isBot)
+                    PlayManager.Instance.RequestTauntNotification();
+                else
+                {
+
+                }
+            }
+        }
+
+        public void SendTauntReceivedNotification(Player target)
+        {
+            FixedString64Bytes uuid = target.UUID.Value;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value == uuid)
+                        p.SendTauntReceivedNotificationClientRPC();
+                }
+            }
+            else
+                SendTauntReceivedNotificationServerRPC(uuid);
+        }
+        [ServerRpc]
+        private void SendTauntReceivedNotificationServerRPC(FixedString64Bytes uuid, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+            {
+                if (p.UUID.Value == uuid)
+                    p.SendTauntReceivedNotificationClientRPC();
+            }
+        }
+        [ClientRpc]
+        private void SendTauntReceivedNotificationClientRPC(ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner)
+            {
+                if (!isBot)
+                    PlayManager.Instance.TauntReceivedNotification();
+                else
+                {
+
+                }
             }
         }
         #endregion

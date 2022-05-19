@@ -220,13 +220,29 @@ public class LootManager : Singleton<LootManager>
 
         // Finally deactivate banner
         lootBanner.SetActive(false);
-        treasureTile = false;
 
         if (endTurnAfter)
-            PlayManager.Instance.EndTurn();
+        {
+            if(treasureTile)
+            {
+                if(AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Treasure Hunter")))
+                {
+                    PlayManager.Instance.DefaultTile();
+                }
+                else
+                {
+                    PlayManager.Instance.ResetEncounterFails();
+                    PlayManager.Instance.EndTurn();
+                }
+            }
+            else
+                PlayManager.Instance.EndTurn();
+        }
 
         if (forStore)
             PlayManager.Instance.localPlayer.ReadyUp();
+
+        treasureTile = false;
     }
 
     IEnumerator AnimateCardDraw(int current, int amount)

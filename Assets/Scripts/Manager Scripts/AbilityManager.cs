@@ -106,24 +106,6 @@ public class AbilityManager : Singleton<AbilityManager>
         };
     }
 
-    public bool CanUseSkill(Skill s, Player p = default)
-    {
-        if (s == default)
-            return default;
-        if (p == default)
-            p = PlayManager.Instance.localPlayer;
-
-        if (s.type == SkillType.ATTACK)
-            return PlayManager.Instance.GetAbilityCharges(p) >= s.cost && CombatManager.Instance.InCombat() && CombatManager.Instance.CanUseAttackAbilities();
-        else if (s.type == SkillType.UTILITY)
-        {
-            // Special case for all utility abilities
-            return PlayManager.Instance.GetAbilityCharges(p) >= s.cost && false;
-        }
-        else
-            return false;
-    }
-
     public Color GetSkillColor(Skill s)
     {
         if (s == default)
@@ -168,7 +150,7 @@ public class AbilityManager : Singleton<AbilityManager>
         textContainer.text = "<b><color=" + FormatColorString(s) + ">" + s.skillName + "</color></b>" + FormatCost(s.cost, s.type) + "\n" + FormatRequirement(s.requirement, s.school) + " " + FormatType(s.type) + "\n" + s.description;
         textContainer.ForceMeshUpdate(true, true);
         if(textContainer.textInfo != null)
-            display.GetComponent<RectTransform>().sizeDelta = new Vector2(5000, 580 + 320 * textContainer.textInfo.lineCount);
+            display.GetComponent<RectTransform>().sizeDelta = new Vector2(5000, 560 + 340 * textContainer.textInfo.lineCount);
     }
 
     private string FormatCost(int cost, SkillType type)
@@ -210,6 +192,32 @@ public class AbilityManager : Singleton<AbilityManager>
         return "#" + ColorUtility.ToHtmlStringRGB(GetSkillColor(s));
     }
 
+    public bool CanUseSkill(Skill s, Player p = default)
+    {
+        if (s == default)
+            return default;
+        if (p == default)
+            p = PlayManager.Instance.localPlayer;
+
+        if (s.type == SkillType.ATTACK)
+            return PlayManager.Instance.GetAbilityCharges(p) >= s.cost && CombatManager.Instance.InCombat() && CombatManager.Instance.CanUseAttackAbilities();
+        else if (s.type == SkillType.UTILITY)
+        {
+            if (PlayManager.Instance.GetAbilityCharges(p) < s.cost)
+                return false;
+            // Special case for all utility abilities
+            return s.skillName switch
+            {
+                "Holy" => CombatManager.Instance.InCombat() && !CombatManager.Instance.usedHoly,
+                "Taunt" => CombatManager.Instance.PlayerRequestedTaunt(),
+                "Rally" => CombatManager.Instance.InCombat(),
+                _ => false
+            };
+        }
+        else
+            return false;
+    }
+
     public void AttackSkillUsed(Skill s)
     {
         abilityDisplay.GetComponent<UIAbilityDisplay>().Close(() => {
@@ -231,7 +239,7 @@ public class AbilityManager : Singleton<AbilityManager>
     #region Warrior Abilities
     private void Battlelust()
     {
-
+        // Done in PlayManager GetAttack(Player p)
     }
 
     private void BalancedStrike()
@@ -241,7 +249,7 @@ public class AbilityManager : Singleton<AbilityManager>
 
     private void Revenge()
     {
-
+        // Done in CombatManager AttackPlayer(Combatant c, Action OnComplete, List<Effect> debuffs = default)
     }
 
     private void CrushingBlow()
@@ -251,12 +259,25 @@ public class AbilityManager : Singleton<AbilityManager>
 
     private void IronWill()
     {
-
+        // Done in Player TakeDamage(int amount, int armor, bool isTrue = false)
     }
 
     private void Rally()
     {
-
+        // *** Has special use case ***
+        string uuid = default;
+        if (CombatManager.Instance.turnOrderCombatantList[CombatManager.Instance.combatTurnMarker].combatantType == CombatantType.PLAYER)
+            uuid = CombatManager.Instance.turnOrderCombatantList[CombatManager.Instance.combatTurnMarker].player.UUID.Value + "";
+        foreach (Combatant c in CombatManager.Instance.turnOrderCombatantList)
+        {
+            if(c.combatantType == CombatantType.PLAYER)
+            {
+                if (c.player.UUID.Value == uuid)
+                    CombatManager.Instance.InflictEffect(c, new Effect("Power Up", 2, 1, true));
+                else
+                    CombatManager.Instance.InflictEffect(c, new Effect("Power Up", 1, 1, true));
+            }
+        }
     }
     #endregion
 
@@ -429,27 +450,37 @@ public class AbilityManager : Singleton<AbilityManager>
     #region General Abilities
     private void Taunt()
     {
-
+        // *** Has special use case ***
+        PlayManager.Instance.localPlayer.SetValue("Taunting", true);
+        foreach(Player p in PlayManager.Instance.playerList)
+        {
+            if (p.RequestedTaunt.Value)
+            {
+                p.SetValue("RequestedTaunt", false);
+                PlayManager.Instance.localPlayer.SendTauntReceivedNotification(p);
+            }
+        }
     }
 
     private void BattleCharge()
     {
-
+        PlayManager.Instance.localPlayer.SetValue("ParticipatingInCombat", 1);
+        PlayManager.Instance.localPlayer.SetPosition(PlayManager.Instance.turnOrderPlayerList[PlayManager.Instance.turnMarker].Position.Value);
     }
 
     private void Dodge()
     {
-
+        // Done in UIDefenseManager and in UIDodgeRoll
     }
 
     private void TreasureHunter()
     {
-
+        // Done in LootManager AnimateClosing()
     }
 
     private void Focus()
     {
-
+        // Done in UIAttackRoll AnimateDiceRoll()
     }
 
     private void SapEnergy()
@@ -500,47 +531,48 @@ public class AbilityManager : Singleton<AbilityManager>
     #region Trait Abilities
     private void Berserk()
     {
-
+        // Done in Combatant TakeDamage(int amount, bool isTrue = false)
     }
 
     private void FleetFooted()
     {
-
+        // Done in Character Creation Scene
     }
 
     private void Generalist()
     {
-
+        // Done in PlayManager GetStatModFromType(string statRollType)
     }
 
     private void Healthy()
     {
-
+        // Done in Character Creation Scene
     }
 
     private void Highborn()
     {
-
+        // Done in Character Creation Scene and in Player LevelUpCheckClientRPC(ClientRpcParams clientRpcParams = default)
     }
 
     private void Holy()
     {
-
+        // *** Has special use case ***
+        CombatManager.Instance.UseHoly(PlayManager.Instance.localPlayer);
     }
 
     private void Looter()
     {
-
+        // Done in CombatManager EndCombat(int result)
     }
 
     private void Mystical()
     {
-
+        // Done in Character Creation Scene
     }
 
     private void Powerful()
     {
-
+        // Done in Character Creation Scene
     }
     #endregion
 }

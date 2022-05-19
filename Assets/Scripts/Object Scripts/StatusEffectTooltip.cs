@@ -19,6 +19,16 @@ public class StatusEffectTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
         display.SetActive(false);
     }
 
+    private void Update()
+    {
+        if (display.activeInHierarchy)
+        {
+            float scale = targetScale / GetCompositeParentsScale(transform);
+            display.transform.localScale = new Vector3(scale, scale, 1);
+            display.transform.localPosition = new Vector3(0, GetComponent<RectTransform>().sizeDelta.y * 0.5f + display.GetComponent<RectTransform>().sizeDelta.y * 0.5f * scale + gap * scale, 0);
+        }
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         hoveringOver = true;
@@ -85,8 +95,11 @@ public class StatusEffectTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
 
     public void SetupDisplay(Effect e)
     {
-        display.GetComponentInChildren<TMP_Text>().text = "<b>Effect: <color=" + GetNameColor(e.name) + ">" + e.name + "</color>" + GetTurnCount(e.duration) + "\n" + GetDescription(e.name, e.potency, e.counter);
-        display.GetComponent<RectTransform>().sizeDelta = new Vector2(5000, 900 + GetHeight(e.name) * 300);
+        TMP_Text textContainer = display.GetComponentInChildren<TMP_Text>();
+        textContainer.text = "<b>Effect: <color=" + GetNameColor(e.name) + ">" + e.name + "</color>" + GetTurnCount(e.duration) + "\n" + GetDescription(e.name, e.potency, e.counter);
+        textContainer.ForceMeshUpdate(true, true);
+        if (textContainer.textInfo != null)
+            display.GetComponent<RectTransform>().sizeDelta = new Vector2(5000, 560 + 340 * textContainer.textInfo.lineCount);
     }
 
     private string GetDescription(string effectName, int potency, int counter)
@@ -107,27 +120,6 @@ public class StatusEffectTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
             "Power Down" => "Has their <color=#F16724>Physical Power</color> and <color=#76A5D8>Magical Power</color> reduced by " + GetFormattedNumber(potency) + ".",
             "Power Fantasy" => "Revives with +" + GetFormattedNumber(1) + " <color=#F16724>Physical Power</color>,\n+" + GetFormattedNumber(1) + " <color=#76A5D8>Magical Power</color>, and " + GetFormattedNumber(1) + " Health upon death.",
             _ => "Unknown Effect: " + effectName
-        };
-    }
-
-    private int GetHeight(string effectName)
-    {
-        return effectName switch
-        {
-            "Eaten" => 3,
-            "Enwebbed" => 1,
-            "Plagued" => 1,
-            "Poisoned" => 4,
-            "Weakened" => 1,
-            "Bleeding" => 2,
-            "Burning" => 2,
-            "Dazed" => 2,
-            "Power Up" => 2,
-            "Attack Up" => 1,
-            "Armor Up" => 1,
-            "Power Down" => 2,
-            "Power Fantasy" => 3,
-            _ => 1
         };
     }
 

@@ -174,7 +174,12 @@ public class Combatant
     public void TakeDamage(int amount, bool isTrue = false)
     {
         if (combatantType == CombatantType.PLAYER)
+        {
+            if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Berserk"), player))
+                CombatManager.Instance.InflictEffect(this, new Effect("Attack Up", -1, 2, true));
+
             player.TakeDamage(amount, GetArmor(), isTrue);
+        }
         else
         {
             currentHealth -= amount;
@@ -219,7 +224,7 @@ public class Combatant
         bool alreadyContains = false;
         for(int i = 0; i < statusEffects.Count; i++)
         {
-            if(statusEffects[i].name == e.name && !e.canHaveMultipleStacks)
+            if(statusEffects[i].name == e.name && !e.canStack)
             {
                 alreadyContains = true;
                 if (e.potency > statusEffects[i].potency || (e.potency == statusEffects[i].potency && e.duration > statusEffects[i].duration && e.counter >= statusEffects[i].counter))
@@ -311,7 +316,7 @@ public class Combatant
         {
             if (statusEffects[i].name == effectName)
             {
-                if (statusEffects[i].canHaveMultipleStacks)
+                if (statusEffects[i].canStack)
                 {
                     canHaveMultipleStacks = true;
                     total += statusEffects[i].potency;
