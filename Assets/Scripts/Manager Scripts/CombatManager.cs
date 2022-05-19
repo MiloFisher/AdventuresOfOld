@@ -40,7 +40,7 @@ public class CombatManager : Singleton<CombatManager>
     public float originY;
     public bool isYourTurn;
     public bool isMonsterTurn;
-    public int[] monsterTargets;
+    public int[] monsterTargets = new int[0];
     public bool fleeingPrevented;
     public CombatLayoutStyle combatLayoutStyle;
     public int attackerId;
@@ -620,8 +620,6 @@ public class CombatManager : Singleton<CombatManager>
                         {
                             // player attacks monster
                             int damage = c.GetAttack();
-                            if (crit)
-                                damage *= 2;
 
                             switch(s.skillName)
                             {
@@ -631,13 +629,13 @@ public class CombatManager : Singleton<CombatManager>
                                     });
                                     break;
                                 case "Balanced Strike":
-                                    AttackMonster(c, damage + PlayManager.Instance.GetMod(PlayManager.Instance.GetStrength(c.player)));
+                                    AttackMonster(c, crit ? (damage + PlayManager.Instance.GetMod(PlayManager.Instance.GetStrength(c.player))) * 2 : damage + PlayManager.Instance.GetMod(PlayManager.Instance.GetStrength(c.player)));
                                     break;
                                 case "Crushing Blow":
-                                    AttackMonster(c, damage, new List<Effect> { new Effect("Dazed", -1) });
+                                    AttackMonster(c, crit ? damage * 2 : damage, new List<Effect> { new Effect("Dazed", -1) });
                                     break;
                                 default:
-                                    AttackMonster(c, damage);
+                                    AttackMonster(c, crit ? damage * 2 : damage);
                                     break;
                             }
                         }
@@ -1102,7 +1100,7 @@ public class CombatManager : Singleton<CombatManager>
             case Target.HIGHEST_HEALTH:
                 return new int[] { GetHighestHealthPlayerIndex() };
         };
-        return default;
+        return new int[0];
     }
 
     private int GetLowestHealthPlayerIndex()
@@ -1713,7 +1711,7 @@ public class CombatManager : Singleton<CombatManager>
 
     private void ResetCombat()
     {
-        monsterTargets = default;
+        monsterTargets = new int[0];
         OnPlayerDealDamage = default;
         OnPlayerTakeDamage = default;
         OnPlayerSpendAbilityCharge = default;
