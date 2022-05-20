@@ -883,6 +883,7 @@ public class CombatManager : Singleton<CombatManager>
         {
             if (OnComplete != default)
                 OnComplete();
+            PlayManager.Instance.SendNotification(10, "The monster failed to attack you!");
             return;
         }
         if (monster.IsDazed())
@@ -890,6 +891,7 @@ public class CombatManager : Singleton<CombatManager>
             if (OnComplete != default)
                 OnComplete();
             CleanseEffect(monster, "Dazed");
+            PlayManager.Instance.SendNotification(9, "The monster failed to attack you!");
             return;
         }
         EnableDefensiveOptions();
