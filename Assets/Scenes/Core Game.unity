@@ -87144,7 +87144,7 @@ MonoBehaviour:
   locationImage: {fileID: 1585979948}
   npcImage: {fileID: 2050097409}
   locationImages:
-  - {fileID: 0}
+  - {fileID: 21300000, guid: 865f2cf6b866a8d46b71b3e26fb4089a, type: 3}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
