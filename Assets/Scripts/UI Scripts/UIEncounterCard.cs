@@ -108,7 +108,10 @@ public class UIEncounterCard : MonoBehaviour
             monsterImage.sprite = m.image;
             monsterCardName.text = m.cardName;
             monsterHealth.text = m.health + PlayManager.Instance.HealthModifier() + "";
-            monsterAttack.text = m.attack + PlayManager.Instance.AttackModifier() + "";
+            if(m.cardName == "Spider Egg")
+                monsterAttack.text = m.attack + "";
+            else
+                monsterAttack.text = m.attack + PlayManager.Instance.AttackModifier() + "";
             monsterSpeed.text = m.speed + "";
             monsterPhysicalPower.text = m.physicalPower + PlayManager.Instance.PowerModifier() + "";
             monsterMagicalPower.text = m.magicalPower + PlayManager.Instance.PowerModifier() + "";

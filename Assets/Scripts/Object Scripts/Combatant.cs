@@ -204,7 +204,12 @@ public class Combatant
             return;
 
         if (combatantType == CombatantType.PLAYER)
+        {
+            if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Angelic Wrath"), player))
+                CombatManager.Instance.InflictEffect(this, new Effect("Attack Up", -1, 2, true));
+
             player.RestoreHealth(amount);
+        }
         else
         {
             currentHealth += amount;

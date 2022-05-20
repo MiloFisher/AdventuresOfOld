@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using AdventuresOfOldMultiplayer;
 
 public class UIAttackRoll : MonoBehaviour
 {
@@ -40,11 +41,17 @@ public class UIAttackRoll : MonoBehaviour
     private int playerPowerValue;
     private int monsterPowerValue;
 
-    public void MakeAttackRoll(int _playerPower, int _monsterPower, string attackName)
+    private Combatant attackingPlayer;
+
+    public void MakeAttackRoll(Combatant c, int _monsterPower, string attackName)
     {
         crit = false;
         success = 0;
-        playerPowerValue = _playerPower;
+        attackingPlayer = c;
+        if (PlayManager.Instance.IsPhysicalBased(attackingPlayer.player))
+            playerPowerValue = attackingPlayer.GetPhysicalPower();
+        else
+            playerPowerValue = attackingPlayer.GetMagicalPower();
         monsterPowerValue = _monsterPower;
         playerPower.text = playerPowerValue + "";
         monsterPower.text = monsterPowerValue + "";
@@ -65,11 +72,19 @@ public class UIAttackRoll : MonoBehaviour
 
     private void Update()
     {
-        if (CombatManager.Instance.CombatOverCheck() > -1 && !rolling && opened)
+        if(opened)
         {
-            rolling = true;
-            hiddenSuccess = 99;
-            StartCoroutine(AnimateClosing());
+            if (PlayManager.Instance.IsPhysicalBased(attackingPlayer.player))
+                playerPowerValue = attackingPlayer.GetPhysicalPower();
+            else
+                playerPowerValue = attackingPlayer.GetMagicalPower();
+            playerPower.text = playerPowerValue + "";
+            if (CombatManager.Instance.CombatOverCheck() > -1 && !rolling)
+            {
+                rolling = true;
+                hiddenSuccess = 99;
+                StartCoroutine(AnimateClosing());
+            }
         }
     }
 
@@ -315,6 +330,8 @@ public class UIAttackRoll : MonoBehaviour
 
     IEnumerator AnimateClosing()
     {
+        opened = false;
+
         // First close the scroll
         float dif = endWidth - startWidth;
         for (int i = Global.animSteps - 1; i >= 0; i--)
@@ -334,5 +351,6 @@ public class UIAttackRoll : MonoBehaviour
         yield return new WaitForSeconds(waitTime * Global.animSpeed);
 
         gameObject.SetActive(false);
+        PlayManager.Instance.localPlayer.SetValue("HasYetToAttack", false);
     }
 }

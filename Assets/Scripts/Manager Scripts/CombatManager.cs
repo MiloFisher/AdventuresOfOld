@@ -406,6 +406,7 @@ public class CombatManager : Singleton<CombatManager>
 
     public void StartTurn()
     {
+        PlayManager.Instance.localPlayer.SetValue("HasYetToAttack", true);
         isYourTurn = true;
         if (!PlayManager.Instance.transitions.transform.GetChild(4).gameObject.activeInHierarchy && !combatFadeOverlay.activeInHierarchy)
             PlayManager.Instance.CallTransition(5);
@@ -544,19 +545,12 @@ public class CombatManager : Singleton<CombatManager>
                 attackerId = GetIdFromCombatant(c);
                 // Make sure to sync this between all players if we decide to have all players see this
                 StartCoroutine(TransitionCombatLayoutStyle(CombatLayoutStyle.ATTACKING, () => {
-                    int playerPower = 0;
                     int monsterPower = 0;
                     if (PlayManager.Instance.IsPhysicalBased(c.player))
-                    {
-                        playerPower = c.GetPhysicalPower();
                         monsterPower = monster.GetPhysicalPower();
-                    }
                     else
-                    {
-                        playerPower = c.GetMagicalPower();
                         monsterPower = monster.GetMagicalPower();
-                    }
-                    MakeAttackRoll(playerPower, monsterPower);
+                    MakeAttackRoll(c, monsterPower);
                     AttackRollListener((a, crit) => {
                         if(a == 1)
                         {
@@ -602,19 +596,22 @@ public class CombatManager : Singleton<CombatManager>
                 attackerId = GetIdFromCombatant(c);
                 // Make sure to sync this between all players if we decide to have all players see this
                 StartCoroutine(TransitionCombatLayoutStyle(CombatLayoutStyle.ATTACKING, () => {
-                    int playerPower = 0;
                     int monsterPower = 0;
                     if (PlayManager.Instance.IsPhysicalBased(c.player))
                     {
-                        playerPower = c.GetPhysicalPower();
-                        monsterPower = monster.GetPhysicalPower();
+                        if (s.skillName == "Holy Blade")
+                            monsterPower = monster.GetPhysicalPower() < monster.GetMagicalPower() ? monster.GetPhysicalPower() : monster.GetMagicalPower();
+                        else
+                            monsterPower = monster.GetPhysicalPower();
                     }
                     else
                     {
-                        playerPower = c.GetMagicalPower();
-                        monsterPower = monster.GetMagicalPower();
+                        if (s.skillName == "Holy Blade")
+                            monsterPower = monster.GetPhysicalPower() < monster.GetMagicalPower() ? monster.GetPhysicalPower() : monster.GetMagicalPower();
+                        else
+                            monsterPower = monster.GetMagicalPower();
                     }
-                    MakeAttackRoll(playerPower, monsterPower);
+                    MakeAttackRoll(c, monsterPower, s.skillName);
                     AttackRollListener((a, crit) => {
                         if (a == 1)
                         {
@@ -629,10 +626,21 @@ public class CombatManager : Singleton<CombatManager>
                                     });
                                     break;
                                 case "Balanced Strike":
-                                    AttackMonster(c, crit ? (damage + PlayManager.Instance.GetMod(PlayManager.Instance.GetStrength(c.player))) * 2 : damage + PlayManager.Instance.GetMod(PlayManager.Instance.GetStrength(c.player)));
+                                    damage = crit ? (damage + PlayManager.Instance.GetMod(PlayManager.Instance.GetStrength(c.player))) * 2 : damage + PlayManager.Instance.GetMod(PlayManager.Instance.GetStrength(c.player));
+                                    AttackMonster(c, damage);
                                     break;
                                 case "Crushing Blow":
                                     AttackMonster(c, crit ? damage * 2 : damage, new List<Effect> { new Effect("Dazed", -1) });
+                                    break;
+                                case "Divine Strike":
+                                    damage = crit ? (damage + PlayManager.Instance.GetMod(PlayManager.Instance.GetStrength(c.player))) * 2 : damage + PlayManager.Instance.GetMod(PlayManager.Instance.GetStrength(c.player));
+                                    AttackMonster(c, damage, default, () => {
+                                        HealPlayer(c.player, HalfRoundedUp(damage));
+                                    });
+                                    break;
+                                case "Holy Blade":
+                                    damage = crit ? (damage + PlayManager.Instance.GetMod(PlayManager.Instance.GetIntelligence(c.player))) * 2 : damage + PlayManager.Instance.GetMod(PlayManager.Instance.GetIntelligence(c.player));
+                                    AttackMonster(c, damage);
                                     break;
                                 default:
                                     AttackMonster(c, crit ? damage * 2 : damage);
@@ -1711,6 +1719,8 @@ public class CombatManager : Singleton<CombatManager>
 
     private void ResetCombat()
     {
+        PlayManager.Instance.localPlayer.SetValue("HasYetToAttack", false);
+
         monsterTargets = new int[0];
         OnPlayerDealDamage = default;
         OnPlayerTakeDamage = default;
@@ -1736,6 +1746,7 @@ public class CombatManager : Singleton<CombatManager>
         {
             g.GetComponent<UIPlayerCard>().DrawStatusEffects(new List<Effect>());
         }
+        enemyCard.DrawStatusEffects(new List<Effect>());
         PlayManager.Instance.localPlayer.SetValue("IronWill", AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Iron Will")));
     }
 
@@ -1848,9 +1859,9 @@ public class CombatManager : Singleton<CombatManager>
         Response(FetchAttackRollResult(), FetchAttackRollCritResult());
     }
 
-    public void MakeAttackRoll(int playerPower, int monsterPower, string abilityName = "Attack Roll")
+    public void MakeAttackRoll(Combatant c, int monsterPower, string abilityName = "Attack Roll")
     {
-        attackRoll.GetComponent<UIAttackRoll>().MakeAttackRoll(playerPower, monsterPower, abilityName);
+        attackRoll.GetComponent<UIAttackRoll>().MakeAttackRoll(c, monsterPower, abilityName);
     }
 
     private int FetchAttackRollResult()
@@ -1930,5 +1941,15 @@ public class CombatManager : Singleton<CombatManager>
                 requested = true;
         }
         return requested;
+    }
+
+    private int HalfRoundedUp(int x)
+    {
+        return (int)MathF.Ceiling(x / 2f);
+    }
+
+    private int HalfRoundedDown(int x)
+    {
+        return (int)MathF.Floor(x / 2f);
     }
 }

@@ -69,6 +69,8 @@ namespace AdventuresOfOldMultiplayer
         public NetworkVariable<bool> RequestedTaunt = new NetworkVariable<bool>();
         public NetworkVariable<bool> Taunting = new NetworkVariable<bool>();
         public NetworkVariable<bool> IronWill = new NetworkVariable<bool>();
+        public NetworkVariable<bool> HasYetToAttack = new NetworkVariable<bool>();
+        public NetworkVariable<bool> JusticarsVow = new NetworkVariable<bool>();
 
         public override void OnNetworkSpawn()
         {
@@ -229,6 +231,8 @@ namespace AdventuresOfOldMultiplayer
                 case "RequestedTaunt": RequestedTaunt.Value = value; break;
                 case "Taunting": Taunting.Value = value; break;
                 case "IronWill": IronWill.Value = value; break;
+                case "HasYetToAttack": HasYetToAttack.Value = value; break;
+                case "JusticarsVow": JusticarsVow.Value = value; break;
                 default: Debug.LogError("Unknown Value: \"" + valueName + "\""); break;
             }
         }
@@ -717,6 +721,12 @@ namespace AdventuresOfOldMultiplayer
             {
                 if (damage > 0)
                     Health.Value -= damage;
+                if (JusticarsVow.Value && Health.Value <= PlayManager.Instance.GetMaxHealth(this) * 0.5f)
+                {
+                    JusticarsVow.Value = false;
+                    RestoreAbilityCharges(2);
+                    JusticarsVowClientRPC();
+                }
                 if (Health.Value <= 0)
                 {
                     Health.Value = 0;
@@ -741,6 +751,12 @@ namespace AdventuresOfOldMultiplayer
         {
             if (damage > 0)
                 Health.Value -= damage;
+            if (JusticarsVow.Value && Health.Value <= PlayManager.Instance.GetMaxHealth(this) * 0.5f)
+            {
+                JusticarsVow.Value = false;
+                RestoreAbilityCharges(2);
+                JusticarsVowClientRPC();
+            }
             if (Health.Value <= 0)
             {
                 Health.Value = 0;
@@ -764,6 +780,15 @@ namespace AdventuresOfOldMultiplayer
             if (IsOwner && !isBot)
             {
                 PlayManager.Instance.SendNotification(7, "You have been revived\nwith +1 Health");
+            }
+        }
+
+        [ClientRpc]
+        private void JusticarsVowClientRPC(ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                PlayManager.Instance.SendNotification(8, "You have recovered +2 Ability Charges");
             }
         }
 

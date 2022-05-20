@@ -22,6 +22,8 @@ public class AbilityManager : Singleton<AbilityManager>
     public Color traitColor;
     public Color racialColor;
 
+    public bool usingAbility;
+
     private void Start()
     {
         foreach (Skill s in skills)
@@ -211,6 +213,8 @@ public class AbilityManager : Singleton<AbilityManager>
                 "Holy" => CombatManager.Instance.InCombat() && !CombatManager.Instance.usedHoly,
                 "Taunt" => CombatManager.Instance.PlayerRequestedTaunt(),
                 "Rally" => CombatManager.Instance.InCombat(),
+                "Bless" => !CombatManager.Instance.choice.activeInHierarchy,
+                "Purification Circle" => CombatManager.Instance.InCombat(),
                 _ => false
             };
         }
@@ -265,14 +269,11 @@ public class AbilityManager : Singleton<AbilityManager>
     private void Rally()
     {
         // *** Has special use case ***
-        string uuid = default;
-        if (CombatManager.Instance.turnOrderCombatantList[CombatManager.Instance.combatTurnMarker].combatantType == CombatantType.PLAYER)
-            uuid = CombatManager.Instance.turnOrderCombatantList[CombatManager.Instance.combatTurnMarker].player.UUID.Value + "";
         foreach (Combatant c in CombatManager.Instance.turnOrderCombatantList)
         {
             if(c.combatantType == CombatantType.PLAYER)
             {
-                if (c.player.UUID.Value == uuid)
+                if (CombatManager.Instance.IsThisCombatantsTurn(c))
                     CombatManager.Instance.InflictEffect(c, new Effect("Power Up", 2, 1, true));
                 else
                     CombatManager.Instance.InflictEffect(c, new Effect("Power Up", 1, 1, true));
@@ -285,7 +286,7 @@ public class AbilityManager : Singleton<AbilityManager>
     #region Paladin Abilties
     private void AngelicWrath()
     {
-
+        // Done in Combatant RestoreHealth(int amount)
     }
 
     private void DivineStrike()
@@ -295,7 +296,34 @@ public class AbilityManager : Singleton<AbilityManager>
 
     private void Bless()
     {
-
+        usingAbility = true;
+        // *** Has special use case ***
+        PlayManager.Instance.TargetPlayerSelection("Choose a player to Bless", true, true, true, (p) => {
+            // OnSelect offer choice to restore 8 health or give +1 power
+            CombatManager.Instance.MakeChoice("Restore +8 Health", "Give +1 Power", true, CombatManager.Instance.InCombat() && CombatManager.Instance.IsCombatant(p));
+            CombatManager.Instance.ChoiceListener((a) => {
+                if(a == 1)
+                {
+                    if (CombatManager.Instance.InCombat())
+                        CombatManager.Instance.HealPlayer(p, 8);
+                    else
+                        p.RestoreHealth(8);
+                    usingAbility = false;
+                }
+                else
+                {
+                    Combatant c = CombatManager.Instance.GetCombatantFromPlayer(p);
+                    if(CombatManager.Instance.IsThisCombatantsTurn(c) && !p.HasYetToAttack.Value)
+                        CombatManager.Instance.InflictEffect(c, new Effect("Power Up", 2, 1, true));
+                    else
+                        CombatManager.Instance.InflictEffect(c, new Effect("Power Up", 1, 1, true));
+                    usingAbility = false;
+                }
+            });
+        }, (p) => {
+            // Requires being alive
+            return PlayManager.Instance.GetHealth(p) > 0;
+        }, false);
     }
 
     private void HolyBlade()
@@ -305,12 +333,20 @@ public class AbilityManager : Singleton<AbilityManager>
 
     private void JusticarsVow()
     {
-
+        // Done in Player TakeDamage(int amount, int armor, bool isTrue = false) and in TransitionStartOfCombat OnDisable()
     }
 
     private void PurificationCircle()
     {
-
+        // *** Has special use case ***
+        foreach (Combatant c in CombatManager.Instance.turnOrderCombatantList)
+        {
+            if (c.combatantType == CombatantType.PLAYER)
+            {
+                CombatManager.Instance.CleanseAllEffectsFromPlayer(c.player);
+                CombatManager.Instance.HealPlayer(c.player, 10);
+            }
+        }
     }
     #endregion
 

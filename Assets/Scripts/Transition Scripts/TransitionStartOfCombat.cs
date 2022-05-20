@@ -37,6 +37,24 @@ public class TransitionStartOfCombat : MonoBehaviour
         // Else if it is the monster's turn, after displaying "Start of Combat", display "Monster Turn"
         else if (CombatManager.Instance.isMonsterTurn)
             PlayManager.Instance.CallTransition(6);
+
+        if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Justicar's Vow")) && CombatManager.Instance.IsCombatant(PlayManager.Instance.localPlayer))
+        {
+            int health = PlayManager.Instance.GetHealth(PlayManager.Instance.localPlayer);
+            int maxHealth = PlayManager.Instance.GetMaxHealth(PlayManager.Instance.localPlayer);
+            if (health < maxHealth * 0.5f)
+            {
+                PlayManager.Instance.localPlayer.SetValue("JusticarsVow", false);
+                PlayManager.Instance.localPlayer.RestoreAbilityCharges(2);
+                PlayManager.Instance.SendNotification(8, "You have recovered +2 Ability Charges");
+            }
+            else
+            {
+                PlayManager.Instance.localPlayer.SetValue("JusticarsVow", true);
+            }
+        }
+        else
+            PlayManager.Instance.localPlayer.SetValue("JusticarsVow", false);
     }
 
     public void Close()

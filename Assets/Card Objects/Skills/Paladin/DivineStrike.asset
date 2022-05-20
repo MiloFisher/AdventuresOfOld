@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6500931b67d034cfb85dab48a90031ab, type: 3}
   m_Name: DivineStrike
   m_EditorClassIdentifier: 
-  skillName: DivineStrike
+  skillName: Divine Strike
   requirement: 1
   type: 1
   cost: 1
