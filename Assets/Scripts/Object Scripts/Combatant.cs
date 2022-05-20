@@ -413,4 +413,9 @@ public class Combatant
     {
         return HasEffect("Power Fantasy") > -1;
     }
+
+    public bool HasVanish()
+    {
+        return HasEffect("Vanish") > -1;
+    }
 }

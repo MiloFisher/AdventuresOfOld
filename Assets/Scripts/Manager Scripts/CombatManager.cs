@@ -47,6 +47,8 @@ public class CombatManager : Singleton<CombatManager>
     public bool waitUntil;
     public bool usedHoly;
     public bool receivedLoneWolf;
+    public bool monsterTookTurn;
+    public bool successfullyUsedAttackAbility;
 
     public Action<Combatant> OnPlayerDealDamage;
     public Action<Combatant> OnPlayerTakeDamage;
@@ -406,6 +408,7 @@ public class CombatManager : Singleton<CombatManager>
 
     public void StartTurn()
     {
+        PlayManager.Instance.localPlayer.SetValue("SuccessfullyAttackedMonster", false);
         PlayManager.Instance.localPlayer.SetValue("HasYetToAttack", true);
         isYourTurn = true;
         if (!PlayManager.Instance.transitions.transform.GetChild(4).gameObject.activeInHierarchy && !combatFadeOverlay.activeInHierarchy)
@@ -420,6 +423,7 @@ public class CombatManager : Singleton<CombatManager>
 
     public void StartMonsterTurn(int[] targets)
     {
+        monsterTookTurn = true;
         monsterTargets = targets;
         isMonsterTurn = true;
         if (!PlayManager.Instance.transitions.transform.GetChild(4).gameObject.activeInHierarchy && !combatFadeOverlay.activeInHierarchy)
@@ -615,10 +619,10 @@ public class CombatManager : Singleton<CombatManager>
                     AttackRollListener((a, crit) => {
                         if (a == 1)
                         {
+                            successfullyUsedAttackAbility = true;
                             // player attacks monster
                             int damage = c.GetAttack();
-
-                            switch(s.skillName)
+                            switch (s.skillName)
                             {
                                 case "Sap Energy":
                                     AttackMonster(c, 0, default, () => {
@@ -626,21 +630,28 @@ public class CombatManager : Singleton<CombatManager>
                                     });
                                     break;
                                 case "Balanced Strike":
-                                    damage = crit ? (damage + PlayManager.Instance.GetMod(PlayManager.Instance.GetStrength(c.player))) * 2 : damage + PlayManager.Instance.GetMod(PlayManager.Instance.GetStrength(c.player));
-                                    AttackMonster(c, damage);
+                                    damage += PlayManager.Instance.GetMod(PlayManager.Instance.GetStrength(c.player));
+                                    AttackMonster(c, crit ? damage * 2 : damage);
                                     break;
                                 case "Crushing Blow":
                                     AttackMonster(c, crit ? damage * 2 : damage, new List<Effect> { new Effect("Dazed", -1) });
                                     break;
                                 case "Divine Strike":
-                                    damage = crit ? (damage + PlayManager.Instance.GetMod(PlayManager.Instance.GetStrength(c.player))) * 2 : damage + PlayManager.Instance.GetMod(PlayManager.Instance.GetStrength(c.player));
-                                    AttackMonster(c, damage, default, () => {
-                                        HealPlayer(c.player, HalfRoundedUp(damage));
+                                    damage += PlayManager.Instance.GetMod(PlayManager.Instance.GetStrength(c.player));
+                                    AttackMonster(c, crit ? damage * 2 : damage, default, () => {
+                                        HealPlayer(c.player, HalfRoundedUp(crit ? damage * 2 : damage));
                                     });
                                     break;
                                 case "Holy Blade":
-                                    damage = crit ? (damage + PlayManager.Instance.GetMod(PlayManager.Instance.GetIntelligence(c.player))) * 2 : damage + PlayManager.Instance.GetMod(PlayManager.Instance.GetIntelligence(c.player));
-                                    AttackMonster(c, damage);
+                                    damage += PlayManager.Instance.GetMod(PlayManager.Instance.GetIntelligence(c.player));
+                                    AttackMonster(c, crit ? damage * 2 : damage);
+                                    break;
+                                case "Backstab":
+                                    damage += PlayManager.Instance.GetMod(PlayManager.Instance.GetDexterity(c.player));
+                                    AttackMonster(c, crit ? damage * 2 : damage);
+                                    break;
+                                case "Lacerate":
+                                    AttackMonster(c, crit ? damage * 2 : damage, new List<Effect> { new Effect("Bleeding", -1, PlayManager.Instance.GetLevel(c.player), false, 3) });
                                     break;
                                 default:
                                     AttackMonster(c, crit ? damage * 2 : damage);
@@ -683,15 +694,16 @@ public class CombatManager : Singleton<CombatManager>
 
     public void AttackMonster(Combatant c, int damage, List<Effect> debuffs = default, Action OnAttack = default)
     {
+        int bleeding = monster.IsBleeding();
+        if (bleeding > -1)
+        {
+            damage += bleeding;
+            UseStatusEffect(monster, "Bleeding");
+        }
+        PlayManager.Instance.localPlayer.SetValue("SuccessfullyAttackedMonster", true);
         // Attack animation + effect + end monster turn
         StartCoroutine(AnimateMonsterAttacked(c, damage,() => {
             // OnAttack
-            int bleeding = monster.IsBleeding();
-            if (bleeding > -1)
-            {
-                damage += bleeding;
-                UseStatusEffect(monster, "Bleeding");
-            }
             monster.TakeDamage(damage);
             if(debuffs != default)
             {
@@ -704,10 +716,69 @@ public class CombatManager : Singleton<CombatManager>
                 OnAttack();
         }, () => {
             // OnComplete
-            StartCoroutine(TransitionCombatLayoutStyle(CombatLayoutStyle.DEFAULT, () => {
-                EndTurn();
-            }));
-            PlayManager.Instance.localPlayer.TransitionOthersToStyle(CombatLayoutStyle.DEFAULT);
+            Skill combinationStrike = AbilityManager.Instance.GetSkill("Combination Strike");
+            if (AbilityManager.Instance.HasAbilityUnlocked(combinationStrike, c.player) && PlayManager.Instance.GetAbilityCharges(c.player) >= combinationStrike.cost && successfullyUsedAttackAbility && monster.GetHealth() > 0)
+            {
+                successfullyUsedAttackAbility = false;
+                MakeChoice("Use Combination Strike", "End Turn", true, true);
+                ChoiceListener((a) => {
+                    if(a == 1)
+                    {
+                        combinationStrike.UseSkill();
+                        InflictEffect(c, new Effect("Power Up", 1, 1, true));
+                        // Basic Attack
+                        attackerId = GetIdFromCombatant(c);
+                        // Make sure to sync this between all players if we decide to have all players see this
+                        int monsterPower = 0;
+                        if (PlayManager.Instance.IsPhysicalBased(c.player))
+                            monsterPower = monster.GetPhysicalPower();
+                        else
+                            monsterPower = monster.GetMagicalPower();
+                        MakeAttackRoll(c, monsterPower);
+                        AttackRollListener((a, crit) => {
+                            if (a == 1)
+                            {
+                                // player attacks monster
+                                int damage = c.GetAttack();
+                                if (crit)
+                                    damage *= 2;
+                                AttackMonster(c, damage);
+                            }
+                            else if (a == -1)
+                            {
+                                // monster attacks player
+                                AttackPlayer(c, () => {
+                                    // OnComplete
+                                    StartCoroutine(TransitionCombatLayoutStyle(CombatLayoutStyle.DEFAULT, () => {
+                                        EndTurn();
+                                    }));
+                                    PlayManager.Instance.localPlayer.TransitionOthersToStyle(CombatLayoutStyle.DEFAULT);
+                                });
+                            }
+                            else if (a == 99)
+                            {
+                                // Combat Over
+                                EndCombat(CombatOverCheck());
+                            }
+                        });
+                    }
+                    else
+                    {
+                        StartCoroutine(TransitionCombatLayoutStyle(CombatLayoutStyle.DEFAULT, () => {
+                            EndTurn();
+                        }));
+                        PlayManager.Instance.localPlayer.TransitionOthersToStyle(CombatLayoutStyle.DEFAULT);
+                    }
+                });
+            }
+            else
+            {
+                successfullyUsedAttackAbility = false;
+                StartCoroutine(TransitionCombatLayoutStyle(CombatLayoutStyle.DEFAULT, () => {
+                    EndTurn();
+                }));
+                PlayManager.Instance.localPlayer.TransitionOthersToStyle(CombatLayoutStyle.DEFAULT);
+            }
         }));
 
         // Visualize monster attack for all other players
@@ -768,7 +839,7 @@ public class CombatManager : Singleton<CombatManager>
         {
             // Only host executes skill
             if (NetworkManager.Singleton.IsServer)
-                monsterCard.Skill(GetCombatantFromPlayer(PlayManager.Instance.localPlayer));
+                MonsterEndTurn();
         }
     }
 
@@ -808,7 +879,13 @@ public class CombatManager : Singleton<CombatManager>
 
     public void AttackPlayer(Combatant c, Action OnComplete, List<Effect> debuffs = default)
     {
-        if(monster.IsDazed())
+        if (c.HasVanish())
+        {
+            if (OnComplete != default)
+                OnComplete();
+            return;
+        }
+        if (monster.IsDazed())
         {
             if (OnComplete != default)
                 OnComplete();
@@ -977,7 +1054,7 @@ public class CombatManager : Singleton<CombatManager>
         if (c.combatantType == CombatantType.PLAYER)
             c.player.GainStatusEffect(e.name, e.duration, e.potency, e.canStack, e.counter);
         else
-            PlayManager.Instance.localPlayer.MonsterGainStatusEffect(e.name, e.duration, e.potency);
+            PlayManager.Instance.localPlayer.MonsterGainStatusEffect(e.name, e.duration, e.potency, e.canStack, e.counter);
     }
 
     public void CleanseEffect(Combatant c, string effectName)
@@ -1093,20 +1170,27 @@ public class CombatManager : Singleton<CombatManager>
     private int[] GetMonsterTargets()
     {
         // Returns indices of targeted players
+        int target;
         switch(monsterCard.target)
         {
             case Target.ALL:
                 List<int> targets = new List<int>();
                 for (int i = 0; i < turnOrderCombatantList.Count; i++)
                 {
-                    if (turnOrderCombatantList[i].combatantType == CombatantType.PLAYER && turnOrderCombatantList[i].IsAlive())
+                    if (turnOrderCombatantList[i].combatantType == CombatantType.PLAYER && turnOrderCombatantList[i].IsAlive() && !(AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Shadow Step"), turnOrderCombatantList[i].player) && turnOrderCombatantList[i].player.SuccessfullyAttackedMonster.Value))
                         targets.Add(i);
                 }
                 return targets.ToArray();
             case Target.LOWEST_HEALTH:
-                return new int[] { GetLowestHealthPlayerIndex() };
+                target = GetLowestHealthPlayerIndex();
+                if (target == -1)
+                    return new int[0];
+                return new int[] { target };
             case Target.HIGHEST_HEALTH:
-                return new int[] { GetHighestHealthPlayerIndex() };
+                target = GetHighestHealthPlayerIndex();
+                if (target == -1)
+                    return new int[0];
+                return new int[] { target };
         };
         return new int[0];
     }
@@ -1116,9 +1200,11 @@ public class CombatManager : Singleton<CombatManager>
         List<Combatant> playersInCombat = new List<Combatant>();
         foreach(Combatant c in turnOrderCombatantList)
         {
-            if (c.combatantType == CombatantType.PLAYER && c.IsAlive())
+            if (c.combatantType == CombatantType.PLAYER && c.IsAlive() && !(AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Shadow Step"), c.player) && c.player.SuccessfullyAttackedMonster.Value))
                 playersInCombat.Add(c);
         }
+        if (playersInCombat.Count == 0)
+            return -1;
         PlayManager.Instance.ShuffleDeck(playersInCombat);
         playersInCombat.Sort((a, b) => a.GetHealth() - b.GetHealth());
         for(int i = 0; i < turnOrderCombatantList.Count; i++)
@@ -1134,9 +1220,11 @@ public class CombatManager : Singleton<CombatManager>
         List<Combatant> playersInCombat = new List<Combatant>();
         foreach (Combatant c in turnOrderCombatantList)
         {
-            if (c.combatantType == CombatantType.PLAYER && c.IsAlive())
+            if (c.combatantType == CombatantType.PLAYER && c.IsAlive() && !(AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Shadow Step"), c.player) && c.player.SuccessfullyAttackedMonster.Value))
                 playersInCombat.Add(c);
         }
+        if (playersInCombat.Count == 0)
+            return -1;
         PlayManager.Instance.ShuffleDeck(playersInCombat);
         playersInCombat.Sort((a, b) => b.GetHealth() - a.GetHealth());
         for (int i = 0; i < turnOrderCombatantList.Count; i++)
@@ -1720,6 +1808,7 @@ public class CombatManager : Singleton<CombatManager>
     private void ResetCombat()
     {
         PlayManager.Instance.localPlayer.SetValue("HasYetToAttack", false);
+        PlayManager.Instance.localPlayer.SetValue("SuccessfullyAttackedMonster", false);
 
         monsterTargets = new int[0];
         OnPlayerDealDamage = default;
@@ -1727,6 +1816,8 @@ public class CombatManager : Singleton<CombatManager>
         OnPlayerSpendAbilityCharge = default;
         OnPlayerBeingAttacked = default;
 
+        successfullyUsedAttackAbility = false;
+        monsterTookTurn = false;
         receivedLoneWolf = false;
         usedHoly = false;
         canUseAttackAbilities = false;

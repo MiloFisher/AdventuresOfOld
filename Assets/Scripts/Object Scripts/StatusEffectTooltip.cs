@@ -119,6 +119,7 @@ public class StatusEffectTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
             "Armor Up" => "Has their <color=#A1A2A5>Armor</color> increased by " + GetFormattedNumber(potency) + ".",
             "Power Down" => "Has their <color=#F16724>Physical Power</color> and <color=#76A5D8>Magical Power</color> reduced by " + GetFormattedNumber(potency) + ".",
             "Power Fantasy" => "Revives with +" + GetFormattedNumber(1) + " <color=#F16724>Physical Power</color>,\n+" + GetFormattedNumber(1) + " <color=#76A5D8>Magical Power</color>, and " + GetFormattedNumber(1) + " Health upon death.",
+            "Vanish" => "Ignore all incoming damage and effects when you fail an Attack Roll.",
             _ => "Unknown Effect: " + effectName
         };
     }
@@ -138,8 +139,9 @@ public class StatusEffectTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
             "Power Up" => "#00A14B",
             "Attack Up" => "#00A14B",
             "Armor Up" => "#00A14B",
-            "Power Down" => "#FFFFFF",
-            "Power Fantasy" => "#FFFFFF",
+            "Power Down" => "#D70B00",
+            "Power Fantasy" => "#00A14B",
+            "Vanish" => "#00A14B",
             _ => "#000000"
         };
     }

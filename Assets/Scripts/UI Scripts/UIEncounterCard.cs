@@ -80,11 +80,33 @@ public class UIEncounterCard : MonoBehaviour
 
         ActivateOptionCardButton(false);
 
-        CombatManager.Instance.monsterCard = m;
+        if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Stealth")))
+        {
+            PlayManager.Instance.MakeChoice("Use Stealth", "Fight Monster", true, true);
+            PlayManager.Instance.ChoiceListener((a) => {
+                if(a == 1)
+                {
+                    PlayManager.Instance.localPlayer.CompleteEncounter(false, PlayManager.Instance.localPlayer.UUID.Value);
+                    PlayManager.Instance.localPlayer.DrawLootCards(1, PlayManager.Instance.localPlayer.UUID.Value, true);
+                }
+                else
+                {
+                    CombatManager.Instance.monsterCard = m;
 
-        PlayManager.Instance.localPlayer.SendCombatNotifications();
-        PlayManager.Instance.localPlayer.SetValue("ParticipatingInCombat", 1);
-        PlayManager.Instance.CallEncounterElement(7);
+                    PlayManager.Instance.localPlayer.SendCombatNotifications();
+                    PlayManager.Instance.localPlayer.SetValue("ParticipatingInCombat", 1);
+                    PlayManager.Instance.CallEncounterElement(7);
+                }
+            });
+        }
+        else
+        {
+            CombatManager.Instance.monsterCard = m;
+
+            PlayManager.Instance.localPlayer.SendCombatNotifications();
+            PlayManager.Instance.localPlayer.SetValue("ParticipatingInCombat", 1);
+            PlayManager.Instance.CallEncounterElement(7);
+        }
     }
 
     public void ChooseOption()
@@ -308,6 +330,7 @@ public class UIEncounterCard : MonoBehaviour
             "Plagued" => true,
             "Power Down" => true,
             "Power Fantasy" => false,
+            "Vanish" => false,
             _ => true
         };
     }
@@ -329,6 +352,7 @@ public class UIEncounterCard : MonoBehaviour
             "Plagued" => statusEffectIcons[10],
             "Power Down" => statusEffectIcons[11],
             "Power Fantasy" => statusEffectIcons[12],
+            "Vanish" => statusEffectIcons[13],
             _ => null
         };
     }

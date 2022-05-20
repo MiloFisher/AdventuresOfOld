@@ -71,6 +71,7 @@ namespace AdventuresOfOldMultiplayer
         public NetworkVariable<bool> IronWill = new NetworkVariable<bool>();
         public NetworkVariable<bool> HasYetToAttack = new NetworkVariable<bool>();
         public NetworkVariable<bool> JusticarsVow = new NetworkVariable<bool>();
+        public NetworkVariable<bool> SuccessfullyAttackedMonster = new NetworkVariable<bool>();
 
         public override void OnNetworkSpawn()
         {
@@ -233,6 +234,7 @@ namespace AdventuresOfOldMultiplayer
                 case "IronWill": IronWill.Value = value; break;
                 case "HasYetToAttack": HasYetToAttack.Value = value; break;
                 case "JusticarsVow": JusticarsVow.Value = value; break;
+                case "SuccessfullyAttackedMonster": SuccessfullyAttackedMonster.Value = value; break;
                 default: Debug.LogError("Unknown Value: \"" + valueName + "\""); break;
             }
         }
@@ -1383,28 +1385,28 @@ namespace AdventuresOfOldMultiplayer
             }
         }
 
-        public void MonsterGainStatusEffect(string name, int duration, int potency)
+        public void MonsterGainStatusEffect(string name, int duration, int potency, bool canStack, int counter)
         {
             if (NetworkManager.Singleton.IsServer)
             {
                 foreach (Player p in PlayManager.Instance.playerList)
-                    p.MonsterGainStatusEffectClientRPC(name, duration, potency);
+                    p.MonsterGainStatusEffectClientRPC(name, duration, potency, canStack, counter);
             }
             else
-                MonsterGainStatusEffectServerRPC(name, duration, potency);
+                MonsterGainStatusEffectServerRPC(name, duration, potency, canStack, counter);
         }
         [ServerRpc]
-        private void MonsterGainStatusEffectServerRPC(FixedString64Bytes name, int duration, int potency, ServerRpcParams rpcParams = default)
+        private void MonsterGainStatusEffectServerRPC(FixedString64Bytes name, int duration, int potency, bool canStack, int counter, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
-                p.MonsterGainStatusEffectClientRPC(name, duration, potency);
+                p.MonsterGainStatusEffectClientRPC(name, duration, potency, canStack, counter);
         }
         [ClientRpc]
-        public void MonsterGainStatusEffectClientRPC(FixedString64Bytes name, int duration, int potency, ClientRpcParams clientRpcParams = default)
+        public void MonsterGainStatusEffectClientRPC(FixedString64Bytes name, int duration, int potency, bool canStack, int counter, ClientRpcParams clientRpcParams = default)
         {
             if (IsOwner && !isBot)
             {
-                CombatManager.Instance.GainStatusEffect(CombatManager.Instance.monster, new Effect(name + "", duration, potency));
+                CombatManager.Instance.GainStatusEffect(CombatManager.Instance.monster, new Effect(name + "", duration, potency, canStack, counter));
             }
         }
 

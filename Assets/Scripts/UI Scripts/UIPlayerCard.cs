@@ -103,6 +103,7 @@ public class UIPlayerCard : MonoBehaviour
             "Plagued" => true,
             "Power Down" => true,
             "Power Fantasy" => false,
+            "Vanish" => false,
             _ => true
         };
     }
@@ -124,6 +125,7 @@ public class UIPlayerCard : MonoBehaviour
             "Plagued" => statusEffectIcons[10],
             "Power Down" => statusEffectIcons[11],
             "Power Fantasy" => statusEffectIcons[12],
+            "Vanish" => statusEffectIcons[13],
             _ => null
         };
     }

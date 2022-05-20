@@ -210,11 +210,12 @@ public class AbilityManager : Singleton<AbilityManager>
             // Special case for all utility abilities
             return s.skillName switch
             {
-                "Holy" => CombatManager.Instance.InCombat() && !CombatManager.Instance.usedHoly,
+                "Holy" => CombatManager.Instance.InCombat() && !CombatManager.Instance.usedHoly && CombatManager.Instance.IsCombatant(PlayManager.Instance.localPlayer),
                 "Taunt" => CombatManager.Instance.PlayerRequestedTaunt(),
                 "Rally" => CombatManager.Instance.InCombat(),
                 "Bless" => !CombatManager.Instance.choice.activeInHierarchy,
                 "Purification Circle" => CombatManager.Instance.InCombat(),
+                "Vanish" => CombatManager.Instance.InCombat() && CombatManager.Instance.IsCombatant(PlayManager.Instance.localPlayer) && !CombatManager.Instance.GetCombatantFromPlayer(PlayManager.Instance.localPlayer).HasVanish(),
                 _ => false
             };
         }
@@ -354,12 +355,14 @@ public class AbilityManager : Singleton<AbilityManager>
     #region Rogue Abilties
     private void Stealth()
     {
-
+        // Done in UIEncounterCard FightMonster()
     }
 
     private void Backstab()
     {
-        AttackSkillUsed(GetSkill("Backstab Strike"));
+        if (!CombatManager.Instance.monsterTookTurn)
+            CombatManager.Instance.InflictEffect(CombatManager.Instance.GetCombatantFromPlayer(PlayManager.Instance.localPlayer), new Effect("Power Up", 1, 1, true));
+        AttackSkillUsed(GetSkill("Backstab"));
     }
 
     private void Lacerate()
@@ -369,17 +372,18 @@ public class AbilityManager : Singleton<AbilityManager>
 
     private void CombinationStrike()
     {
-
+        // Done in CombatManager AttackMonster(Combatant c, int damage, List<Effect> debuffs = default, Action OnAttack = default)
     }
 
     private void ShadowStep()
     {
-
+        // Done in CombatManager GetMonsterTargets()
     }
 
     private void Vanish()
     {
-
+        // *** Has special use case ***
+        CombatManager.Instance.InflictEffect(CombatManager.Instance.GetCombatantFromPlayer(PlayManager.Instance.localPlayer), new Effect("Vanish", 2));
     }
     #endregion
 
