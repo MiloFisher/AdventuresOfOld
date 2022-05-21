@@ -216,6 +216,8 @@ public class AbilityManager : Singleton<AbilityManager>
                 "Bless" => !CombatManager.Instance.choice.activeInHierarchy,
                 "Purification Circle" => CombatManager.Instance.InCombat(),
                 "Vanish" => CombatManager.Instance.InCombat() && CombatManager.Instance.IsCombatant(PlayManager.Instance.localPlayer) && !CombatManager.Instance.GetCombatantFromPlayer(PlayManager.Instance.localPlayer).HasVanish(),
+                "Flaming Shot" => CombatManager.Instance.InCombat() && CombatManager.Instance.IsCombatant(PlayManager.Instance.localPlayer) && !(CombatManager.Instance.GetCombatantFromPlayer(PlayManager.Instance.localPlayer).HasFlamingShot() > -1),
+                "Survival Kit" => true,
                 _ => false
             };
         }
@@ -314,10 +316,7 @@ public class AbilityManager : Singleton<AbilityManager>
                 else
                 {
                     Combatant c = CombatManager.Instance.GetCombatantFromPlayer(p);
-                    if(CombatManager.Instance.IsThisCombatantsTurn(c) && !p.HasYetToAttack.Value)
-                        CombatManager.Instance.InflictEffect(c, new Effect("Power Up", 2, 1, true));
-                    else
-                        CombatManager.Instance.InflictEffect(c, new Effect("Power Up", 1, 1, true));
+                    CombatManager.Instance.InflictEffect(c, new Effect("Blessing", -1, 1, true));
                     usingAbility = false;
                 }
             });
@@ -391,7 +390,7 @@ public class AbilityManager : Singleton<AbilityManager>
     #region Ranger Abilities
     private void TacticalPositioning()
     {
-
+        // Done in CombatManager AttackPlayer(Combatant c, Action OnComplete, List<Effect> debuffs = default)
     }
 
     private void QuickShot()
@@ -401,6 +400,10 @@ public class AbilityManager : Singleton<AbilityManager>
 
     private void FlamingShot()
     {
+        // *** Has special use case ***
+        Player p = PlayManager.Instance.localPlayer;
+        Combatant c = CombatManager.Instance.GetCombatantFromPlayer(p);
+        CombatManager.Instance.InflictEffect(c, new Effect("Flaming Shot", -1, 1));
 
     }
 
@@ -411,12 +414,23 @@ public class AbilityManager : Singleton<AbilityManager>
 
     private void NaturesCharm()
     {
-
+        // Done in PlayManager TakeShortRest(Player p) and in PlayManager GetStatModFromType(string statRollType)
     }
 
     private void SurvivalKit()
     {
-
+        // *** Has special use case ***
+        if(CombatManager.Instance.InCombat() && CombatManager.Instance.IsCombatant(PlayManager.Instance.localPlayer))
+        {
+            Combatant c = CombatManager.Instance.GetCombatantFromPlayer(PlayManager.Instance.localPlayer);
+            CombatManager.Instance.CleanseAllEffectsFromPlayer(c.player);
+            CombatManager.Instance.HealPlayer(c.player, 15);
+            CombatManager.Instance.InflictEffect(c, new Effect("Blessing", -1, 1, true));
+        }
+        else
+        {
+            PlayManager.Instance.localPlayer.RestoreHealth(15);
+        }
     }
     #endregion
 

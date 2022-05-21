@@ -18,6 +18,7 @@ public class CombatManager : Singleton<CombatManager>
     public GameObject combatLayout;
     public GameObject statRoll;
     public GameObject choice;
+    public GameObject genericRoll;
     public GameObject attackRoll;
     public GameObject defensiveOptions;
     public GameObject combatOptions;
@@ -49,6 +50,9 @@ public class CombatManager : Singleton<CombatManager>
     public bool receivedLoneWolf;
     public bool monsterTookTurn;
     public bool successfullyUsedAttackAbility;
+    public bool tacticalPositioning;
+    public bool quickShot;
+    public bool arrowBarrage;
 
     public Action<Combatant> OnPlayerDealDamage;
     public Action<Combatant> OnPlayerTakeDamage;
@@ -653,6 +657,15 @@ public class CombatManager : Singleton<CombatManager>
                                 case "Lacerate":
                                     AttackMonster(c, crit ? damage * 2 : damage, new List<Effect> { new Effect("Bleeding", -1, PlayManager.Instance.GetLevel(c.player), false, 3) });
                                     break;
+                                case "Quick Shot":
+                                    quickShot = true;
+                                    damage += PlayManager.Instance.GetMod(PlayManager.Instance.GetDexterity(c.player));
+                                    AttackMonster(c, crit ? damage * 2 : damage);
+                                    break;
+                                case "Arrow Barrage":
+                                    arrowBarrage = true;
+                                    AttackMonster(c, crit ? damage * 2 : damage);
+                                    break;
                                 default:
                                     AttackMonster(c, crit ? damage * 2 : damage);
                                     break;
@@ -698,7 +711,21 @@ public class CombatManager : Singleton<CombatManager>
         if (bleeding > -1)
         {
             damage += bleeding;
-            UseStatusEffect(monster, "Bleeding");
+            UseEffect(monster, "Bleeding");
+        }
+        int flamingShot = c.HasFlamingShot();
+        if (flamingShot > -1)
+        {
+            if (debuffs == default)
+                debuffs = new List<Effect>() { new Effect("Burning", 3, PlayManager.Instance.GetLevel(c.player)) };
+            else
+                debuffs.Add(new Effect("Burning", 3, PlayManager.Instance.GetLevel(c.player)));
+            CleanseEffect(c, "Flaming Shot");
+        }
+        int blessing = c.HasBlessing();
+        if (blessing > -1)
+        {
+            CleanseEffect(c, "Blessing");
         }
         PlayManager.Instance.localPlayer.SetValue("SuccessfullyAttackedMonster", true);
         // Attack animation + effect + end monster turn
@@ -768,6 +795,66 @@ public class CombatManager : Singleton<CombatManager>
                             EndTurn();
                         }));
                         PlayManager.Instance.localPlayer.TransitionOthersToStyle(CombatLayoutStyle.DEFAULT);
+                    }
+                });
+            }
+            else if(quickShot)
+            {
+                AbilityManager.Instance.GetSkill("Quick Shot").cost = 1;
+                quickShot = false;
+                successfullyUsedAttackAbility = false;
+                genericRoll.GetComponent<UIGenericRoll>().Setup("Quick Shot", (x) => {
+                    // Success on roll even
+                    return x % 2 == 0;
+                }, () => {
+                    // OnSuccess
+                    AbilityManager.Instance.GetSkill("Quick Shot").cost = 0;
+                    StartCoroutine(TransitionCombatLayoutStyle(CombatLayoutStyle.DEFAULT, () => {
+                        EndTurn();
+                    }));
+                    PlayManager.Instance.localPlayer.TransitionOthersToStyle(CombatLayoutStyle.DEFAULT);
+                }, () => {
+                    // OnFailure
+                    StartCoroutine(TransitionCombatLayoutStyle(CombatLayoutStyle.DEFAULT, () => {
+                        EndTurn();
+                    }));
+                    PlayManager.Instance.localPlayer.TransitionOthersToStyle(CombatLayoutStyle.DEFAULT);
+                });
+            }
+            else if(arrowBarrage)
+            {
+                successfullyUsedAttackAbility = false;
+                InflictEffect(c, new Effect("Power Down", 1, 1, true));
+                // Basic Attack
+                attackerId = GetIdFromCombatant(c);
+                // Make sure to sync this between all players if we decide to have all players see this
+                int monsterPower = 0;
+                if (PlayManager.Instance.IsPhysicalBased(c.player))
+                    monsterPower = monster.GetPhysicalPower();
+                else
+                    monsterPower = monster.GetMagicalPower();
+                MakeAttackRoll(c, monsterPower);
+                AttackRollListener((a, crit) => {
+                    if (a == 1)
+                    {
+                        // player attacks monster
+                        int damage = c.GetAttack();
+                        if (crit)
+                            damage *= 2;
+                        AttackMonster(c, damage);
+                    }
+                    else if (a == -1)
+                    {
+                        arrowBarrage = false;
+                        StartCoroutine(TransitionCombatLayoutStyle(CombatLayoutStyle.DEFAULT, () => {
+                            EndTurn();
+                        }));
+                        PlayManager.Instance.localPlayer.TransitionOthersToStyle(CombatLayoutStyle.DEFAULT);
+                    }
+                    else if (a == 99)
+                    {
+                        // Combat Over
+                        EndCombat(CombatOverCheck());
                     }
                 });
             }
@@ -879,7 +966,25 @@ public class CombatManager : Singleton<CombatManager>
 
     public void AttackPlayer(Combatant c, Action OnComplete, List<Effect> debuffs = default)
     {
-        if (c.HasVanish())
+        int flamingShot = c.HasFlamingShot();
+        if (flamingShot > -1)
+        {
+            CleanseEffect(c, "Flaming Shot");
+        }
+        int blessing = c.HasBlessing();
+        if (blessing > -1)
+        {
+            CleanseEffect(c, "Blessing");
+        }
+        if (tacticalPositioning && IsThisCombatantsTurn(c))
+        {
+            if (OnComplete != default)
+                OnComplete();
+            tacticalPositioning = false;
+            PlayManager.Instance.SendNotification(11, "The monster failed to attack you!");
+            return;
+        }
+        if (c.HasVanish() && IsThisCombatantsTurn(c))
         {
             if (OnComplete != default)
                 OnComplete();
@@ -1372,6 +1477,9 @@ public class CombatManager : Singleton<CombatManager>
 
     IEnumerator LeaveCombat(Action OnComplete = default)
     {
+        // Revert quick shot cost back to 1 in case it had been reduced to 0 and not used
+        AbilityManager.Instance.GetSkill("Quick Shot").cost = 1;
+
         combatFadeOverlay.SetActive(true);
 
         // First fade in overlay
@@ -1818,6 +1926,8 @@ public class CombatManager : Singleton<CombatManager>
         OnPlayerSpendAbilityCharge = default;
         OnPlayerBeingAttacked = default;
 
+        arrowBarrage = false;
+        quickShot = false;
         successfullyUsedAttackAbility = false;
         monsterTookTurn = false;
         receivedLoneWolf = false;
@@ -1835,12 +1945,14 @@ public class CombatManager : Singleton<CombatManager>
         ready = false;
         combatLayout.SetActive(false);
         combatBackground.SetActive(false);
-        foreach(GameObject g in playerCards)
+        combatLayoutStyle = CombatLayoutStyle.DEFAULT;
+        foreach (GameObject g in playerCards)
         {
             g.GetComponent<UIPlayerCard>().DrawStatusEffects(new List<Effect>());
         }
         enemyCard.DrawStatusEffects(new List<Effect>());
         PlayManager.Instance.localPlayer.SetValue("IronWill", AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Iron Will")));
+        tacticalPositioning = AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Tactical Positioning"));
     }
 
     #region Stat Roll

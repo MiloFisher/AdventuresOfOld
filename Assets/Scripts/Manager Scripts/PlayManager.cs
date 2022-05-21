@@ -480,7 +480,10 @@ public class PlayManager : Singleton<PlayManager>
     public void TakeShortRest(Player p)
     {
         // Restores 1 Ability Charge and recovers Health equal to 3x the Chaos Tier
-        p.RestoreAbilityCharges(1);
+        int ac = 1;
+        if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Nature's Charm")))
+            ac++;
+        p.RestoreAbilityCharges(ac);
         p.RestoreHealth(3 * ChaosTier());
 
         p.ReadyUp();            
@@ -886,6 +889,8 @@ public class PlayManager : Singleton<PlayManager>
             default: Debug.LogError("Unknown Stat Roll Type: " + statRollType); break;
         }
         if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Generalist")))
+            result += 1;
+        if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Nature's Charm")))
             result += 1;
         if (result < 0 && AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Elven Knowledge")))
             result = 0;

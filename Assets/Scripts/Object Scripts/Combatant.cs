@@ -132,6 +132,14 @@ public class Combatant
         else
             power =  monster.physicalPower + PlayManager.Instance.PowerModifier();
 
+        int flamingShot = HasFlamingShot();
+        if (flamingShot > -1)
+            power += flamingShot;
+
+        int blessing = HasBlessing();
+        if (blessing > -1)
+            power += blessing;
+
         int powerUp = HasPowerUp();
         if (powerUp > -1)
             power += powerUp;
@@ -155,6 +163,14 @@ public class Combatant
             power = PlayManager.Instance.GetMagicalPower(player);
         else
             power = monster.magicalPower + PlayManager.Instance.PowerModifier();
+
+        int flamingShot = HasFlamingShot();
+        if (flamingShot > -1)
+            power += flamingShot;
+
+        int blessing = HasBlessing();
+        if (blessing > -1)
+            power += blessing;
 
         int powerUp = HasPowerUp();
         if (powerUp > -1)
@@ -417,5 +433,15 @@ public class Combatant
     public bool HasVanish()
     {
         return HasEffect("Vanish") > -1;
+    }
+
+    public int HasFlamingShot()
+    {
+        return HasEffect("Flaming Shot");
+    }
+
+    public int HasBlessing()
+    {
+        return HasEffect("Blessing");
     }
 }

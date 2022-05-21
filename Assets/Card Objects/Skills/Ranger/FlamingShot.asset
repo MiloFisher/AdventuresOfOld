@@ -17,5 +17,5 @@ MonoBehaviour:
   type: 2
   cost: 1
   school: 3
-  description: Your next attack has +1 Power and inflicts <b><color=#ED1C24>Burning
+  description: Your next attack has +1 Power and inflicts <b><color=#F7941D>Burning
     (3)</color></b>.
