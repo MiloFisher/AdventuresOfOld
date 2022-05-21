@@ -638,6 +638,9 @@ public class CombatManager : Singleton<CombatManager>
         int poisoned = c.IsPoisoned();
         if (poisoned > -1)
         {
+            if (PlayManager.Instance.ChaosTier() == 6)
+                poisoned *= 2;
+
             bool goingToDie = c.GetHealth() <= poisoned && !c.player.IronWill.Value;
 
             StartCoroutine(AnimatePlayerTakeDamage(GetPlayerCardFromCombatant(c), poisoned, () => {
@@ -1205,17 +1208,19 @@ public class CombatManager : Singleton<CombatManager>
                                     if (c.GetArmor() >= monster.GetAttack())
                                     {
                                         // No damage will be taken, therefore avoid debuffs
-                                        StartCoroutine(AnimatePlayerAttacked(c,
-                                        () => {
-                                        // OnAttack
-                                        c.TakeDamage(monster.GetAttack());
+                                        StartCoroutine(AnimatePlayerAttacked(c, () => {
+                                            // OnAttack
+                                            int damage = monster.GetAttack();
+                                            if (PlayManager.Instance.ChaosTier() == 6)
+                                                damage *= 2;
+                                            c.TakeDamage(damage);
 
                                             StartCoroutine(AnimateMonsterTakeDamage(enemyCard, c.GetAttack(), () => {
                                                 monster.TakeDamage(c.GetAttack());
                                             }));
 
-                                        // Visualize player taking damage for all other players
-                                        PlayManager.Instance.localPlayer.VisualizeMonsterTakeDamageForOthers(c.GetAttack());
+                                            // Visualize player taking damage for all other players
+                                            PlayManager.Instance.localPlayer.VisualizeMonsterTakeDamageForOthers(c.GetAttack());
                                         }, OnComplete));
                                     }
                                     else
@@ -1223,8 +1228,11 @@ public class CombatManager : Singleton<CombatManager>
                                         // Attack animation + effect + end monster turn
                                         StartCoroutine(AnimatePlayerAttacked(c,
                                         () => {
-                                        // OnAttack
-                                        c.TakeDamage(monster.GetAttack());
+                                            // OnAttack
+                                            int damage = monster.GetAttack();
+                                            if (PlayManager.Instance.ChaosTier() == 6)
+                                                damage *= 2;
+                                            c.TakeDamage(damage);
 
                                             StartCoroutine(AnimateMonsterTakeDamage(enemyCard, c.GetAttack(), () => {
                                                 monster.TakeDamage(c.GetAttack());
@@ -1284,7 +1292,10 @@ public class CombatManager : Singleton<CombatManager>
             StartCoroutine(AnimatePlayerAttacked(c,
             () => {
                 // OnAttack
-                c.TakeDamage(monster.GetAttack());
+                int damage = monster.GetAttack();
+                if (PlayManager.Instance.ChaosTier() == 6)
+                    damage *= 2;
+                c.TakeDamage(damage);
                 if (debuffs != default)
                 {
                     foreach (Effect e in debuffs)
@@ -1841,7 +1852,10 @@ public class CombatManager : Singleton<CombatManager>
         }
 
         // Animate take damage
-        StartCoroutine(AnimatePlayerTakeDamage(playerCard, monster.GetAttack() - target.GetArmor(), OnAttack));
+        int damage = monster.GetAttack() - target.GetArmor();
+        if (PlayManager.Instance.ChaosTier() == 6)
+            damage *= 2;
+        StartCoroutine(AnimatePlayerTakeDamage(playerCard, damage, OnAttack));
         yield return new WaitForSeconds(attackFlashLength);
 
         // Fade out attack icon

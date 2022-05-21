@@ -2196,6 +2196,38 @@ namespace AdventuresOfOldMultiplayer
                 }
             }
         }
+
+        public void Emote(int id)
+        {
+            FixedString64Bytes uuid = UUID.Value;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.EmoteClientRPC(uuid, id);
+            }
+            else
+                EmoteServerRPC(uuid, id);
+        }
+        [ServerRpc]
+        private void EmoteServerRPC(FixedString64Bytes uuid, int id, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.EmoteClientRPC(uuid, id);
+        }
+        [ClientRpc]
+        public void EmoteClientRPC(FixedString64Bytes uuid, int id, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value == uuid)
+                    {
+                        EmoteManager.Instance.DrawEmote(p, id);
+                    }
+                }
+            }
+        }
         #endregion
     }
 }

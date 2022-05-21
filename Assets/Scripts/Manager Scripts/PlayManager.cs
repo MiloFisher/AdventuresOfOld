@@ -2932,7 +2932,9 @@ public class PlayManager : Singleton<PlayManager>
     #region Chaos Counter Functions
     public int XPModifier()
     {
-        return 2 * (ChaosTier() - 1);
+        if(ChaosTier() < 6)
+            return 2 * (ChaosTier() - 1);
+        return 8;
     }
 
     public void ReduceChaos(int amount)
