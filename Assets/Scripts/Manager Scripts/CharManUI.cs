@@ -190,7 +190,6 @@ public class CharManUI : MonoBehaviour
         //Updating skill slab background image
         //By copying the scuffed switch case - Ethan
         //confirm_Class_Image.GetComponent<Image>().sprite = aasimar_image;'
-        Debug.Log(createdchar.getChosen_class().getName());
         confirm_Class_Image.GetComponent<Image>().sprite = Resources.Load<Sprite>("Icons/Icon_" + createdchar.getChosen_class().getName());
 
     }
@@ -415,7 +414,6 @@ public class CharManUI : MonoBehaviour
     public void PreviewPowerful(int type) {
         powerful_text.GetComponent<TextMeshProUGUI>().color = new Color32(59,255,0,255);
         trait_confirm_button.SetActive(false);
-        trait_scroll.GetComponent<ScrollRect>().enabled = false;
         if(type == 0) {
             PreviewTrait("Musclehead");
         }
@@ -430,8 +428,8 @@ public class CharManUI : MonoBehaviour
         }
         //Renable the confirm button and scroll after dropdown selection.
         trait_confirm_button.SetActive(true);
-        trait_scroll.GetComponent<ScrollRect>().enabled = true;
     }
+
     public void setCharName() {
         createdchar.setName(inputname.GetComponent<TextMeshProUGUI>().text);
         gamestart = true;
