@@ -136,9 +136,9 @@ public class Combatant
         if (flamingShot > -1)
             power += flamingShot;
 
-        int blessing = HasBlessing();
-        if (blessing > -1)
-            power += blessing;
+        int bonusPower = HasBonusPower();
+        if (bonusPower > -1)
+            power += bonusPower;
 
         int powerUp = HasPowerUp();
         if (powerUp > -1)
@@ -168,9 +168,9 @@ public class Combatant
         if (flamingShot > -1)
             power += flamingShot;
 
-        int blessing = HasBlessing();
-        if (blessing > -1)
-            power += blessing;
+        int bonusPower = HasBonusPower();
+        if (bonusPower > -1)
+            power += bonusPower;
 
         int powerUp = HasPowerUp();
         if (powerUp > -1)
@@ -440,8 +440,8 @@ public class Combatant
         return HasEffect("Flaming Shot");
     }
 
-    public int HasBlessing()
+    public int HasBonusPower()
     {
-        return HasEffect("Blessing");
+        return HasEffect("Bonus Power");
     }
 }

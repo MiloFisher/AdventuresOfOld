@@ -18,7 +18,8 @@ public class CombatManager : Singleton<CombatManager>
     public GameObject combatLayout;
     public GameObject statRoll;
     public GameObject choice;
-    public GameObject genericRoll;
+    public UIGenericRoll genericRoll;
+    public UIGenericDoubleRoll genericDoubleRoll;
     public GameObject attackRoll;
     public GameObject defensiveOptions;
     public GameObject combatOptions;
@@ -53,6 +54,7 @@ public class CombatManager : Singleton<CombatManager>
     public bool tacticalPositioning;
     public bool quickShot;
     public bool arrowBarrage;
+    public bool arcaneBolt;
 
     public Action<Combatant> OnPlayerDealDamage;
     public Action<Combatant> OnPlayerTakeDamage;
@@ -666,6 +668,28 @@ public class CombatManager : Singleton<CombatManager>
                                     arrowBarrage = true;
                                     AttackMonster(c, crit ? damage * 2 : damage);
                                     break;
+                                case "Arcane Bolt":
+                                    arcaneBolt = true;
+                                    AttackMonster(c, crit ? damage * 2 : damage);
+                                    break;
+                                case "Thunder Strike":
+                                    genericDoubleRoll.Setup("Thunder Strike", (r1, r2) => {
+                                        // Success on even sum
+                                        return (r1 + r2) % 2 == 0;
+                                    }, (r1, r2) => {
+                                        // OnSuccess
+                                        damage += r1 + r2;
+                                        AttackMonster(c, crit ? damage * 2 : damage, new List<Effect> { new Effect("Dazed", -1) });
+                                    }, (r1, r2) => {
+                                        // OnFailure
+                                        damage += r1 + r2;
+                                        AttackMonster(c, crit ? damage * 2 : damage);
+                                    });
+                                    break;
+                                case "Fireball":
+                                    damage += PlayManager.Instance.GetMod(PlayManager.Instance.GetIntelligence(c.player));
+                                    AttackMonster(c, crit ? damage * 2 : damage, new List<Effect> { new Effect("Burning", 3, PlayManager.Instance.GetLevel(c.player)) });
+                                    break;
                                 default:
                                     AttackMonster(c, crit ? damage * 2 : damage);
                                     break;
@@ -717,15 +741,20 @@ public class CombatManager : Singleton<CombatManager>
         if (flamingShot > -1)
         {
             if (debuffs == default)
-                debuffs = new List<Effect>() { new Effect("Burning", 3, PlayManager.Instance.GetLevel(c.player)) };
+                debuffs = new List<Effect> { new Effect("Burning", 3, PlayManager.Instance.GetLevel(c.player)) };
             else
                 debuffs.Add(new Effect("Burning", 3, PlayManager.Instance.GetLevel(c.player)));
             CleanseEffect(c, "Flaming Shot");
         }
-        int blessing = c.HasBlessing();
-        if (blessing > -1)
+        int bonusPower = c.HasBonusPower();
+        if (bonusPower > -1)
         {
-            CleanseEffect(c, "Blessing");
+            CleanseEffect(c, "Bonus Power");
+        }
+        if(arcaneBolt)
+        {
+            arcaneBolt = false;
+            InflictEffect(c, new Effect("Bonus Power", -1, 1, true));
         }
         PlayManager.Instance.localPlayer.SetValue("SuccessfullyAttackedMonster", true);
         // Attack animation + effect + end monster turn
@@ -803,7 +832,7 @@ public class CombatManager : Singleton<CombatManager>
                 AbilityManager.Instance.GetSkill("Quick Shot").cost = 1;
                 quickShot = false;
                 successfullyUsedAttackAbility = false;
-                genericRoll.GetComponent<UIGenericRoll>().Setup("Quick Shot", (x) => {
+                genericRoll.Setup("Quick Shot", (x) => {
                     // Success on roll even
                     return x % 2 == 0;
                 }, () => {
@@ -971,10 +1000,10 @@ public class CombatManager : Singleton<CombatManager>
         {
             CleanseEffect(c, "Flaming Shot");
         }
-        int blessing = c.HasBlessing();
-        if (blessing > -1)
+        int bonusPower = c.HasBonusPower();
+        if (bonusPower > -1)
         {
-            CleanseEffect(c, "Blessing");
+            CleanseEffect(c, "Bonus Power");
         }
         if (tacticalPositioning && IsThisCombatantsTurn(c))
         {
@@ -1920,12 +1949,15 @@ public class CombatManager : Singleton<CombatManager>
         PlayManager.Instance.localPlayer.SetValue("HasYetToAttack", false);
         PlayManager.Instance.localPlayer.SetValue("SuccessfullyAttackedMonster", false);
 
+        AbilityManager.Instance.energyTransfusionTargets = new List<Player>(PlayManager.Instance.playerList);
+
         monsterTargets = new int[0];
         OnPlayerDealDamage = default;
         OnPlayerTakeDamage = default;
         OnPlayerSpendAbilityCharge = default;
         OnPlayerBeingAttacked = default;
 
+        arcaneBolt = false;
         arrowBarrage = false;
         quickShot = false;
         successfullyUsedAttackAbility = false;

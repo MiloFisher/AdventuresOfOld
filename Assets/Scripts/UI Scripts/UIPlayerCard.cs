@@ -105,7 +105,7 @@ public class UIPlayerCard : MonoBehaviour
             "Power Fantasy" => false,
             "Vanish" => false,
             "Flaming Shot" => false,
-            "Blessing" => false,
+            "Bonus Power" => false,
             _ => true
         };
     }
@@ -129,7 +129,7 @@ public class UIPlayerCard : MonoBehaviour
             "Power Fantasy" => statusEffectIcons[12],
             "Vanish" => statusEffectIcons[13],
             "Flaming Shot" => statusEffectIcons[14],
-            "Blessing" => statusEffectIcons[15],
+            "Bonus Power" => statusEffectIcons[15],
             _ => null
         };
     }

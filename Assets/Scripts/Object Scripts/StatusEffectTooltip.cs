@@ -121,7 +121,7 @@ public class StatusEffectTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
             "Power Fantasy" => "Revives with +" + GetFormattedNumber(1) + " <color=#F16724>Physical Power</color>,\n+" + GetFormattedNumber(1) + " <color=#76A5D8>Magical Power</color>, and " + GetFormattedNumber(1) + " Health upon death.",
             "Vanish" => "Ignore all incoming damage and effects when you fail an Attack Roll.",
             "Flaming Shot" => "Your next attack has +" + GetFormattedNumber(potency) + " Power and inflicts <b><color=#F7941D>Burning (3)</color>",
-            "Blessing" => "Has their <color=#F16724>Physical Power</color> and <color=#76A5D8>Magical Power</color> increased by " + GetFormattedNumber(potency) + ".",
+            "Bonus Power" => "Has their <color=#F16724>Physical Power</color> and <color=#76A5D8>Magical Power</color> increased by " + GetFormattedNumber(potency) + ".",
             _ => "Unknown Effect: " + effectName
         };
     }
@@ -145,7 +145,7 @@ public class StatusEffectTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
             "Power Fantasy" => "#00A14B",
             "Vanish" => "#00A14B",
             "Flaming Shot" => "#F7941D",
-            "Blessing" => "#DDA8D4",
+            "Bonus Power" => "#00A14B",
             _ => "#000000"
         };
     }

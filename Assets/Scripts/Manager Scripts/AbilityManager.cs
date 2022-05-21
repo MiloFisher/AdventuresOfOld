@@ -23,6 +23,7 @@ public class AbilityManager : Singleton<AbilityManager>
     public Color racialColor;
 
     public bool usingAbility;
+    public List<Player> energyTransfusionTargets = new List<Player>();
 
     private void Start()
     {
@@ -218,6 +219,7 @@ public class AbilityManager : Singleton<AbilityManager>
                 "Vanish" => CombatManager.Instance.InCombat() && CombatManager.Instance.IsCombatant(PlayManager.Instance.localPlayer) && !CombatManager.Instance.GetCombatantFromPlayer(PlayManager.Instance.localPlayer).HasVanish(),
                 "Flaming Shot" => CombatManager.Instance.InCombat() && CombatManager.Instance.IsCombatant(PlayManager.Instance.localPlayer) && !(CombatManager.Instance.GetCombatantFromPlayer(PlayManager.Instance.localPlayer).HasFlamingShot() > -1),
                 "Survival Kit" => true,
+                "Energy Transfusion" => true,
                 _ => false
             };
         }
@@ -235,6 +237,33 @@ public class AbilityManager : Singleton<AbilityManager>
     public void PayCost(int cost)
     {
         PlayManager.Instance.localPlayer.LoseAbilityCharges(cost);
+
+        if(CombatManager.Instance.InCombat() && CombatManager.Instance.IsCombatant(PlayManager.Instance.localPlayer))
+        {
+            Combatant c = CombatManager.Instance.GetCombatantFromPlayer(PlayManager.Instance.localPlayer);
+
+            if (CombatManager.Instance.OnPlayerSpendAbilityCharge != default)
+                CombatManager.Instance.OnPlayerSpendAbilityCharge(c);
+
+            if (HasAbilityUnlocked(GetSkill("Infused Strikes")) && cost > 0)
+                CombatManager.Instance.InflictEffect(c, new Effect("Attack Up", -1, cost, true));
+
+            if (HasAbilityUnlocked(GetSkill("Elemental Conduit")) && cost > 0)
+            {
+                usingAbility = true;
+                CombatManager.Instance.genericRoll.Setup("Elemental Conduit", (r) => {
+                    // Success on even roll
+                    return r % 2 == 0;
+                }, () => {
+                    // OnSuccess
+                    c.player.RestoreAbilityCharges(1);
+                    usingAbility = false;
+                }, () => {
+                    // OnFailure
+                    usingAbility = false;
+                });
+            }
+        }
     }
 
     public void UseSkill(string name)
@@ -316,7 +345,7 @@ public class AbilityManager : Singleton<AbilityManager>
                 else
                 {
                     Combatant c = CombatManager.Instance.GetCombatantFromPlayer(p);
-                    CombatManager.Instance.InflictEffect(c, new Effect("Blessing", -1, 1, true));
+                    CombatManager.Instance.InflictEffect(c, new Effect("Bonus Power", -1, 1, true));
                     usingAbility = false;
                 }
             });
@@ -425,7 +454,7 @@ public class AbilityManager : Singleton<AbilityManager>
             Combatant c = CombatManager.Instance.GetCombatantFromPlayer(PlayManager.Instance.localPlayer);
             CombatManager.Instance.CleanseAllEffectsFromPlayer(c.player);
             CombatManager.Instance.HealPlayer(c.player, 15);
-            CombatManager.Instance.InflictEffect(c, new Effect("Blessing", -1, 1, true));
+            CombatManager.Instance.InflictEffect(c, new Effect("Bonus Power", -1, 1, true));
         }
         else
         {
@@ -438,7 +467,7 @@ public class AbilityManager : Singleton<AbilityManager>
     #region Sorcerer Abilties
     private void InfusedStrikes()
     {
-
+        // Done in AbilityManager PayCost(int cost)
     }
 
     private void ArcaneBolt()
@@ -458,12 +487,39 @@ public class AbilityManager : Singleton<AbilityManager>
 
     private void ElementalConduit()
     {
-
+        // Done in AbilityManager PayCost(int cost)
     }
 
     private void EnergyTransfusion()
     {
+        // *** Has special use case ***
+        if (!CombatManager.Instance.InCombat())
+            energyTransfusionTargets = new List<Player>(PlayManager.Instance.playerList);
 
+        PlayManager.Instance.TargetPlayerSelection("Choose Target", true, true, false, (p) => {
+            // OnSelect
+            p.RestoreAbilityCharges(2);
+            if (CombatManager.Instance.InCombat())
+            {
+                if (CombatManager.Instance.IsCombatant(p))
+                    CombatManager.Instance.HealPlayer(p, 12);
+                else
+                    p.RestoreHealth(12);
+
+                if (CombatManager.Instance.IsCombatant(PlayManager.Instance.localPlayer))
+                    CombatManager.Instance.HealPlayer(PlayManager.Instance.localPlayer, 12);
+                else
+                    PlayManager.Instance.localPlayer.RestoreHealth(12);
+            }
+            else
+            {
+                p.RestoreHealth(12);
+                PlayManager.Instance.localPlayer.RestoreHealth(12);
+            }
+        }, (p) => {
+            // Requirement is player must be in the target list and must be alive
+            return energyTransfusionTargets.Contains(p) && PlayManager.Instance.GetHealth(p) > 0 ;
+        }, false);
     }
     #endregion
 
