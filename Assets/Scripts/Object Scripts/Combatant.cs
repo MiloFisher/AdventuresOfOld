@@ -18,6 +18,7 @@ public class Combatant
     private int minionAttack = 0;
     private int minionPower = 0;
     private bool hasHatched;
+    public int startHealth;
 
     public Combatant(CombatantType combatantType, Player player)
     {
@@ -43,8 +44,7 @@ public class Combatant
         this.combatantType = combatantType;
         this.player = player;
         this.monster = monster;
-        if (startHealth != default)
-            currentHealth = startHealth;
+        this.startHealth = startHealth;
         statusEffects = new List<Effect>();
         monster.Skill(this);
     }

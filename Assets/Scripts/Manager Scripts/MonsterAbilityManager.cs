@@ -461,6 +461,8 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
         int level = PlayManager.Instance.GetLevel(target.player);
         int health = target.monster.health + 2 * level;
         target.SetMinionMaxHealth(health);
+        if (target.startHealth != default)
+            health = target.startHealth;
         target.SetCurrentHealth(health);
         int attack = target.monster.attack + level;
         target.SetMinionAttack(attack);
