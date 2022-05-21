@@ -649,7 +649,7 @@ namespace AdventuresOfOldMultiplayer
         {
             if (IsOwner)
             {
-                if (XP.Value > PlayManager.Instance.GetNeededXP(this))
+                if (XP.Value >= PlayManager.Instance.GetNeededXP(this))
                 {
                     LevelUp(PlayManager.Instance.GetNeededXP(this));
                     PlayManager.Instance.LevelUpNotification();
