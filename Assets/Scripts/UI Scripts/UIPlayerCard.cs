@@ -34,8 +34,11 @@ public class UIPlayerCard : MonoBehaviour
     public float damageNumberFadeLength = 0.004f;
     public Color statusEffectDebuffColor;
     public Color statusEffectBuffColor;
+    public UIEncounterCard minionCard;
+    public GameObject toggleViewButton;
 
     private List<GameObject> statusEffectList = new List<GameObject>();
+    private bool blockSwapping;
 
     public void SetVisuals(Combatant c)
     {
@@ -50,6 +53,17 @@ public class UIPlayerCard : MonoBehaviour
         playerPhysicalPower.text = combatant.GetPhysicalPower().ToString();
         playerMagicalPower.text = combatant.GetMagicalPower().ToString();
         playerDescription.text = combatant.player.Trait.Value + " " + combatant.player.Race.Value + " " + combatant.player.Class.Value;
+  
+        if (combatant.minion == default)
+        {
+            toggleViewButton.SetActive(false);
+            minionCard.gameObject.SetActive(false);
+        }
+        else
+        {
+            toggleViewButton.SetActive(!blockSwapping);
+            toggleViewButton.GetComponentInChildren<TMP_Text>().text = minionCard.gameObject.activeInHierarchy ? "Show Player" : "Show Minion";
+        }
         UpdateHealthBar();
     }
 
@@ -57,8 +71,16 @@ public class UIPlayerCard : MonoBehaviour
     {
         if (combatant == null)
             return;
-        healthBarText.text = combatant.GetHealth() + " / " + combatant.GetMaxHealth();
-        healthBar.transform.localPosition = new Vector3(1454f * combatant.GetHealth() / combatant.GetMaxHealth() - 1454f, 0, 0);
+        if(minionCard.gameObject.activeInHierarchy)
+        {
+            healthBarText.text = combatant.minion.GetHealth() + " / " + combatant.minion.GetMaxHealth();
+            healthBar.transform.localPosition = new Vector3(1454f * combatant.minion.GetHealth() / combatant.minion.GetMaxHealth() - 1454f, 0, 0);
+        }
+        else
+        {
+            healthBarText.text = combatant.GetHealth() + " / " + combatant.GetMaxHealth();
+            healthBar.transform.localPosition = new Vector3(1454f * combatant.GetHealth() / combatant.GetMaxHealth() - 1454f, 0, 0);
+        }
     }
 
     public void ClickCard(int id)
@@ -66,8 +88,10 @@ public class UIPlayerCard : MonoBehaviour
 
     }
 
-    public void DrawStatusEffects(List<Effect> effects)
+    public void DrawStatusEffects(List<Effect> effects, bool isMinion = false)
     {
+        if (isMinion != minionCard.gameObject.activeInHierarchy)
+            return;
         // First previous effects
         for (int i = 0; i < statusEffectList.Count; i++)
             Destroy(statusEffectList[i]);
@@ -106,6 +130,7 @@ public class UIPlayerCard : MonoBehaviour
             "Vanish" => false,
             "Flaming Shot" => false,
             "Bonus Power" => false,
+            "Cursed" => true,
             _ => true
         };
     }
@@ -130,6 +155,7 @@ public class UIPlayerCard : MonoBehaviour
             "Vanish" => statusEffectIcons[13],
             "Flaming Shot" => statusEffectIcons[14],
             "Bonus Power" => statusEffectIcons[15],
+            "Cursed" => statusEffectIcons[16],
             _ => null
         };
     }
@@ -156,6 +182,8 @@ public class UIPlayerCard : MonoBehaviour
 
     public void ActivateCrosshair(bool active)
     {
+        if (minionCard.gameObject.activeInHierarchy)
+            active = false;
         targetCrosshair.SetActive(active);
     }
 
@@ -209,5 +237,38 @@ public class UIPlayerCard : MonoBehaviour
     private void SetAlpha(TMP_Text t, float a)
     {
         t.color = new Color(t.color.r, t.color.g, t.color.b, a);
+    }
+
+    public void ToggleView()
+    {
+        if (blockSwapping)
+            return;
+        if(minionCard.gameObject.activeInHierarchy)
+        {
+            minionCard.gameObject.SetActive(false);
+            DrawStatusEffects(combatant.statusEffects, false);
+        }
+        else
+        {
+            minionCard.gameObject.SetActive(true);
+            DrawStatusEffects(combatant.minion.statusEffects, true);
+        }
+    }
+
+    public void SetMinionCardActive(bool active)
+    {
+        minionCard.gameObject.SetActive(active);
+        DrawStatusEffects(combatant.statusEffects, active);
+    }
+
+    public void BlockSwapping(bool active)
+    {
+        blockSwapping = active;
+    }
+
+    public void ResetMinionVisuals()
+    {
+        toggleViewButton.SetActive(false);
+        minionCard.gameObject.SetActive(false);
     }
 }

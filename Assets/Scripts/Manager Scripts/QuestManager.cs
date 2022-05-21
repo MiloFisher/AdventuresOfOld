@@ -155,27 +155,27 @@ public class QuestManager : Singleton<QuestManager>
                 break;
             case "Ancient Spring":
                 isLocation = true;
-                locationImage.sprite = locationImages[0];
+                locationImage.sprite = locationImages[1];
                 break;
             case "Bandit Hideout":
                 isLocation = true;
-                locationImage.sprite = locationImages[0];
+                locationImage.sprite = locationImages[2];
                 break;
             case "Howling Cave":
                 isLocation = true;
-                locationImage.sprite = locationImages[0];
+                locationImage.sprite = locationImages[3];
                 break;
             case "Ominous Clearing":
                 isLocation = true;
-                locationImage.sprite = locationImages[0];
+                locationImage.sprite = locationImages[4];
                 break;
             case "Overgrown Temple":
                 isLocation = true;
-                locationImage.sprite = locationImages[0];
+                locationImage.sprite = locationImages[5];
                 break;
             case "Webbed Forest":
                 isLocation = true;
-                locationImage.sprite = locationImages[0];
+                locationImage.sprite = locationImages[6];
                 break;
         }
         locationImage.gameObject.SetActive(isLocation);

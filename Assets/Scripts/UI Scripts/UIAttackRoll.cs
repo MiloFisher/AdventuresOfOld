@@ -48,10 +48,17 @@ public class UIAttackRoll : MonoBehaviour
         crit = false;
         success = 0;
         attackingPlayer = c;
-        if (PlayManager.Instance.IsPhysicalBased(attackingPlayer.player))
+        if(attackingPlayer.combatantType == CombatantType.MINION)
+        {
             playerPowerValue = attackingPlayer.GetPhysicalPower();
+        }
         else
-            playerPowerValue = attackingPlayer.GetMagicalPower();
+        {
+            if (PlayManager.Instance.IsPhysicalBased(attackingPlayer.player))
+                playerPowerValue = attackingPlayer.GetPhysicalPower();
+            else
+                playerPowerValue = attackingPlayer.GetMagicalPower();
+        }
         monsterPowerValue = _monsterPower;
         playerPower.text = playerPowerValue + "";
         monsterPower.text = monsterPowerValue + "";
@@ -74,10 +81,17 @@ public class UIAttackRoll : MonoBehaviour
     {
         if(opened)
         {
-            if (PlayManager.Instance.IsPhysicalBased(attackingPlayer.player))
+            if (attackingPlayer.combatantType == CombatantType.MINION)
+            {
                 playerPowerValue = attackingPlayer.GetPhysicalPower();
+            }
             else
-                playerPowerValue = attackingPlayer.GetMagicalPower();
+            {
+                if (PlayManager.Instance.IsPhysicalBased(attackingPlayer.player))
+                    playerPowerValue = attackingPlayer.GetPhysicalPower();
+                else
+                    playerPowerValue = attackingPlayer.GetMagicalPower();
+            }
             playerPower.text = playerPowerValue + "";
             if (CombatManager.Instance.CombatOverCheck() > -1 && !rolling)
             {
@@ -163,10 +177,14 @@ public class UIAttackRoll : MonoBehaviour
         // End dice 2
         rollDisplay2.sprite = diceFaces[roll2 - 1];
 
-        int playerCritValue = PlayManager.Instance.GetCrit(PlayManager.Instance.localPlayer);
+        int playerCritValue;
+        if(attackingPlayer.combatantType == CombatantType.MINION)
+            playerCritValue = 12;
+        else
+            playerCritValue = PlayManager.Instance.GetCrit(PlayManager.Instance.localPlayer);
 
         // Display success or failure
-        if(roll1 + roll2 >= playerCritValue)
+        if (roll1 + roll2 >= playerCritValue)
         {
             crit = true;
             successText.SetActive(true);
@@ -199,7 +217,7 @@ public class UIAttackRoll : MonoBehaviour
         }
         else if (roll1 + roll2 + playerPowerValue < monsterPowerValue)
         {
-            if(AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Focus")) && (roll1 == 1 || roll2 == 1) && !focusUsed)
+            if(AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Focus")) && (roll1 == 1 || roll2 == 1) && !focusUsed && attackingPlayer.combatantType != CombatantType.MINION)
             {
                 focusUsed = true;
                 PlayManager.Instance.SendNotification(6, "Your (1) is being re-rolled!", () => {
@@ -219,7 +237,7 @@ public class UIAttackRoll : MonoBehaviour
         }
         else
         {
-            if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Focus")) && (roll1 == 1 || roll2 == 1) && !focusUsed)
+            if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Focus")) && (roll1 == 1 || roll2 == 1) && !focusUsed && attackingPlayer.combatantType != CombatantType.MINION)
             {
                 focusUsed = true;
                 PlayManager.Instance.SendNotification(6, "Your (1) is being re-rolled!", () => {
@@ -351,6 +369,7 @@ public class UIAttackRoll : MonoBehaviour
         yield return new WaitForSeconds(waitTime * Global.animSpeed);
 
         gameObject.SetActive(false);
-        PlayManager.Instance.localPlayer.SetValue("HasYetToAttack", false);
+        if(attackingPlayer.combatantType != CombatantType.MINION)
+            PlayManager.Instance.localPlayer.SetValue("HasYetToAttack", false);
     }
 }

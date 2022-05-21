@@ -3758,9 +3758,10 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 8ba51a79d503143ada259cbb4e09247c, type: 3}
   - {fileID: 21300000, guid: 5702a5870bbc5484c8e80beb24b2327f, type: 3}
   - {fileID: 21300000, guid: f0ae18d70ae014163ad7350565590fae, type: 3}
-  - {fileID: 21300000, guid: f0ae18d70ae014163ad7350565590fae, type: 3}
+  - {fileID: 21300000, guid: 572034cc230764e6f89d0306e7a07784, type: 3}
   - {fileID: 21300000, guid: a93ad83ada4434247ae799ef702d1a85, type: 3}
   - {fileID: 21300000, guid: ad883969045b44b32a0e40343191270a, type: 3}
+  - {fileID: 21300000, guid: 5089d6ced0cd544e3b38b1e0669a922a, type: 3}
   damageNumberFadeLength: 0.004
   statusEffectDebuffColor: {r: 1, g: 0, b: 0, a: 0.39215687}
   statusEffectBuffColor: {r: 0, g: 1, b: 0, a: 0.39215687}

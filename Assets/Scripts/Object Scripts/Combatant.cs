@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using AdventuresOfOldMultiplayer;
 
-public enum CombatantType { PLAYER, MONSTER };
+public enum CombatantType { PLAYER, MONSTER, MINION };
 
 [Serializable]
 public class Combatant
@@ -10,26 +10,43 @@ public class Combatant
     public CombatantType combatantType;
     public Player player;
     public MonsterCard monster;
+    public Combatant minion;
     public List<Effect> statusEffects;
 
-    private int currentHealth;
+    private int currentHealth = 0;
+    private int minionMaxHealth = 0;
+    private int minionAttack = 0;
+    private int minionPower = 0;
     private bool hasHatched;
 
     public Combatant(CombatantType combatantType, Player player)
     {
         this.combatantType = combatantType;
         this.player = player;
-        statusEffects = new List<Effect>();
+        minion = default;
         monster = default;
+        statusEffects = new List<Effect>();
     }
 
     public Combatant(CombatantType combatantType, MonsterCard monster)
     {
         this.combatantType = combatantType;
         this.monster = monster;
+        minion = default;
         player = default;
         statusEffects = new List<Effect>();
         currentHealth = monster.health + PlayManager.Instance.HealthModifier();
+    }
+
+    public Combatant(CombatantType combatantType, Player player, MonsterCard monster, int startHealth = default)
+    {
+        this.combatantType = combatantType;
+        this.player = player;
+        this.monster = monster;
+        if (startHealth != default)
+            currentHealth = startHealth;
+        statusEffects = new List<Effect>();
+        monster.Skill(this);
     }
 
     public string GetName()
@@ -60,8 +77,10 @@ public class Combatant
     {
         if (combatantType == CombatantType.PLAYER)
             return PlayManager.Instance.GetMaxHealth(player);
-        else
+        else if (combatantType == CombatantType.MONSTER)
             return monster.health + PlayManager.Instance.HealthModifier();
+        else
+            return minionMaxHealth;
     }
 
     public bool IsAlive()
@@ -82,8 +101,13 @@ public class Combatant
         if(armorUp > -1)
             armor += armorUp;
 
+        if (IsCursed())
+        {
+            armor = HalfRoundedUp(armor);
+        }
+
         int weakened = IsWeakened();
-        if(weakened > -1)
+        if (weakened > -1)
         {
             armor -= weakened;
             if (armor < 0)
@@ -99,8 +123,10 @@ public class Combatant
 
         if (combatantType == CombatantType.PLAYER)
             attack = PlayManager.Instance.GetAttack(player);
-        else
+        else if (combatantType == CombatantType.MONSTER)
             attack = monster.attack + PlayManager.Instance.AttackModifier();
+        else
+            attack = minionAttack;
 
         int attackUp = HasAttackUp();
         if (attackUp > -1)
@@ -129,8 +155,10 @@ public class Combatant
 
         if (combatantType == CombatantType.PLAYER)
             power = PlayManager.Instance.GetPhysicalPower(player);
+        else if (combatantType == CombatantType.MONSTER)
+            power = monster.physicalPower + PlayManager.Instance.PowerModifier();
         else
-            power =  monster.physicalPower + PlayManager.Instance.PowerModifier();
+            power = minionPower;
 
         int flamingShot = HasFlamingShot();
         if (flamingShot > -1)
@@ -161,8 +189,10 @@ public class Combatant
 
         if (combatantType == CombatantType.PLAYER)
             power = PlayManager.Instance.GetMagicalPower(player);
-        else
+        else if (combatantType == CombatantType.MONSTER)
             power = monster.magicalPower + PlayManager.Instance.PowerModifier();
+        else
+            power = 0;
 
         int flamingShot = HasFlamingShot();
         if (flamingShot > -1)
@@ -196,7 +226,7 @@ public class Combatant
 
             player.TakeDamage(amount, GetArmor(), isTrue);
         }
-        else
+        else if (combatantType == CombatantType.MONSTER)
         {
             currentHealth -= amount;
             if (currentHealth <= 0)
@@ -211,6 +241,13 @@ public class Combatant
                     currentHealth = 0;
             }
             PlayManager.Instance.localPlayer.UpdateMonsterHealth(currentHealth);
+        }
+        else
+        {
+            currentHealth -= amount;
+            if (currentHealth <= 0)
+                currentHealth = 0;
+            CombatManager.Instance.UpdateMinion(player, GetHealth(), GetMaxHealth(), GetAttack(), GetPhysicalPower());
         }
     }
 
@@ -240,6 +277,21 @@ public class Combatant
         currentHealth = value;
     }
 
+    public void SetMinionMaxHealth(int value)
+    {
+        minionMaxHealth = value;
+    }
+
+    public void SetMinionAttack(int value)
+    {
+        minionAttack = value;
+    }
+
+    public void SetMinionPower(int value)
+    {
+        minionPower = value;
+    }
+
     public void GainStatusEffect(Effect e)
     {
         bool alreadyContains = false;
@@ -258,8 +310,10 @@ public class Combatant
 
         if (combatantType == CombatantType.PLAYER)
             CombatManager.Instance.GetPlayerCardFromCombatant(this).DrawStatusEffects(statusEffects);
-        else
+        else if (combatantType == CombatantType.MONSTER)
             CombatManager.Instance.enemyCard.DrawStatusEffects(statusEffects);
+        else
+            CombatManager.Instance.GetPlayerCardFromCombatant(CombatManager.Instance.GetCombatantFromPlayer(player)).DrawStatusEffects(statusEffects, true);
     }
 
     public void RemoveStatusEffect(string effectName)
@@ -275,8 +329,10 @@ public class Combatant
 
         if (combatantType == CombatantType.PLAYER)
             CombatManager.Instance.GetPlayerCardFromCombatant(this).DrawStatusEffects(statusEffects);
-        else
+        else if (combatantType == CombatantType.MONSTER)
             CombatManager.Instance.enemyCard.DrawStatusEffects(statusEffects);
+        else
+            CombatManager.Instance.GetPlayerCardFromCombatant(CombatManager.Instance.GetCombatantFromPlayer(player)).DrawStatusEffects(statusEffects, true);
     }
 
     public void CycleStatusEffects()
@@ -294,8 +350,10 @@ public class Combatant
 
         if (combatantType == CombatantType.PLAYER)
             CombatManager.Instance.GetPlayerCardFromCombatant(this).DrawStatusEffects(statusEffects);
-        else
+        else if (combatantType == CombatantType.MONSTER)
             CombatManager.Instance.enemyCard.DrawStatusEffects(statusEffects);
+        else
+            CombatManager.Instance.GetPlayerCardFromCombatant(CombatManager.Instance.GetCombatantFromPlayer(player)).DrawStatusEffects(statusEffects, true);
     }
 
     public void UseStatusEffect(string effectName)
@@ -315,8 +373,10 @@ public class Combatant
 
         if (combatantType == CombatantType.PLAYER)
             CombatManager.Instance.GetPlayerCardFromCombatant(this).DrawStatusEffects(statusEffects);
-        else
+        else if (combatantType == CombatantType.MONSTER)
             CombatManager.Instance.enemyCard.DrawStatusEffects(statusEffects);
+        else
+            CombatManager.Instance.GetPlayerCardFromCombatant(CombatManager.Instance.GetCombatantFromPlayer(player)).DrawStatusEffects(statusEffects, true);
     }
 
     private int HalfRoundedUp(int x)
@@ -443,5 +503,10 @@ public class Combatant
     public int HasBonusPower()
     {
         return HasEffect("Bonus Power");
+    }
+
+    public bool IsCursed()
+    {
+        return HasEffect("Cursed") > -1;
     }
 }

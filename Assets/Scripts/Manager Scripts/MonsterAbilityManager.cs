@@ -70,6 +70,8 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
     private void SpiderEgg_Passive()
     {
         CombatManager.Instance.OnPlayerTakeDamage = (t) => {
+            if (t.combatantType == CombatantType.MINION)
+                return;
             CombatManager.Instance.waitUntil = true;
             CombatManager.Instance.MakeStatRoll("CON", 7);
             CombatManager.Instance.StatRollListener((a) => {
@@ -100,6 +102,8 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
     private void GiantSpider_Passive()
     {
         CombatManager.Instance.OnPlayerTakeDamage = (t) => {
+            if (t.combatantType == CombatantType.MINION)
+                return;
             CombatManager.Instance.waitUntil = true;
             CombatManager.Instance.MakeStatRoll("CON", 8);
             CombatManager.Instance.StatRollListener((a) => {
@@ -174,6 +178,8 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
     private void GiantRat_Passive()
     {
         CombatManager.Instance.OnPlayerTakeDamage = (t) => {
+            if (t.combatantType == CombatantType.MINION)
+                return;
             CombatManager.Instance.waitUntil = true;
             CombatManager.Instance.MakeStatRoll("CON", 8);
             CombatManager.Instance.StatRollListener((a) => {
@@ -207,6 +213,8 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
     private void GiantFieryRat_Passive()
     {
         CombatManager.Instance.OnPlayerTakeDamage = (t) => {
+            if (t.combatantType == CombatantType.MINION)
+                return;
             CombatManager.Instance.waitUntil = true;
             CombatManager.Instance.MakeStatRoll("CON", 11);
             CombatManager.Instance.StatRollListener((a) => {
@@ -307,6 +315,8 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
     private void RagingDiscordKitten_Passive()
     {
         CombatManager.Instance.OnPlayerTakeDamage = (t) => {
+            if (t.combatantType == CombatantType.MINION)
+                return;
             if (CombatManager.Instance.IsThisCombatantsTurn(t))
                 CombatManager.Instance.InflictEffect(t, new Effect("Plagued", 2));
             else
@@ -381,6 +391,8 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
             CombatManager.Instance.InflictEffect(CombatManager.Instance.monster, new Effect("Power Down", -1, 2, true));
         }
         CombatManager.Instance.OnPlayerTakeDamage = (t) => {
+            if (t.combatantType == CombatantType.MINION)
+                return;
             CombatManager.Instance.waitUntil = true;
             CombatManager.Instance.MakeStatRoll("CON", 8);
             CombatManager.Instance.StatRollListener((a) => {
@@ -446,7 +458,14 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
     #region Undead Minion
     private void UndeadMinion_Skill()
     {
-        // effect goes here...
+        int level = PlayManager.Instance.GetLevel(target.player);
+        int health = target.monster.health + 2 * level;
+        target.SetMinionMaxHealth(health);
+        target.SetCurrentHealth(health);
+        int attack = target.monster.attack + level;
+        target.SetMinionAttack(attack);
+        int power = target.monster.physicalPower + level;
+        target.SetMinionPower(power);
     }
 
     private void UndeadMinion_Passive()

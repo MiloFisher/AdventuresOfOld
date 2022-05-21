@@ -226,6 +226,8 @@ public class UIEncounterCard : MonoBehaviour
 
     public void SetMonsterVisuals(Combatant c)
     {
+        if (c == default)
+            return;
         cardName = c.monster.cardName;
         eventComponents.SetActive(false);
         monsterComponents.SetActive(true);
@@ -333,6 +335,7 @@ public class UIEncounterCard : MonoBehaviour
             "Vanish" => false,
             "Flaming Shot" => false,
             "Bonus Power" => false,
+            "Cursed" => true,
             _ => true
         };
     }
@@ -357,6 +360,7 @@ public class UIEncounterCard : MonoBehaviour
             "Vanish" => statusEffectIcons[13],
             "Flaming Shot" => statusEffectIcons[14],
             "Bonus Power" => statusEffectIcons[15],
+            "Cursed" => statusEffectIcons[16],
             _ => null
         };
     }

@@ -55,6 +55,8 @@ public class CombatManager : Singleton<CombatManager>
     public bool quickShot;
     public bool arrowBarrage;
     public bool arcaneBolt;
+    public bool usedRaiseUndead;
+    public bool isYourMinionsTurn;
 
     public Action<Combatant> OnPlayerDealDamage;
     public Action<Combatant> OnPlayerTakeDamage;
@@ -101,8 +103,10 @@ public class CombatManager : Singleton<CombatManager>
             {
                 if (turnOrderCombatantList[i].combatantType == CombatantType.PLAYER)
                     arr[i] = turnOrderCombatantList[i].player.UUID.Value;
-                else
+                else if (turnOrderCombatantList[i].combatantType == CombatantType.MONSTER)
                     arr[i] = turnOrderCombatantList[i].monster.cardName;
+                else
+                    arr[i] = "m_" + turnOrderCombatantList[i].player.UUID.Value;
             }
             combatTurnMarker = 0;
             PlayManager.Instance.localPlayer.SetTurnOrderCombatantList(arr, false);
@@ -422,9 +426,21 @@ public class CombatManager : Singleton<CombatManager>
         usedItemThisTurn = false;
     }
 
+    public void StartMinionTurn()
+    {
+        isYourMinionsTurn = true;
+        if (!PlayManager.Instance.transitions.transform.GetChild(4).gameObject.activeInHierarchy && !combatFadeOverlay.activeInHierarchy)
+            PlayManager.Instance.CallTransition(7);
+    }
+
     public void StartBotTurn()
     {
         EndBotTurn();
+    }
+
+    public void StartBotMinionTurn()
+    {
+
     }
 
     public void StartMonsterTurn(int[] targets)
@@ -440,6 +456,8 @@ public class CombatManager : Singleton<CombatManager>
     {
         Combatant c = GetCombatantFromPlayer(PlayManager.Instance.localPlayer);
 
+        PlayManager.Instance.localPlayer.SetPlayerCardMinionView(false, false);
+
         // Deactivate variable marking your turn
         isYourTurn = false;
 
@@ -449,6 +467,29 @@ public class CombatManager : Singleton<CombatManager>
 
         // Cycle effects
         CycleEffects(c);
+
+        // Start next combatant turn
+        StartCombatantsTurn();
+    }
+
+    public void EndMinionTurn()
+    {
+        Combatant c = GetCombatantFromPlayer(PlayManager.Instance.localPlayer).minion;
+
+        PlayManager.Instance.localPlayer.SetPlayerCardMinionView(false, false);
+
+        // Deactivate variable marking your turn
+        isYourMinionsTurn = false;
+
+        if (c != default)
+        {
+            // Increment turn marker for all players
+            combatTurnMarker++;
+            PlayManager.Instance.localPlayer.UpdateCombatTurnMarker(combatTurnMarker);
+
+            // Cycle effects
+            CycleEffects(c);
+        } 
 
         // Start next combatant turn
         StartCombatantsTurn();
@@ -475,8 +516,8 @@ public class CombatManager : Singleton<CombatManager>
         if (combatTurnMarker >= turnOrderCombatantList.Count)
             combatTurnMarker = 0;
         if (turnOrderCombatantList[combatTurnMarker].combatantType == CombatantType.PLAYER)
-            PlayManager.Instance.localPlayer.StartNextCombatantTurn(combatTurnMarker);
-        else
+            PlayManager.Instance.localPlayer.StartNextCombatantTurn(combatTurnMarker, false);
+        else if (turnOrderCombatantList[combatTurnMarker].combatantType == CombatantType.MONSTER)
         {
             // First handle on start of turn monster debuffs
             int burning = monster.IsBurning();
@@ -501,16 +542,89 @@ public class CombatManager : Singleton<CombatManager>
 
             PlayManager.Instance.localPlayer.StartMonsterTurn(GetMonsterTargets());
         }
+        else
+        {
+            // minion turn here
+            PlayManager.Instance.localPlayer.StartNextCombatantTurn(combatTurnMarker, true);
+        }
+    }
+
+    public void MinionTakeTurn()
+    {
+        Combatant c = GetCombatantFromPlayer(PlayManager.Instance.localPlayer).minion;
+        Combatant owner = GetCombatantFromPlayer(c.player);
+        UIPlayerCard card = GetPlayerCardFromCombatant(owner);
+        PlayManager.Instance.localPlayer.SetPlayerCardMinionView(true, false);
+
+        // Check if still alive
+        if (c == default || !c.IsAlive())
+        {
+            EndMinionTurn();
+            UpdateMinion(PlayManager.Instance.localPlayer, 0, 0, 0, 0);
+            return;
+        }
+
+        if (c.IsEnwebbed())
+        {
+            EndMinionTurn();
+            return;
+        }
+
+        // Basic Attack
+        attackerId = GetIdFromCombatant(c);
+        // Make sure to sync this between all players if we decide to have all players see this
+        StartCoroutine(TransitionCombatLayoutStyle(CombatLayoutStyle.ATTACKING, () => {
+            PlayManager.Instance.localPlayer.SetPlayerCardMinionView(true, true);
+            int monsterPower = monster.GetPhysicalPower();
+            MakeAttackRoll(c, monsterPower);
+            AttackRollListener((a, crit) => {
+                if (a == 1)
+                {
+                    // minion attacks monster
+                    int damage = c.GetAttack();
+                    if (crit)
+                        damage *= 2;
+                    AttackMonster(c, damage);
+                }
+                else if (a == -1)
+                {
+                    // monster attacks minion
+                    AttackPlayer(c, () => {
+                        // OnComplete
+                        StartCoroutine(TransitionCombatLayoutStyle(CombatLayoutStyle.DEFAULT, () => {
+                            EndMinionTurn();
+                        }));
+                        PlayManager.Instance.localPlayer.TransitionOthersToStyle(CombatLayoutStyle.DEFAULT);
+                    });
+                }
+                else if (a == 99)
+                {
+                    // Combat Over
+                    EndCombat(CombatOverCheck());
+                }
+            });
+        }));
+        PlayManager.Instance.localPlayer.TransitionOthersToStyle(CombatLayoutStyle.ATTACKING, attackerId);
     }
 
     public void TakeTurn()
     {
         Combatant c = GetCombatantFromPlayer(PlayManager.Instance.localPlayer);
+        PlayManager.Instance.localPlayer.SetPlayerCardMinionView(false, false);
 
-        if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Lone Wolf")) && turnOrderCombatantList.Count == 2 && !receivedLoneWolf)
+        if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Lone Wolf")) && !receivedLoneWolf)
         {
-            receivedLoneWolf = true;
-            InflictEffect(c, new Effect("Power Up", -1, 1, true));
+            int players = 0;
+            foreach(Combatant com in turnOrderCombatantList)
+            {
+                if (com.combatantType == CombatantType.PLAYER)
+                    players++;
+            }
+            if(players == 1)
+            {
+                receivedLoneWolf = true;
+                InflictEffect(c, new Effect("Power Up", -1, 1, true));
+            }
         }
 
         // Check if still alive
@@ -555,6 +669,7 @@ public class CombatManager : Singleton<CombatManager>
                 attackerId = GetIdFromCombatant(c);
                 // Make sure to sync this between all players if we decide to have all players see this
                 StartCoroutine(TransitionCombatLayoutStyle(CombatLayoutStyle.ATTACKING, () => {
+                    PlayManager.Instance.localPlayer.SetPlayerCardMinionView(false, true);
                     int monsterPower = 0;
                     if (PlayManager.Instance.IsPhysicalBased(c.player))
                         monsterPower = monster.GetPhysicalPower();
@@ -606,6 +721,7 @@ public class CombatManager : Singleton<CombatManager>
                 attackerId = GetIdFromCombatant(c);
                 // Make sure to sync this between all players if we decide to have all players see this
                 StartCoroutine(TransitionCombatLayoutStyle(CombatLayoutStyle.ATTACKING, () => {
+                    PlayManager.Instance.localPlayer.SetPlayerCardMinionView(false, true);
                     int monsterPower = 0;
                     if (PlayManager.Instance.IsPhysicalBased(c.player))
                     {
@@ -690,6 +806,10 @@ public class CombatManager : Singleton<CombatManager>
                                     damage += PlayManager.Instance.GetMod(PlayManager.Instance.GetIntelligence(c.player));
                                     AttackMonster(c, crit ? damage * 2 : damage, new List<Effect> { new Effect("Burning", 3, PlayManager.Instance.GetLevel(c.player)) });
                                     break;
+                                case "Necrotic Blast":
+                                    damage += PlayManager.Instance.GetMod(PlayManager.Instance.GetIntelligence(c.player)) + c.GetArmor();
+                                    AttackMonster(c, crit ? damage * 2 : damage);
+                                    break;
                                 default:
                                     AttackMonster(c, crit ? damage * 2 : damage);
                                     break;
@@ -702,6 +822,9 @@ public class CombatManager : Singleton<CombatManager>
                             {
                                 case "Balanced Strike":
                                     InflictEffect(c, new Effect("Armor Up", 1, 3, true));
+                                    break;
+                                case "Necrotic Blast":
+                                    InflictEffect(c, new Effect("Cursed", 1));
                                     break;
                             }
                             AttackPlayer(c, () => {
@@ -756,10 +879,15 @@ public class CombatManager : Singleton<CombatManager>
             arcaneBolt = false;
             InflictEffect(c, new Effect("Bonus Power", -1, 1, true));
         }
-        PlayManager.Instance.localPlayer.SetValue("SuccessfullyAttackedMonster", true);
+        if(c.combatantType != CombatantType.MINION)
+            PlayManager.Instance.localPlayer.SetValue("SuccessfullyAttackedMonster", true);
         // Attack animation + effect + end monster turn
         StartCoroutine(AnimateMonsterAttacked(c, damage,() => {
             // OnAttack
+            if(AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Siphon Life"), c.player) && c.combatantType != CombatantType.MINION)
+            {
+                HealPlayer(c.player, HalfRoundedDown(damage));
+            }
             monster.TakeDamage(damage);
             if(debuffs != default)
             {
@@ -891,7 +1019,10 @@ public class CombatManager : Singleton<CombatManager>
             {
                 successfullyUsedAttackAbility = false;
                 StartCoroutine(TransitionCombatLayoutStyle(CombatLayoutStyle.DEFAULT, () => {
-                    EndTurn();
+                    if (c.combatantType == CombatantType.MINION)
+                        EndMinionTurn();
+                    else
+                        EndTurn();
                 }));
                 PlayManager.Instance.localPlayer.TransitionOthersToStyle(CombatLayoutStyle.DEFAULT);
             }
@@ -906,7 +1037,7 @@ public class CombatManager : Singleton<CombatManager>
         // Remove from turn order combatant list
         for (int i = 0; i < turnOrderCombatantList.Count; i++)
         {
-            if (turnOrderCombatantList[i].combatantType == c.combatantType && ((turnOrderCombatantList[i].combatantType == CombatantType.PLAYER && turnOrderCombatantList[i].player.UUID.Value == c.player.UUID.Value) || (turnOrderCombatantList[i].combatantType == CombatantType.MONSTER && turnOrderCombatantList[i].monster.cardName == c.monster.cardName)))
+            if (turnOrderCombatantList[i].combatantType == c.combatantType && ((turnOrderCombatantList[i].combatantType == CombatantType.PLAYER && turnOrderCombatantList[i].player.UUID.Value == c.player.UUID.Value) || (turnOrderCombatantList[i].combatantType == CombatantType.MONSTER && turnOrderCombatantList[i].monster.cardName == c.monster.cardName) || (turnOrderCombatantList[i].combatantType == CombatantType.MINION && turnOrderCombatantList[i].player.UUID.Value == c.player.UUID.Value)))
             {
                 turnOrderCombatantList.RemoveAt(i);
                 break;
@@ -918,8 +1049,10 @@ public class CombatManager : Singleton<CombatManager>
         {
             if (turnOrderCombatantList[i].combatantType == CombatantType.PLAYER)
                 arr[i] = turnOrderCombatantList[i].player.UUID.Value;
-            else
+            else if (turnOrderCombatantList[i].combatantType == CombatantType.MONSTER)
                 arr[i] = turnOrderCombatantList[i].monster.cardName;
+            else
+                arr[i] = "m_" + turnOrderCombatantList[i].player.UUID.Value;
         }
         // Update turn order combatant list for all players
         PlayManager.Instance.localPlayer.SetTurnOrderCombatantList(arr, true);
@@ -1028,95 +1161,109 @@ public class CombatManager : Singleton<CombatManager>
             PlayManager.Instance.SendNotification(9, "The monster failed to attack you!");
             return;
         }
-        EnableDefensiveOptions();
-        DefensiveOptionsListener((a, p) => {
-            if(a == 1)
-            {
-                // Avoided getting attacked
-                if (OnComplete != default)
-                    OnComplete();
-            }
-            else if(a == -1)
-            {
-                if (p != default)
+
+        if (c.combatantType == CombatantType.MINION)
+        {
+            RegularAttacked(c, OnComplete, debuffs);
+        }
+        else
+        {
+            EnableDefensiveOptions();
+            DefensiveOptionsListener((a, p) => {
+                if (a == 1)
                 {
-                    c = GetCombatantFromPlayer(p);
-                    RegularAttacked(c, OnComplete, debuffs);
+                    // Avoided getting attacked
+                    if (OnComplete != default)
+                        OnComplete();
                 }
-                else
+                else if (a == -1)
                 {
-                    Skill revenge = AbilityManager.Instance.GetSkill("Revenge");
-                    if (AbilityManager.Instance.HasAbilityUnlocked(revenge) && PlayManager.Instance.GetAbilityCharges(c.player) >= revenge.cost && isYourTurn)
+                    if (p != default)
                     {
-                        MakeChoice("Use Revenge", "Take Damage", true, true);
-                        ChoiceListener((a) =>
-                        {
-                            if (a == 1)
-                            {
-                                revenge.UseSkill();
-                                InflictEffect(c, new Effect("Power Up", 2, 1, true));
-                                // Got attacked
-                                if (c.GetArmor() >= monster.GetAttack())
-                                {
-                                    // No damage will be taken, therefore avoid debuffs
-                                    StartCoroutine(AnimatePlayerAttacked(c,
-                                    () => {
-                                        // OnAttack
-                                        c.TakeDamage(monster.GetAttack());
-                                       
-                                        StartCoroutine(AnimateMonsterTakeDamage(enemyCard, c.GetAttack(), () => {
-                                            monster.TakeDamage(c.GetAttack());
-                                        }));
-
-                                        // Visualize player taking damage for all other players
-                                        PlayManager.Instance.localPlayer.VisualizeMonsterTakeDamageForOthers(c.GetAttack());
-                                    }, OnComplete));
-                                }
-                                else
-                                {
-                                    // Attack animation + effect + end monster turn
-                                    StartCoroutine(AnimatePlayerAttacked(c,
-                                    () => {
-                                        // OnAttack
-                                        c.TakeDamage(monster.GetAttack());
-
-                                        StartCoroutine(AnimateMonsterTakeDamage(enemyCard, c.GetAttack(), () => {
-                                            monster.TakeDamage(c.GetAttack());
-                                        }));
-
-                                        // Visualize player taking damage for all other players
-                                        PlayManager.Instance.localPlayer.VisualizeMonsterTakeDamageForOthers(c.GetAttack());
-
-                                        if (debuffs != default)
-                                        {
-                                            foreach (Effect e in debuffs)
-                                                InflictEffect(c, e);
-                                        }
-                                    }, () => {
-                                        if (c.IsAlive())
-                                            StartCoroutine(OnTakeDamage(c, OnComplete));
-                                        else if (OnComplete != default)
-                                            OnComplete();
-                                    }));
-                                }
-
-                                // Visualize player attack for all other players
-                                PlayManager.Instance.localPlayer.VisualizeAttackForOthers(c.player);
-                            }
-                            else
-                                RegularAttacked(c, OnComplete, debuffs);
-                        });
+                        c = GetCombatantFromPlayer(p);
+                        RegularAttacked(c, OnComplete, debuffs);
+                    }
+                    else if (c.minion != default)
+                    {
+                        c.player.SetPlayerCardMinionView(true, true);
+                        c = c.minion;
+                        RegularAttacked(c, OnComplete, debuffs);
                     }
                     else
-                        RegularAttacked(c, OnComplete, debuffs);
+                    {
+                        Skill revenge = AbilityManager.Instance.GetSkill("Revenge");
+                        if (AbilityManager.Instance.HasAbilityUnlocked(revenge) && PlayManager.Instance.GetAbilityCharges(c.player) >= revenge.cost && isYourTurn)
+                        {
+                            MakeChoice("Use Revenge", "Take Damage", true, true);
+                            ChoiceListener((a) =>
+                            {
+                                if (a == 1)
+                                {
+                                    revenge.UseSkill();
+                                    InflictEffect(c, new Effect("Power Up", 2, 1, true));
+                                    // Got attacked
+                                    if (c.GetArmor() >= monster.GetAttack())
+                                    {
+                                        // No damage will be taken, therefore avoid debuffs
+                                        StartCoroutine(AnimatePlayerAttacked(c,
+                                        () => {
+                                        // OnAttack
+                                        c.TakeDamage(monster.GetAttack());
+
+                                            StartCoroutine(AnimateMonsterTakeDamage(enemyCard, c.GetAttack(), () => {
+                                                monster.TakeDamage(c.GetAttack());
+                                            }));
+
+                                        // Visualize player taking damage for all other players
+                                        PlayManager.Instance.localPlayer.VisualizeMonsterTakeDamageForOthers(c.GetAttack());
+                                        }, OnComplete));
+                                    }
+                                    else
+                                    {
+                                        // Attack animation + effect + end monster turn
+                                        StartCoroutine(AnimatePlayerAttacked(c,
+                                        () => {
+                                        // OnAttack
+                                        c.TakeDamage(monster.GetAttack());
+
+                                            StartCoroutine(AnimateMonsterTakeDamage(enemyCard, c.GetAttack(), () => {
+                                                monster.TakeDamage(c.GetAttack());
+                                            }));
+
+                                        // Visualize player taking damage for all other players
+                                        PlayManager.Instance.localPlayer.VisualizeMonsterTakeDamageForOthers(c.GetAttack());
+
+                                            if (debuffs != default)
+                                            {
+                                                foreach (Effect e in debuffs)
+                                                    InflictEffect(c, e);
+                                            }
+                                        }, () => {
+                                            if (c.IsAlive())
+                                                StartCoroutine(OnTakeDamage(c, OnComplete));
+                                            else if (OnComplete != default)
+                                                OnComplete();
+                                        }));
+                                    }
+
+                                    // Visualize player attack for all other players
+                                    PlayManager.Instance.localPlayer.VisualizeAttackForOthers(c.player);
+                                }
+                                else
+                                    RegularAttacked(c, OnComplete, debuffs);
+                            });
+                        }
+                        else
+                            RegularAttacked(c, OnComplete, debuffs);
+                    }
                 }
-            }
-            else if(a == 99)
-            {
-                // Combat Over
-                EndCombat(CombatOverCheck());
-            }
-        });
+                else if (a == 99)
+                {
+                    // Combat Over
+                    EndCombat(CombatOverCheck());
+                }
+            });
+        }
     }
 
     private void RegularAttacked(Combatant c, Action OnComplete, List<Effect> debuffs = default)
@@ -1189,32 +1336,40 @@ public class CombatManager : Singleton<CombatManager>
     {
         if (c.combatantType == CombatantType.PLAYER)
             c.player.GainStatusEffect(e.name, e.duration, e.potency, e.canStack, e.counter);
-        else
+        else if (c.combatantType == CombatantType.MONSTER)
             PlayManager.Instance.localPlayer.MonsterGainStatusEffect(e.name, e.duration, e.potency, e.canStack, e.counter);
+        else
+            c.player.MinionGainStatusEffect(e.name, e.duration, e.potency, e.canStack, e.counter);
     }
 
     public void CleanseEffect(Combatant c, string effectName)
     {
         if (c.combatantType == CombatantType.PLAYER)
             c.player.RemoveStatusEffect(effectName);
-        else
+        else if (c.combatantType == CombatantType.MONSTER)
             PlayManager.Instance.localPlayer.MonsterRemoveStatusEffect(effectName);
+        else
+            c.player.MinionRemoveStatusEffect(effectName);
     }
 
     public void CycleEffects(Combatant c)
     {
         if (c.combatantType == CombatantType.PLAYER)
             c.player.CycleStatusEffects();
-        else
+        else if (c.combatantType == CombatantType.MONSTER)
             PlayManager.Instance.localPlayer.MonsterCycleStatusEffects();
+        else
+            c.player.MinionCycleStatusEffects();
     }
 
     public void UseEffect(Combatant c, string effectName)
     {
         if (c.combatantType == CombatantType.PLAYER)
             c.player.UseStatusEffect(effectName);
-        else
+        else if (c.combatantType == CombatantType.MONSTER)
             PlayManager.Instance.localPlayer.MonsterUseStatusEffect(effectName);
+        else
+            c.player.MinionUseStatusEffect(effectName);
     }
 
     public void CleanseAllEffectsFromPlayer(Player p)
@@ -1255,7 +1410,8 @@ public class CombatManager : Singleton<CombatManager>
     // Called from Player.cs
     public void GainStatusEffect(Combatant c, Effect e)
     {
-        c.GainStatusEffect(e);
+        if(c != default)
+            c.GainStatusEffect(e);
     }
     // Called from Player.cs
     public void RemoveStatusEffect(Combatant c, string effectName)
@@ -1373,8 +1529,15 @@ public class CombatManager : Singleton<CombatManager>
 
     private void AllignPlayerCards()
     {
-        int playerAmount = Mathf.Clamp(turnOrderCombatantList.Count - 1, 0, 6);
-        if(combatLayoutStyle == CombatLayoutStyle.DEFAULT)
+        int playerAmount = 0;
+        foreach(Combatant c in turnOrderCombatantList)
+        {
+            if (c.combatantType == CombatantType.PLAYER)
+                playerAmount++;
+        }
+        playerAmount = Mathf.Clamp(playerAmount, 0, 6);
+
+        if (combatLayoutStyle == CombatLayoutStyle.DEFAULT)
         {
             float theta = Mathf.PI / 5f;
             float startingDegree = 0;
@@ -1397,18 +1560,23 @@ public class CombatManager : Singleton<CombatManager>
                 {
                     if(index >= 0)
                     {
-                        playerCards[index].GetComponent<UIPlayerCard>().ActivateCrosshair(IsTargetedByMonster(turnOrderCombatantList[i].player) && turnOrderCombatantList[combatTurnMarker % turnOrderCombatantList.Count].monster != null && !isMonsterTurn && CombatOverCheck() == -1);
+                        playerCards[index].GetComponent<UIPlayerCard>().ActivateCrosshair(IsTargetedByMonster(turnOrderCombatantList[i].player) && turnOrderCombatantList[combatTurnMarker % turnOrderCombatantList.Count].combatantType == CombatantType.MONSTER && !isMonsterTurn && CombatOverCheck() == -1);
                         playerCards[index].GetComponent<UIPlayerCard>().ActivateTurnMarker(combatTurnMarker == i);
                         playerCards[index].GetComponent<UIPlayerCard>().SetVisuals(turnOrderCombatantList[i]);
+                        playerCards[index].GetComponent<UIPlayerCard>().minionCard.SetMonsterVisuals(turnOrderCombatantList[i].minion);
                         index--;
                     }
                 }
-                else
+                else if (turnOrderCombatantList[i].combatantType == CombatantType.MONSTER)
                 {
                     enemyCard.ActivateTurnMarker(combatTurnMarker == i);
                     enemyCard.SetMonsterVisuals(turnOrderCombatantList[i]);
                     enemyCard.UpdateHealthBar(turnOrderCombatantList[i]);
                     enemyCard.SetDisplayPosition(new Vector3(0, 0, 0));
+                }
+                else
+                {
+                    // Do nothing for minions?
                 }
             }
         }
@@ -1442,18 +1610,23 @@ public class CombatManager : Singleton<CombatManager>
                 {
                     if (index >= 0)
                     {
-                        playerCards[index].GetComponent<UIPlayerCard>().ActivateCrosshair(IsTargetedByMonster(turnOrderCombatantList[i].player) && turnOrderCombatantList[combatTurnMarker].monster != null && !isMonsterTurn && CombatOverCheck() == -1);
+                        playerCards[index].GetComponent<UIPlayerCard>().ActivateCrosshair(IsTargetedByMonster(turnOrderCombatantList[i].player) && combatTurnMarker < turnOrderCombatantList.Count && turnOrderCombatantList[combatTurnMarker].combatantType == CombatantType.MONSTER && !isMonsterTurn && CombatOverCheck() == -1);
                         playerCards[index].GetComponent<UIPlayerCard>().ActivateTurnMarker(combatTurnMarker == i);
                         playerCards[index].GetComponent<UIPlayerCard>().SetVisuals(turnOrderCombatantList[i]);
+                        playerCards[index].GetComponent<UIPlayerCard>().minionCard.SetMonsterVisuals(turnOrderCombatantList[i].minion);
                         index--;
                     }
                 }
-                else
+                else if (turnOrderCombatantList[i].combatantType == CombatantType.MONSTER)
                 {
                     enemyCard.ActivateTurnMarker(combatTurnMarker == i);
                     enemyCard.SetMonsterVisuals(turnOrderCombatantList[i]);
                     enemyCard.UpdateHealthBar(turnOrderCombatantList[i]);
                     enemyCard.SetDisplayPosition(new Vector3(470, 0, 0));
+                }
+                else
+                {
+                    // Do nothing for minions?
                 }
             }
         }
@@ -1551,7 +1724,14 @@ public class CombatManager : Singleton<CombatManager>
     {
         changingStyle = true;
 
-        int playerAmount = Mathf.Clamp(turnOrderCombatantList.Count - 1, 0, 6);
+        //int playerAmount = Mathf.Clamp(turnOrderCombatantList.Count - 1, 0, 6);
+        int playerAmount = 0;
+        foreach (Combatant c in turnOrderCombatantList)
+        {
+            if (c.combatantType == CombatantType.PLAYER)
+                playerAmount++;
+        }
+        playerAmount = Mathf.Clamp(playerAmount, 0, 6);
         float theta = Mathf.PI / 5f;
         float startingDegree = 0;
         float start = (6 - playerAmount) / 2f;
@@ -1775,12 +1955,13 @@ public class CombatManager : Singleton<CombatManager>
     {
         if(keepUnits)
         {
+            // Remove any names no longer in arr
             for (int i = 0; i < turnOrderCombatantList.Count; i++)
             {
                 bool existsInList = false;
                 for (int j = 0; j < arr.Length; j++)
                 {
-                    if ((turnOrderCombatantList[i].combatantType == CombatantType.PLAYER && arr[j] + "" == turnOrderCombatantList[i].player.UUID.Value) || (turnOrderCombatantList[i].combatantType == CombatantType.MONSTER && arr[j] + "" == turnOrderCombatantList[i].monster.cardName))
+                    if ((turnOrderCombatantList[i].combatantType == CombatantType.PLAYER && arr[j] + "" == turnOrderCombatantList[i].player.UUID.Value) || (turnOrderCombatantList[i].combatantType == CombatantType.MONSTER && arr[j] + "" == turnOrderCombatantList[i].monster.cardName) || (turnOrderCombatantList[i].combatantType == CombatantType.MINION && arr[j] + "" == "m_" + turnOrderCombatantList[i].player.UUID.Value))
                     {
                         existsInList = true;
                     }
@@ -1936,6 +2117,8 @@ public class CombatManager : Singleton<CombatManager>
             return true;
         else if (turnOrderCombatantList[i].combatantType == CombatantType.MONSTER && c.combatantType == CombatantType.MONSTER && turnOrderCombatantList[i].monster.cardName == c.monster.cardName)
             return true;
+        else if (turnOrderCombatantList[i].combatantType == CombatantType.MINION && c.combatantType == CombatantType.MINION && turnOrderCombatantList[i].player.UUID.Value == c.player.UUID.Value)
+            return true;
         return false;
     }
 
@@ -1957,6 +2140,7 @@ public class CombatManager : Singleton<CombatManager>
         OnPlayerSpendAbilityCharge = default;
         OnPlayerBeingAttacked = default;
 
+        usedRaiseUndead = false;
         arcaneBolt = false;
         arrowBarrage = false;
         quickShot = false;
@@ -1980,6 +2164,7 @@ public class CombatManager : Singleton<CombatManager>
         combatLayoutStyle = CombatLayoutStyle.DEFAULT;
         foreach (GameObject g in playerCards)
         {
+            g.GetComponent<UIPlayerCard>().ResetMinionVisuals();
             g.GetComponent<UIPlayerCard>().DrawStatusEffects(new List<Effect>());
         }
         enemyCard.DrawStatusEffects(new List<Effect>());
@@ -2188,5 +2373,88 @@ public class CombatManager : Singleton<CombatManager>
     private int HalfRoundedDown(int x)
     {
         return (int)MathF.Floor(x / 2f);
+    }
+
+    public void UpdateMinion(Player p, int currentHealth, int maxHealth, int attack, int power, bool createNew = default)
+    {
+        if(currentHealth <= 0 && AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Eternal Servitude"), p) && PlayManager.Instance.GetAbilityCharges(p) > 1)
+        {
+            p.UpdateMinionStats(0, maxHealth, attack, power, createNew);
+            MakeChoice("Revive Minion", "Ignore", true, true);
+            ChoiceListener((a) => {
+                if(a == 1)
+                {
+                    p.UpdateMinionStats(1, maxHealth, attack, power, true);
+                    p.LoseAbilityCharges(1);
+                }
+                else
+                {
+                    p.UpdateMinionStats(0, maxHealth, attack, power, createNew);
+                }
+            });
+        }
+        else
+        {
+            p.UpdateMinionStats(currentHealth, maxHealth, attack, power, createNew);
+        }
+    }
+
+    // Called from Player.cs
+    public void UpdatePlayerMinion(Player p, int currentHealth, int maxHealth, int attack, int power, bool createNew)
+    {
+        Combatant c = GetCombatantFromPlayer(p);
+        if(createNew)
+        {
+            if (currentHealth == 1)
+                c.minion = new Combatant(CombatantType.MINION, c.player, PlayManager.Instance.minionDeck["Undead Minion"], 1);
+            else
+                c.minion = new Combatant(CombatantType.MINION, c.player, PlayManager.Instance.minionDeck["Undead Minion"]);
+            turnOrderCombatantList.Add(c.minion);
+        }
+        else
+        {
+            if(currentHealth == 0)
+            {
+                for(int i = 0; i < turnOrderCombatantList.Count; i++)
+                {
+                    if (turnOrderCombatantList[i].combatantType == CombatantType.MINION && p.UUID.Value == turnOrderCombatantList[i].player.UUID.Value)
+                    {
+                        turnOrderCombatantList.RemoveAt(i);
+                        break;
+                    }
+                }
+                c.minion = default;
+                p.SetPlayerCardMinionView(false, false);
+            }
+            else
+            {
+                c.minion.SetCurrentHealth(currentHealth);
+                c.minion.SetMinionMaxHealth(maxHealth);
+                c.minion.SetMinionAttack(attack);
+                c.minion.SetMinionPower(power);
+            }
+        }
+    }
+
+    public void BloodSacrifice(Combatant c)
+    {
+        int damage = PlayManager.Instance.ChaosTier() * 2;
+        StartCoroutine(AnimatePlayerTakeDamage(GetPlayerCardFromCombatant(c), damage, () => {
+            c.TakeDamage(damage, true);
+            InflictEffect(c, new Effect("Bonus Power", -1, 2, true));
+        }));
+
+        // Visualize player taking damage for all other players
+        PlayManager.Instance.localPlayer.VisualizeTakeDamageForOthers(damage);
+    }
+
+    public bool HasDeadTeammate(Combatant c)
+    {
+        for (int i = 0; i < turnOrderCombatantList.Count; i++)
+        {
+            if (turnOrderCombatantList[i].combatantType == CombatantType.PLAYER && turnOrderCombatantList[i].player.UUID.Value != c.player.UUID.Value && c.GetHealth() <= 0)
+                return true;
+        }
+        return false;
     }
 }

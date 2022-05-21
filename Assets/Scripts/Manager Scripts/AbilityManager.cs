@@ -202,6 +202,9 @@ public class AbilityManager : Singleton<AbilityManager>
         if (p == default)
             p = PlayManager.Instance.localPlayer;
 
+        if (PlayManager.Instance.GetHealth(p) <= 0)
+            return false;
+
         if (s.type == SkillType.ATTACK)
             return PlayManager.Instance.GetAbilityCharges(p) >= s.cost && CombatManager.Instance.InCombat() && CombatManager.Instance.CanUseAttackAbilities();
         else if (s.type == SkillType.UTILITY)
@@ -220,6 +223,9 @@ public class AbilityManager : Singleton<AbilityManager>
                 "Flaming Shot" => CombatManager.Instance.InCombat() && CombatManager.Instance.IsCombatant(PlayManager.Instance.localPlayer) && !(CombatManager.Instance.GetCombatantFromPlayer(PlayManager.Instance.localPlayer).HasFlamingShot() > -1),
                 "Survival Kit" => true,
                 "Energy Transfusion" => true,
+                "Raise Undead" => CombatManager.Instance.InCombat() && CombatManager.Instance.IsCombatant(PlayManager.Instance.localPlayer) && !CombatManager.Instance.usedRaiseUndead,
+                "Blood Sacrifice" => CombatManager.Instance.InCombat() && CombatManager.Instance.IsCombatant(PlayManager.Instance.localPlayer) && CombatManager.Instance.GetCombatantFromPlayer(PlayManager.Instance.localPlayer).GetHealth() > 2 * PlayManager.Instance.ChaosTier(),
+                "Mass Resurrection" => CombatManager.Instance.InCombat() && CombatManager.Instance.IsCombatant(PlayManager.Instance.localPlayer) && CombatManager.Instance.HasDeadTeammate(CombatManager.Instance.GetCombatantFromPlayer(PlayManager.Instance.localPlayer)),
                 _ => false
             };
         }
@@ -527,7 +533,7 @@ public class AbilityManager : Singleton<AbilityManager>
     #region Necromancer Abilities
     private void SiphonLife()
     {
-
+        // Done in CombatManager AttackMonster(Combatant c, int damage, List<Effect> debuffs = default, Action OnAttack = default)
     }
 
     private void NecroticBlast()
@@ -537,12 +543,16 @@ public class AbilityManager : Singleton<AbilityManager>
 
     private void RaiseUndead()
     {
-
+        // *** Has special use case ***
+        CombatManager.Instance.usedRaiseUndead = true;
+        PlayManager.Instance.localPlayer.UpdateMinionStats(0, 0, 0, 0, true);
     }
 
     private void BloodSacrifice()
     {
-
+        // *** Has special use case ***
+        Combatant c = CombatManager.Instance.GetCombatantFromPlayer(PlayManager.Instance.localPlayer);
+        CombatManager.Instance.BloodSacrifice(c);
     }
 
     private void EternalServitude()
@@ -552,7 +562,12 @@ public class AbilityManager : Singleton<AbilityManager>
 
     private void MassResurrection()
     {
-
+        // *** Has special use case ***
+        foreach(Combatant c in CombatManager.Instance.turnOrderCombatantList)
+        {
+            if (c.combatantType == CombatantType.PLAYER && c.GetHealth() <= 0)
+                c.player.Resurrect();
+        }
     }
     #endregion
 

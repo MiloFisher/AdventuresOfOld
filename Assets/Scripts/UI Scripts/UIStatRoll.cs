@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using AdventuresOfOldMultiplayer;
 
 public class UIStatRoll : MonoBehaviour
 {
@@ -39,11 +40,14 @@ public class UIStatRoll : MonoBehaviour
     private string statRollType;
     private int statRollValue;
 
-    public void MakeStatRoll(string _statRollType, int _statRollValue)
+    private Player player;
+
+    public void MakeStatRoll(string _statRollType, int _statRollValue, Player p = default)
     {
         success = 0;
         statRollType = _statRollType;
         statRollValue = _statRollValue;
+        player = p;
         gameObject.SetActive(true);
     }
 
@@ -62,7 +66,7 @@ public class UIStatRoll : MonoBehaviour
     {
         // Set title
         title.text = statRollType + " Roll (" + statRollValue + ")";
-        subtitle.text = "Your current stat modifier: " + FormatStat(PlayManager.Instance.GetStatModFromType(statRollType));
+        subtitle.text = "Your current stat modifier: " + FormatStat(PlayManager.Instance.GetStatModFromType(statRollType, player));
 
         // Then grow the object
         float dif = endScale - startScale;
@@ -155,7 +159,7 @@ public class UIStatRoll : MonoBehaviour
         rollDisplay2.sprite = diceFaces[roll2 - 1];
 
         // Display success or failure
-        if (roll1 + roll2 + PlayManager.Instance.GetStatModFromType(statRollType) >= statRollValue)
+        if (roll1 + roll2 + PlayManager.Instance.GetStatModFromType(statRollType, player) >= statRollValue)
         {
             successText.SetActive(true);
             hiddenSuccess = 1;

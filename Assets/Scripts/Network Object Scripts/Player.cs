@@ -1122,29 +1122,39 @@ namespace AdventuresOfOldMultiplayer
             }
         }
 
-        public void StartNextCombatantTurn(int turnMarker)
+        public void StartNextCombatantTurn(int turnMarker, bool minionTurn)
         {
             if (NetworkManager.Singleton.IsServer)
             {
-                CombatManager.Instance.turnOrderCombatantList[turnMarker].player.StartNextCombatantTurnClientRPC();
+                CombatManager.Instance.turnOrderCombatantList[turnMarker].player.StartNextCombatantTurnClientRPC(minionTurn);
             }
             else
-                StartNextCombatantTurnServerRPC(turnMarker);
+                StartNextCombatantTurnServerRPC(turnMarker, minionTurn);
         }
         [ServerRpc]
-        private void StartNextCombatantTurnServerRPC(int turnMarker, ServerRpcParams rpcParams = default)
+        private void StartNextCombatantTurnServerRPC(int turnMarker, bool minionTurn, ServerRpcParams rpcParams = default)
         {
-            CombatManager.Instance.turnOrderCombatantList[turnMarker].player.StartNextCombatantTurnClientRPC();
+            CombatManager.Instance.turnOrderCombatantList[turnMarker].player.StartNextCombatantTurnClientRPC(minionTurn);
         }
         [ClientRpc]
-        public void StartNextCombatantTurnClientRPC(ClientRpcParams clientRpcParams = default)
+        public void StartNextCombatantTurnClientRPC(bool minionTurn, ClientRpcParams clientRpcParams = default)
         {
             if (IsOwner)
             {
                 if (isBot)
-                    CombatManager.Instance.StartBotTurn();
+                {
+                    if(minionTurn)
+                        CombatManager.Instance.StartBotMinionTurn();
+                    else
+                        CombatManager.Instance.StartBotTurn();
+                }
                 else
-                    CombatManager.Instance.StartTurn();
+                {
+                    if(minionTurn)
+                        CombatManager.Instance.StartMinionTurn();
+                    else
+                        CombatManager.Instance.StartTurn();
+                }
             }
         }
 
@@ -1999,6 +2009,190 @@ namespace AdventuresOfOldMultiplayer
                 else
                 {
 
+                }
+            }
+        }
+
+        public void UpdateMinionStats(int currentHealth, int maxHealth, int attack, int power, bool createNew = default)
+        {
+            FixedString64Bytes uuid = UUID.Value;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.UpdateMinionStatsClientRPC(uuid, currentHealth, maxHealth, attack, power, createNew);
+            }
+            else
+                UpdateMinionStatsServerRPC(uuid, currentHealth, maxHealth, attack, power, createNew);
+        }
+        [ServerRpc]
+        private void UpdateMinionStatsServerRPC(FixedString64Bytes uuid, int currentHealth, int maxHealth, int attack, int power, bool createNew, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.UpdateMinionStatsClientRPC(uuid, currentHealth, maxHealth, attack, power, createNew);
+        }
+        [ClientRpc]
+        private void UpdateMinionStatsClientRPC(FixedString64Bytes uuid, int currentHealth, int maxHealth, int attack, int power, bool createNew, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if(p.UUID.Value == uuid)
+                        CombatManager.Instance.UpdatePlayerMinion(p, currentHealth, maxHealth, attack, power, createNew);
+                }
+            }
+        }
+
+        public void MinionGainStatusEffect(string name, int duration, int potency, bool canStack, int counter)
+        {
+            FixedString64Bytes uuid = UUID.Value;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.MinionGainStatusEffectClientRPC(uuid, name, duration, potency, canStack, counter);
+            }
+            else
+                MinionGainStatusEffectServerRPC(uuid, name, duration, potency, canStack, counter);
+        }
+        [ServerRpc]
+        private void MinionGainStatusEffectServerRPC(FixedString64Bytes uuid, FixedString64Bytes name, int duration, int potency, bool canStack, int counter, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.MinionGainStatusEffectClientRPC(uuid, name, duration, potency, canStack, counter);
+        }
+        [ClientRpc]
+        public void MinionGainStatusEffectClientRPC(FixedString64Bytes uuid, FixedString64Bytes name, int duration, int potency, bool canStack, int counter, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if(p.UUID.Value == uuid)
+                        CombatManager.Instance.GainStatusEffect(CombatManager.Instance.GetCombatantFromPlayer(p).minion, new Effect(name + "", duration, potency, canStack, counter));
+                }
+            }
+        }
+
+        public void MinionRemoveStatusEffect(string effectName)
+        {
+            FixedString64Bytes uuid = UUID.Value;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.MinionRemoveStatusEffectClientRPC(uuid, effectName);
+            }
+            else
+                MinionRemoveStatusEffectServerRPC(uuid, effectName);
+        }
+        [ServerRpc]
+        private void MinionRemoveStatusEffectServerRPC(FixedString64Bytes uuid, FixedString64Bytes effectName, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.MinionRemoveStatusEffectClientRPC(uuid, effectName);
+        }
+        [ClientRpc]
+        public void MinionRemoveStatusEffectClientRPC(FixedString64Bytes uuid, FixedString64Bytes effectName, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value == uuid)
+                        CombatManager.Instance.RemoveStatusEffect(CombatManager.Instance.GetCombatantFromPlayer(p).minion, effectName + "");
+                }
+            }
+        }
+
+        public void MinionCycleStatusEffects()
+        {
+            FixedString64Bytes uuid = UUID.Value;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.MinionCycleStatusEffectsClientRPC(uuid);
+            }
+            else
+                MinionCycleStatusEffectsServerRPC(uuid);
+        }
+        [ServerRpc]
+        private void MinionCycleStatusEffectsServerRPC(FixedString64Bytes uuid, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.MinionCycleStatusEffectsClientRPC(uuid);
+        }
+        [ClientRpc]
+        public void MinionCycleStatusEffectsClientRPC(FixedString64Bytes uuid, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value == uuid)
+                        CombatManager.Instance.CycleStatusEffects(CombatManager.Instance.GetCombatantFromPlayer(p).minion);
+                }
+            }
+        }
+
+        public void MinionUseStatusEffect(string effectName)
+        {
+            FixedString64Bytes uuid = UUID.Value;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.MinionUseStatusEffectClientRPC(uuid, effectName);
+            }
+            else
+                MinionUseStatusEffectServerRPC(uuid, effectName);
+        }
+        [ServerRpc]
+        private void MinionUseStatusEffectServerRPC(FixedString64Bytes uuid, FixedString64Bytes effectName, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.MinionUseStatusEffectClientRPC(uuid, effectName);
+        }
+        [ClientRpc]
+        public void MinionUseStatusEffectClientRPC(FixedString64Bytes uuid, FixedString64Bytes effectName, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value == uuid)
+                        CombatManager.Instance.UseStatusEffect(CombatManager.Instance.GetCombatantFromPlayer(p).minion, effectName + "");
+                }
+            }
+        }
+
+        public void SetPlayerCardMinionView(bool active, bool lockToggle)
+        {
+            FixedString64Bytes uuid = UUID.Value;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.SetPlayerCardMinionViewClientRPC(uuid, active, lockToggle);
+            }
+            else
+                SetPlayerCardMinionViewServerRPC(uuid, active, lockToggle);
+        }
+        [ServerRpc]
+        private void SetPlayerCardMinionViewServerRPC(FixedString64Bytes uuid, bool active, bool lockToggle, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.SetPlayerCardMinionViewClientRPC(uuid, active, lockToggle);
+        }
+        [ClientRpc]
+        public void SetPlayerCardMinionViewClientRPC(FixedString64Bytes uuid, bool active, bool lockToggle, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value == uuid)
+                    {
+                        UIPlayerCard card = CombatManager.Instance.GetPlayerCardFromCombatant(CombatManager.Instance.GetCombatantFromPlayer(p));
+                        card.SetMinionCardActive(active);
+                        card.BlockSwapping(lockToggle);
+                    }
                 }
             }
         }

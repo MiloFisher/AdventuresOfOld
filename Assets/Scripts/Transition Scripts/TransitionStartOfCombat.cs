@@ -37,6 +37,9 @@ public class TransitionStartOfCombat : MonoBehaviour
         // Else if it is the monster's turn, after displaying "Start of Combat", display "Monster Turn"
         else if (CombatManager.Instance.isMonsterTurn)
             PlayManager.Instance.CallTransition(6);
+        // Else if it is your minion's turn, after displaying "Start of Combat", display "Minion Turn"
+        else if (CombatManager.Instance.isYourMinionsTurn)
+            PlayManager.Instance.CallTransition(7);
 
         if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Justicar's Vow")) && CombatManager.Instance.IsCombatant(PlayManager.Instance.localPlayer))
         {

@@ -25,13 +25,23 @@ public class UICombatCharacterPanel : MonoBehaviour
 
             characterName.text = c.player.Name.Value + "";
         }
-        else
+        else if (c.combatantType == CombatantType.MONSTER)
         {
             characterImage.gameObject.SetActive(false);
             monsterImage.gameObject.SetActive(true);
             monsterImage.sprite = c.monster.image;
 
             nameplate.color = enemyColor;
+
+            characterName.text = c.monster.cardName;
+        }
+        else
+        {
+            characterImage.gameObject.SetActive(false);
+            monsterImage.gameObject.SetActive(true);
+            monsterImage.sprite = c.monster.image;
+
+            nameplate.color = friendlyColor;
 
             characterName.text = c.monster.cardName;
         }

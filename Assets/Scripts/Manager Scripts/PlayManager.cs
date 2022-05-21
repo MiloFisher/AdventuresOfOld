@@ -875,24 +875,26 @@ public class PlayManager : Singleton<PlayManager>
         characterDisplayMinimizeButton.SetActive(false);
     }
 
-    public int GetStatModFromType(string statRollType)
+    public int GetStatModFromType(string statRollType, Player p = default)
     {
+        if (p == default)
+            p = localPlayer;
         int result = 0;
         switch (statRollType)
         {
-            case "STR": result = GetMod(GetStrength(localPlayer)); break;
-            case "DEX": result = GetMod(GetDexterity(localPlayer)); break;
-            case "INT": result = GetMod(GetIntelligence(localPlayer)); break;
-            case "SPD": result = GetMod(GetSpeed(localPlayer)); break;
-            case "CON": result = GetMod(GetConstitution(localPlayer)); break;
-            case "ENG": result = GetMod(GetEnergy(localPlayer)); break;
+            case "STR": result = GetMod(GetStrength(p)); break;
+            case "DEX": result = GetMod(GetDexterity(p)); break;
+            case "INT": result = GetMod(GetIntelligence(p)); break;
+            case "SPD": result = GetMod(GetSpeed(p)); break;
+            case "CON": result = GetMod(GetConstitution(p)); break;
+            case "ENG": result = GetMod(GetEnergy(p)); break;
             default: Debug.LogError("Unknown Stat Roll Type: " + statRollType); break;
         }
-        if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Generalist")))
+        if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Generalist"),p))
             result += 1;
-        if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Nature's Charm")))
+        if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Nature's Charm"),p))
             result += 1;
-        if (result < 0 && AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Elven Knowledge")))
+        if (result < 0 && AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Elven Knowledge"),p))
             result = 0;
         return result;
     }
