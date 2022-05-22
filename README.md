@@ -22,8 +22,8 @@ Banned Bandits Team:
 - Programmer: Brandon Wong
 - UI Designer: Pierce Sullivan
 - UI Designer: [Ethan Erh](https://kushiri.itch.io/)
-- 2D Artist: Emily Wen
-- 2D Artist: Julian Cady
+- 2D Artist: [Emily Wen](https://ko-fi.com/dwerple)
+- 2D Artist: [ulian Cady](ttps://www.linkedin.com/in/julian-cady-4b4057214/)
 
 How to Play
 -----------
