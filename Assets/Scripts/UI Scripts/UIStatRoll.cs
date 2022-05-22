@@ -172,11 +172,13 @@ public class UIStatRoll : MonoBehaviour
         // Display success or failure
         if (roll1 + roll2 + PlayManager.Instance.GetStatModFromType(statRollType, player) >= statRollValue)
         {
+            JLAudioManager.Instance.PlayOneShotSound("Success");
             successText.SetActive(true);
             hiddenSuccess = 1;
         }
         else
         {
+            JLAudioManager.Instance.PlayOneShotSound("Failure");
             failureText.SetActive(true);
             hiddenSuccess = -1;
         }

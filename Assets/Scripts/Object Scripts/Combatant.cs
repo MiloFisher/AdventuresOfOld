@@ -133,9 +133,6 @@ public class Combatant
         if (attackUp > -1)
             attack += attackUp;
 
-        if (IsEaten())
-            attack = HalfRoundedUp(attack);
-
         if (IsUnhatchedSpiderEgg())
             attack = 0;
 

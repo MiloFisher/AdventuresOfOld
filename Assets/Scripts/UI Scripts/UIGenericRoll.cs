@@ -120,11 +120,13 @@ public class UIGenericRoll : MonoBehaviour
         // Display success or failure
         if (SuccessCondition(roll))
         {
+            JLAudioManager.Instance.PlayOneShotSound("Success");
             successText.SetActive(true);
             OnComplete = OnSuccess;
         }
         else
         {
+            JLAudioManager.Instance.PlayOneShotSound("Failure");
             failureText.SetActive(true);
             OnComplete = OnFailure;
         }

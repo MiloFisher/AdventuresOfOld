@@ -56,6 +56,7 @@ public class EmoteManager : Singleton<EmoteManager>
 
     public void DrawEmote(Player p, int id)
     {
+        JLAudioManager.Instance.PlayOneShotSound("Emote");
         Vector3 targetPosition;
         if(CombatManager.Instance.IsCombatant(p))
         {

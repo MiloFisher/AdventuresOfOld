@@ -405,10 +405,12 @@ public class CombatManager : Singleton<CombatManager>
         string description;
         if (result == 1)
         {
+            JLAudioManager.Instance.PlayOneShotSound("Success");
             description = "<color=#267833>VICTORY</color>";
         }
         else
         {
+            JLAudioManager.Instance.PlayOneShotSound("Failure");
             description = "<color=#902E2E>DEFEAT</color>";
         }
         PlayManager.Instance.SendNotification(4, description, () => {
@@ -860,6 +862,8 @@ public class CombatManager : Singleton<CombatManager>
 
     public void AttackMonster(Combatant c, int damage, List<Effect> debuffs = default, Action OnAttack = default)
     {
+        if (c.IsEaten())
+            damage = HalfRoundedUp(damage);
         int bleeding = monster.IsBleeding();
         if (bleeding > -1)
         {
@@ -1132,6 +1136,9 @@ public class CombatManager : Singleton<CombatManager>
         // Increment turn marker for all players
         combatTurnMarker++;
         PlayManager.Instance.localPlayer.UpdateCombatTurnMarker(combatTurnMarker);
+
+        // Cycle effects
+        CycleEffects(monster);
 
         // Start next combatant turn
         StartCombatantsTurn();
@@ -1704,6 +1711,8 @@ public class CombatManager : Singleton<CombatManager>
     {
         // Revert quick shot cost back to 1 in case it had been reduced to 0 and not used
         AbilityManager.Instance.GetSkill("Quick Shot").cost = 1;
+        // Disable Justicar's Vow
+        PlayManager.Instance.localPlayer.SetValue("JusticarsVow", false);
 
         combatFadeOverlay.SetActive(true);
 
@@ -1860,12 +1869,14 @@ public class CombatManager : Singleton<CombatManager>
         UIPlayerCard playerCard = GetPlayerCardFromCombatant(target);
         attackIcon.transform.localPosition = enemyCard.GetDisplayPositionScaled() + (playerCard.transform.localPosition - enemyCard.GetDisplayPositionScaled()) / 2;
 
+        JLAudioManager.Instance.PlayOneShotSound("Attack1");
         // Fade in attack icon
-        for(int i = 1; i <= Global.animSteps; i++)
+        for (int i = 1; i <= Global.animSteps; i++)
         {
             SetAlpha(attackIcon.GetComponent<Image>(), i * Global.animRate);
             yield return new WaitForSeconds(attackFadeLength * Global.animTimeMod * Global.animSpeed);
         }
+        JLAudioManager.Instance.PlayOneShotSound("Attack2");
 
         // Animate take damage
         int damage = monster.GetAttack() - target.GetArmor();
@@ -1915,12 +1926,14 @@ public class CombatManager : Singleton<CombatManager>
         UIPlayerCard playerCard = GetPlayerCardFromCombatant(attacker);
         attackIcon.transform.localPosition = enemyCard.GetDisplayPositionScaled() + (playerCard.transform.localPosition - enemyCard.GetDisplayPositionScaled()) / 2;
 
+        JLAudioManager.Instance.PlayOneShotSound("Attack1");
         // Fade in attack icon
         for (int i = 1; i <= Global.animSteps; i++)
         {
             SetAlpha(attackIcon.GetComponent<Image>(), i * Global.animRate);
             yield return new WaitForSeconds(attackFadeLength * Global.animTimeMod * Global.animSpeed);
         }
+        JLAudioManager.Instance.PlayOneShotSound("Attack2");
 
         // Animate take damage
         StartCoroutine(AnimateMonsterTakeDamage(enemyCard, damage, OnAttack));
@@ -1947,6 +1960,7 @@ public class CombatManager : Singleton<CombatManager>
         if (OnAttack != default)
             OnAttack();
 
+        JLAudioManager.Instance.PlaySound("TakeDamage");
         card.ActivateDamaged(true);
         card.DisplayDamageNumber(damage);
         yield return new WaitForSeconds(attackFlashLength * Global.animSpeed);
@@ -1975,6 +1989,7 @@ public class CombatManager : Singleton<CombatManager>
         if (OnHeal != default)
             OnHeal();
 
+        JLAudioManager.Instance.PlaySound("Heal");
         card.ActivateHealed(true);
         card.DisplayHealNumber(heal);
         yield return new WaitForSeconds(attackFlashLength * Global.animSpeed);

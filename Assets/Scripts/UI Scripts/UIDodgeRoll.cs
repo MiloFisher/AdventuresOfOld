@@ -112,11 +112,13 @@ public class UIDodgeRoll : MonoBehaviour
         // Display success or failure
         if (roll == int.Parse(dodgePrediction.text))
         {
+            JLAudioManager.Instance.PlayOneShotSound("Success");
             successText.SetActive(true);
             hiddenSuccess = 1;
         }
         else
         {
+            JLAudioManager.Instance.PlayOneShotSound("Failure");
             failureText.SetActive(true);
             hiddenSuccess = -1;
         }

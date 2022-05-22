@@ -122,15 +122,27 @@ public class UIEncounterElement : MonoBehaviour
         {
             case EncounterElementType.ROLL_TO_ENCOUNTER:
                 if (roll % 2 == 0)
+                {
+                    JLAudioManager.Instance.PlayOneShotSound("Success");
                     successText.SetActive(true);
+                }   
                 else
+                {
+                    JLAudioManager.Instance.PlayOneShotSound("Failure");
                     failureText.SetActive(true);
+                }
                 break;
             case EncounterElementType.EAT_THE_CANDY:
                 if (roll % 2 == 0)
+                {
+                    JLAudioManager.Instance.PlayOneShotSound("Success");
                     successText.SetActive(true);
+                }
                 else
+                {
+                    JLAudioManager.Instance.PlayOneShotSound("Failure");
                     failureText.SetActive(true);
+                }
                 break;
         }
 

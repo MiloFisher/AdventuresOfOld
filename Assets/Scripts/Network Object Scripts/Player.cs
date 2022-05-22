@@ -688,7 +688,7 @@ namespace AdventuresOfOldMultiplayer
                 AbilityCharges.Value++;
                 LevelUpPoints.Value += 3;
                 if (Level.Value == 5)
-                    XP.Value = neededXP;
+                    XP.Value = neededXP + 5;
             }
             else
                 LevelUpServerRPC(neededXP);
@@ -743,6 +743,10 @@ namespace AdventuresOfOldMultiplayer
             {
                 if (damage > 0)
                     Health.Value -= damage;
+
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.PlayDamageSoundClientRPC();
+
                 if (JusticarsVow.Value && Health.Value <= PlayManager.Instance.GetMaxHealth(this) * 0.5f)
                 {
                     JusticarsVow.Value = false;
@@ -773,6 +777,10 @@ namespace AdventuresOfOldMultiplayer
         {
             if (damage > 0)
                 Health.Value -= damage;
+
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.PlayDamageSoundClientRPC();
+
             if (JusticarsVow.Value && Health.Value <= PlayManager.Instance.GetMaxHealth(this) * 0.5f)
             {
                 JusticarsVow.Value = false;
@@ -797,6 +805,15 @@ namespace AdventuresOfOldMultiplayer
         }
 
         [ClientRpc]
+        private void PlayDamageSoundClientRPC(ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                JLAudioManager.Instance.PlaySound("TakeDamage");
+            }
+        }
+
+        [ClientRpc]
         private void IronWillClientRPC(ClientRpcParams clientRpcParams = default)
         {
             if (IsOwner && !isBot)
@@ -814,7 +831,7 @@ namespace AdventuresOfOldMultiplayer
             }
         }
 
-        public void RestoreAbilityCharges(int amount)
+        public void RestoreAbilityCharges(int amount, bool noSound = false)
         {
             if (Health.Value <= 0)
                 return;
@@ -824,19 +841,32 @@ namespace AdventuresOfOldMultiplayer
                 AbilityCharges.Value += amount;
                 if (AbilityCharges.Value > cap)
                     AbilityCharges.Value = cap;
+                if(!noSound)
+                    PlayGainAbilityChargeSoundClientRPC();
             }
             else
-                RestoreAbilityChargesServerRPC(amount, cap);
+                RestoreAbilityChargesServerRPC(amount, cap, noSound);
         }
         [ServerRpc]
-        private void RestoreAbilityChargesServerRPC(int amount, int cap, ServerRpcParams rpcParams = default)
+        private void RestoreAbilityChargesServerRPC(int amount, int cap, bool noSound, ServerRpcParams rpcParams = default)
         {
             AbilityCharges.Value += amount;
             if (AbilityCharges.Value > cap)
                 AbilityCharges.Value = cap;
+            if (!noSound)
+                PlayGainAbilityChargeSoundClientRPC();
         }
 
-        public void RestoreHealth(int amount)
+        [ClientRpc]
+        private void PlayGainAbilityChargeSoundClientRPC(ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                JLAudioManager.Instance.PlaySound("GainAbilityCharge");
+            }
+        }
+
+        public void RestoreHealth(int amount, bool noSound = false)
         {
             if (Health.Value <= 0)
                 return;
@@ -851,16 +881,35 @@ namespace AdventuresOfOldMultiplayer
                 Health.Value += amount;
                 if (Health.Value > cap)
                     Health.Value = cap;
+                if(!noSound)
+                {
+                    foreach (Player p in PlayManager.Instance.playerList)
+                        p.PlayHealSoundClientRPC();
+                }
             }
             else
-                RestoreRestoreHealthServerRPC(amount, cap);
+                RestoreRestoreHealthServerRPC(amount, cap, noSound);
         }
         [ServerRpc]
-        private void RestoreRestoreHealthServerRPC(int amount, int cap, ServerRpcParams rpcParams = default)
+        private void RestoreRestoreHealthServerRPC(int amount, int cap, bool noSound, ServerRpcParams rpcParams = default)
         {
             Health.Value += amount;
             if (Health.Value > cap)
                 Health.Value = cap;
+            if (!noSound)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.PlayHealSoundClientRPC();
+            }
+        }
+
+        [ClientRpc]
+        private void PlayHealSoundClientRPC(ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                JLAudioManager.Instance.PlaySound("Heal");
+            }
         }
 
         public void LoseAbilityCharges(int amount)

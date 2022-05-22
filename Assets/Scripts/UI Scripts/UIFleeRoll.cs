@@ -108,11 +108,13 @@ public class UIFleeRoll : MonoBehaviour
         // Display success or failure
         if (roll >= 5)
         {
+            JLAudioManager.Instance.PlayOneShotSound("Success");
             successText.SetActive(true);
             hiddenSuccess = 1;
         }
         else
         {
+            JLAudioManager.Instance.PlayOneShotSound("Failure");
             failureText.SetActive(true);
             hiddenSuccess = -1;
         }

@@ -322,10 +322,10 @@ public class PlayManager : Singleton<PlayManager>
                 p.SetValue("LevelUpPoints", 2);
 
             // Fill all of their ability charges
-            p.RestoreAbilityCharges(999);
+            p.RestoreAbilityCharges(999, true);
 
             // Set their health to full
-            p.RestoreHealth(999);
+            p.RestoreHealth(999, true);
 
             // Set player positions to starting tile
             p.SetPosition(new Vector3Int(0, 7, -7), true);
@@ -940,6 +940,7 @@ public class PlayManager : Singleton<PlayManager>
 
     public void LevelUpNotification()
     {
+        JLAudioManager.Instance.PlayOneShotSound("LevelUp");
         string description = "You have <color=#006A9A><b>" + GetLevelUpPoints(localPlayer) + "</b></color> upgrade points available!";
         Action action = LevelUpNotificationOnComplete;
         SendNotification(0, description, action);

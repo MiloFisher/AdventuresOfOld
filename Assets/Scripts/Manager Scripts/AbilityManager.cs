@@ -274,6 +274,7 @@ public class AbilityManager : Singleton<AbilityManager>
 
     public void UseSkill(string name)
     {
+        JLAudioManager.Instance.PlayOneShotSound("UseAbility");
         Invoke(name, 0);
     }
 

@@ -198,6 +198,7 @@ public class UIAttackRoll : MonoBehaviour
         if (roll1 + roll2 >= playerCritValue)
         {
             crit = true;
+            JLAudioManager.Instance.PlayOneShotSound("Success");
             successText.SetActive(true);
             hiddenSuccess = 1;
 
@@ -208,6 +209,7 @@ public class UIAttackRoll : MonoBehaviour
         }
         else if (roll1 == 1 && roll2 == 1)
         {
+            JLAudioManager.Instance.PlayOneShotSound("Failure");
             failureText.SetActive(true);
             hiddenSuccess = -1;
 
@@ -218,6 +220,7 @@ public class UIAttackRoll : MonoBehaviour
         }
         else if (roll1 + roll2 + playerPowerValue > monsterPowerValue)
         {
+            JLAudioManager.Instance.PlayOneShotSound("Success");
             successText.SetActive(true);
             hiddenSuccess = 1;
 
@@ -237,6 +240,7 @@ public class UIAttackRoll : MonoBehaviour
             }
             else
             {
+                JLAudioManager.Instance.PlayOneShotSound("Failure");
                 failureText.SetActive(true);
                 hiddenSuccess = -1;
 
@@ -257,6 +261,7 @@ public class UIAttackRoll : MonoBehaviour
             }
             else
             {
+                JLAudioManager.Instance.PlayOneShotSound("Tie");
                 tieText.SetActive(true);
 
                 yield return new WaitForSeconds(rollDisplayTime * Global.animSpeed);
@@ -317,6 +322,7 @@ public class UIAttackRoll : MonoBehaviour
         if (roll1 + roll2 >= playerCritValue)
         {
             crit = true;
+            JLAudioManager.Instance.PlayOneShotSound("Success");
             successText.SetActive(true);
             hiddenSuccess = 1;
 
@@ -327,6 +333,7 @@ public class UIAttackRoll : MonoBehaviour
         }
         else if (roll1 == 1 && roll2 == 1)
         {
+            JLAudioManager.Instance.PlayOneShotSound("Failure");
             failureText.SetActive(true);
             hiddenSuccess = -1;
 
@@ -337,6 +344,7 @@ public class UIAttackRoll : MonoBehaviour
         }
         else if (roll1 + roll2 + playerPowerValue > monsterPowerValue)
         {
+            JLAudioManager.Instance.PlayOneShotSound("Success");
             successText.SetActive(true);
             hiddenSuccess = 1;
 
@@ -347,6 +355,7 @@ public class UIAttackRoll : MonoBehaviour
         }
         else if (roll1 + roll2 + playerPowerValue < monsterPowerValue)
         {
+            JLAudioManager.Instance.PlayOneShotSound("Success");
             failureText.SetActive(true);
             hiddenSuccess = -1;
 
@@ -357,6 +366,7 @@ public class UIAttackRoll : MonoBehaviour
         }
         else
         {
+            JLAudioManager.Instance.PlayOneShotSound("Tie");
             tieText.SetActive(true);
 
             yield return new WaitForSeconds(rollDisplayTime * Global.animSpeed);

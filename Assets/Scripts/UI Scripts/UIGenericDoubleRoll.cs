@@ -140,11 +140,13 @@ public class UIGenericDoubleRoll : MonoBehaviour
         // Display success or failure
         if (SuccessCondition(roll1, roll2))
         {
+            JLAudioManager.Instance.PlayOneShotSound("Success");
             successText.SetActive(true);
             OnComplete = OnSuccess;
         }
         else
         {
+            JLAudioManager.Instance.PlayOneShotSound("Failure");
             failureText.SetActive(true);
             OnComplete = OnFailure;
         }
