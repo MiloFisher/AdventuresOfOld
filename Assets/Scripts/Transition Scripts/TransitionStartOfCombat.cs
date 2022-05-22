@@ -70,7 +70,7 @@ public class TransitionStartOfCombat : MonoBehaviour
 
     IEnumerator FadeInSequence()
     {
-        JLAudioManager.Instance.PlayOneShotSound("NextTurn");
+        JLAudioManager.Instance.PlayOneShotSound("TransitionTone1");
         // First fade in background + title + divider + divider underlay
         for (int i = 1; i <= Global.animSteps; i++)
         {

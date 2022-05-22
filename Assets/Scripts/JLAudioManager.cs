@@ -123,6 +123,14 @@ public class JLAudioManager : Singleton<JLAudioManager>
         s.audioSource.UnPause();
     }
 
+    public void SetPitch(string soundName, float pitch)
+    {
+        if (!soundDictionary.ContainsKey(soundName))
+            return;
+        JLSoundClass s = soundDictionary[soundName];
+        s.audioSource.pitch = pitch;
+    }
+
     public void SetMasterVolume(float sliderValue) {
         masterMixer.SetFloat("MasterMixer", Mathf.Log10(sliderValue) * 20);
     }

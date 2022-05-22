@@ -328,7 +328,7 @@ public class PlayManager : Singleton<PlayManager>
             p.RestoreHealth(999);
 
             // Set player positions to starting tile
-            p.SetPosition(new Vector3Int(0, 7, -7));
+            p.SetPosition(new Vector3Int(0, 7, -7), true);
         }
 
         // 4) Deal Chapter Boss Card (host only)

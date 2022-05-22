@@ -826,6 +826,9 @@ public class CombatManager : Singleton<CombatManager>
                                 case "Balanced Strike":
                                     InflictEffect(c, new Effect("Armor Up", 1, 3, true));
                                     break;
+                                case "Quick Shot":
+                                    AbilityManager.Instance.GetSkill("Quick Shot").cost = 1;
+                                    break;
                                 case "Necrotic Blast":
                                     InflictEffect(c, new Effect("Cursed", 1));
                                     break;
@@ -1091,7 +1094,12 @@ public class CombatManager : Singleton<CombatManager>
         {
             // Only host executes skill
             if (NetworkManager.Singleton.IsServer)
-                MonsterEndTurn();
+            {
+                if(monster.monster.target == Target.NONE)
+                    monsterCard.Skill(default);
+                else
+                    MonsterEndTurn();
+            }
         }
     }
 

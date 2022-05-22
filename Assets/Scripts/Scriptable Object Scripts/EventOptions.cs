@@ -260,7 +260,11 @@ public class EventOptions : ScriptableObject
                 PlayManager.Instance.MakeStatRoll("STR", 11);
                 PlayManager.Instance.StatRollListener((a) => {
                     if (a == 1)
+                    {
                         xp += 2;
+                        p.CompleteEncounter(true, p.UUID.Value);
+                        p.GainXP(xp);
+                    }
                     else
                     {
                         if(InventoryManager.Instance.HasCardInInventory(p))

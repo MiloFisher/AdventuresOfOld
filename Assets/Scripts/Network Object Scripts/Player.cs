@@ -241,17 +241,37 @@ namespace AdventuresOfOldMultiplayer
         #endregion
 
         #region Gameplay
-        public void SetPosition(Vector3Int pos)
+        public void SetPosition(Vector3Int pos, bool noSound = false)
         {
             if (NetworkManager.Singleton.IsServer)
+            {
                 Position.Value = pos;
+                if(!noSound)
+                {
+                    foreach (Player p in PlayManager.Instance.playerList)
+                        p.PlayMoveSoundClientRPC();
+                }
+            }
             else
-                SetPositionServerRPC(pos);
+                SetPositionServerRPC(pos, noSound);
         }
         [ServerRpc]
-        private void SetPositionServerRPC(Vector3Int pos, ServerRpcParams rpcParams = default)
+        private void SetPositionServerRPC(Vector3Int pos, bool noSound, ServerRpcParams rpcParams = default)
         {
             Position.Value = pos;
+            if (!noSound)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.PlayMoveSoundClientRPC();
+            }
+        }
+        [ClientRpc]
+        private void PlayMoveSoundClientRPC(ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                JLAudioManager.Instance.PlaySound("MoveSound");
+            }
         }
 
         public void SetTurnPhase(int phase)

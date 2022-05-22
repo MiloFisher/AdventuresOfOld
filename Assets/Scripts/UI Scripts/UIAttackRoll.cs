@@ -159,6 +159,11 @@ public class UIAttackRoll : MonoBehaviour
         int rollTimes = Random.Range(80, 121);
         for (int i = 0; i < rollTimes; i++)
         {
+            if (i % 4 == 0)
+            {
+                JLAudioManager.Instance.SetPitch("RollDice", Random.Range(1.3f, 1.7f));
+                JLAudioManager.Instance.PlayOneShotSound("RollDice");
+            }
             rollDisplay1.sprite = diceFaces[Random.Range(0, 6)];
             rollDisplay2.sprite = diceFaces[Random.Range(0, 6)];
             yield return new WaitForSeconds(rollLength * Global.animSpeed);
@@ -171,6 +176,11 @@ public class UIAttackRoll : MonoBehaviour
         rollTimes = Random.Range(20, 60);
         for (int i = 0; i < rollTimes; i++)
         {
+            if (i % 4 == 0)
+            {
+                JLAudioManager.Instance.SetPitch("RollDice", Random.Range(1.3f, 1.7f));
+                JLAudioManager.Instance.PlayOneShotSound("RollDice");
+            }
             rollDisplay2.sprite = diceFaces[Random.Range(0, 6)];
             yield return new WaitForSeconds(rollLength * Global.animSpeed);
         }
@@ -269,6 +279,11 @@ public class UIAttackRoll : MonoBehaviour
             // Flash through random dice faces
             for (int i = 0; i < rollTimes; i++)
             {
+                if (i % 4 == 0)
+                {
+                    JLAudioManager.Instance.SetPitch("RollDice", Random.Range(1.3f, 1.7f));
+                    JLAudioManager.Instance.PlayOneShotSound("RollDice");
+                }
                 rollDisplay1.sprite = diceFaces[Random.Range(0, 6)];
                 yield return new WaitForSeconds(rollLength * Global.animSpeed);
             }
@@ -283,6 +298,11 @@ public class UIAttackRoll : MonoBehaviour
             // Flash through random dice faces
             for (int i = 0; i < rollTimes; i++)
             {
+                if (i % 4 == 0)
+                {
+                    JLAudioManager.Instance.SetPitch("RollDice", Random.Range(1.3f, 1.7f));
+                    JLAudioManager.Instance.PlayOneShotSound("RollDice");
+                }
                 rollDisplay2.sprite = diceFaces[Random.Range(0, 6)];
                 yield return new WaitForSeconds(rollLength * Global.animSpeed);
             }

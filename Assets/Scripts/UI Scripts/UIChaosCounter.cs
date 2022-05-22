@@ -5,11 +5,15 @@ public class UIChaosCounter : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 {
     public GameObject description;
     public bool isDescription;
+    private string hoverSound = "PageTurn";
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         if(!isDescription)
+        {
+            JLAudioManager.Instance.PlayOneShotSound(hoverSound);
             description.SetActive(true);
+        }
     }
 
     public void OnPointerExit(PointerEventData eventData)

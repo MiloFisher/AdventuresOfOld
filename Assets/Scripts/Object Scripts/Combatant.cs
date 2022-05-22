@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using AdventuresOfOldMultiplayer;
+using UnityEngine;
 
 public enum CombatantType { PLAYER, MONSTER, MINION };
 
@@ -17,7 +18,7 @@ public class Combatant
     private int minionMaxHealth = 0;
     private int minionAttack = 0;
     private int minionPower = 0;
-    private bool hasHatched;
+    public bool hasHatched;
     public int startHealth;
 
     public Combatant(CombatantType combatantType, Player player)
