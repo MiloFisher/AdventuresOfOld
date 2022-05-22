@@ -48,6 +48,7 @@ public class UIForcedDiscard : MonoBehaviour
             yield return new WaitForSeconds(growingLength * Global.animTimeMod);
         }
 
+        JLAudioManager.Instance.PlayOneShotSound("ScrollOpen");
         // Next open the scroll
         dif = endWidth - startWidth;
         for (int i = 1; i <= Global.animSteps; i++)
@@ -69,6 +70,7 @@ public class UIForcedDiscard : MonoBehaviour
         InventoryManager.Instance.forcedMaximize = false;
         InventoryManager.Instance.MinimizeInventory();
 
+        JLAudioManager.Instance.PlayOneShotSound("ScrollOpen");
         // Then close the scroll
         float dif = endWidth - startWidth;
         for (int i = Global.animSteps - 1; i >= 0; i--)

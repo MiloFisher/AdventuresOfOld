@@ -76,6 +76,7 @@ public class UIStatRoll : MonoBehaviour
             yield return new WaitForSeconds(growingLength * Global.animTimeMod * Global.animSpeed);
         }
 
+        JLAudioManager.Instance.PlayOneShotSound("ScrollOpen");
         // Next open the scroll and fade in toggle show button
         dif = endWidth - startWidth;
         for (int i = 1; i <= Global.animSteps; i++)
@@ -180,6 +181,7 @@ public class UIStatRoll : MonoBehaviour
     {
         opened = false;
 
+        JLAudioManager.Instance.PlayOneShotSound("ScrollOpen");
         // First close the scroll and fade out toggle show button
         float dif = endWidth - startWidth;
         for (int i = Global.animSteps - 1; i >= 0; i--)

@@ -50,6 +50,7 @@ public class TransitionGeneric : MonoBehaviour
 
     IEnumerator FadeSequence()
     {
+        JLAudioManager.Instance.PlayOneShotSound("NextTurn");
         // Fade in background, images, and texts
         for (int i = 1; i <= Global.animSteps; i++)
         {

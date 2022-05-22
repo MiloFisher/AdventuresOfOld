@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class UIButtonAnim : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class UIButtonAnim : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     public Sprite defaultSprite;
     public Sprite selectedSprite;
@@ -18,6 +18,8 @@ public class UIButtonAnim : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     private float defaultWidth;
     private float defaultHeight;
     private float defaultChildScale = 1;
+    private string clickSound = "ClickSound";
+    private string hoverSound = "PageTurn";
 
     void Start()
     {
@@ -29,10 +31,16 @@ public class UIButtonAnim : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
             image.alphaHitTestMinimumThreshold = 0.1f;
     }
 
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        JLAudioManager.Instance.PlayOneShotSound(clickSound);
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (!GetComponent<Button>().enabled)
             return;
+        JLAudioManager.Instance.PlayOneShotSound(hoverSound);
         image.sprite = selectedSprite;
         rt.sizeDelta = new Vector2(scaledWidth,scaledHeight);
         if (transform.childCount > 0)

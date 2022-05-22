@@ -14,9 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Health Potion
   rarity: 0
-  image: {fileID: 21300000, guid: b7dc26a7dbb5291409070cefd3aa2317, type: 3}
+  image: {fileID: 21300000, guid: bc70aed9f4ef248898d00a16e0df2483, type: 3}
   copies: 16
   itemType: Consumable
   effectDescription: Recover +10 Health
   buyCost: 10
   sellCost: 5
+  useCondition: 0

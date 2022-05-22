@@ -70,6 +70,7 @@ public class TransitionStartOfCombat : MonoBehaviour
 
     IEnumerator FadeInSequence()
     {
+        JLAudioManager.Instance.PlayOneShotSound("NextTurn");
         // First fade in background + title + divider + divider underlay
         for (int i = 1; i <= Global.animSteps; i++)
         {
@@ -90,6 +91,7 @@ public class TransitionStartOfCombat : MonoBehaviour
         // Next fade in number + player list
         for (int x = 0; x < CombatManager.Instance.turnOrderCombatantList.Count; x++)
         {
+            JLAudioManager.Instance.PlayOneShotSound("ClickSound");
             playerList[x].text = "<color=" + CombatManager.Instance.turnOrderCombatantList[x].GetColor() + ">" + CombatManager.Instance.turnOrderCombatantList[x].GetName() + "</color>";
             for (int i = 1; i <= Global.animSteps; i++)
             {

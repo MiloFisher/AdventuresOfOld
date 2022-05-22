@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Simple Leather Armor
   rarity: 0
-  image: {fileID: 21300000, guid: dc3f1731ca470cc4da6da30d0dde16fb, type: 3}
+  image: {fileID: 21300000, guid: 22b018b54fa064a688f2d1c44029103f, type: 3}
   copies: 6
   itemType: Medium Armor
   effectDescription: +2 Armor

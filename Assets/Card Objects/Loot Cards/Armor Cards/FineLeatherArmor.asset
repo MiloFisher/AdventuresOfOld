@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Fine Leather Armor
   rarity: 1
-  image: {fileID: 21300000, guid: 11e1be71edc062f45bebd09c27fbf70e, type: 3}
+  image: {fileID: 21300000, guid: 8164cd4662452496fabfd30a1dd62828, type: 3}
   copies: 4
   itemType: Medium Armor
   effectDescription: +4 Armor

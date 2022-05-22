@@ -56,6 +56,7 @@ public class UIGamble : MonoBehaviour
             yield return new WaitForSeconds(growingLength * Global.animTimeMod * Global.animSpeed);
         }
 
+        JLAudioManager.Instance.PlayOneShotSound("ScrollOpen");
         // Next open the scroll
         dif = endWidth - startWidth;
         for (int i = 1; i <= Global.animSteps; i++)
@@ -138,6 +139,7 @@ public class UIGamble : MonoBehaviour
 
     IEnumerator AnimateClosing()
     {
+        JLAudioManager.Instance.PlayOneShotSound("ScrollOpen");
         // First close the scroll
         float dif = endWidth - startWidth;
         for (int i = Global.animSteps - 1; i >= 0; i--)

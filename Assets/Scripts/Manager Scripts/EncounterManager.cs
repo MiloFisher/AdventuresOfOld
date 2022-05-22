@@ -90,6 +90,7 @@ public class EncounterManager : Singleton<EncounterManager>
             yield return new WaitForSeconds(bannerGrowingLength * Global.animTimeMod * Global.animSpeed);
         }
 
+        JLAudioManager.Instance.PlayOneShotSound("ScrollOpen");
         // Next open the scroll
         dif = bannerEndWidth - bannerStartWidth;
         for (int i = 1; i <= Global.animSteps; i++)
@@ -104,6 +105,7 @@ public class EncounterManager : Singleton<EncounterManager>
 
     IEnumerator AnimateClosing()
     {
+        JLAudioManager.Instance.PlayOneShotSound("ScrollOpen");
         // First close the scroll
         float dif = bannerEndWidth - bannerStartWidth;
         for (int i = Global.animSteps - 1; i >= 0; i--)
@@ -129,6 +131,8 @@ public class EncounterManager : Singleton<EncounterManager>
 
     IEnumerator AnimateCardDraw(int current, int amount)
     {
+        JLAudioManager.Instance.PlayOneShotSound("DrawCard");
+
         GameObject travelCard = Instantiate(cardPrefab, transform.parent);
         travelCard.GetComponent<UIEncounterCard>().SetVisuals(cardsToDraw[current]);
         travelCard.GetComponent<UIEncounterCard>().ActivateCardButton(false);

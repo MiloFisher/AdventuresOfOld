@@ -1673,6 +1673,10 @@ public class CombatManager : Singleton<CombatManager>
         yield return new WaitForSeconds(fadedWaitTime * Global.animSpeed);
         ready = true;
 
+        // Start combat music
+        JLAudioManager.Instance.StopSound("BackgroundMusic");
+        JLAudioManager.Instance.PlaySound("FightMusic");
+
         // Then fade out overlay
         for (int i = Global.animSteps - 1; i >= 0; i--)
         {
@@ -1709,6 +1713,10 @@ public class CombatManager : Singleton<CombatManager>
         // Hold faded in overlay
         yield return new WaitForSeconds(fadedWaitTime * Global.animSpeed);
         ready = false;
+
+        // Start background music
+        JLAudioManager.Instance.StopSound("FightMusic");
+        JLAudioManager.Instance.PlaySound("BackgroundMusic");
 
         // Then fade out overlay
         for (int i = Global.animSteps - 1; i >= 0; i--)

@@ -369,6 +369,9 @@ public class PlayManager : Singleton<PlayManager>
 
         yield return new WaitForSeconds(1);
 
+        // Start background music
+        JLAudioManager.Instance.PlaySound("BackgroundMusic");
+
         // Begin Game with Start of Day (host only)
         StartOfDay();
     }

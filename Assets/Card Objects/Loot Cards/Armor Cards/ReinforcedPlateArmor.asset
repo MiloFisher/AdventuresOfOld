@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Reinforced Plate Armor
   rarity: 2
-  image: {fileID: 21300000, guid: 97cde09c7c038684ab08fdca2432e57d, type: 3}
+  image: {fileID: 21300000, guid: 9c713a4899e9c4987a69257cbfa9c43e, type: 3}
   copies: 2
   itemType: Heavy Armor
   effectDescription: +7 Armor, -2 Speed (SPD)

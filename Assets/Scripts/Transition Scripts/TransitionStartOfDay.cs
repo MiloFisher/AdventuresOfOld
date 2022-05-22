@@ -54,6 +54,7 @@ public class TransitionStartOfDay : MonoBehaviour
 
     IEnumerator FadeInSequence()
     {
+        JLAudioManager.Instance.PlayOneShotSound("NextTurn");
         // First fade in background + title + divider + divider underlay
         for (int i = 1; i <= Global.animSteps; i++)
         {
@@ -74,6 +75,7 @@ public class TransitionStartOfDay : MonoBehaviour
         //Next fade in number + player list
         for(int x = 0; x < PlayManager.Instance.turnOrderPlayerList.Count; x++)
         {
+            JLAudioManager.Instance.PlayOneShotSound("ClickSound");
             playerList[x].text = "<color=" + PlayManager.Instance.GetPlayerColorString(PlayManager.Instance.turnOrderPlayerList[x]) + ">" + PlayManager.Instance.turnOrderPlayerList[x].Name.Value + "</color>";
             for (int i = 1; i <= Global.animSteps; i++)
             {

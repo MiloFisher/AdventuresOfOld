@@ -157,6 +157,7 @@ public class UITargetPlayer : MonoBehaviour
         // Draw player objects
         DrawPlayerDisplays();
 
+        JLAudioManager.Instance.PlayOneShotSound("ScrollOpen");
         // Next open the scroll and fade in object (and cancel button if active)
         dif = bannerEndWidth - bannerStartWidth;
         for (int i = 1; i <= Global.animSteps; i++)
@@ -181,6 +182,7 @@ public class UITargetPlayer : MonoBehaviour
         foreach(GameObject g in playerDisplays)
             g.GetComponent<UIPlayerDisplay>().FadeOutDisplay();
 
+        JLAudioManager.Instance.PlayOneShotSound("ScrollOpen");
         // First close the scroll and fade out object (and cancel button if active)
         float dif = bannerEndWidth - bannerStartWidth;
         for (int i = Global.animSteps - 1; i >= 0; i--)

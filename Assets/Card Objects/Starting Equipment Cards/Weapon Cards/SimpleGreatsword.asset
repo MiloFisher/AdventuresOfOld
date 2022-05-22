@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Simple Greatsword
   rarity: 0
-  image: {fileID: 21300000, guid: 44d21c6a1532d2c4fa1240e9c80aeef9, type: 3}
+  image: {fileID: 21300000, guid: cb3e55fbbdbc449cd9044bda7f389611, type: 3}
   copies: 6
   itemType: 2H Sword
   effectDescription: +6 Damage

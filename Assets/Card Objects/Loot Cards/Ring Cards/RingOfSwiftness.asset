@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardName: Ring of Swiftness
   rarity: 2
-  image: {fileID: 21300000, guid: dba16c3f950209b4688b4698d892354e, type: 3}
+  image: {fileID: 21300000, guid: ca4f707afefb546acb11e5f1011118bf, type: 3}
   copies: 4
   itemType: Ring
   effectDescription: +2 Speed (SPD)

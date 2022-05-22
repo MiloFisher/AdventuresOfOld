@@ -184,6 +184,7 @@ public class LootManager : Singleton<LootManager>
             yield return new WaitForSeconds(bannerGrowingLength * Global.animTimeMod * Global.animSpeed);
         }
 
+        JLAudioManager.Instance.PlayOneShotSound("ScrollOpen");
         // Next open the scroll
         dif = bannerEndWidth - bannerStartWidth;
         for (int i = 1; i <= Global.animSteps; i++)
@@ -202,6 +203,7 @@ public class LootManager : Singleton<LootManager>
         goldDisplay.SetActive(false);
         discardCardsButton.SetActive(false);
 
+        JLAudioManager.Instance.PlayOneShotSound("ScrollOpen");
         // First close the scroll
         float dif = bannerEndWidth - bannerStartWidth;
         for (int i = Global.animSteps - 1; i >= 0; i--)
@@ -247,6 +249,8 @@ public class LootManager : Singleton<LootManager>
 
     IEnumerator AnimateCardDraw(int current, int amount)
     {
+        JLAudioManager.Instance.PlayOneShotSound("DrawCard");
+
         GameObject travelCard = Instantiate(cardPrefab, transform.parent);
         travelCard.GetComponent<UILootCard>().SetVisuals(cardsToDraw[current]);
         travelCard.GetComponent<UILootCard>().ActivateCardButton(false);
