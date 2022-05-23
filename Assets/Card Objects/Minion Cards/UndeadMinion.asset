@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: UndeadMinion
   m_EditorClassIdentifier: 
   cardName: Undead Minion
-  image: {fileID: 0}
+  image: {fileID: 21300000, guid: eec5c2bc5083f446c9c78ae2487dd6dd, type: 3}
   flavorText: "A corpse raised to do its master\u2019s bidding"
   type: 4
   health: 10
@@ -30,3 +30,4 @@ MonoBehaviour:
   passiveDescription: Redirect all incoming attacks to the caster to this minion
     instead.
   background: {fileID: 21300000, guid: c9bd982ee37cfa548ad465fc93dcddf4, type: 3}
+  target: 0

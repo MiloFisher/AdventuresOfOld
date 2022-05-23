@@ -73,7 +73,7 @@ public class EmoteManager : Singleton<EmoteManager>
         }
         else
         {
-            targetPosition = CombatManager.Instance.enemyCard.transform.localPosition;
+            targetPosition = CombatManager.Instance.enemyCard.GetDisplayPositionScaled();
         }
         GameObject g = Instantiate(emotePrefab, transform);
         g.transform.localScale = new Vector3(emoteScale, emoteScale, 1);

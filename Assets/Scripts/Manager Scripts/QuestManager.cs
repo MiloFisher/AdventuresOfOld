@@ -307,7 +307,8 @@ public class QuestManager : Singleton<QuestManager>
         questLayout.SetActive(false);
 
         // End by calling OnComplete
-        OnComplete();
+        if(OnComplete != default)
+            OnComplete();
     }
 
     private void SetAlpha(GameObject g, float a)

@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 3447
+  controlID: 3657
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -86,7 +86,7 @@ MonoBehaviour:
     m_HSlider: 0
     m_VSlider: 0
     m_IgnoreScrollWheelUntilClicked: 0
-    m_EnableMouseInput: 0
+    m_EnableMouseInput: 1
     m_EnableSliderZoomHorizontal: 0
     m_EnableSliderZoomVertical: 0
     m_UniformScale: 1
@@ -141,7 +141,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 3448
+  controlID: 3658
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -166,7 +166,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 3449
+  controlID: 3659
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -442,9 +442,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: 996.75665, y: 555.4719, z: 204033.78}
+    m_Target: {x: 470.47372, y: 509.96005, z: 76687.18}
     speed: 2
-    m_Value: {x: 996.75665, y: 555.4719, z: 204033.78}
+    m_Value: {x: 462.8145, y: 505.65457, z: 67977.28}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -495,9 +495,9 @@ MonoBehaviour:
     speed: 2
     m_Value: {x: 0, y: 0, z: 0, w: 1}
   m_Size:
-    m_Target: 600.66144
+    m_Target: 224.2844
     speed: 2
-    m_Value: 600.66144
+    m_Value: 198.67818
   m_Ortho:
     m_Target: 1
     speed: 2
@@ -606,10 +606,10 @@ MonoBehaviour:
     m_SaveData: []
   m_SceneHierarchy:
     m_TreeViewState:
-      scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 6019ffff
-      m_LastClickedID: -59040
-      m_ExpandedIDs: ec17ffff2419ffffd28effff40f5ffff2cfbfffff4ffffff06cb0000
+      scrollPos: {x: 0, y: 6}
+      m_SelectedIDs: 72420100
+      m_LastClickedID: 82546
+      m_ExpandedIDs: c45cfeffec17ffff2419ffffd28effff40f5ffff2cfbfffff4ffffff06cb0000a039010014490100764a0100
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -643,7 +643,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 1
   m_Script: {fileID: 12006, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: ConsoleWindow
+  m_Name: ProjectBrowser
   m_EditorClassIdentifier: 
   m_Children: []
   m_Position:
@@ -652,14 +652,14 @@ MonoBehaviour:
     y: 612
     width: 1328
     height: 418
-  m_MinSize: {x: 101, y: 121}
-  m_MaxSize: {x: 4001, y: 4021}
-  m_ActualView: {fileID: 12}
+  m_MinSize: {x: 231, y: 271}
+  m_MaxSize: {x: 10001, y: 10021}
+  m_ActualView: {fileID: 11}
   m_Panes:
   - {fileID: 11}
   - {fileID: 12}
-  m_Selected: 1
-  m_LastSelected: 0
+  m_Selected: 0
+  m_LastSelected: 1
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -701,22 +701,22 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scenes
+    - Assets/Game_Resources/UI
     m_Globs: []
     m_OriginalText: 
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Scenes
+  - Assets/Game_Resources/UI
   m_LastFoldersGridSize: -1
   m_LastProjectPath: /Users/milo/Documents/GitHub/Adventures of Old 2022
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 679}
-    m_SelectedIDs: 40d10000
-    m_LastClickedID: 53568
-    m_ExpandedIDs: 000000008e6f0000906f0000926f0000946f0000966f0000986f00009a6f00009c6f00009e6f0000a06f0000a26f0000a46f0000a66f0000
+    scrollPos: {x: 0, y: 475}
+    m_SelectedIDs: 94840000
+    m_LastClickedID: 33940
+    m_ExpandedIDs: 000000008e6f0000906f0000926f0000966f0000986f00009a6f00009c6f00009e6f0000a06f0000a26f0000a66f000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -769,8 +769,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 5ed10000
-    m_LastClickedInstanceID: 53598
+    m_SelectedInstanceIDs: 72420100
+    m_LastClickedInstanceID: 82546
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000a81e03004083000020830000
     m_RenameOverlay:
@@ -796,7 +796,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 0}
+    m_ScrollPosition: {x: 0, y: 104}
     m_GridSize: 64
   m_SkipHiddenPackages: 0
   m_DirectoriesAreaWidth: 170
@@ -847,8 +847,8 @@ MonoBehaviour:
     y: 0
     width: 400
     height: 1030
-  m_MinSize: {x: 276, y: 71}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 275, y: 50}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 14}
   m_Panes:
   - {fileID: 14}

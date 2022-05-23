@@ -122,7 +122,7 @@ public class LootManager : Singleton<LootManager>
             yield return new WaitForSeconds(fadeLength * Global.animTimeMod * Global.animSpeed);
         }
 
-        displayCards = null;
+        displayCards[slot] = null;
         Destroy(card);
     }
 

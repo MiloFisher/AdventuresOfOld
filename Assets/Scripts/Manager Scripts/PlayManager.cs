@@ -1006,7 +1006,7 @@ public class PlayManager : Singleton<PlayManager>
 
     public void CombatNotification()
     {
-        string description = "<color=" + GetPlayerColorString(turnOrderPlayerList[turnMarker]) + ">" + turnOrderPlayerList[turnMarker].Name.Value + "</color> is fighting " + EncounterManager.Instance.GetEncounter().cardName + "!";
+        string description = "<color=" + GetPlayerColorString(turnOrderPlayerList[turnMarker]) + ">" + turnOrderPlayerList[turnMarker].Name.Value + "</color> is fighting a monster!";
         Action action = CombatNotificationOnComplete;
         SendNotification(1, description, action);
     }

@@ -98,7 +98,7 @@ namespace AdventuresOfOldMultiplayer
             }
         }
 
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         void AssignUsernameAndUUIDServerRPC(FixedString64Bytes username, FixedString64Bytes uuid, ServerRpcParams rpcParams = default)
         {
             Username.Value = username;
@@ -141,7 +141,7 @@ namespace AdventuresOfOldMultiplayer
                 SetStringValueServerRPC(valueName, value);
         }
 
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void SetStringValueServerRPC(FixedString64Bytes valueName, FixedString64Bytes value, ServerRpcParams rpcParams = default)
         {
             SetStringValue(valueName + "", value + "");
@@ -177,7 +177,7 @@ namespace AdventuresOfOldMultiplayer
                 SetIntValueServerRPC(valueName, value);
         }
 
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void SetIntValueServerRPC(FixedString64Bytes valueName, int value, ServerRpcParams rpcParams = default)
         {
             SetIntValue(valueName + "", value);
@@ -215,7 +215,7 @@ namespace AdventuresOfOldMultiplayer
                 SetBoolValueServerRPC(valueName, value);
         }
 
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void SetBoolValueServerRPC(FixedString64Bytes valueName, bool value, ServerRpcParams rpcParams = default)
         {
             SetBoolValue(valueName + "", value);
@@ -255,7 +255,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 SetPositionServerRPC(pos, noSound);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void SetPositionServerRPC(Vector3Int pos, bool noSound, ServerRpcParams rpcParams = default)
         {
             Position.Value = pos;
@@ -281,7 +281,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 SetTurnPhaseServerRPC(phase);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void SetTurnPhaseServerRPC(int phase, ServerRpcParams rpcParams = default)
         {
             TurnPhase.Value = phase;
@@ -294,7 +294,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 ReadyUpServerRPC();
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void ReadyUpServerRPC(ServerRpcParams rpcParams = default)
         {
             Ready.Value = true;
@@ -307,7 +307,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 UnreadyServerRPC();
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void UnreadyServerRPC(ServerRpcParams rpcParams = default)
         {
             Ready.Value = false;
@@ -360,7 +360,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 UpdateTurnMarkerServerRPC(marker);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void UpdateTurnMarkerServerRPC(int marker, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -385,7 +385,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 StartNextPlayerTurnServerRPC(turnMarker);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void StartNextPlayerTurnServerRPC(int turnMarker, ServerRpcParams rpcParams = default)
         {
             PlayManager.Instance.turnOrderPlayerList[turnMarker].StartTurnClientRPC();
@@ -436,7 +436,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 EndDayForPlayersServerRPC();
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void EndDayForPlayersServerRPC(ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -490,7 +490,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 DrawLootCardsServerRPC(amount, uuid, endTurnAfter);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void DrawLootCardsServerRPC(int amount, FixedString64Bytes uuid, bool endTurnAfter, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -543,7 +543,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 DrawEncounterCardsServerRPC(amount, uuid, animateOpening);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void DrawEncounterCardsServerRPC(int amount, FixedString64Bytes uuid, bool animateOpening, ServerRpcParams rpcParams = default)
         {
             List<string> cards = new List<string>();
@@ -588,7 +588,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 CompleteEncounterServerRPC(endTurnAfter, uuid);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void CompleteEncounterServerRPC(bool endTurnAfter, FixedString64Bytes uuid, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -623,7 +623,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 ForkInTheRoadHelperServerRPC(uuid);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void ForkInTheRoadHelperServerRPC(FixedString64Bytes uuid, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -658,7 +658,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 GainXPServerRPC(total);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void GainXPServerRPC(int total, ServerRpcParams rpcParams = default)
         {
             XP.Value += total;
@@ -693,7 +693,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 LevelUpServerRPC(neededXP);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void LevelUpServerRPC(int neededXP, ServerRpcParams rpcParams = default)
         {
             XP.Value -= neededXP;
@@ -711,7 +711,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 GainGoldServerRPC(amount);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void GainGoldServerRPC(int amount, ServerRpcParams rpcParams = default)
         {
             Gold.Value += amount;
@@ -728,7 +728,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 LoseGoldServerRPC(amount);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void LoseGoldServerRPC(int amount, ServerRpcParams rpcParams = default)
         {
             Gold.Value -= amount;
@@ -772,7 +772,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 TakeDamageServerRPC(damage);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void TakeDamageServerRPC(int damage, ServerRpcParams rpcParams = default)
         {
             if (damage > 0)
@@ -847,7 +847,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 RestoreAbilityChargesServerRPC(amount, cap, noSound);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void RestoreAbilityChargesServerRPC(int amount, int cap, bool noSound, ServerRpcParams rpcParams = default)
         {
             AbilityCharges.Value += amount;
@@ -890,7 +890,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 RestoreRestoreHealthServerRPC(amount, cap, noSound);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void RestoreRestoreHealthServerRPC(int amount, int cap, bool noSound, ServerRpcParams rpcParams = default)
         {
             Health.Value += amount;
@@ -923,7 +923,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 LoseAbilityChargesServerRPC(amount);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void LoseAbilityChargesServerRPC(int amount, ServerRpcParams rpcParams = default)
         {
             AbilityCharges.Value -= amount;
@@ -941,7 +941,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 IncreaseChaosServerRPC(amount);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void IncreaseChaosServerRPC(int amount, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -966,7 +966,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 ReduceChaosServerRPC(amount);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void ReduceChaosServerRPC(int amount, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -998,7 +998,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 UpdateQuestsServerRPC(quests, steps);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void UpdateQuestsServerRPC(FixedString64Bytes[] quests, int[] steps, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1035,7 +1035,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 UpdateStatsServerRPC(temporaryStrength, temporaryDexterity, temporaryIntelligence, temporarySpeed, temporaryConstitution, temporaryEnergy);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         public void UpdateStatsServerRPC(int temporaryStrength, int temporaryDexterity, int temporaryIntelligence, int temporarySpeed, int temporaryConstitution, int temporaryEnergy, ServerRpcParams rpcParams = default)
         {
             Strength.Value += temporaryStrength;
@@ -1067,7 +1067,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 SendCombatNotificationsServerRPC(uuid);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void SendCombatNotificationsServerRPC(FixedString64Bytes uuid, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1101,7 +1101,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 ContinueToCombatServerRPC();
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void ContinueToCombatServerRPC(ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1126,7 +1126,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 UpdateMonsterHealthServerRPC(value);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void UpdateMonsterHealthServerRPC(int value, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1151,7 +1151,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 SetTurnOrderCombatantListServerRPC(arr, keepMonster);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void SetTurnOrderCombatantListServerRPC(FixedString64Bytes[] arr, bool keepMonster, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1176,7 +1176,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 UpdateCombatTurnMarkerServerRPC(marker);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void UpdateCombatTurnMarkerServerRPC(int marker, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1200,7 +1200,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 StartNextCombatantTurnServerRPC(turnMarker, minionTurn);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void StartNextCombatantTurnServerRPC(int turnMarker, bool minionTurn, ServerRpcParams rpcParams = default)
         {
             CombatManager.Instance.turnOrderCombatantList[turnMarker].player.StartNextCombatantTurnClientRPC(minionTurn);
@@ -1237,7 +1237,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 StartMonsterTurnServerRPC(targets);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void StartMonsterTurnServerRPC(int[] targets, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1276,7 +1276,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 VisualizeAttackForOthersServerRPC(uuid, uuid2);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void VisualizeAttackForOthersServerRPC(FixedString64Bytes uuid, FixedString64Bytes uuid2, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1317,7 +1317,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 VisualizeTakeDamageForOthersServerRPC(uuid, amount);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void VisualizeTakeDamageForOthersServerRPC(FixedString64Bytes uuid, int amount, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1350,7 +1350,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 GainStatusEffectServerRPC(uuid, name, duration, potency, canStack, counter);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void GainStatusEffectServerRPC(FixedString64Bytes uuid, FixedString64Bytes name, int duration, int potency, bool canStack, int counter, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1382,7 +1382,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 RemoveStatusEffectServerRPC(uuid, effectName);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void RemoveStatusEffectServerRPC(FixedString64Bytes uuid, FixedString64Bytes effectName, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1413,7 +1413,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 CycleStatusEffectsServerRPC(uuid);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void CycleStatusEffectsServerRPC(FixedString64Bytes uuid, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1444,7 +1444,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 UseStatusEffectServerRPC(uuid, effectName);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void UseStatusEffectServerRPC(FixedString64Bytes uuid, FixedString64Bytes effectName, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1474,7 +1474,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 MonsterGainStatusEffectServerRPC(name, duration, potency, canStack, counter);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void MonsterGainStatusEffectServerRPC(FixedString64Bytes name, int duration, int potency, bool canStack, int counter, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1499,7 +1499,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 MonsterRemoveStatusEffectServerRPC(effectName);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void MonsterRemoveStatusEffectServerRPC(FixedString64Bytes effectName, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1524,7 +1524,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 MonsterCycleStatusEffectsServerRPC();
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void MonsterCycleStatusEffectsServerRPC(ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1549,7 +1549,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 MonsterUseStatusEffectServerRPC(effectName);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void MonsterUseStatusEffectServerRPC(FixedString64Bytes effectName, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1578,7 +1578,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 VisualizeMonsterAttackForOthersServerRPC(uuid, amount);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void VisualizeMonsterAttackForOthersServerRPC(FixedString64Bytes uuid, int amount, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1614,7 +1614,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 VisualizeMonsterTakeDamageForOthersServerRPC(uuid, amount);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void VisualizeMonsterTakeDamageForOthersServerRPC(FixedString64Bytes uuid, int amount, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1652,7 +1652,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 TransitionOthersToStyleServerRPC(uuid, style, attackerId);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void TransitionOthersToStyleServerRPC(FixedString64Bytes uuid, FixedString64Bytes style, int attackerId, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1690,7 +1690,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 SendCombatCompleteNotificationsServerRPC(uuid, result);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void SendCombatCompleteNotificationsServerRPC(FixedString64Bytes uuid, int result, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1727,7 +1727,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 VisualizeHealForOthersServerRPC(uuid, amount);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void VisualizeHealForOthersServerRPC(FixedString64Bytes uuid, int amount, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1763,7 +1763,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 VisualizeMonsterHealForOthersServerRPC(uuid, amount);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void VisualizeMonsterHealForOthersServerRPC(FixedString64Bytes uuid, int amount, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1829,7 +1829,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 SetupStoreServerRPC(storeSize);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void SetupStoreServerRPC(int storeSize, ServerRpcParams rpcParams = default)
         {
             List<string> cards = new List<string>();
@@ -1860,7 +1860,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 RemoveStoreCardForOthersServerRPC(uuid, slot);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void RemoveStoreCardForOthersServerRPC(FixedString64Bytes uuid, int slot, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1887,7 +1887,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 ResurrectServerRPC(health);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void ResurrectServerRPC(int health, ServerRpcParams rpcParams = default)
         {
             Health.Value = health;
@@ -1903,7 +1903,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 SetNextDialogueChunkServerRPC();
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void SetNextDialogueChunkServerRPC(ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1928,7 +1928,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 EndDialogueServerRPC();
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void EndDialogueServerRPC(ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1953,7 +1953,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 LoadIntoQuestServerRPC(questName);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void LoadIntoQuestServerRPC(FixedString64Bytes questName, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -1977,7 +1977,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 GameOverServerRPC(state);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void GameOverServerRPC(int state, ServerRpcParams rpcParams = default)
         {
             PlayManager.Instance.GameOver(state);
@@ -1993,7 +1993,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 SetBossServerRPC(cardName);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void SetBossServerRPC(FixedString64Bytes cardName, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -2022,7 +2022,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 SendRequestTauntNotificationsServerRPC(uuid);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void SendRequestTauntNotificationsServerRPC(FixedString64Bytes uuid, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -2059,7 +2059,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 SendTauntReceivedNotificationServerRPC(uuid);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void SendTauntReceivedNotificationServerRPC(FixedString64Bytes uuid, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -2093,7 +2093,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 UpdateMinionStatsServerRPC(uuid, currentHealth, maxHealth, attack, power, createNew);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void UpdateMinionStatsServerRPC(FixedString64Bytes uuid, int currentHealth, int maxHealth, int attack, int power, bool createNew, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -2123,7 +2123,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 MinionGainStatusEffectServerRPC(uuid, name, duration, potency, canStack, counter);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void MinionGainStatusEffectServerRPC(FixedString64Bytes uuid, FixedString64Bytes name, int duration, int potency, bool canStack, int counter, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -2153,7 +2153,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 MinionRemoveStatusEffectServerRPC(uuid, effectName);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void MinionRemoveStatusEffectServerRPC(FixedString64Bytes uuid, FixedString64Bytes effectName, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -2183,7 +2183,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 MinionCycleStatusEffectsServerRPC(uuid);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void MinionCycleStatusEffectsServerRPC(FixedString64Bytes uuid, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -2213,7 +2213,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 MinionUseStatusEffectServerRPC(uuid, effectName);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void MinionUseStatusEffectServerRPC(FixedString64Bytes uuid, FixedString64Bytes effectName, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -2243,7 +2243,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 SetPlayerCardMinionViewServerRPC(uuid, active, lockToggle);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void SetPlayerCardMinionViewServerRPC(FixedString64Bytes uuid, bool active, bool lockToggle, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
@@ -2277,7 +2277,7 @@ namespace AdventuresOfOldMultiplayer
             else
                 EmoteServerRPC(uuid, id);
         }
-        [ServerRpc]
+        [ServerRpc(RequireOwnership = false)]
         private void EmoteServerRPC(FixedString64Bytes uuid, int id, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
