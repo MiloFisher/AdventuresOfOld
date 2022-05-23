@@ -192,7 +192,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4127195135
+    rgba: 687865855
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -329,7 +329,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 184549375
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -655,7 +655,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 50331647
+    rgba: 4294967295
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -915,7 +915,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 1124073471
+    rgba: 3841982463
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1138,7 +1138,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 100663295
+    rgba: 2986344447
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1378,14 +1378,10 @@ MonoBehaviour:
     Justin Lao
     - Secondary Narrator
 
-    C. Conrad Cady - Crazed Hermit
+    C. Conrad Cady - Crazed Hermit, Pablo the Noob, Goblin
+    Prince
 
     - Distressed Villager
-
-    Emily
-    Wen - Forest Hag
-
-    Ethan Michaels - Four Eyed Boy
 
 '
   m_isRightToLeft: 0
@@ -1396,7 +1392,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 184549375
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1635,7 +1631,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 50331647
+    rgba: 4043309055
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1761,19 +1757,19 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '- Fire Elemental
+  m_text: 'Emily Wen - Forest Hag
 
-    - goblin prince
+    Ethan Michaels - Four Eyed Boy
 
-    - pablo the noob
+    - Fire
+    Elemental
 
-    Remy
-    Fisher - Shifty Peddler
+    Remy Fisher - Shifty Peddler
 
     Milo Fisher - Suspicious Horse
 
-    Ethan Erh -
-    Veteran Hunter'
+    Ethan
+    Erh - Veteran Hunter'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
   m_sharedMaterial: {fileID: -3865223766179326254, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
@@ -1782,7 +1778,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 16777215
+    rgba: 134217727
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1919,7 +1915,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 67108863
+    rgba: 2264924159
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -2061,7 +2057,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 218103807
+    rgba: 402653183
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3

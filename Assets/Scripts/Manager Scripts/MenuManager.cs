@@ -15,6 +15,10 @@ public class MenuManager : Singleton<MenuManager>
         {
             JLAudioManager.Instance.PlaySound("MainTheme");
         }
+        if (SceneManager.GetActiveScene().name == "Character Creation")
+        {
+            JLAudioManager.Instance.PlaySound("Medieval");
+        }
         SwapScene(0);
     }
 
