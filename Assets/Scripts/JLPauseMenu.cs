@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using TMPro;
 using UnityEngine.UI;
+using System.Collections;
 
 public class JLPauseMenu : MonoBehaviour
 {
@@ -17,6 +18,17 @@ public class JLPauseMenu : MonoBehaviour
     {
         animSlider.value = -1 * Global.animSpeed;
         AnimationSpeed(Global.animSpeed);
+
+        float width = mainCanvas.GetComponent<RectTransform>().sizeDelta.x;
+        float height = mainCanvas.GetComponent<RectTransform>().sizeDelta.y;
+        if (width / height <= 16f / 9f)
+        {
+            ResolutionChange("Standard");
+        }
+        else
+        {
+            ResolutionChange("Widescreen");
+        }
     }
 
     // Update is called once per frame
