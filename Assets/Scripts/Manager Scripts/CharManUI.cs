@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -57,7 +58,8 @@ public class CharManUI : MonoBehaviour
     public GameObject powerful_text;
     public GameObject class_confirm_button;
     public GameObject trait_confirm_button;
-    public GameObject inputname;
+    public TMP_InputField inputname;
+    public GameObject error_text;
     public GameObject end_fade;
     public bool gamestart = false;
 
@@ -431,8 +433,16 @@ public class CharManUI : MonoBehaviour
     }
 
     public void setCharName() {
-        createdchar.setName(inputname.GetComponent<TextMeshProUGUI>().text);
-        gamestart = true;
+        string name = inputname.text;
+        if (string.IsNullOrEmpty(name)) {
+            error_text.SetActive(true);
+        }
+        else {
+            createdchar.setName(inputname.text);
+            error_text.SetActive(false);
+            gamestart = true;
+            MenuManager.GetComponent<MenuManager>().SwapScene(6);
+        }
     }
 
     public CreatedChar getChar() {
