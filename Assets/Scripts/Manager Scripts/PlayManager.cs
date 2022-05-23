@@ -322,10 +322,10 @@ public class PlayManager : Singleton<PlayManager>
                 p.SetValue("LevelUpPoints", 2);
 
             // Fill all of their ability charges
-            p.RestoreAbilityCharges(999, true);
+            p.RestoreAbilityCharges(999, true, true);
 
             // Set their health to full
-            p.RestoreHealth(999, true);
+            p.RestoreHealth(999, true, true);
 
             // Set player positions to starting tile
             p.SetPosition(new Vector3Int(0, 7, -7), true);

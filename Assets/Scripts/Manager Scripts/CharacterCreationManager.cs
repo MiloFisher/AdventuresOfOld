@@ -64,7 +64,6 @@ public class CharacterCreationManager : MonoBehaviour
         localPlayer.SetValue("Speed", player.getSpd());
         localPlayer.SetValue("Constitution", player.getCon());
         localPlayer.SetValue("Energy", player.getEng());
-        localPlayer.SetValue("Health", localPlayer.Constitution.Value * 2);
         localPlayer.SetValue("Image", player.getImage());
         // Set gear to empty
         localPlayer.SetValue("Weapon", player.getWeapon());
@@ -98,7 +97,6 @@ public class CharacterCreationManager : MonoBehaviour
                     p.SetValue("Speed", 10);
                     p.SetValue("Constitution", 10);
                     p.SetValue("Energy", 10);
-                    p.SetValue("Health", p.Constitution.Value);
                     p.SetValue("Image", "portrait_human");
                     // Set gear to empty
                     p.SetValue("Weapon", emptyValue);

@@ -831,9 +831,9 @@ namespace AdventuresOfOldMultiplayer
             }
         }
 
-        public void RestoreAbilityCharges(int amount, bool noSound = false)
+        public void RestoreAbilityCharges(int amount, bool noSound = false, bool workOnDead = false)
         {
-            if (Health.Value <= 0)
+            if (Health.Value <= 0 && !workOnDead)
                 return;
             int cap = PlayManager.Instance.GetMaxAbilityCharges(this);
             if (NetworkManager.Singleton.IsServer)
@@ -866,9 +866,9 @@ namespace AdventuresOfOldMultiplayer
             }
         }
 
-        public void RestoreHealth(int amount, bool noSound = false)
+        public void RestoreHealth(int amount, bool noSound = false, bool workOnDead = false)
         {
-            if (Health.Value <= 0)
+            if (Health.Value <= 0 && !workOnDead)
                 return;
             int cap = PlayManager.Instance.GetMaxHealth(this);
 
