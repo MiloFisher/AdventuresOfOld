@@ -38,7 +38,7 @@ namespace AdventuresOfOldMultiplayer
             hostingInProgress.SetActive(false);
             joiningInProgress.SetActive(false);
 
-            Application.targetFrameRate = 60;
+            Application.targetFrameRate = Global.frameCap;
         }
 
         void Update()

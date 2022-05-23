@@ -96,16 +96,17 @@ public class UIGamble : MonoBehaviour
     IEnumerator AnimateDiceRoll()
     {
         // Animate dice 1
-        int rollTimes = Random.Range(80, 121);
+        int rollTimes = (int)(Global.animSteps * Random.Range(1f, 2f));
+        int soundTrigger = Mathf.FloorToInt(Global.animSteps * 0.2f);
         for (int i = 0; i < rollTimes; i++)
         {
-            if (i % 4 == 0)
+            if (i % soundTrigger == 0)
             {
                 JLAudioManager.Instance.SetPitch("RollDice", Random.Range(1.3f, 1.7f));
                 JLAudioManager.Instance.PlayOneShotSound("RollDice");
             }
             rollDisplay1.sprite = diceFaces[Random.Range(0, 6)];
-            yield return new WaitForSeconds(rollLength * Global.animSpeed);
+            yield return new WaitForSeconds(rollLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // End dice 1 first
@@ -114,16 +115,17 @@ public class UIGamble : MonoBehaviour
         yield return new WaitForSeconds(rollDisplayTime * 0.5f * Global.animSpeed);
 
         // Animate dice 2
-        rollTimes = Random.Range(80, 121);
+        rollTimes = (int)(Global.animSteps * Random.Range(1f, 2f));
+        soundTrigger = Mathf.FloorToInt(Global.animSteps * 0.2f);
         for (int i = 0; i < rollTimes; i++)
         {
-            if (i % 4 == 0)
+            if (i % soundTrigger == 0)
             {
                 JLAudioManager.Instance.SetPitch("RollDice", Random.Range(1.3f, 1.7f));
                 JLAudioManager.Instance.PlayOneShotSound("RollDice");
             }
             rollDisplay2.sprite = diceFaces[Random.Range(0, 6)];
-            yield return new WaitForSeconds(rollLength * Global.animSpeed);
+            yield return new WaitForSeconds(rollLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // End dice 2

@@ -102,16 +102,17 @@ public class UIGenericRoll : MonoBehaviour
     protected IEnumerator AnimateDiceRoll(int roll)
     {
         // Flash through random dice faces
-        int rollTimes = UnityEngine.Random.Range(80, 121);
+        int rollTimes = (int)(Global.animSteps * UnityEngine.Random.Range(1f, 2f));
+        int soundTrigger = Mathf.FloorToInt(Global.animSteps * 0.2f);
         for (int i = 0; i < rollTimes; i++)
         {
-            if (i % 4 == 0)
+            if (i % soundTrigger == 0)
             {
                 JLAudioManager.Instance.SetPitch("RollDice", UnityEngine.Random.Range(1.3f, 1.7f));
                 JLAudioManager.Instance.PlayOneShotSound("RollDice");
             }
             rollDisplay.sprite = diceFaces[UnityEngine.Random.Range(0, 6)];
-            yield return new WaitForSeconds(rollLength * Global.animSpeed);
+            yield return new WaitForSeconds(rollLength * Global.animTimeMod * Global.animSpeed);
         }
 
         // End on rolled value face

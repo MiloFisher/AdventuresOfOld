@@ -11,6 +11,8 @@ public class JLPauseMenu : MonoBehaviour
     public GameObject[] pauseMenus;
     public Slider animSlider;
     public TextMeshProUGUI animText;
+    public Slider frameSlider;
+    public TextMeshProUGUI frameText;
 
     private int currentID;
 
@@ -18,6 +20,9 @@ public class JLPauseMenu : MonoBehaviour
     {
         animSlider.value = -1 * Global.animSpeed;
         AnimationSpeed(Global.animSpeed);
+
+        frameSlider.value = Global.animSteps;
+        FramerateCap(Global.animSteps);
 
         float width = mainCanvas.GetComponent<RectTransform>().sizeDelta.x;
         float height = mainCanvas.GetComponent<RectTransform>().sizeDelta.y;
@@ -105,5 +110,16 @@ public class JLPauseMenu : MonoBehaviour
                 animText.text = "Not Working";
                 break;
         }
+    }
+
+    public void FramerateCap(float value)
+    {
+        Global.animSteps = (int)value;
+        Global.frameCap = 3 * (int)value;
+        Global.animRate = 1f / Global.animSteps;
+        Global.animTimeMod = 100f / Global.animSteps;
+
+        Application.targetFrameRate = Global.frameCap;
+        frameText.text = Global.frameCap + " fps";
     }
 }
