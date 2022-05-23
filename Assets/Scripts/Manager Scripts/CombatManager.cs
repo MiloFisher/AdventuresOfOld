@@ -465,6 +465,8 @@ public class CombatManager : Singleton<CombatManager>
 
         // Increment turn marker for all players
         combatTurnMarker++;
+        if (combatTurnMarker >= turnOrderCombatantList.Count)
+            combatTurnMarker = 0;
         PlayManager.Instance.localPlayer.UpdateCombatTurnMarker(combatTurnMarker);
 
         // Cycle effects
@@ -487,6 +489,8 @@ public class CombatManager : Singleton<CombatManager>
         {
             // Increment turn marker for all players
             combatTurnMarker++;
+            if (combatTurnMarker >= turnOrderCombatantList.Count)
+                combatTurnMarker = 0;
             PlayManager.Instance.localPlayer.UpdateCombatTurnMarker(combatTurnMarker);
 
             // Cycle effects
@@ -501,6 +505,8 @@ public class CombatManager : Singleton<CombatManager>
     {
         // Increment turn marker for all players
         combatTurnMarker++;
+        if (combatTurnMarker >= turnOrderCombatantList.Count)
+            combatTurnMarker = 0;
         PlayManager.Instance.localPlayer.UpdateCombatTurnMarker(combatTurnMarker);
 
         // Start next combatant turn
@@ -515,8 +521,6 @@ public class CombatManager : Singleton<CombatManager>
             return;
         }
 
-        if (combatTurnMarker >= turnOrderCombatantList.Count)
-            combatTurnMarker = 0;
         if (turnOrderCombatantList[combatTurnMarker].combatantType == CombatantType.PLAYER)
             PlayManager.Instance.localPlayer.StartNextCombatantTurn(combatTurnMarker, false);
         else if (turnOrderCombatantList[combatTurnMarker].combatantType == CombatantType.MONSTER)
@@ -1135,6 +1139,8 @@ public class CombatManager : Singleton<CombatManager>
 
         // Increment turn marker for all players
         combatTurnMarker++;
+        if (combatTurnMarker >= turnOrderCombatantList.Count)
+            combatTurnMarker = 0;
         PlayManager.Instance.localPlayer.UpdateCombatTurnMarker(combatTurnMarker);
 
         // Cycle effects
