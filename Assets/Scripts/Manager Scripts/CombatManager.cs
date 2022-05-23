@@ -1153,12 +1153,12 @@ public class CombatManager : Singleton<CombatManager>
     public void AttackPlayer(Combatant c, Action OnComplete, List<Effect> debuffs = default)
     {
         int flamingShot = c.HasFlamingShot();
-        if (flamingShot > -1)
+        if (flamingShot > -1 && IsThisCombatantsTurn(c))
         {
             CleanseEffect(c, "Flaming Shot");
         }
         int bonusPower = c.HasBonusPower();
-        if (bonusPower > -1)
+        if (bonusPower > -1 && IsThisCombatantsTurn(c))
         {
             CleanseEffect(c, "Bonus Power");
         }
@@ -1196,18 +1196,22 @@ public class CombatManager : Singleton<CombatManager>
             DefensiveOptionsListener((a, p) => {
                 if (a == 1)
                 {
-                    // Avoided getting attacked
-                    if (OnComplete != default)
-                        OnComplete();
-                }
-                else if (a == -1)
-                {
                     if (p != default)
                     {
+                        // Someone taunted for you
                         c = GetCombatantFromPlayer(p);
                         RegularAttacked(c, OnComplete, debuffs);
                     }
-                    else if (c.minion != default)
+                    else
+                    {
+                        // Avoided getting attacked
+                        if (OnComplete != default)
+                            OnComplete();
+                    }
+                }
+                else if (a == -1)
+                {
+                    if (c.minion != default)
                     {
                         c.player.SetPlayerCardMinionView(true, true);
                         c = c.minion;
@@ -2101,14 +2105,11 @@ public class CombatManager : Singleton<CombatManager>
 
     public int GetIdFromCombatant(Combatant c)
     {
-        int pos = 0;
-        for (int i = 0; i < turnOrderCombatantList.Count; i++)
+        for (int i = 0; i < playerCards.Length; i++)
         {
-            if (turnOrderCombatantList[i].combatantType == CombatantType.PLAYER)
+            if (playerCards[i].GetComponent<UIPlayerCard>().combatant.player.UUID.Value == c.player.UUID.Value)
             {
-                if (turnOrderCombatantList[i].player.UUID.Value == c.player.UUID.Value)
-                    return pos;
-                pos++;
+                return i;
             }
         }
         return -1;
