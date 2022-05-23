@@ -30,6 +30,7 @@ public class UIQuestDisplay : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerEnter(PointerEventData eventData)
     {
+        JLAudioManager.Instance.PlayOneShotSound("PageTurn");
         open = true;
         DisplayQuestCards();
     }

@@ -57,23 +57,23 @@ public class AbilityManager : Singleton<AbilityManager>
         return default;
     }
 
-    public List<Skill> GetPassives()
+    public List<Skill> GetPassives(Player p = default)
     {
         List<Skill> x = new List<Skill>();
         foreach(Skill s in skills)
         {
-            if (HasAbilityUnlocked(s) && s.type == SkillType.PASSIVE)
+            if (HasAbilityUnlocked(s, p) && s.type == SkillType.PASSIVE)
                 x.Add(s);
         }
         return x;
     }
 
-    public List<Skill> GetSkills()
+    public List<Skill> GetSkills(Player p = default)
     {
         List<Skill> x = new List<Skill>();
         foreach (Skill s in skills)
         {
-            if (HasAbilityUnlocked(s) && s.type != SkillType.PASSIVE)
+            if (HasAbilityUnlocked(s, p) && s.type != SkillType.PASSIVE)
                 x.Add(s);
         }
         return x;
@@ -179,7 +179,7 @@ public class AbilityManager : Singleton<AbilityManager>
         };
     }
 
-    private string FormatType(SkillType type)
+    public string FormatType(SkillType type)
     {
         return type switch
         {

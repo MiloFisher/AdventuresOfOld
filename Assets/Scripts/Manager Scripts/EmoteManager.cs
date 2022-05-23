@@ -26,6 +26,15 @@ public class EmoteManager : Singleton<EmoteManager>
 
     private bool animating;
 
+    private void OnDisable()
+    {
+        for (int i = 0; i < currentEmotes.Count; i++)
+        {
+            Destroy(currentEmotes[i]);
+        }
+        currentEmotes.Clear();
+    }
+
     private void Update()
     {
         for(int i = 0; i < currentEmotes.Count; i++)
@@ -86,7 +95,8 @@ public class EmoteManager : Singleton<EmoteManager>
     {
         if (animating)
             return;
-        if(isMaximized)
+        JLAudioManager.Instance.PlayOneShotSound("ClickSound");
+        if (isMaximized)
         {
             isMaximized = false;
             toggleShowButton.GetComponent<Image>().sprite = maximize;

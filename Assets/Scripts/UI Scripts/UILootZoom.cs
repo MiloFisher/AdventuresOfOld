@@ -13,6 +13,7 @@ public class UILootZoom : MonoBehaviour, IPointerClickHandler, IPointerExitHandl
     {
         if (display.transform.localScale != zoomScale)
         {
+            JLAudioManager.Instance.PlayOneShotSound("PageTurn");
             copy = Instantiate(display, transform.parent.parent.parent);
             copy.transform.localPosition = display.transform.parent.localPosition;
             copy.transform.localScale = zoomScale;

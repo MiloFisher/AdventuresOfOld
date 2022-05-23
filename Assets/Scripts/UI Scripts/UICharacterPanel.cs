@@ -30,6 +30,7 @@ public class UICharacterPanel : MonoBehaviour
 
     public void ClickPortrait()
     {
+        JLAudioManager.Instance.PlayOneShotSound("ClickSound");
         PlayManager.Instance.SelectPortrait(id);
     }
 }

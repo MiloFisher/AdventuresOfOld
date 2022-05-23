@@ -782,7 +782,7 @@ public class PlayManager : Singleton<PlayManager>
         for (i = 0; i < turnOrderPlayerList.Count; i++)
         {
             characterPanels[i].SetActive(true);
-            characterPanels[i].transform.localPosition = new Vector3(characterPanels[i].transform.localPosition.x, 117.5f * (turnOrderPlayerList.Count - 2 * i - 1), 0);
+            characterPanels[i].transform.localPosition = new Vector3(characterPanels[i].transform.localPosition.x, 114.5f * (turnOrderPlayerList.Count - 2 * i - 1), 0);
             characterPanels[i].GetComponent<UICharacterPanel>().UpdateCharacterImage(portaitDictionary[turnOrderPlayerList[i].Image.Value]);
             characterPanels[i].GetComponent<UICharacterPanel>().UpdateCharacterName(turnOrderPlayerList[i].Name.Value + "", GetPlayerColorString(turnOrderPlayerList[i]));
         }

@@ -50,6 +50,7 @@ public class UICharacterSheet : MonoBehaviour
     public GameObject energyIncrementButton;
     public GameObject energyDecrementButton;
     public GameObject confirmPointsButton;
+    public TMP_Text abilities;
 
     private int temporaryStrength;
     private int temporaryDexterity;
@@ -82,6 +83,18 @@ public class UICharacterSheet : MonoBehaviour
         physicalPower.text = ": " + PlayManager.Instance.GetPhysicalPower(p);
         magicalPower.text = ": " + PlayManager.Instance.GetMagicalPower(p);
         gold.text = ": " + PlayManager.Instance.GetGold(p);
+
+        abilities.text = "";
+        List<Skill> passiveList = AbilityManager.Instance.GetPassives(p);
+        foreach(Skill s in passiveList)
+        {
+            abilities.text += s.skillName + " (" + AbilityManager.Instance.FormatType(s.type) + ")\n";
+        }
+        List<Skill> skillList = AbilityManager.Instance.GetSkills(p);
+        foreach (Skill s in skillList)
+        {
+            abilities.text += s.skillName + " (" + AbilityManager.Instance.FormatType(s.type) + ")\n";
+        }
 
         string plus;
         if (PlayManager.Instance.GetMod(PlayManager.Instance.GetStrength(p)) >= 0)

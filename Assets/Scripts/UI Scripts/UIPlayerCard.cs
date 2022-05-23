@@ -162,6 +162,8 @@ public class UIPlayerCard : MonoBehaviour
 
     public void ActivateTurnMarker(bool active)
     {
+        if (minionCard.gameObject.activeInHierarchy)
+            active = false;
         playerTurnMarker.SetActive(active);
     }
 
@@ -258,7 +260,10 @@ public class UIPlayerCard : MonoBehaviour
     public void SetMinionCardActive(bool active)
     {
         minionCard.gameObject.SetActive(active);
-        DrawStatusEffects(combatant.statusEffects, active);
+        if(active)
+            DrawStatusEffects(combatant.minion.statusEffects, true);
+        else
+            DrawStatusEffects(combatant.statusEffects, false);
     }
 
     public void BlockSwapping(bool active)

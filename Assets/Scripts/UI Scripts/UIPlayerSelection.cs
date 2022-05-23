@@ -26,7 +26,10 @@ public class UIPlayerSelection : MonoBehaviour, IPointerClickHandler, IPointerEx
     public void OnClick()
     {
         if (playerDisplay.transform.localScale != zoomScale)
+        {
+            JLAudioManager.Instance.PlayOneShotSound("PageTurn");
             playerDisplay.transform.localScale = zoomScale;
+        }  
         else
             HideSelection();
     }

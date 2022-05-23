@@ -12,6 +12,8 @@ public class UIButtonAnim : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
     public float scaledHeight;
     public float childScale;
     public bool allowClickOnEmptySpace = false;
+    public bool disableHoverSound = false;
+    public bool disableClickSound = false;
 
     private Image image;
     private RectTransform rt;
@@ -33,14 +35,16 @@ public class UIButtonAnim : MonoBehaviour, IPointerEnterHandler, IPointerExitHan
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        JLAudioManager.Instance.PlayOneShotSound(clickSound);
+        if (!disableClickSound)
+            JLAudioManager.Instance.PlayOneShotSound(clickSound);
     }
 
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (!GetComponent<Button>().enabled)
             return;
-        JLAudioManager.Instance.PlayOneShotSound(hoverSound);
+        if(!disableHoverSound)
+            JLAudioManager.Instance.PlaySound(hoverSound);
         image.sprite = selectedSprite;
         rt.sizeDelta = new Vector2(scaledWidth,scaledHeight);
         if (transform.childCount > 0)

@@ -28,6 +28,7 @@ public class UIEncounterSelection : MonoBehaviour, IPointerClickHandler, IPointe
     {
         if (eventDisplay.transform.localScale != zoomScale)
         {
+            JLAudioManager.Instance.PlayOneShotSound("PageTurn");
             eventDisplay.transform.localScale = zoomScale;
             monsterDisplay.transform.localScale = zoomScale;
         }

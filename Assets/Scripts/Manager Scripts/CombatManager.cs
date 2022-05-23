@@ -1603,6 +1603,7 @@ public class CombatManager : Singleton<CombatManager>
                 else
                 {
                     // Do nothing for minions?
+                    GetPlayerCardFromCombatant(GetCombatantFromPlayer(turnOrderCombatantList[i].player)).minionCard.ActivateTurnMarker(combatTurnMarker == i);
                 }
             }
         }

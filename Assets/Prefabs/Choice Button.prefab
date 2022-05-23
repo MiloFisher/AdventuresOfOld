@@ -288,6 +288,9 @@ MonoBehaviour:
   scaledWidth: 9600
   scaledHeight: 1740
   childScale: 1.2
+  allowClickOnEmptySpace: 0
+  disableHoverSound: 1
+  disableClickSound: 1
 --- !u!114 &5894762296261565646
 MonoBehaviour:
   m_ObjectHideFlags: 0

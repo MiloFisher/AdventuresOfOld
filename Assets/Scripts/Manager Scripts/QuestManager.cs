@@ -55,6 +55,7 @@ public class QuestManager : Singleton<QuestManager>
 
     public void SetChunk(int id)
     {
+        JLAudioManager.Instance.PlayOneShotSound("PageTurn");
         currentChunk = id;
         chunks[id]();
     }
@@ -63,7 +64,10 @@ public class QuestManager : Singleton<QuestManager>
     {
         currentChunk++;
         if (currentChunk < chunks.Count)
+        {
+            JLAudioManager.Instance.PlayOneShotSound("PageTurn");
             chunks[currentChunk]();
+        }
         else
             StartCoroutine(FadeOutScene());
     }

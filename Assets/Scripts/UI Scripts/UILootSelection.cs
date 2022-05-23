@@ -15,6 +15,7 @@ public class UILootSelection : MonoBehaviour, IPointerEnterHandler
         if (!GetComponent<Button>().enabled || !InventoryManager.Instance.maximized || InventoryManager.Instance.inAnimation)
             return;
 
+        JLAudioManager.Instance.PlaySound("PageTurn");
         copy = Instantiate(display, display.transform.parent);
         copy.transform.localScale = displayScale;
         copy.transform.localPosition = displayPosition;
