@@ -15,7 +15,6 @@ public class Skill : ScriptableObject
     public void UseSkill() {
         if (!AbilityManager.Instance.usingAbility)
         {
-            Debug.Log("Use Skill Called: " + skillName + " and cost is: " + cost);
             AbilityManager.Instance.UseSkill(name);
             AbilityManager.Instance.PayCost(cost);
         }

@@ -142,6 +142,7 @@ public class InventoryManager : Singleton<InventoryManager>
         {
             if (emptySpaces[i])
             {
+                PassiveNotificationManager.Instance.AddNotification("<color=#00FF1C>Gained \"" + cardToAdd.GetComponent<UILootCard>().cardName + "\"</color>");
                 PlayManager.Instance.localPlayer.SetValue("Inventory" + (i + 1), cardToAdd.GetComponent<UILootCard>().cardName);
                 StartCoroutine(AnimateAddDrawnCard(i + 4, cardToAdd));
                 break;
@@ -534,39 +535,51 @@ public class InventoryManager : Singleton<InventoryManager>
         if (PlayManager.Instance.GetHealth(PlayManager.Instance.localPlayer) <= 0)
             return;
         Player p = PlayManager.Instance.localPlayer;
+        string cardName = "";
         switch (selectedID)
         {
             case 0:
+                cardName = p.Weapon.Value + "";
                 p.SetValue("Weapon", emptyValue);
                 break;
             case 1:
+                cardName = p.Armor.Value + "";
                 p.SetValue("Armor", emptyValue);
                 break;
             case 2:
+                cardName = p.Ring1.Value + "";
                 p.SetValue("Ring1", emptyValue);
                 break;
             case 3:
+                cardName = p.Ring2.Value + "";
                 p.SetValue("Ring2", emptyValue);
                 break;
             case 4:
+                cardName = p.Inventory1.Value + "";
                 p.SetValue("Inventory1", emptyValue);
                 break;
             case 5:
+                cardName = p.Inventory2.Value + "";
                 p.SetValue("Inventory2", emptyValue);
                 break;
             case 6:
+                cardName = p.Inventory3.Value + "";
                 p.SetValue("Inventory3", emptyValue);
                 break;
             case 7:
+                cardName = p.Inventory4.Value + "";
                 p.SetValue("Inventory4", emptyValue);
                 break;
             case 8:
+                cardName = p.Inventory5.Value + "";
                 p.SetValue("Inventory5", emptyValue);
                 break;
             default:
+                cardName = "Invalid discard selectID";
                 Debug.Log("Invalid discard selectID: " + selectedID);
                 break;
         }
+        PassiveNotificationManager.Instance.AddNotification("<color=#FF0000>Discarded \"" + cardName + "\"</color>");
         if (forcedDiscard.activeInHierarchy)
             forcedDiscard.GetComponent<UIForcedDiscard>().DiscardComplete();
         if (discardMany.activeInHierarchy)

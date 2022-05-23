@@ -707,7 +707,10 @@ namespace AdventuresOfOldMultiplayer
         public void GainGold(int amount)
         {
             if (NetworkManager.Singleton.IsServer)
+            {
                 Gold.Value += amount;
+                GainGoldNotificationClientRPC(amount);
+            }
             else
                 GainGoldServerRPC(amount);
         }
@@ -715,6 +718,15 @@ namespace AdventuresOfOldMultiplayer
         private void GainGoldServerRPC(int amount, ServerRpcParams rpcParams = default)
         {
             Gold.Value += amount;
+            GainGoldNotificationClientRPC(amount);
+        }
+        [ClientRpc]
+        private void GainGoldNotificationClientRPC(int amount, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                PassiveNotificationManager.Instance.AddNotification("<color=#FCFF00>+" + amount + " Gold</color>");
+            }
         }
 
         public void LoseGold(int amount)
@@ -724,6 +736,7 @@ namespace AdventuresOfOldMultiplayer
                 Gold.Value -= amount;
                 if (Gold.Value < 0)
                     Gold.Value = 0;
+                LoseGoldNotificationClientRPC(amount);
             }
             else
                 LoseGoldServerRPC(amount);
@@ -734,6 +747,15 @@ namespace AdventuresOfOldMultiplayer
             Gold.Value -= amount;
             if (Gold.Value < 0)
                 Gold.Value = 0;
+            LoseGoldNotificationClientRPC(amount);
+        }
+        [ClientRpc]
+        private void LoseGoldNotificationClientRPC(int amount, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                PassiveNotificationManager.Instance.AddNotification("<color=#FF0000>-" + amount + " Gold</color>");
+            }
         }
 
         public void TakeDamage(int amount, int armor, bool isTrue = false)
@@ -842,7 +864,10 @@ namespace AdventuresOfOldMultiplayer
                 if (AbilityCharges.Value > cap)
                     AbilityCharges.Value = cap;
                 if(!noSound)
+                {
+                    RestoreAbilityChargesNotificationClientRPC(amount);
                     PlayGainAbilityChargeSoundClientRPC();
+                }    
             }
             else
                 RestoreAbilityChargesServerRPC(amount, cap, noSound);
@@ -854,7 +879,18 @@ namespace AdventuresOfOldMultiplayer
             if (AbilityCharges.Value > cap)
                 AbilityCharges.Value = cap;
             if (!noSound)
+            {
+                RestoreAbilityChargesNotificationClientRPC(amount);
                 PlayGainAbilityChargeSoundClientRPC();
+            }
+        }
+        [ClientRpc]
+        private void RestoreAbilityChargesNotificationClientRPC(int amount, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                PassiveNotificationManager.Instance.AddNotification("<color=#00DCFF>+" + amount + " Ability Charge" + (amount == 1 ? "" : "s") + "</color>");
+            }
         }
 
         [ClientRpc]
@@ -919,6 +955,7 @@ namespace AdventuresOfOldMultiplayer
                 AbilityCharges.Value -= amount;
                 if (AbilityCharges.Value < 0)
                     AbilityCharges.Value = 0;
+                LoseAbilityChargesNotificationClientRPC(amount);
             }
             else
                 LoseAbilityChargesServerRPC(amount);
@@ -929,6 +966,15 @@ namespace AdventuresOfOldMultiplayer
             AbilityCharges.Value -= amount;
             if (AbilityCharges.Value < 0)
                 AbilityCharges.Value = 0;
+            LoseAbilityChargesNotificationClientRPC(amount);
+        }
+        [ClientRpc]
+        private void LoseAbilityChargesNotificationClientRPC(int amount, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                PassiveNotificationManager.Instance.AddNotification("<color=#FF0000>-" + amount + " Ability Charge" + (amount == 1 ? "" : "s") + "</color>");
+            }
         }
 
         public void IncreaseChaos(int amount)
@@ -953,6 +999,7 @@ namespace AdventuresOfOldMultiplayer
             if (IsOwner && !isBot)
             {
                 PlayManager.Instance.IncreaseChaos(amount);
+                PassiveNotificationManager.Instance.AddNotification("<color=#FF0000>+" + amount + " Chaos</color>");
             }
         }
 
@@ -978,6 +1025,7 @@ namespace AdventuresOfOldMultiplayer
             if (IsOwner && !isBot)
             {
                 PlayManager.Instance.ReduceChaos(amount);
+                PassiveNotificationManager.Instance.AddNotification("<color=#F68BFF>-" + amount + " Chaos</color>");
             }
         }
 

@@ -53,7 +53,6 @@ public class LootManager : Singleton<LootManager>
     {
         if (InventoryManager.Instance.AddDrawnCardToInventory(card))
         {
-            Debug.Log("Successfully added Card to Inventory!");
             displayCards.Remove(card);
             Destroy(card);
             if(displayCards.Count == 0)
@@ -77,7 +76,6 @@ public class LootManager : Singleton<LootManager>
             PlayManager.Instance.localPlayer.LoseGold(cost);
             PlayManager.Instance.localPlayer.RemoveStoreCardForOthers(slot);
 
-            Debug.Log("Successfully Bought Card!");
             displayCards[slot] = null;
             Destroy(card);
         }

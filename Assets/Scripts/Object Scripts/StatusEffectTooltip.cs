@@ -10,6 +10,7 @@ public class StatusEffectTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
     public GameObject display;
     public float gap = 100;
     public Action OnClick = default;
+    private Effect effect;
 
     private float targetScale = 0.1f;
     private bool hoveringOver;
@@ -26,6 +27,10 @@ public class StatusEffectTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
             float scale = targetScale / GetCompositeParentsScale(transform);
             display.transform.localScale = new Vector3(scale, scale, 1);
             display.transform.localPosition = new Vector3(0, GetComponent<RectTransform>().sizeDelta.y * 0.5f + display.GetComponent<RectTransform>().sizeDelta.y * 0.5f * scale + gap * scale, 0);
+            if(effect != null)
+            {
+                SetupDisplay(effect);
+            }
         }
     }
 
@@ -95,11 +100,14 @@ public class StatusEffectTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
 
     public void SetupDisplay(Effect e)
     {
+        effect = e;
         TMP_Text textContainer = display.GetComponentInChildren<TMP_Text>();
         textContainer.text = "<b>Effect: <color=" + GetNameColor(e.name) + ">" + e.name + "</color>" + GetTurnCount(e.duration) + "\n" + GetDescription(e.name, e.potency, e.counter);
         textContainer.ForceMeshUpdate(true, true);
         if (textContainer.textInfo != null)
+        {
             display.GetComponent<RectTransform>().sizeDelta = new Vector2(5000, 560 + 340 * textContainer.textInfo.lineCount);
+        }
     }
 
     private string GetDescription(string effectName, int potency, int counter)
