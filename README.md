@@ -19,7 +19,7 @@ About the Team
 Banned Bandits Team:
 - Producer: [Justin Lao](https://jchancelao.wixsite.com/website)
 - Lead Designer & Programmer: [Milo Fisher](https://milofisher.net)
-- Programmer: Brandon Wong
+- Programmer: [Brandon Wong](https://www.linkedin.com/in/brandon-wong-a2605321a/)
 - UI Designer: Pierce Sullivan
 - UI Designer: [Ethan Erh](https://kushiri.itch.io/)
 - 2D Artist: [Emily Wen](https://ko-fi.com/dwerple)
