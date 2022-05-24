@@ -11,7 +11,7 @@ public class JLCreditsMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        JLAudioManager.Instance.PlaySound("Death");
+        JLAudioManager.Instance.PlaySound("Medieval");
 
         if (Global.screenLayout != default)
             ResolutionChange(Global.screenLayout);
@@ -37,5 +37,10 @@ public class JLCreditsMenu : MonoBehaviour
         {
             mainCanvas.GetComponent<CanvasScaler>().matchWidthOrHeight = 1;
         }
+    }
+
+    public void CreditsEnded() {
+        Debug.Log("Credits finished");
+        SceneManager.LoadScene("JLMainMenu");
     }
 }
