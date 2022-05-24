@@ -489,13 +489,14 @@ public class CombatManager : Singleton<CombatManager>
         {
             // Increment turn marker for all players
             combatTurnMarker++;
-            if (combatTurnMarker >= turnOrderCombatantList.Count)
-                combatTurnMarker = 0;
-            PlayManager.Instance.localPlayer.UpdateCombatTurnMarker(combatTurnMarker);
-
+           
             // Cycle effects
             CycleEffects(c);
-        } 
+        }
+
+        if (combatTurnMarker >= turnOrderCombatantList.Count)
+            combatTurnMarker = 0;
+        PlayManager.Instance.localPlayer.UpdateCombatTurnMarker(combatTurnMarker);
 
         // Start next combatant turn
         StartCombatantsTurn();
