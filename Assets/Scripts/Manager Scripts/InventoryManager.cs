@@ -379,21 +379,11 @@ public class InventoryManager : Singleton<InventoryManager>
     {
         if (PlayManager.Instance.GetHealth(PlayManager.Instance.localPlayer) <= 0)
             return;
-        if (specificCard != default)
+        if (specificCard == default)
         {
-            for(int i = 0; i < cards.Length; i++)
-            {
-                if (cards[i].GetComponent<UILootCard>().cardName == specificCard)
-                    selectedID = i;
-            }
-            if (selectedID == -1)
-            {
-                Debug.Log(specificCard + " not found in inventory!");
-                return;
-            }
+            specificCard = cards[selectedID].GetComponent<UILootCard>().cardName;
         }
-        string cardName = cards[selectedID].GetComponent<UILootCard>().cardName;
-        ConsumableCard c = PlayManager.Instance.itemReference[cardName] as ConsumableCard;
+        ConsumableCard c = PlayManager.Instance.itemReference[specificCard] as ConsumableCard;
         c.UseEffect();
     }
 
@@ -530,13 +520,15 @@ public class InventoryManager : Singleton<InventoryManager>
         p.SetValue("AbilityCharges", newAbilityCharge > 0 ? newAbilityCharge : 0);
     }
 
-    public void Discard()
+    public void Discard(int specificId = -1)
     {
         if (PlayManager.Instance.GetHealth(PlayManager.Instance.localPlayer) <= 0)
             return;
         Player p = PlayManager.Instance.localPlayer;
-        string cardName = "";
-        switch (selectedID)
+        if (specificId == -1)
+            specificId = selectedID;
+        string cardName;
+        switch (specificId)
         {
             case 0:
                 cardName = p.Weapon.Value + "";

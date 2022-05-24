@@ -941,7 +941,7 @@ public class PlayManager : Singleton<PlayManager>
     public void LevelUpNotification()
     {
         JLAudioManager.Instance.PlayOneShotSound("LevelUp");
-        string description = "You have <color=#006A9A><b>" + GetLevelUpPoints(localPlayer) + "</b></color> upgrade points available!";
+        string description = "You have <color=#006A9A><b>3</b></color> upgrade points available!";
         Action action = LevelUpNotificationOnComplete;
         SendNotification(0, description, action);
     }
@@ -1011,15 +1011,40 @@ public class PlayManager : Singleton<PlayManager>
         SendNotification(1, description, action);
     }
 
+    public void BossFightNotificationOnComplete()
+    {
+        MakeChoice("Assist in Combat", "Spectate Combat", GetHealth(localPlayer) > 0, GetHealth(localPlayer) <= 0);
+        ChoiceListener((a) => {
+            if (a == 1)
+            {
+                // Assist functionality
+                localPlayer.SetValue("ParticipatingInCombat", 1);
+            }
+            else
+            {
+                // Spectate functionality
+                localPlayer.SetValue("ParticipatingInCombat", 0);
+            }
+            CallEncounterElement(7);
+        });
+    }
+
+    public void BossFightNotification()
+    {
+        string description = "<color=" + GetPlayerColorString(turnOrderPlayerList[turnMarker]) + ">" + turnOrderPlayerList[turnMarker].Name.Value + "</color> is fighting the boss!";
+        Action action = BossFightNotificationOnComplete;
+        SendNotification(1, description, action);
+    }
+
     public void RequestTauntNotification()
     {
         string description = "You may use the ability \"Taunt\" to intercept the incoming monster attack!";
         SendNotification(2, description);
     }
 
-    public void TauntReceivedNotification()
+    public void TauntReceivedNotification(FixedString64Bytes uuid)
     {
-        CombatManager.Instance.defensiveOptions.GetComponent<UIDefensiveOptions>().TauntReceived();
+        CombatManager.Instance.defensiveOptions.GetComponent<UIDefensiveOptions>().TauntReceived(uuid + "");
         string description = "Another player has taunted for you!";
         SendNotification(5, description);
     }
@@ -1081,7 +1106,7 @@ public class PlayManager : Singleton<PlayManager>
     {
         LootManager.Instance.treasureTile = true;
         localPlayer.DrawLootCards(3, localPlayer.UUID.Value, true);
-        gameboard[localPlayer.Position.Value].DisableTreasureToken();
+        localPlayer.DisableTreasureToken(localPlayer.Position.Value);
     }
 
     public void BossFight()
@@ -1094,7 +1119,7 @@ public class PlayManager : Singleton<PlayManager>
                 {
                     ResetEncounterFails();
                     CombatManager.Instance.monsterCard = chapterBoss;
-                    localPlayer.SendCombatNotifications();
+                    localPlayer.SendBossFightNotifications();
                     localPlayer.SetValue("ParticipatingInCombat", 1);
                     CallEncounterElement(7);
                 }

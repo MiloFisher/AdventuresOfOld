@@ -108,20 +108,23 @@ public class LootManager : Singleton<LootManager>
 
     IEnumerator FadeStoreCard(int slot)
     {
-        GameObject card = displayCards[slot];
-
-        // First disable buy button
-        card.GetComponent<UILootCard>().ActivateBuyCardButton(false);
-
-        // Next fade out card
-        for (int i = Global.animSteps - 1; i >= 0; i--)
+        if (slot < displayCards.Count && slot >= 0)
         {
-            SetAlpha(card, i * Global.animRate);
-            yield return new WaitForSeconds(fadeLength * Global.animTimeMod * Global.animSpeed);
-        }
+            GameObject card = displayCards[slot];
 
-        displayCards[slot] = null;
-        Destroy(card);
+            // First disable buy button
+            card.GetComponent<UILootCard>().ActivateBuyCardButton(false);
+
+            // Next fade out card
+            for (int i = Global.animSteps - 1; i >= 0; i--)
+            {
+                SetAlpha(card, i * Global.animRate);
+                yield return new WaitForSeconds(fadeLength * Global.animTimeMod * Global.animSpeed);
+            }
+
+            displayCards[slot] = null;
+            Destroy(card);
+        }
     }
 
     public void DiscardRemaining()

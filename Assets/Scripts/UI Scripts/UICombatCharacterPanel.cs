@@ -45,7 +45,10 @@ public class UICombatCharacterPanel : MonoBehaviour
 
             characterName.text = c.monster.cardName;
         }
-        healthbarText.text = c.GetHealth() + " / " + c.GetMaxHealth();
-        healthbar.transform.localPosition = new Vector3(195f * c.GetHealth() / c.GetMaxHealth() - 195f, 0, 0);
+        int health = c.GetHealth();
+        int maxHealth = c.GetMaxHealth();
+        healthbarText.text = health + " / " + maxHealth;
+        if(maxHealth > 0)
+            healthbar.transform.localPosition = new Vector3(195f * health / maxHealth - 195f, 0, 0);
     }
 }

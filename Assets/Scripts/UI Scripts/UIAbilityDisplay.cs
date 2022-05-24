@@ -189,7 +189,9 @@ public class UIAbilityDisplay : MonoBehaviour
             combatOptions.SetLockInput(true);
             CombatManager.Instance.SetCanUseAttackAbilities(true);
         }
-        
+        else
+            CombatManager.Instance.SetCanUseAttackAbilities(false);
+
         // Finally set opened to true
         opened = true;
         animating = false;

@@ -1300,37 +1300,96 @@ public class CombatManager : Singleton<CombatManager>
 
     private void RegularAttacked(Combatant c, Action OnComplete, List<Effect> debuffs = default)
     {
-        // Got attacked
-        if (c.GetArmor() >= monster.GetAttack())
+        if(c.combatantType == CombatantType.MINION)
         {
-            // No damage will be taken, therefore avoid debuffs
-            StartCoroutine(AnimatePlayerAttacked(c,
-            () => {
-                // OnAttack
-                c.TakeDamage(monster.GetAttack());
-            }, OnComplete));
+            Action MinionOnComplete = () => {
+                if (c.GetHealth() <= 0 && AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Eternal Servitude"), c.player) && PlayManager.Instance.GetAbilityCharges(c.player) >= 1)
+                {
+                    MakeChoice("Revive Minion", "Ignore", true, true);
+                    ChoiceListener((a) => {
+                        if (a == 1)
+                        {
+                            c.player.UpdateMinionStats(1, 0, 0, 0, true);
+                            c.player.LoseAbilityCharges(1);
+                        }
+                        else
+                        {
+                            c.player.UpdateMinionStats(0, 0, 0, 0);
+                        }
+                        if (OnComplete != default)
+                            OnComplete();
+                    });
+                }
+                else if (OnComplete != default)
+                    OnComplete();
+            };
+            // Got attacked
+            if (c.GetArmor() >= monster.GetAttack())
+            {
+                // No damage will be taken, therefore avoid debuffs
+                StartCoroutine(AnimatePlayerAttacked(c,
+                () => {
+                    // OnAttack
+                    c.TakeDamage(monster.GetAttack());
+                }, MinionOnComplete));
+            }
+            else
+            {
+                // Attack animation + effect + end monster turn
+                StartCoroutine(AnimatePlayerAttacked(c,
+                () => {
+                    // OnAttack
+                    int damage = monster.GetAttack();
+                    if (PlayManager.Instance.ChaosTier() == 6)
+                        damage *= 2;
+                    c.TakeDamage(damage);
+                    if (debuffs != default)
+                    {
+                        foreach (Effect e in debuffs)
+                            InflictEffect(c, e);
+                    }
+                }, () => {
+                    if (c.IsAlive())
+                        StartCoroutine(OnTakeDamage(c, MinionOnComplete));
+                    else if (MinionOnComplete != default)
+                        MinionOnComplete();
+                }));
+            }
         }
         else
         {
-            // Attack animation + effect + end monster turn
-            StartCoroutine(AnimatePlayerAttacked(c,
-            () => {
+            // Got attacked
+            if (c.GetArmor() >= monster.GetAttack())
+            {
+                // No damage will be taken, therefore avoid debuffs
+                StartCoroutine(AnimatePlayerAttacked(c,
+                () => {
+                // OnAttack
+                c.TakeDamage(monster.GetAttack());
+                }, OnComplete));
+            }
+            else
+            {
+                // Attack animation + effect + end monster turn
+                StartCoroutine(AnimatePlayerAttacked(c,
+                () => {
                 // OnAttack
                 int damage = monster.GetAttack();
-                if (PlayManager.Instance.ChaosTier() == 6)
-                    damage *= 2;
-                c.TakeDamage(damage);
-                if (debuffs != default)
-                {
-                    foreach (Effect e in debuffs)
-                        InflictEffect(c, e);
-                }
-            }, () => {
-                if (c.IsAlive())
-                    StartCoroutine(OnTakeDamage(c, OnComplete));
-                else if (OnComplete != default)
-                    OnComplete();
-            }));
+                    if (PlayManager.Instance.ChaosTier() == 6)
+                        damage *= 2;
+                    c.TakeDamage(damage);
+                    if (debuffs != default)
+                    {
+                        foreach (Effect e in debuffs)
+                            InflictEffect(c, e);
+                    }
+                }, () => {
+                    if (c.IsAlive())
+                        StartCoroutine(OnTakeDamage(c, OnComplete));
+                    else if (OnComplete != default)
+                        OnComplete();
+                }));
+            }
         }
 
         // Visualize player attack for all other players
@@ -1692,7 +1751,7 @@ public class CombatManager : Singleton<CombatManager>
         combatBackground.SetActive(true);
         
         yield return new WaitUntil(() => combatantListSet);
-        combatBackground.GetComponent<Image>().sprite = monsterCard.background;
+        combatBackground.transform.GetChild(0).GetComponent<Image>().sprite = monsterCard.background;
         
         // Hold faded in overlay
         yield return new WaitForSeconds(fadedWaitTime * Global.animSpeed);
@@ -2434,26 +2493,7 @@ public class CombatManager : Singleton<CombatManager>
 
     public void UpdateMinion(Player p, int currentHealth, int maxHealth, int attack, int power, bool createNew = default)
     {
-        if(currentHealth <= 0 && AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Eternal Servitude"), p) && PlayManager.Instance.GetAbilityCharges(p) > 1)
-        {
-            p.UpdateMinionStats(0, maxHealth, attack, power, createNew);
-            MakeChoice("Revive Minion", "Ignore", true, true);
-            ChoiceListener((a) => {
-                if(a == 1)
-                {
-                    p.UpdateMinionStats(1, maxHealth, attack, power, true);
-                    p.LoseAbilityCharges(1);
-                }
-                else
-                {
-                    p.UpdateMinionStats(0, maxHealth, attack, power, createNew);
-                }
-            });
-        }
-        else
-        {
-            p.UpdateMinionStats(currentHealth, maxHealth, attack, power, createNew);
-        }
+        p.UpdateMinionStats(currentHealth, maxHealth, attack, power, createNew);
     }
 
     // Called from Player.cs

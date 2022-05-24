@@ -67,7 +67,6 @@ namespace AdventuresOfOldMultiplayer
 
         // Ability data
         public NetworkVariable<bool> RequestedTaunt = new NetworkVariable<bool>();
-        public NetworkVariable<bool> Taunting = new NetworkVariable<bool>();
         public NetworkVariable<bool> IronWill = new NetworkVariable<bool>();
         public NetworkVariable<bool> HasYetToAttack = new NetworkVariable<bool>();
         public NetworkVariable<bool> JusticarsVow = new NetworkVariable<bool>();
@@ -230,7 +229,6 @@ namespace AdventuresOfOldMultiplayer
                 case "GrabbedHorse": GrabbedHorse.Value = value; break;
                 case "KilledGoblin": KilledGoblin.Value = value; break;
                 case "RequestedTaunt": RequestedTaunt.Value = value; break;
-                case "Taunting": Taunting.Value = value; break;
                 case "IronWill": IronWill.Value = value; break;
                 case "HasYetToAttack": HasYetToAttack.Value = value; break;
                 case "JusticarsVow": JusticarsVow.Value = value; break;
@@ -338,6 +336,31 @@ namespace AdventuresOfOldMultiplayer
             if (IsOwner && !isBot)
             {
                 PlayManager.Instance.gameboard[pos].EnableTreasureToken();
+            }
+        }
+
+        public void DisableTreasureToken(Vector3Int pos)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                    p.DisableTreasureTokenClientRPC(pos);
+            }
+            else
+                DisableTreasureTokenServerRPC(pos);
+        }
+        [ServerRpc(RequireOwnership = false)]
+        private void DisableTreasureTokenServerRPC(Vector3Int pos, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+                p.DisableTreasureTokenClientRPC(pos);
+        }
+        [ClientRpc]
+        public void DisableTreasureTokenClientRPC(Vector3Int pos, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                PlayManager.Instance.gameboard[pos].DisableTreasureToken();
             }
         }
 
@@ -653,7 +676,7 @@ namespace AdventuresOfOldMultiplayer
             if (NetworkManager.Singleton.IsServer)
             {
                 XP.Value += total;
-                LevelUpCheckClientRPC();
+                LevelUpCheckClientRPC(XP.Value);
             }
             else
                 GainXPServerRPC(total);
@@ -662,14 +685,14 @@ namespace AdventuresOfOldMultiplayer
         private void GainXPServerRPC(int total, ServerRpcParams rpcParams = default)
         {
             XP.Value += total;
-            LevelUpCheckClientRPC();
+            LevelUpCheckClientRPC(XP.Value);
         }
         [ClientRpc]
-        private void LevelUpCheckClientRPC(ClientRpcParams clientRpcParams = default)
+        private void LevelUpCheckClientRPC(int xp, ClientRpcParams clientRpcParams = default)
         {
             if (IsOwner)
             {
-                if (XP.Value >= PlayManager.Instance.GetNeededXP(this))
+                if (xp >= PlayManager.Instance.GetNeededXP(this))
                 {
                     LevelUp(PlayManager.Instance.GetNeededXP(this));
                     PlayManager.Instance.LevelUpNotification();
@@ -701,7 +724,7 @@ namespace AdventuresOfOldMultiplayer
             AbilityCharges.Value++;
             LevelUpPoints.Value += 3;
             if (Level.Value == 5)
-                XP.Value = neededXP;
+                XP.Value = neededXP + 5;
         }
 
         public void GainGold(int amount)
@@ -1131,6 +1154,44 @@ namespace AdventuresOfOldMultiplayer
             {
                 if(!isBot)
                     PlayManager.Instance.CombatNotification();
+                else
+                {
+                    SetValue("ParticipatingInCombat", 0);
+                    ReadyUp();
+                }
+            }
+        }
+
+        public void SendBossFightNotifications()
+        {
+            FixedString64Bytes uuid = UUID.Value;
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if (p.UUID.Value != uuid)
+                        p.SendBossFightNotificationsClientRPC();
+                }
+            }
+            else
+                SendBossFightNotificationsServerRPC(uuid);
+        }
+        [ServerRpc(RequireOwnership = false)]
+        private void SendBossFightNotificationsServerRPC(FixedString64Bytes uuid, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+            {
+                if (p.UUID.Value != uuid)
+                    p.SendBossFightNotificationsClientRPC();
+            }
+        }
+        [ClientRpc]
+        private void SendBossFightNotificationsClientRPC(ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner)
+            {
+                if (!isBot)
+                    PlayManager.Instance.BossFightNotification();
                 else
                 {
                     SetValue("ParticipatingInCombat", 0);
@@ -2093,34 +2154,35 @@ namespace AdventuresOfOldMultiplayer
 
         public void SendTauntReceivedNotification(Player target)
         {
-            FixedString64Bytes uuid = target.UUID.Value;
+            FixedString64Bytes uuid = UUID.Value;
+            FixedString64Bytes target_uuid = target.UUID.Value;
             if (NetworkManager.Singleton.IsServer)
             {
                 foreach (Player p in PlayManager.Instance.playerList)
                 {
-                    if (p.UUID.Value == uuid)
-                        p.SendTauntReceivedNotificationClientRPC();
+                    if (p.UUID.Value == target_uuid)
+                        p.SendTauntReceivedNotificationClientRPC(uuid);
                 }
             }
             else
-                SendTauntReceivedNotificationServerRPC(uuid);
+                SendTauntReceivedNotificationServerRPC(uuid, target_uuid);
         }
         [ServerRpc(RequireOwnership = false)]
-        private void SendTauntReceivedNotificationServerRPC(FixedString64Bytes uuid, ServerRpcParams rpcParams = default)
+        private void SendTauntReceivedNotificationServerRPC(FixedString64Bytes uuid, FixedString64Bytes target_uuid, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
             {
-                if (p.UUID.Value == uuid)
-                    p.SendTauntReceivedNotificationClientRPC();
+                if (p.UUID.Value == target_uuid)
+                    p.SendTauntReceivedNotificationClientRPC(uuid);
             }
         }
         [ClientRpc]
-        private void SendTauntReceivedNotificationClientRPC(ClientRpcParams clientRpcParams = default)
+        private void SendTauntReceivedNotificationClientRPC(FixedString64Bytes uuid, ClientRpcParams clientRpcParams = default)
         {
             if (IsOwner)
             {
                 if (!isBot)
-                    PlayManager.Instance.TauntReceivedNotification();
+                    PlayManager.Instance.TauntReceivedNotification(uuid);
                 else
                 {
 

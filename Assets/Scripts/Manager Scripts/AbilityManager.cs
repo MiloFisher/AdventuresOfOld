@@ -248,7 +248,7 @@ public class AbilityManager : Singleton<AbilityManager>
         {
             Combatant c = CombatManager.Instance.GetCombatantFromPlayer(PlayManager.Instance.localPlayer);
 
-            if (CombatManager.Instance.OnPlayerSpendAbilityCharge != default)
+            if (CombatManager.Instance.OnPlayerSpendAbilityCharge != default && cost > 0)
                 CombatManager.Instance.OnPlayerSpendAbilityCharge(c);
 
             if (HasAbilityUnlocked(GetSkill("Infused Strikes")) && cost > 0)
@@ -577,7 +577,6 @@ public class AbilityManager : Singleton<AbilityManager>
     private void Taunt()
     {
         // *** Has special use case ***
-        PlayManager.Instance.localPlayer.SetValue("Taunting", true);
         foreach(Player p in PlayManager.Instance.playerList)
         {
             if (p.RequestedTaunt.Value)

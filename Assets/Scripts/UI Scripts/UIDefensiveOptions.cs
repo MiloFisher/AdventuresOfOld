@@ -93,14 +93,13 @@ public class UIDefensiveOptions : MonoBehaviour
         PlayManager.Instance.localPlayer.SendRequestTauntNotifications();
     }
 
-    public void TauntReceived()
+    public void TauntReceived(string uuid)
     {
         foreach(Player p in PlayManager.Instance.playerList)
         {
-            if (p.Taunting.Value)
+            if (p.UUID.Value == uuid)
             {
                 targetPlayer = p;
-                p.SetValue("Taunting", false);
             }
         }
         hadSuccess = true;

@@ -73,6 +73,13 @@ public class ConsumableManager : Singleton<ConsumableManager>
     private void Use_Torch()
     {
         PlayManager.Instance.GetEncounter();
-        InventoryManager.Instance.Discard();
+        for (int i = 0; i < InventoryManager.Instance.cards.Length; i++)
+        {
+            if (InventoryManager.Instance.cards[i].GetComponent<UILootCard>().cardName == "Torch")
+            {
+                InventoryManager.Instance.Discard(i);
+                break;
+            }
+        }
     }
 }

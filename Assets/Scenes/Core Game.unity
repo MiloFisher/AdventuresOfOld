@@ -19448,7 +19448,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   questCardPrefab: {fileID: 3324662092234170068, guid: 37e4298830b6142bd8918aeeb61f8a78, type: 3}
   scale: 2.5
-  gap: 120
+  gap: 140
   questCards: []
 --- !u!1001 &417548250
 PrefabInstance:
