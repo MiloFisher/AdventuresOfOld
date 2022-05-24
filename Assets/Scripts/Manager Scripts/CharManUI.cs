@@ -240,6 +240,7 @@ public class CharManUI : MonoBehaviour
         trait_confirm_button.SetActive(false);
         stat_container.SetActive(true);
         SceneHeader.GetComponent<TextMeshProUGUI>().SetText("View Abilities");
+        error_text.SetActive(false);
     }
 
     public void ViewedTraits() {
