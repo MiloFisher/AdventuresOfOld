@@ -897,7 +897,7 @@ public class CombatManager : Singleton<CombatManager>
         // Attack animation + effect + end monster turn
         StartCoroutine(AnimateMonsterAttacked(c, damage,() => {
             // OnAttack
-            if(AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Siphon Life"), c.player) && c.combatantType != CombatantType.MINION)
+            if(AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Siphon Life"), c.player) && c.combatantType != CombatantType.MINION && damage > 0)
             {
                 HealPlayer(c.player, HalfRoundedDown(damage));
             }
