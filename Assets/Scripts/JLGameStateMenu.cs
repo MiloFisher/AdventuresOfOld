@@ -9,6 +9,7 @@ public class JLGameStateMenu : MonoBehaviour
     private GameObject[] players;
     public GameObject[] gravestones; // For Failure Menu
     public GameObject[] playerSilhouettes; // For Success Menu
+    public GameObject mainCanvas;
     
     public Sprite[] SpriteSheet;
 
@@ -25,6 +26,14 @@ public class JLGameStateMenu : MonoBehaviour
             playerSilhouettes[players.Length - 1].SetActive(true);
             GetPlayerRace(players);
         }
+    }
+
+    private void Start()
+    {
+        if(Global.screenLayout != default)
+            ResolutionChange(Global.screenLayout);
+        else
+            ResolutionChange("Standard");
     }
 
     private void SetPlayerName(GameObject[] players) {
@@ -70,5 +79,17 @@ public class JLGameStateMenu : MonoBehaviour
 
     public void quitButton() {
         SceneManager.LoadScene("JLMainMenu", LoadSceneMode.Single);
+    }
+
+    public void ResolutionChange(string viewType)
+    {
+        if (viewType == "Standard")
+        {
+            mainCanvas.GetComponent<CanvasScaler>().matchWidthOrHeight = 0;
+        }
+        else if (viewType == "Widescreen")
+        {
+            mainCanvas.GetComponent<CanvasScaler>().matchWidthOrHeight = 1;
+        }
     }
 }

@@ -8,6 +8,9 @@ public class MenuManager : Singleton<MenuManager>
     public GameObject[] menuScenes;
     public Slider animSlider;
     public TextMeshProUGUI animText;
+    public Slider frameSlider;
+    public TextMeshProUGUI frameText;
+    public GameObject mainCanvas;
 
     private void Awake()
     {
@@ -29,6 +32,31 @@ public class MenuManager : Singleton<MenuManager>
             animSlider.value = -1 * Global.animSpeed;
             AnimationSpeed(Global.animSpeed);
         }
+
+        if(frameSlider)
+        {
+            frameSlider.value = Global.animSteps;
+            FramerateCap(Global.animSteps);
+        }
+
+        if(mainCanvas)
+        {
+            if (Global.screenLayout == default)
+            {
+                float width = mainCanvas.GetComponent<RectTransform>().sizeDelta.x;
+                float height = mainCanvas.GetComponent<RectTransform>().sizeDelta.y;
+                if (width / height <= 16f / 9f)
+                {
+                    ResolutionChange("Standard");
+                }
+                else
+                {
+                    ResolutionChange("Widescreen");
+                }
+            }
+            else
+                ResolutionChange(Global.screenLayout);
+        }
     }
 
     public void SwapScene(int id)
@@ -40,15 +68,16 @@ public class MenuManager : Singleton<MenuManager>
         menuScenes[id].SetActive(true);
     }
 
-    public void ResolutionChange(int resNumber)
-    { // Set resNumber with Button function in Unity Editor Scene
-        if (resNumber == 1920)
+    public void ResolutionChange(string viewType)
+    {
+        Global.screenLayout = viewType;
+        if (viewType == "Standard")
         {
-            Screen.SetResolution(1920, 1080, true); // True == Fullscreen
+            mainCanvas.GetComponent<CanvasScaler>().matchWidthOrHeight = 0;
         }
-        else if (resNumber == 2560)
+        else if (viewType == "Widescreen")
         {
-            Screen.SetResolution(2560, 1440, true);
+            mainCanvas.GetComponent<CanvasScaler>().matchWidthOrHeight = 1;
         }
     }
 
@@ -83,5 +112,16 @@ public class MenuManager : Singleton<MenuManager>
                 animText.text = "Not Working";
                 break;
         }
+    }
+
+    public void FramerateCap(float value)
+    {
+        Global.animSteps = (int)value;
+        Global.frameCap = 3 * (int)value;
+        Global.animRate = 1f / Global.animSteps;
+        Global.animTimeMod = 100f / Global.animSteps;
+
+        Application.targetFrameRate = Global.frameCap;
+        frameText.text = Global.frameCap + " fps";
     }
 }

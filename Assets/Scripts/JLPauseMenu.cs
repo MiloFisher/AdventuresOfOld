@@ -24,16 +24,7 @@ public class JLPauseMenu : MonoBehaviour
         frameSlider.value = Global.animSteps;
         FramerateCap(Global.animSteps);
 
-        float width = mainCanvas.GetComponent<RectTransform>().sizeDelta.x;
-        float height = mainCanvas.GetComponent<RectTransform>().sizeDelta.y;
-        if (width / height <= 16f / 9f)
-        {
-            ResolutionChange("Standard");
-        }
-        else
-        {
-            ResolutionChange("Widescreen");
-        }
+        ResolutionChange(Global.screenLayout);
     }
 
     // Update is called once per frame
