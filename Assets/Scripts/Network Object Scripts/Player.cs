@@ -1208,7 +1208,6 @@ namespace AdventuresOfOldMultiplayer
         {
             if (IsOwner && !isBot)
             {
-                Debug.LogError("Got the client RPC: SetTurnOrderCombatantList");
                 CombatManager.Instance.SetTurnOrderCombatantList(arr, keepMonster);
             }
         }
@@ -2305,14 +2304,12 @@ namespace AdventuresOfOldMultiplayer
                 {
                     if (p.UUID.Value == uuid)
                     {
-                        Combatant c = CombatManager.Instance.GetCombatantFromPlayer(p);
-                        if (c == null)
-                            return;
-                        UIPlayerCard card = CombatManager.Instance.GetPlayerCardFromCombatant(c);
-                        if (card == null)
-                            return;
-                        card.SetMinionCardActive(active);
-                        card.BlockSwapping(lockToggle);
+                        if(CombatManager.Instance.IsReady())
+                        {
+                            UIPlayerCard card = CombatManager.Instance.GetPlayerCardFromCombatant(CombatManager.Instance.GetCombatantFromPlayer(p));
+                            card.SetMinionCardActive(active);
+                            card.BlockSwapping(lockToggle);
+                        }
                     }
                 }
             }
