@@ -723,7 +723,6 @@ public class CombatManager : Singleton<CombatManager>
             {
                 // Attack Ability
                 Skill s = combatOptions.GetComponent<UICombatOptions>().skillUsed;
-                Debug.Log("Used Skill: " + s.skillName);
 
                 // *** Add in fancy ability stuff here ***
 
@@ -1680,41 +1679,40 @@ public class CombatManager : Singleton<CombatManager>
     IEnumerator FadeOverlay()
     {
         combatFadeOverlay.SetActive(true);
-        Debug.LogError("Checkpoint 0");
+        
         // First fade in overlay
         for (int i = 1; i <= Global.animSteps; i++)
         {
             SetAlpha(combatFadeOverlay.GetComponent<Image>(), i * Global.animRate);
             yield return new WaitForSeconds(fadeLength * Global.animTimeMod * Global.animSpeed);
         }
-        Debug.LogError("Checkpoint 1");
+        
         // Activate main layout while screen is obstructed by overlay
         combatLayout.SetActive(true);
         combatBackground.SetActive(true);
-        Debug.LogError("Checkpoint 2");
+        
         yield return new WaitUntil(() => combatantListSet);
         combatBackground.GetComponent<Image>().sprite = monsterCard.background;
-        Debug.LogError("Checkpoint 3");
+        
         // Hold faded in overlay
         yield return new WaitForSeconds(fadedWaitTime * Global.animSpeed);
         ready = true;
-        Debug.LogError("Checkpoint 4");
+        
         // Start combat music
         JLAudioManager.Instance.StopSound("BackgroundMusic");
-        Debug.LogError("Checkpoint 5");
         JLAudioManager.Instance.PlaySound("FightMusic");
-        Debug.LogError("Checkpoint 6");
+        
         // Then fade out overlay
         for (int i = Global.animSteps - 1; i >= 0; i--)
         {
             SetAlpha(combatFadeOverlay.GetComponent<Image>(), i * Global.animRate);
             yield return new WaitForSeconds(fadeLength * Global.animTimeMod * Global.animSpeed);
         }
-        Debug.LogError("Checkpoint 7");
+        
         combatFadeOverlay.SetActive(false);
 
         PlayManager.Instance.CallTransition(4);
-        Debug.LogError("Checkpoint 8");
+        
         // Setup Monster Passive
         monsterCard.Passive();
     }
@@ -1755,6 +1753,7 @@ public class CombatManager : Singleton<CombatManager>
         }
 
         combatFadeOverlay.SetActive(false);
+        combatantListSet = false;
 
         // Call OnComplete
         if (OnComplete != default)
@@ -2064,7 +2063,6 @@ public class CombatManager : Singleton<CombatManager>
             }
         }
         combatantListSet = true;
-        Debug.Log("CombatantList set!");
     }
 
     public int CombatOverCheck()
@@ -2212,7 +2210,6 @@ public class CombatManager : Singleton<CombatManager>
         OnPlayerBeingAttacked = default;
         isMonsterTurn = false;
         isYourTurn = false;
-        combatantListSet = false;
         ready = false;
         combatLayout.SetActive(false);
         combatBackground.SetActive(false);
