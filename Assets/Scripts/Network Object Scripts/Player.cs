@@ -2306,7 +2306,12 @@ namespace AdventuresOfOldMultiplayer
                 {
                     if (p.UUID.Value == uuid)
                     {
-                        UIPlayerCard card = CombatManager.Instance.GetPlayerCardFromCombatant(CombatManager.Instance.GetCombatantFromPlayer(p));
+                        Combatant c = CombatManager.Instance.GetCombatantFromPlayer(p);
+                        if (c == null)
+                            return;
+                        UIPlayerCard card = CombatManager.Instance.GetPlayerCardFromCombatant(c);
+                        if (card == null)
+                            return;
                         card.SetMinionCardActive(active);
                         card.BlockSwapping(lockToggle);
                     }
