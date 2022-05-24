@@ -1143,8 +1143,7 @@ namespace AdventuresOfOldMultiplayer
         {
             if (NetworkManager.Singleton.IsServer)
             {
-                foreach (Player p in PlayManager.Instance.playerList)
-                    p.ContinueToCombatClientRPC();
+                ContinueToCombatClientRPC();
             }
             else
                 ContinueToCombatServerRPC();
@@ -1152,8 +1151,7 @@ namespace AdventuresOfOldMultiplayer
         [ServerRpc(RequireOwnership = false)]
         private void ContinueToCombatServerRPC(ServerRpcParams rpcParams = default)
         {
-            foreach (Player p in PlayManager.Instance.playerList)
-                p.ContinueToCombatClientRPC();
+            ContinueToCombatClientRPC();
         }
         [ClientRpc]
         private void ContinueToCombatClientRPC(ClientRpcParams clientRpcParams = default)
@@ -1210,6 +1208,7 @@ namespace AdventuresOfOldMultiplayer
         {
             if (IsOwner && !isBot)
             {
+                Debug.LogError("Got the client RPC: SetTurnOrderCombatantList");
                 CombatManager.Instance.SetTurnOrderCombatantList(arr, keepMonster);
             }
         }

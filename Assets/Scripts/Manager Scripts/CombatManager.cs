@@ -2009,7 +2009,8 @@ public class CombatManager : Singleton<CombatManager>
 
     public void SetTurnOrderCombatantList(FixedString64Bytes[] arr, bool keepUnits)
     {
-        if(keepUnits)
+        Debug.LogError("SetTurnOrderCombatantList was called!");
+        if (keepUnits)
         {
             // Remove any names no longer in arr
             for (int i = 0; i < turnOrderCombatantList.Count; i++)
@@ -2028,6 +2029,7 @@ public class CombatManager : Singleton<CombatManager>
                     i--;
                 }
             }
+            Debug.LogError("SetTurnOrderCombatantList Received, but keepUnits is TRUE!");
             return;
         }
         turnOrderCombatantList = new List<Combatant>();
@@ -2129,7 +2131,7 @@ public class CombatManager : Singleton<CombatManager>
     {
         for(int i = 0; i < playerCards.Length; i++)
         {
-            if (playerCards[i].GetComponent<UIPlayerCard>().combatant.player.UUID.Value == c.player.UUID.Value)
+            if (playerCards[i].GetComponent<UIPlayerCard>().combatant != null && playerCards[i].GetComponent<UIPlayerCard>().combatant.player.UUID.Value == c.player.UUID.Value)
                 return playerCards[i].GetComponent<UIPlayerCard>();
         }
         return null;

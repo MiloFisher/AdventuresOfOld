@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 200}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 15997
+  controlID: 16678
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -141,7 +141,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 200}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 15998
+  controlID: 16679
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -166,7 +166,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 15999
+  controlID: 16680
 --- !u!114 &5
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -607,23 +607,23 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 9ecafbff
-      m_LastClickedID: -275810
-      m_ExpandedIDs: 8011fcff161cfcfff41efcff4c1ffcffb41ffcff4a24fcffa424fcff5e2bfcff982efcff2e30fcff6033fcffea33fcffd234fcff2e35fcff8e35fcffd638fcff6c7ffcff84c6fcff6813fdff1e5bfdff16a9fdff04aafdff6caafdff9eadfdff54aefdff9eaefdffacb8fdffe0befdff8a05feff320afeffec50feffc256feff749dfeff76f8feffec4affff4ca1ffff86f4ffff80f5ffff2cfbffffa26900005c6b0000183201001c4601005c47010016490100985201009c660100c86701009c690100f679010038930100e8d40100a2de0100d4de01001ee40100661a02008221020054730200707a020092c00200cac0020000c1020010c5020042c5020072c7020062c80200eccd020000cf0200a0db02006ee30200d6e30200081803003a2d0300
+      m_SelectedIDs: 706afbff
+      m_LastClickedID: -300432
+      m_ExpandedIDs: 52b1fbff8011fcff161cfcfff41efcff4c1ffcffb41ffcff4a24fcffa424fcff5e2bfcff982efcff2e30fcff6033fcffea33fcffd234fcff2e35fcff8e35fcffd638fcff6c7ffcff84c6fcff6813fdff1e5bfdff16a9fdff04aafdff6caafdff9eadfdff54aefdff9eaefdffacb8fdffe0befdff8a05feff320afeffec50feffc256feff749dfeff76f8feffec4affff4ca1ffff86f4ffff80f5ffff2cfbffffa26900005c6b0000183201001c4601005c47010016490100985201009c660100c86701009c690100f679010038930100e8d40100a2de0100d4de01001ee40100661a02008221020054730200707a020092c00200cac0020000c1020010c5020042c5020072c7020062c80200eccd020000cf0200a0db02006ee30200d6e30200081803003a2d0300f243030024590300
       m_RenameOverlay:
         m_UserAcceptedRename: 0
-        m_Name: 
-        m_OriginalName: 
+        m_Name: NPC Image
+        m_OriginalName: NPC Image
         m_EditFieldRect:
           serializedVersion: 2
           x: 0
           y: 0
           width: 0
           height: 0
-        m_UserData: 0
+        m_UserData: 219684
         m_IsWaitingForDelay: 0
         m_IsRenaming: 0
-        m_OriginalEventType: 11
+        m_OriginalEventType: 0
         m_IsRenamingFilename: 0
         m_ClientGUIView: {fileID: 8}
       m_SearchString: 
@@ -681,9 +681,9 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 0
-    y: 598
+    y: 659
     width: 1327
-    height: 478
+    height: 417
   m_ViewDataDictionary: {fileID: 0}
   m_OverlayCanvas:
     m_LastAppliedPresetName: Default
@@ -769,9 +769,9 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: 8c0d0000
-    m_LastClickedInstanceID: 3468
-    m_HadKeyboardFocusLastEvent: 1
+    m_SelectedInstanceIDs: 
+    m_LastClickedInstanceID: 0
+    m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs: c6230000a81e03004083000020830000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
