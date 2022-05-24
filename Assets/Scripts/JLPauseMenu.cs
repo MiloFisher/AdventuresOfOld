@@ -112,5 +112,7 @@ public class JLPauseMenu : MonoBehaviour
 
         Application.targetFrameRate = Global.frameCap;
         frameText.text = Global.frameCap + " fps";
+
+        PlayerPrefs.SetInt("animSteps", Global.animSteps);
     }
 }

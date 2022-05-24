@@ -35,7 +35,7 @@ public class MenuManager : Singleton<MenuManager>
 
         if(frameSlider)
         {
-            frameSlider.value = Global.animSteps;
+            frameSlider.value = PlayerPrefs.GetInt("animSteps", Global.animSteps);
             FramerateCap(Global.animSteps);
         }
 
@@ -123,5 +123,7 @@ public class MenuManager : Singleton<MenuManager>
 
         Application.targetFrameRate = Global.frameCap;
         frameText.text = Global.frameCap + " fps";
+
+        PlayerPrefs.SetInt("animSteps", Global.animSteps);
     }
 }
