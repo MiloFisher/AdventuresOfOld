@@ -407,7 +407,7 @@ public class PlayManager : Singleton<PlayManager>
         // Calculate turn order player list
         turnOrderPlayerList = new List<Player>(playerList);
         ShuffleDeck(turnOrderPlayerList);
-        turnOrderPlayerList.Sort((a, b) => b.Speed.Value - a.Speed.Value);
+        turnOrderPlayerList.Sort((a, b) => GetSpeed(b) - GetSpeed(a));
         FixedString64Bytes[] arr = new FixedString64Bytes[turnOrderPlayerList.Count];
         for (int i = 0; i < turnOrderPlayerList.Count; i++)
         {
@@ -1006,7 +1006,7 @@ public class PlayManager : Singleton<PlayManager>
 
     public void CombatNotification()
     {
-        string description = "<color=" + GetPlayerColorString(turnOrderPlayerList[turnMarker]) + ">" + turnOrderPlayerList[turnMarker].Name.Value + "</color> is fighting a monster!";
+        string description = turnOrderPlayerList[turnMarker].Name.Value + " is fighting a monster!";
         Action action = CombatNotificationOnComplete;
         SendNotification(1, description, action);
     }
@@ -1031,7 +1031,7 @@ public class PlayManager : Singleton<PlayManager>
 
     public void BossFightNotification()
     {
-        string description = "<color=" + GetPlayerColorString(turnOrderPlayerList[turnMarker]) + ">" + turnOrderPlayerList[turnMarker].Name.Value + "</color> is fighting the boss!";
+        string description = turnOrderPlayerList[turnMarker].Name.Value + " is fighting the boss!";
         Action action = BossFightNotificationOnComplete;
         SendNotification(1, description, action);
     }

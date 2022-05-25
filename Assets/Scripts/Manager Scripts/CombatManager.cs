@@ -81,7 +81,6 @@ public class CombatManager : Singleton<CombatManager>
     public void LoadIntoCombat()
     {
         ResetCombat();
-        StartCoroutine(FadeOverlay());
 
         // If it is your turn, set turn order combatant list for all players
         if(PlayManager.Instance.isYourTurn)
@@ -111,7 +110,11 @@ public class CombatManager : Singleton<CombatManager>
             combatTurnMarker = 0;
             PlayManager.Instance.localPlayer.SetTurnOrderCombatantList(arr, false);
             PlayManager.Instance.localPlayer.UpdateCombatTurnMarker(combatTurnMarker);
-            StartCombatantsTurn();
+            StartCoroutine(FadeOverlay(true));
+        }
+        else
+        {
+            StartCoroutine(FadeOverlay());
         }
     }
 
@@ -1736,7 +1739,7 @@ public class CombatManager : Singleton<CombatManager>
         }
     }
 
-    IEnumerator FadeOverlay()
+    IEnumerator FadeOverlay(bool isHost = false)
     {
         combatFadeOverlay.SetActive(true);
         
@@ -1775,6 +1778,9 @@ public class CombatManager : Singleton<CombatManager>
         
         // Setup Monster Passive
         monsterCard.Passive();
+
+        if(isHost)
+            StartCombatantsTurn();
     }
 
     IEnumerator LeaveCombat(Action OnComplete = default)

@@ -28,6 +28,8 @@ public class EncounterManager : Singleton<EncounterManager>
     private bool endTurnAfter;
     private bool isYourTurn;
 
+    private bool drawing;
+
     public void CompleteEncounter(bool _endTurnAfter)
     {
         endTurnAfter = _endTurnAfter;
@@ -51,17 +53,24 @@ public class EncounterManager : Singleton<EncounterManager>
         if (amount > 0)
         {
             isYourTurn = _isYourTurn;
-            if(animateOpening)
+            drawing = true;
+            if (animateOpening)
                 StartCoroutine(AnimateOpening(amount, uuid));
             else
                 StartCoroutine(AnimateCardDraw(0, amount));
         }
     }
 
+    public void EnableCardButtons()
+    {
+        foreach (GameObject g in displayCards)
+            g.GetComponent<UIEncounterCard>().SetButtonActive(true);
+    }
+
     public void DisableCardButtons()
     {
         foreach (GameObject g in displayCards)
-            g.GetComponent<UIEncounterCard>().SetButtonActive(false);
+            g.GetComponent<UIEncounterCard>().ActivateOptionCardButton(false);
     }
 
     IEnumerator AnimateOpening(int amount, string uuid)
@@ -161,7 +170,7 @@ public class EncounterManager : Singleton<EncounterManager>
 
         GameObject card = Instantiate(cardPrefab, travelCard.transform.position, Quaternion.identity, transform.parent);
         card.GetComponent<UIEncounterCard>().SetVisuals(cardsToDraw[current]);
-        card.GetComponent<UIEncounterCard>().ActivateCardButton(true);
+        //card.GetComponent<UIEncounterCard>().ActivateCardButton(true);
         card.GetComponent<UIEncounterCard>().ActivateOptionCardButton(isYourTurn);
         card.transform.localScale = travelCard.transform.localScale;
         displayCards.Add(card);
@@ -170,11 +179,17 @@ public class EncounterManager : Singleton<EncounterManager>
         if (current < amount - 1)
             StartCoroutine(AnimateCardDraw(current + 1, amount));
         else
+        {
+            drawing = false;
+            EnableCardButtons();
             cardsToDraw.Clear();
+        }   
     }
 
     IEnumerator AnimateCardFade()
     {
+        yield return new WaitUntil(() => !drawing);
+
         for(int i = Global.animSteps - 1; i >= 0; i--)
         {
             foreach (GameObject g in displayCards)

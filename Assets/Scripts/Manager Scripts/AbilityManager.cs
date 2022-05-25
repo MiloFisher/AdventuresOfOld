@@ -206,7 +206,7 @@ public class AbilityManager : Singleton<AbilityManager>
             return false;
 
         if (s.type == SkillType.ATTACK)
-            return PlayManager.Instance.GetAbilityCharges(p) >= s.cost && CombatManager.Instance.InCombat() && CombatManager.Instance.CanUseAttackAbilities();
+            return PlayManager.Instance.GetAbilityCharges(p) >= s.cost && CombatManager.Instance.InCombat() && CombatManager.Instance.CanUseAttackAbilities() && !CombatManager.Instance.combatOptions.GetComponent<UICombatOptions>().fleeRoll.activeInHierarchy;
         else if (s.type == SkillType.UTILITY)
         {
             if (PlayManager.Instance.GetAbilityCharges(p) < s.cost)

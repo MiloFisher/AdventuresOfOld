@@ -78,7 +78,7 @@ public class UIEncounterCard : MonoBehaviour
 
         MonsterCard m = PlayManager.Instance.encounterReference[cardName] as MonsterCard;
 
-        ActivateOptionCardButton(false);
+        //ActivateOptionCardButton(false);
 
         if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Stealth")))
         {
@@ -115,7 +115,7 @@ public class UIEncounterCard : MonoBehaviour
             return;
 
         EncounterManager.Instance.DisableCardButtons();
-        ActivateOptionCardButton(false);
+        //ActivateOptionCardButton(false);
     }
 
     public void SetVisuals(string card)
@@ -460,7 +460,7 @@ public class UIEncounterCard : MonoBehaviour
             yield return new WaitForSeconds(fadeLength * Global.animTimeMod * Global.animSpeed);
         }
 
-        actionButtonActive = true;
+        //actionButtonActive = true;
     }
 
     IEnumerator FadeOutButton()

@@ -17784,8 +17784,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Name 2
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a8dcbf322d1104a599ad7f192eddaa0c, type: 2}
-  m_sharedMaterial: {fileID: -2024710304679377605, guid: a8dcbf322d1104a599ad7f192eddaa0c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3528f3bdfe29849029aa25427510351c, type: 2}
+  m_sharedMaterial: {fileID: 3901619611459720256, guid: 3528f3bdfe29849029aa25427510351c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -27849,8 +27849,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Tychdrion the sla
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a8dcbf322d1104a599ad7f192eddaa0c, type: 2}
-  m_sharedMaterial: {fileID: -2024710304679377605, guid: a8dcbf322d1104a599ad7f192eddaa0c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3528f3bdfe29849029aa25427510351c, type: 2}
+  m_sharedMaterial: {fileID: 3901619611459720256, guid: 3528f3bdfe29849029aa25427510351c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -43991,8 +43991,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Name 6
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a8dcbf322d1104a599ad7f192eddaa0c, type: 2}
-  m_sharedMaterial: {fileID: -2024710304679377605, guid: a8dcbf322d1104a599ad7f192eddaa0c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3528f3bdfe29849029aa25427510351c, type: 2}
+  m_sharedMaterial: {fileID: 3901619611459720256, guid: 3528f3bdfe29849029aa25427510351c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -66670,8 +66670,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Name 5
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a8dcbf322d1104a599ad7f192eddaa0c, type: 2}
-  m_sharedMaterial: {fileID: -2024710304679377605, guid: a8dcbf322d1104a599ad7f192eddaa0c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3528f3bdfe29849029aa25427510351c, type: 2}
+  m_sharedMaterial: {fileID: 3901619611459720256, guid: 3528f3bdfe29849029aa25427510351c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -77329,8 +77329,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Name 3
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a8dcbf322d1104a599ad7f192eddaa0c, type: 2}
-  m_sharedMaterial: {fileID: -2024710304679377605, guid: a8dcbf322d1104a599ad7f192eddaa0c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3528f3bdfe29849029aa25427510351c, type: 2}
+  m_sharedMaterial: {fileID: 3901619611459720256, guid: 3528f3bdfe29849029aa25427510351c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -77574,7 +77574,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 300}
+  m_AnchoredPosition: {x: 0, y: 160}
   m_SizeDelta: {x: 2048, y: 1314}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1585979948
@@ -77597,7 +77597,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 865f2cf6b866a8d46b71b3e26fb4089a, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -92782,16 +92782,16 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 865f2cf6b866a8d46b71b3e26fb4089a, type: 3}
   - {fileID: 0}
   npcImages:
-  - {fileID: 21300000, guid: c4f7b01719297a74f8d0139fc09060d6, type: 3}
-  - {fileID: 21300000, guid: d431e80c9e7083448b3e615cd8c80702, type: 3}
-  - {fileID: 21300000, guid: 8aa3088bc8ad02f42ae5326d5e42c90a, type: 3}
-  - {fileID: 21300000, guid: dd28e0932bb5c8e4fb8aad48de5ccc64, type: 3}
-  - {fileID: 21300000, guid: 34d87de53fce6ec43b24e316c51d4679, type: 3}
-  - {fileID: 21300000, guid: 47f551f15700ecb4abef636fea57caec, type: 3}
-  - {fileID: 21300000, guid: 934035d83242d104b951c7effb316579, type: 3}
-  - {fileID: 21300000, guid: b630087cea5f6a14ebb1f776e22a432e, type: 3}
-  - {fileID: 21300000, guid: 3bccde1d0a8fc044d9c09eeb49167f63, type: 3}
-  - {fileID: 21300000, guid: 68846c4eb49364329a42cd0c4ed243c8, type: 3}
+  - {fileID: 21300000, guid: 8d787ae034abb45ab812c8bf80a70656, type: 3}
+  - {fileID: 21300000, guid: 8298af715d9974793902f854a444eae6, type: 3}
+  - {fileID: 21300000, guid: ef95820ccb87e47cfac21c299e524e77, type: 3}
+  - {fileID: 21300000, guid: 16c6d63aa6ff7464f8f4228cfdcf606a, type: 3}
+  - {fileID: 21300000, guid: 07d50ef53a150423882f3e2f37c6eede, type: 3}
+  - {fileID: 21300000, guid: 3251322904cfd42a3b3c185eb9a20259, type: 3}
+  - {fileID: 21300000, guid: a7548b1ebce9e42e992c8bca1999ce1c, type: 3}
+  - {fileID: 21300000, guid: 30bb9051ce2444597bab3a814fb31739, type: 3}
+  - {fileID: 21300000, guid: 4580b39f1067f4e4da02a98d9ab01109, type: 3}
+  - {fileID: 21300000, guid: 8c1634ebf13f741759f114e2d926317e, type: 3}
   speakerText: {fileID: 891764180}
   dialogueText: {fileID: 935360665}
   continueButton: {fileID: 1864285221}
@@ -93189,8 +93189,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Name 4
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a8dcbf322d1104a599ad7f192eddaa0c, type: 2}
-  m_sharedMaterial: {fileID: -2024710304679377605, guid: a8dcbf322d1104a599ad7f192eddaa0c, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3528f3bdfe29849029aa25427510351c, type: 2}
+  m_sharedMaterial: {fileID: 3901619611459720256, guid: 3528f3bdfe29849029aa25427510351c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -101173,7 +101173,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: 4580b39f1067f4e4da02a98d9ab01109, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -101208,7 +101208,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 300}
+  m_AnchoredPosition: {x: 0, y: 160}
   m_SizeDelta: {x: 1314, y: 1314}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &2051364488

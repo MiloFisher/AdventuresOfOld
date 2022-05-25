@@ -2122,7 +2122,7 @@ namespace AdventuresOfOldMultiplayer
             {
                 foreach (Player p in PlayManager.Instance.playerList)
                 {
-                    if (p.UUID.Value != uuid && AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Taunt"), p))
+                    if (p.UUID.Value != uuid && AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Taunt"), p) && CombatManager.Instance.IsCombatant(p))
                         p.SendRequestTauntNotificationsClientRPC();
                 }
             }
@@ -2134,7 +2134,7 @@ namespace AdventuresOfOldMultiplayer
         {
             foreach (Player p in PlayManager.Instance.playerList)
             {
-                if (p.UUID.Value != uuid && AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Taunt"), p))
+                if (p.UUID.Value != uuid && AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Taunt"), p) && CombatManager.Instance.IsCombatant(p))
                     p.SendRequestTauntNotificationsClientRPC();
             }
         }
