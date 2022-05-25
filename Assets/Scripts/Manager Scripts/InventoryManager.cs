@@ -571,7 +571,7 @@ public class InventoryManager : Singleton<InventoryManager>
                 Debug.Log("Invalid discard selectID: " + selectedID);
                 break;
         }
-        PassiveNotificationManager.Instance.AddNotification("<color=#FF0000>Discarded \"" + cardName + "\"</color>");
+        PassiveNotificationManager.Instance.AddNotification("<color=#FF0000>Lost \"" + cardName + "\"</color>");
         if (forcedDiscard.activeInHierarchy)
             forcedDiscard.GetComponent<UIForcedDiscard>().DiscardComplete();
         if (discardMany.activeInHierarchy)
