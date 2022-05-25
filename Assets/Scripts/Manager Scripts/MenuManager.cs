@@ -14,6 +14,11 @@ public class MenuManager : Singleton<MenuManager>
 
     private void Awake()
     {
+        SwapScene(0);
+    }
+
+    private void Start()
+    {
         if (SceneManager.GetActiveScene().name == "JLMainMenu")
         {
             JLAudioManager.Instance.PlaySound("MainTheme");
@@ -22,11 +27,7 @@ public class MenuManager : Singleton<MenuManager>
         {
             JLAudioManager.Instance.PlaySound("Medieval");
         }
-        SwapScene(0);
-    }
 
-    private void Start()
-    {
         if (animSlider)
         {
             animSlider.value = -1 * Global.animSpeed;
