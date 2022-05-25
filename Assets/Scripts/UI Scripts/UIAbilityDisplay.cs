@@ -57,7 +57,12 @@ public class UIAbilityDisplay : MonoBehaviour
             skillContainer.transform.localPosition += new Vector3(0, unitHeight, 0);
         }
 
-        if(skillList.Count <= 6)
+        if (skillList.Count <= 9)
+        {
+            currentHeight -= unitHeight;
+        }
+
+        if (skillList.Count <= 6)
         {
             currentHeight -= unitHeight;
         }
@@ -143,6 +148,12 @@ public class UIAbilityDisplay : MonoBehaviour
             if (i < 6)
                 return 3;
             return count - 6;
+        }
+        if (count <= 12)
+        {
+            if (i < 9)
+                return 3;
+            return count - 9;
         }
         return 3;
     }

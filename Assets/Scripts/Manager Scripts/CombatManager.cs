@@ -542,6 +542,8 @@ public class CombatManager : Singleton<CombatManager>
                 // Visualize player taking damage for all other players
                 PlayManager.Instance.localPlayer.VisualizeMonsterTakeDamageForOthers(burning);
 
+                UseEffect(monster, "Burning");
+
                 // Check if still alive with incoming poison damage
                 if (goingToDie)
                 {
@@ -816,7 +818,7 @@ public class CombatManager : Singleton<CombatManager>
                                     break;
                                 case "Fireball":
                                     damage += PlayManager.Instance.GetMod(PlayManager.Instance.GetIntelligence(c.player));
-                                    AttackMonster(c, crit ? damage * 2 : damage, new List<Effect> { new Effect("Burning", 3, PlayManager.Instance.GetLevel(c.player)) });
+                                    AttackMonster(c, crit ? damage * 2 : damage, new List<Effect> { new Effect("Burning", -1, PlayManager.Instance.GetLevel(c.player), false, 3) });
                                     break;
                                 case "Necrotic Blast":
                                     damage += PlayManager.Instance.GetMod(PlayManager.Instance.GetIntelligence(c.player)) + c.GetArmor();
@@ -881,9 +883,9 @@ public class CombatManager : Singleton<CombatManager>
         if (flamingShot > -1)
         {
             if (debuffs == default)
-                debuffs = new List<Effect> { new Effect("Burning", 3, PlayManager.Instance.GetLevel(c.player)) };
+                debuffs = new List<Effect> { new Effect("Burning", -1, PlayManager.Instance.GetLevel(c.player), false, 3) };
             else
-                debuffs.Add(new Effect("Burning", 3, PlayManager.Instance.GetLevel(c.player)));
+                debuffs.Add(new Effect("Burning", -1, PlayManager.Instance.GetLevel(c.player), false, 3));
             CleanseEffect(c, "Flaming Shot");
         }
         int bonusPower = c.HasBonusPower();

@@ -37,6 +37,7 @@ public class PlayManager : Singleton<PlayManager>
 
     public Dictionary<FixedString64Bytes, Sprite> portaitDictionary = new Dictionary<FixedString64Bytes, Sprite>();
 
+    public List<LootCard> specialItems;
     public List<LootCard> equipmentDeck;
 
     [SerializeField] private LootCard[] lootCardObjects;
@@ -129,6 +130,10 @@ public class PlayManager : Singleton<PlayManager>
         }
 
         // Construct Item Reference dictionary
+        foreach (LootCard l in specialItems)
+        {
+            itemReference.Add(l.cardName, l);
+        }
         foreach (LootCard l in equipmentDeck)
         {
             itemReference.Add(l.cardName, l);
@@ -320,6 +325,8 @@ public class PlayManager : Singleton<PlayManager>
             // If player is human, give them 2 level up points
             if (p.Race.Value == "Human")
                 p.SetValue("LevelUpPoints", 2);
+
+            EasterEggCheck(p);
 
             // Fill all of their ability charges
             p.RestoreAbilityCharges(999, true, true);
@@ -3482,5 +3489,30 @@ public class PlayManager : Singleton<PlayManager>
                 return true;
         }
         return false;
+    }
+
+    public void EasterEggCheck(Player p)
+    {
+        if(p.Name.Value == "Tychdrion" && p.Race.Value == "Human" && p.Class.Value == "Paladin" && p.Trait.Value == "Holy")
+        {
+            p.SetValue("Image", "ee2");
+            p.SetValue("Armor", "Divine Plate Armor");
+            p.SetValue("Weapon", "Divine Greatsword");
+            p.SetValue("Ring1", "Ring of Divine Justice");
+            p.SetValue("Ring2", "Ring of Divine Justice");
+            p.SetValue("Inventory1", "Torch");
+            p.SetValue("Inventory2", "Torch");
+            p.SetValue("Inventory3", "Energy Potion");
+            p.SetValue("Inventory4", "Energy Potion");
+            p.SetValue("Level", 5);
+            p.SetValue("XP", 30);
+            p.SetValue("Strength", 20);
+            p.SetValue("Dexterity", 20);
+            p.SetValue("Intelligence", 20);
+            p.SetValue("Speed", 20);
+            p.SetValue("Constitution", 20);
+            p.SetValue("Energy", 20);
+            p.SetValue("LevelUpPoints", 0);
+        }
     }
 }

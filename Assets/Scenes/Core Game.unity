@@ -16082,6 +16082,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 3de39388a3d994566adfbb46e45712a3, type: 2}
   minionObjects:
   - {fileID: 11400000, guid: 3ef3187fa1f7441a194740494a09dd45, type: 2}
+  specialItems:
+  - {fileID: 11400000, guid: 5f64a7d90b5144312856860238997041, type: 2}
+  - {fileID: 11400000, guid: 7fae643ababd849b7a9714b3e73cccb2, type: 2}
+  - {fileID: 11400000, guid: b4e99a012d6304bda9466296790e6b65, type: 2}
   equipmentDeck:
   - {fileID: 11400000, guid: 9aa9f23b640ce4418850830e108bbc4c, type: 2}
   - {fileID: 11400000, guid: abcbda5969e544f94a6b90a2a75168fb, type: 2}
@@ -16192,6 +16196,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 9178bf90c47f8d749872f7bad2fd8574, type: 3}
   - {fileID: 21300000, guid: b046fd5f5610b2c4584be89fd4083f3a, type: 3}
   - {fileID: 21300000, guid: 68e75b06b26cf7b49b45f625b210697c, type: 3}
+  - {fileID: 21300000, guid: 9d053e65da35945cf97862ac11a50291, type: 3}
   loadingScreen: {fileID: 1366110076}
   questDisplay: {fileID: 411482570}
   playerColors:
@@ -24903,11 +24908,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 233623641833532145, guid: 3adedd67048864c25b78a0d0dfb5ae50, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 850
+      value: -850
       objectReference: {fileID: 0}
     - target: {fileID: 233623641833532145, guid: 3adedd67048864c25b78a0d0dfb5ae50, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -780
+      value: -1010
       objectReference: {fileID: 0}
     - target: {fileID: 233623641833532145, guid: 3adedd67048864c25b78a0d0dfb5ae50, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -50957,7 +50962,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 3200, y: 2300}
+  m_SizeDelta: {x: 3200, y: 2530}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1055939421
 MonoBehaviour:
@@ -51011,7 +51016,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startWidth: 440
   endWidth: 3200
-  baseHeight: 2300
+  baseHeight: 2530
   startScale: 0
   endScale: 0.5
   growingLength: 0.004
@@ -54128,7 +54133,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 233623641833532145, guid: 3adedd67048864c25b78a0d0dfb5ae50, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -780
+      value: -1010
       objectReference: {fileID: 0}
     - target: {fileID: 233623641833532145, guid: 3adedd67048864c25b78a0d0dfb5ae50, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -69956,11 +69961,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 233623641833532145, guid: 3adedd67048864c25b78a0d0dfb5ae50, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 850
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 233623641833532145, guid: 3adedd67048864c25b78a0d0dfb5ae50, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -780
+      value: -1010
       objectReference: {fileID: 0}
     - target: {fileID: 233623641833532145, guid: 3adedd67048864c25b78a0d0dfb5ae50, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x

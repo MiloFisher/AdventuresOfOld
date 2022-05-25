@@ -102,7 +102,10 @@ public class StatusEffectTooltip : MonoBehaviour, IPointerEnterHandler, IPointer
     {
         effect = e;
         TMP_Text textContainer = display.GetComponentInChildren<TMP_Text>();
-        textContainer.text = "<b>Effect: <color=" + GetNameColor(e.name) + ">" + e.name + "</color>" + GetTurnCount(e.duration) + "\n" + GetDescription(e.name, e.potency, e.counter);
+        if(e.name == "Burning")
+            textContainer.text = "<b>Effect: <color=" + GetNameColor(e.name) + ">" + e.name + "</color>" + GetTurnCount(e.counter) + "\n" + GetDescription(e.name, e.potency, e.counter);
+        else
+            textContainer.text = "<b>Effect: <color=" + GetNameColor(e.name) + ">" + e.name + "</color>" + GetTurnCount(e.duration) + "\n" + GetDescription(e.name, e.potency, e.counter);
         textContainer.ForceMeshUpdate(true, true);
         if (textContainer.textInfo != null)
         {
