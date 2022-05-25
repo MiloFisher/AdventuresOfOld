@@ -547,7 +547,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 334.92413, y: -1182.665}
+  m_AnchoredPosition: {x: 334.953, y: -1407.6951}
   m_SizeDelta: {x: 244.35, y: 75.03}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &104863545
@@ -604,6 +604,18 @@ MonoBehaviour:
           m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: Highborn
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 686782119}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: OnClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &104863546
@@ -810,6 +822,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 686782119}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: OnClick
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &138476442
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -925,6 +949,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 686782119}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: OnClick
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &138542449
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -969,7 +1005,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 334.92413, y: -732.605}
+  m_AnchoredPosition: {x: 334.953, y: -957.635}
   m_SizeDelta: {x: 215.44, y: 75.03}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &170061316
@@ -1026,6 +1062,18 @@ MonoBehaviour:
           m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: Berserk
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 686782119}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: OnClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &170061317
@@ -1451,7 +1499,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 325.3512, y: -957.635}
+  m_AnchoredPosition: {x: 325.38007, y: -957.635}
   m_SizeDelta: {x: 242.97, y: 75.03}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &211359706
@@ -1508,6 +1556,18 @@ MonoBehaviour:
           m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: Sorcerer
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 686782119}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: OnClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &211359707
@@ -1690,8 +1750,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 283489037}
   m_HandleRect: {fileID: 283489036}
   m_Direction: 2
-  m_Value: 0.50000006
-  m_Size: 0.4692027
+  m_Value: 0.49999994
+  m_Size: 0.46918344
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -1952,7 +2012,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 231.27148, y: -136.19269}
+  m_AnchoredPosition: {x: 231.3003, y: -136.17645}
   m_SizeDelta: {x: 400, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &237903391
@@ -2397,8 +2457,8 @@ RectTransform:
   m_Father: {fileID: 1929823372}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.26539868}
-  m_AnchorMax: {x: 1, y: 0.7346014}
+  m_AnchorMin: {x: 0, y: 0.2654083}
+  m_AnchorMax: {x: 1, y: 0.7345917}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2757,7 +2817,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 325.3512, y: -732.605}
+  m_AnchoredPosition: {x: 325.38007, y: -732.605}
   m_SizeDelta: {x: 188.76, y: 75.03}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &409293623
@@ -2814,6 +2874,18 @@ MonoBehaviour:
           m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: Ranger
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 686782119}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: OnClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &409293624
@@ -3176,8 +3248,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 367.33466, y: -331.355}
-  m_SizeDelta: {x: 634.6693, y: 562.71}
+  m_AnchoredPosition: {x: 367.36346, y: -331.33878}
+  m_SizeDelta: {x: 634.7269, y: 562.67755}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &430304864
 MonoBehaviour:
@@ -3389,7 +3461,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 231.27148, y: -736.1927}
+  m_AnchoredPosition: {x: 231.3003, y: -736.17645}
   m_SizeDelta: {x: 400, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &452981386
@@ -3926,7 +3998,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 325.3512, y: -57.515}
+  m_AnchoredPosition: {x: 325.38007, y: -57.515}
   m_SizeDelta: {x: 233.42, y: 75.03}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &488123034
@@ -3983,6 +4055,18 @@ MonoBehaviour:
           m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: Warrior
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 686782119}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: OnClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &488123035
@@ -4255,7 +4339,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 334.92413, y: -1407.6951}
+  m_AnchoredPosition: {x: 334.953, y: -57.515}
   m_SizeDelta: {x: 267.43, y: 75.03}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &544670058
@@ -4456,6 +4540,18 @@ MonoBehaviour:
             m_IntArgument: 0
             m_FloatArgument: 0
             m_StringArgument: Powerful
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 686782119}
+          m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
+          m_MethodName: PlaySound
+          m_Mode: 5
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: OnClick
             m_BoolArgument: 0
           m_CallState: 2
 --- !u!1 &545594245
@@ -4752,6 +4848,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 686782119}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: OnClick
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &573919507
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4844,7 +4952,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1722819631}
   m_Direction: 2
   m_Value: 0.5000001
-  m_Size: 0.6490584
+  m_Size: 0.64903224
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4926,7 +5034,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -0.00048828125, y: 0.00012207031}
-  m_SizeDelta: {x: -0.001, y: -771.1151}
+  m_SizeDelta: {x: -0.001, y: -771.08264}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &587987091
 MonoBehaviour:
@@ -5744,7 +5852,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
       propertyPath: soundArray.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
       propertyPath: soundArray.Array.data[0].loop
@@ -5755,27 +5863,66 @@ PrefabInstance:
       value: Medieval
       objectReference: {fileID: 0}
     - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: soundArray.Array.data[1].loop
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: soundArray.Array.data[1].name
+      value: OnClick
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
       propertyPath: soundArray.Array.data[0].pitch
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: soundArray.Array.data[1].pitch
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
       propertyPath: soundArray.Array.data[0].volume
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: soundArray.Array.data[1].volume
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
       propertyPath: soundArray.Array.data[0].audioClip
       value: 
       objectReference: {fileID: 8300000, guid: cb5b6b7f5f711f34aadafc1168175088, type: 3}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: soundArray.Array.data[1].audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: b9341f8b791cee6478f6b268aaca50ed, type: 3}
     - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
       propertyPath: soundArray.Array.data[0].playOnAwake
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: soundArray.Array.data[1].playOnAwake
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
       propertyPath: soundArray.Array.data[0].audioMixerGroup
       value: 
       objectReference: {fileID: -5635314622650428223, guid: dfffffeaefd95134da98ebaa4b571ba5, type: 2}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: soundArray.Array.data[1].audioMixerGroup
+      value: 
+      objectReference: {fileID: -575683712353037192, guid: 7c6c585bcdbdbbd499c864e88bace28d, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+--- !u!114 &686782119 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+  m_PrefabInstance: {fileID: 686782118}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e617eb0525565254989c982f2842a6d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &718645357
 GameObject:
   m_ObjectHideFlags: 0
@@ -5986,6 +6133,18 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 686782119}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: OnClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!222 &745968634
@@ -6314,6 +6473,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 686782119}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: OnClick
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &788376525
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6407,7 +6578,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -0.00048828125, y: 0}
-  m_SizeDelta: {x: -0.001, y: 435.23083}
+  m_SizeDelta: {x: -0.001, y: 435.2633}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &802565879
 MonoBehaviour:
@@ -7060,6 +7231,18 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 686782119}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: OnClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!222 &919484574
@@ -7965,6 +8148,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 686782119}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: OnClick
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &1110713514
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -8646,7 +8841,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 334.92413, y: -507.575}
+  m_AnchoredPosition: {x: 334.953, y: -732.605}
   m_SizeDelta: {x: 243.12, y: 75.03}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1268773084
@@ -8703,6 +8898,18 @@ MonoBehaviour:
           m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: Mystical
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 686782119}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: OnClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1268773085
@@ -8838,8 +9045,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 325.3512, y: -507.575}
-  m_SizeDelta: {x: 162.45, y: 75.03}
+  m_AnchoredPosition: {x: 325.38007, y: -507.575}
+  m_SizeDelta: {x: 162.46, y: 75.03}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1283452625
 MonoBehaviour:
@@ -8895,6 +9102,18 @@ MonoBehaviour:
           m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: Rogue
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 686782119}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: OnClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1283452626
@@ -9030,7 +9249,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 334.92413, y: -282.54498}
+  m_AnchoredPosition: {x: 334.953, y: -507.575}
   m_SizeDelta: {x: 225.43, y: 75.03}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1306570547
@@ -9087,6 +9306,18 @@ MonoBehaviour:
           m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: Healthy
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 686782119}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: OnClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1306570548
@@ -9223,7 +9454,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 631.2715, y: -436.1927}
+  m_AnchoredPosition: {x: 631.3003, y: -436.17645}
   m_SizeDelta: {x: 400, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1323742374
@@ -10230,6 +10461,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 686782119}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: OnClick
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!222 &1454631782
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -10285,7 +10528,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -1.0241699, y: 0}
-  m_SizeDelta: {x: -0.001, y: 897.1749}
+  m_SizeDelta: {x: -0.001, y: 897.2074}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1469372235
 MonoBehaviour:
@@ -10650,7 +10893,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 325.3512, y: -282.54498}
+  m_AnchoredPosition: {x: 325.38007, y: -282.54498}
   m_SizeDelta: {x: 207.77, y: 75.03}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1501286842
@@ -10707,6 +10950,18 @@ MonoBehaviour:
           m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: Paladin
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 686782119}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: OnClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1501286843
@@ -10911,6 +11166,18 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 686782119}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: OnClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!222 &1504893668
@@ -11139,7 +11406,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 334.92413, y: -57.515}
+  m_AnchoredPosition: {x: 334.953, y: -282.54498}
   m_SizeDelta: {x: 373.67, y: 75.03}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1561548967
@@ -11196,6 +11463,18 @@ MonoBehaviour:
           m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: Fleet-Footed
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 686782119}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: OnClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1561548968
@@ -11942,7 +12221,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 334.92413, y: -957.635}
+  m_AnchoredPosition: {x: 334.953, y: -1182.665}
   m_SizeDelta: {x: 291, y: 75.03}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1699653031
@@ -11999,6 +12278,18 @@ MonoBehaviour:
           m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: Generalist
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 686782119}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: OnClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1699653032
@@ -12401,8 +12692,8 @@ RectTransform:
   m_Father: {fileID: 88220996}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0.17547084}
-  m_AnchorMax: {x: 1, y: 0.82452923}
+  m_AnchorMin: {x: 0, y: 0.17548393}
+  m_AnchorMax: {x: 1, y: 0.8245162}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -12604,7 +12895,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 631.2715, y: -136.19269}
+  m_AnchoredPosition: {x: 631.3003, y: -136.17645}
   m_SizeDelta: {x: 400, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1797311045
@@ -12841,7 +13132,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 325.3512, y: -1182.665}
+  m_AnchoredPosition: {x: 325.38007, y: -1182.665}
   m_SizeDelta: {x: 343.35, y: 75.03}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1810882529
@@ -12898,6 +13189,18 @@ MonoBehaviour:
           m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: Necromancer
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 686782119}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: OnClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &1810882530
@@ -13036,7 +13339,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 631.2715, y: -736.1927}
+  m_AnchoredPosition: {x: 631.3003, y: -736.17645}
   m_SizeDelta: {x: 400, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1814033792
@@ -13344,6 +13647,18 @@ MonoBehaviour:
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 686782119}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: OnClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!222 &1895607612
@@ -13773,7 +14088,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 231.27148, y: -436.1927}
+  m_AnchoredPosition: {x: 231.3003, y: -436.17645}
   m_SizeDelta: {x: 400, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2013750330
@@ -14012,7 +14327,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 334.92413, y: -1632.7251}
+  m_AnchoredPosition: {x: 334.953, y: -1632.7251}
   m_SizeDelta: {x: 134.93, y: 75.03}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2032606081
@@ -14069,6 +14384,18 @@ MonoBehaviour:
           m_IntArgument: 3
           m_FloatArgument: 0
           m_StringArgument: Holy
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 686782119}
+        m_TargetAssemblyTypeName: JLAudioManager, Assembly-CSharp
+        m_MethodName: PlaySound
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: OnClick
           m_BoolArgument: 0
         m_CallState: 2
 --- !u!114 &2032606082
@@ -14783,7 +15110,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: -10, y: -19}
-  m_SizeDelta: {x: 82.60571, y: -198.61658}
+  m_SizeDelta: {x: 82.54797, y: -198.5841}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2075484506
 MonoBehaviour:

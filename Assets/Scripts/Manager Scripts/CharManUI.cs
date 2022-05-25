@@ -87,6 +87,7 @@ public class CharManUI : MonoBehaviour
         racebutton.transform.SetParent(objectToSetTo, false);
         racebutton.GetComponent<Button>().onClick.AddListener(() => MenuManager.GetComponent<MenuManager>().SwapScene(1));
         racebutton.GetComponent<Button>().onClick.AddListener(() => SetRaceDetails(race));
+        racebutton.GetComponent<Button>().onClick.AddListener(() => JLAudioManager.Instance.PlaySound("OnClick"));
     }
 
     

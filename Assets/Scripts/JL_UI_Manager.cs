@@ -20,7 +20,7 @@ public class JL_UI_Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
 
     public void OnPointerEnter(PointerEventData eventData)
     {
-        JLAudioManager.Instance.PlaySound("Hover");
+        JLAudioManager.Instance.PlaySound("OnHover");
         isHighlighted(1);
     }
 
