@@ -12185,7 +12185,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5054663507420193055, guid: 3e2b791ff927cf046b97558b04097aa4, type: 3}
       propertyPath: m_text
-      value: Resolution
+      value: Screen
       objectReference: {fileID: 0}
     - target: {fileID: 5054663507420193055, guid: 3e2b791ff927cf046b97558b04097aa4, type: 3}
       propertyPath: m_fontSize
