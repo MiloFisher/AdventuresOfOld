@@ -9,32 +9,28 @@ using System.Collections;
 public class JLGameStateMenu : MonoBehaviour
 {
     private GameObject[] players;
-    public GameObject[] gravestones; // For Failure Menu
-    public GameObject[] playerSilhouettes; // For Success Menu
-    public Sprite[] SpriteSheet;
-    public GameObject mainCanvas;
 
-    [Header("Success Screen Components")]
+    public GameObject mainCanvas;
     public bool testMode;
     public GameObject[] layouts;
+    public Sprite[] races;
 
     void Awake()
     {
-        if (SceneManager.GetActiveScene().name == "JLFailureMenu") {
-            players = GameObject.FindGameObjectsWithTag("Player");
-            if(players.Length > 0)
+        players = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject g in layouts)
+            g.SetActive(false);
+
+        if (players.Length >= 3)
+        {
+            if (SceneManager.GetActiveScene().name == "JLFailureMenu")
             {
-                gravestones[players.Length - 1].SetActive(true);
-                SetPlayerName(players);
+                if (testMode)
+                    StartCoroutine(AnimateSetupFailureScreen());
+                else
+                    SetupFailureScreen();
             }
-        }
-
-        else if (SceneManager.GetActiveScene().name == "JLSuccessMenu") {
-
-            foreach (GameObject g in layouts)
-                g.SetActive(false);
-            players = GameObject.FindGameObjectsWithTag("Player");
-            if(players.Length >= 3)
+            else if (SceneManager.GetActiveScene().name == "JLSuccessMenu")
             {
                 if (testMode)
                     StartCoroutine(AnimateSetupSuccessScreen());
@@ -54,48 +50,8 @@ public class JLGameStateMenu : MonoBehaviour
             ResolutionChange("Standard");
     }
 
-    private void SetPlayerName(GameObject[] players) {
-        GameObject graveyard = gravestones[players.Length - 1];
-        int i = 0;
-        foreach (GameObject player in players) {
-            GameObject currGrave = graveyard.transform.GetChild(i).gameObject; //Obtaining the TMP child
-            TextMeshProUGUI graveText = currGrave.transform.GetChild(0).gameObject.GetComponent<TextMeshProUGUI>(); //Obtaining the text component of child
-            graveText.text = player.GetComponent<Player>().Name.Value + "";
-            i++;
-        }
-    }
-
-    private void GetPlayerRace(GameObject[] players) {
-        GameObject playerField = playerSilhouettes[players.Length - 1];
-        int i = 0;
-        foreach (GameObject player in players) {
-            GameObject currPlayer = playerField.transform.GetChild(i).gameObject; //Obtaining the TMP child
-            if (player.GetComponent<Player>().Race.Value + "" == "Human") {
-                currPlayer.GetComponent<Image>().sprite = SpriteSheet[0];
-            }
-            else if (player.GetComponent<Player>().Race.Value + "" == "Dwarf") {
-                currPlayer.GetComponent<Image>().sprite = SpriteSheet[1];
-            }
-            else if (player.GetComponent<Player>().Race.Value + "" == "Centaur") {
-                currPlayer.GetComponent<Image>().sprite = SpriteSheet[2];
-            }
-            else if (player.GetComponent<Player>().Race.Value + "" == "Leonin") {
-                currPlayer.GetComponent<Image>().sprite = SpriteSheet[3];
-            }
-            else if (player.GetComponent<Player>().Race.Value + "" == "High Elf" || player.GetComponent<Player>().Race.Value + "" == "Night Elf") {
-                currPlayer.GetComponent<Image>().sprite = SpriteSheet[4];
-            }
-            else if (player.GetComponent<Player>().Race.Value + "" == "Aasimar") {
-                currPlayer.GetComponent<Image>().sprite = SpriteSheet[5];
-            }
-            else {
-                currPlayer.GetComponent<Image>().sprite = SpriteSheet[0];
-            }
-            i++;
-        }
-    }
-
-    public void quitButton() {
+    public void quitButton()
+    {
         if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsConnectedClient)
             NetworkManager.Singleton.Shutdown();
         SceneManager.LoadScene("JLMainMenu");
@@ -115,11 +71,11 @@ public class JLGameStateMenu : MonoBehaviour
 
     IEnumerator AnimateSetupSuccessScreen()
     {
-        string[] raceList = {"Human", "Dwarf", "Leonin", "Centaur", "High Elf", "Aasimar" };
+        string[] raceList = { "Human", "Dwarf", "Leonin", "Centaur", "High Elf", "Aasimar" };
         int counter = 0;
-        for(; ; )
+        for (; ; )
         {
-            SetupSuccessScreen("Spectacular Tester", raceList[counter++%raceList.Length]);
+            SetupSuccessScreen("Spectacular Tester", raceList[counter++ % raceList.Length]);
             yield return new WaitForSeconds(2);
         }
     }
@@ -128,16 +84,16 @@ public class JLGameStateMenu : MonoBehaviour
     {
         GameObject layout = layouts[players.Length - 3];
         layout.SetActive(true);
-        for(int i = 0; i < players.Length; i++)
+        for (int i = 0; i < players.Length; i++)
         {
             layout.transform.GetChild(i).GetComponent<Image>().enabled = false;
             GameObject silhouetteCollection = layout.transform.GetChild(i).GetChild(0).gameObject;
             Player p = players[i].GetComponent<Player>();
             GameObject silhouette;
 
-            if(name == default)
+            if (name == default)
                 name = p.Name.Value + "";
-            if(race == default)
+            if (race == default)
                 race = p.Race.Value + "";
 
             for (int j = 0; j < silhouetteCollection.transform.childCount; j++)
@@ -173,6 +129,63 @@ public class JLGameStateMenu : MonoBehaviour
 
             silhouette.SetActive(true);
             silhouette.GetComponentInChildren<TMP_Text>().text = name;
+        }
+    }
+
+    IEnumerator AnimateSetupFailureScreen()
+    {
+        string[] raceList = { "Human", "Dwarf", "Leonin", "Centaur", "High Elf", "Night Elf", "Aasimar" };
+        int counter = 0;
+        for (; ; )
+        {
+            SetupFailureScreen("Spectacular Tester", raceList[counter++ % raceList.Length]);
+            yield return new WaitForSeconds(2);
+        }
+    }
+
+    public void SetupFailureScreen(string name = default, string race = default)
+    {
+        GameObject layout = layouts[players.Length - 3];
+        layout.SetActive(true);
+        for (int i = 0; i < players.Length; i++)
+        {
+            Transform tombstone = layout.transform.GetChild(i);
+            Player p = players[i].GetComponent<Player>();
+
+            if (name == default)
+                name = p.Name.Value + "";
+            if (race == default)
+                race = p.Race.Value + "";
+
+            tombstone.GetChild(0).GetComponent<TMP_Text>().text = name;
+
+            switch (race)
+            {
+                case "Human":
+                    tombstone.GetChild(1).GetComponent<Image>().sprite = races[0];
+                    break;
+                case "Dwarf":
+                    tombstone.GetChild(1).GetComponent<Image>().sprite = races[1];
+                    break;
+                case "Leonin":
+                    tombstone.GetChild(1).GetComponent<Image>().sprite = races[2];
+                    break;
+                case "Centaur":
+                    tombstone.GetChild(1).GetComponent<Image>().sprite = races[3];
+                    break;
+                case "High Elf":
+                    tombstone.GetChild(1).GetComponent<Image>().sprite = races[4];
+                    break;
+                case "Night Elf":
+                    tombstone.GetChild(1).GetComponent<Image>().sprite = races[5];
+                    break;
+                case "Aasimar":
+                    tombstone.GetChild(1).GetComponent<Image>().sprite = races[6];
+                    break;
+                default:
+                    tombstone.GetChild(1).GetComponent<Image>().sprite = races[0];
+                    break;
+            }
         }
     }
 }
