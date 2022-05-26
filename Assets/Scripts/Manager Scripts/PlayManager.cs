@@ -8,6 +8,8 @@ using Unity.Collections;
 using TMPro;
 using UnityEngine.SceneManagement;
 using AdventuresOfOldMultiplayer;
+using System.Security.Cryptography;
+using System.Text;
 
 public class PlayManager : Singleton<PlayManager>
 {
@@ -3493,8 +3495,9 @@ public class PlayManager : Singleton<PlayManager>
 
     public void EasterEggCheck(Player p)
     {
-        if(p.Name.Value == "Tychdrion" && p.Race.Value == "Human" && p.Class.Value == "Paladin" && p.Trait.Value == "Holy")
+        if(ComputeSha256Hash(p.Name.Value + "") == "c2f81653c077bd8f56aa6eb34d92646ae5c1c4a2b0f7b42ae59f3e3fe022ba07" && p.Race.Value == "Human" && p.Class.Value == "Paladin" && p.Trait.Value == "Holy")
         {
+            p.SetValue("Name", "Tychdrion");
             p.SetValue("Image", "ee2");
             p.SetValue("Armor", "Divine Plate Armor");
             p.SetValue("Weapon", "Divine Greatsword");
@@ -3513,6 +3516,24 @@ public class PlayManager : Singleton<PlayManager>
             p.SetValue("Constitution", 20);
             p.SetValue("Energy", 20);
             p.SetValue("LevelUpPoints", 0);
+        }
+    }
+
+    static string ComputeSha256Hash(string rawData)
+    {
+        // Create a SHA256   
+        using (SHA256 sha256Hash = SHA256.Create())
+        {
+            // ComputeHash - returns byte array  
+            byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawData));
+
+            // Convert byte array to a string   
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < bytes.Length; i++)
+            {
+                builder.Append(bytes[i].ToString("x2"));
+            }
+            return builder.ToString();
         }
     }
 }

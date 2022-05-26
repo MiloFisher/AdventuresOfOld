@@ -31,9 +31,11 @@ public class JL_UI_Manager : MonoBehaviour, IPointerEnterHandler, IPointerExitHa
         else if (this.name == "ReturnToMenu_BUTTON") {
             if (status == 0) {
                 this.GetComponent<Image>().transform.localScale = new Vector2(2, 2);
+                this.GetComponent<Image>().sprite = button;
             }
             else if (status == 1) {
                 this.GetComponent<Image>().transform.localScale = new Vector2((float)2.2, (float)2.2);
+                this.GetComponent<Image>().sprite = buttonSelected;
             }
         }
         else {

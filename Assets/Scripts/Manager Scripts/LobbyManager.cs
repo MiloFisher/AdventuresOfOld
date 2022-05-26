@@ -252,5 +252,15 @@ namespace AdventuresOfOldMultiplayer
         //    }
         //    return "No IP Found.";
         //}
+
+        public void TestingFunction_LoadFailMenu()
+        {
+            GetOrderedPlayers()[0].GetComponent<Player>().ChangeScene("JLFailureMenu");
+        }
+
+        public void TestingFunction_LoadSuccessMenu()
+        {
+            GetOrderedPlayers()[0].GetComponent<Player>().ChangeScene("JLSuccessMenu");
+        }
     }
 }
