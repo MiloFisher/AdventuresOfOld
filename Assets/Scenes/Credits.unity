@@ -726,7 +726,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 2264924159
+    rgba: 134217727
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -861,7 +861,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 939524095
+    rgba: 184549375
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1598,7 +1598,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 771751935
+    rgba: 134217727
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -1836,7 +1836,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 939524095
+    rgba: 1946157055
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -2042,15 +2042,15 @@ MonoBehaviour:
 
     Ethan Michaels - Four Eyed Boy
 
-    - Fire
-    Elemental
+    Madeline
+    Green - Fire Elemental
 
     Remy Fisher - Shifty Peddler
 
-    Milo Fisher - Suspicious Horse
+    Milo Fisher - Suspicious
+    Horse
 
-    Ethan
-    Erh - Veteran Hunter'
+    Ethan Erh - Veteran Hunter'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
   m_sharedMaterial: {fileID: -3865223766179326254, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
@@ -2059,7 +2059,7 @@ MonoBehaviour:
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 184549375
+    rgba: 67108863
   m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
@@ -2414,7 +2414,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -440, y: 0}
+  m_AnchoredPosition: {x: -440, y: 255}
   m_SizeDelta: {x: -960, y: -1030}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2120670642
@@ -2473,8 +2473,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 54
-  m_fontSizeBase: 54
+  m_fontSize: 64
+  m_fontSizeBase: 64
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
