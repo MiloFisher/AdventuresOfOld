@@ -89,7 +89,7 @@ public class TransitionStartOfCombat : MonoBehaviour
         }
 
         // Next fade in number + player list
-        for (int x = 0; x < CombatManager.Instance.turnOrderCombatantList.Count; x++)
+        for (int x = 0; x < CombatManager.Instance.turnOrderCombatantList.Count && x < playerList.Length; x++)
         {
             JLAudioManager.Instance.PlayOneShotSound("ClickSound");
             playerList[x].text = "<color=" + CombatManager.Instance.turnOrderCombatantList[x].GetColor() + ">" + CombatManager.Instance.turnOrderCombatantList[x].GetName() + "</color>";
@@ -156,7 +156,7 @@ public class TransitionStartOfCombat : MonoBehaviour
         SetAlpha(divider, 0);
         SetAlpha(dividerUnderlay, 0);
         SetAlpha(turnOrderPrompt, 0);
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < numberList.Length; i++)
         {
             SetAlpha(numberList[i], 0);
             SetAlpha(playerList[i], 0);
