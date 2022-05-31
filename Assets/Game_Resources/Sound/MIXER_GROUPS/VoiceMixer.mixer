@@ -63,6 +63,25 @@ AudioMixerEffectController:
   m_SendTarget: {fileID: 0}
   m_EnableWetMix: 0
   m_Bypass: 0
+--- !u!243 &-8079461841049518193
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: StateVO
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: 4c5f8dbef2bd985438d308f898a4687d
+  m_Children: []
+  m_Volume: 81f5d9ccb8ffc3348b17d996d1f3587d
+  m_Pitch: 2453fda5c3dcd2d4faa79334e38bce90
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -4081419253306029311}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
 --- !u!243 &-7502533423361790704
 AudioMixerGroupController:
   m_ObjectHideFlags: 0
@@ -267,6 +286,7 @@ AudioMixerGroupController:
   m_GroupID: 3cbd4ee4d1d3abe4eb247dbdd86ed5ef
   m_Children:
   - {fileID: -689994064969802828}
+  - {fileID: -8079461841049518193}
   m_Volume: 9c6254e5d62820b46b255799c552af85
   m_Pitch: f61c10a9f44a7cf459cef759297f81d5
   m_Send: 00000000000000000000000000000000
@@ -276,6 +296,20 @@ AudioMixerGroupController:
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0
+--- !u!244 &-4081419253306029311
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 9633d29b0e7907c4bbcb7b14908a38b8
+  m_EffectName: Attenuation
+  m_MixLevel: 610cfdb39c735134dad47760863e8f0f
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!244 &-3834100701549646083
 AudioMixerEffectController:
   m_ObjectHideFlags: 3
@@ -559,6 +593,7 @@ AudioMixerController:
     - 1d5359385280088478c865e1f00ce6ed
     - bf80d272827bce0428aaf530f0048b40
     - 22eaa6ac79addc6428bb1085c3d60245
+    - 4c5f8dbef2bd985438d308f898a4687d
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -652,6 +687,7 @@ AudioMixerSnapshotController:
     8defc91c78f7fa44482a8f19188f821b: -10000
     9d89e39c3c36ba34591e7bdc87faa2e8: 4
     e09602ac12843ac4b8137621f88a8847: 5
+    81f5d9ccb8ffc3348b17d996d1f3587d: -9
     c5c21a2d508db8a4288a036e0fc19081: 239
     3a990e2d68672d64596e74b4829ac7ba: 3252
     c469187d6f1369244aeedf14e1f5d685: -4
