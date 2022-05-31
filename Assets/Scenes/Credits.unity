@@ -1588,8 +1588,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   m_text: "<u>Voice Credits</u>\nNathan Altice - Main Narrator\nJustin Lao - Secondary
-    Narrator\nC. Conrad Cady - Crazed Hermit, Pablo the Noob, \nGoblin Prince\n-
-    Distressed Villager\n"
+    Narrator\nC. Conrad Cady - Crazed Hermit, Pablo the Noob, \nGoblin Prince\nAlexandra
+    Janarilla - Distressed Villager\n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
   m_sharedMaterial: {fileID: -3865223766179326254, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
@@ -2048,9 +2048,7 @@ MonoBehaviour:
     Remy Fisher - Shifty Peddler
 
     Milo Fisher - Suspicious
-    Horse
-
-    Ethan Erh - Veteran Hunter'
+    Horse, Veteran Hunter'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
   m_sharedMaterial: {fileID: -3865223766179326254, guid: 913f09d57cf6ab840b1351c6c6a61a54, type: 2}
