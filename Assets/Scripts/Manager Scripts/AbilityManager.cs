@@ -33,7 +33,7 @@ public class AbilityManager : Singleton<AbilityManager>
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.A) && !abilityDisplay.GetComponent<UIAbilityDisplay>().animating)
+        if(Input.GetKeyDown(KeyCode.A) && !abilityDisplay.GetComponent<UIAbilityDisplay>().animating && !TextChatManager.Instance.IsActive())
         {
             if (abilityDisplay.GetComponent<UIAbilityDisplay>().opened)
                 abilityDisplay.GetComponent<UIAbilityDisplay>().Close();

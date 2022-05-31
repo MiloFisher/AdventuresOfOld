@@ -2408,6 +2408,37 @@ namespace AdventuresOfOldMultiplayer
                 }
             }
         }
+
+        public void SendMessage(string message, string recipient = "all")
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (Player p in PlayManager.Instance.playerList)
+                {
+                    if(recipient == "all" || recipient == p.UUID.Value)
+                        p.SendMessageClientRPC(message);
+                }
+            }
+            else
+                SendMessageServerRPC(message, recipient);
+        }
+        [ServerRpc(RequireOwnership = false)]
+        private void SendMessageServerRPC(FixedString512Bytes message, FixedString64Bytes recipient, ServerRpcParams rpcParams = default)
+        {
+            foreach (Player p in PlayManager.Instance.playerList)
+            {
+                if (recipient == "all" || recipient == p.UUID.Value)
+                    p.SendMessageClientRPC(message);
+            }
+        }
+        [ClientRpc]
+        public void SendMessageClientRPC(FixedString512Bytes message, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                TextChatManager.Instance.SendMessage(message + "");
+            }
+        }
         #endregion
     }
 }
