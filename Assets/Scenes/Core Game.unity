@@ -16643,6 +16643,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: b046fd5f5610b2c4584be89fd4083f3a, type: 3}
   - {fileID: 21300000, guid: 68e75b06b26cf7b49b45f625b210697c, type: 3}
   - {fileID: 21300000, guid: 9d053e65da35945cf97862ac11a50291, type: 3}
+  - {fileID: 21300000, guid: e568224ae953745edb9d8b2a4c28cdb8, type: 3}
   loadingScreen: {fileID: 1366110076}
   questDisplay: {fileID: 411482570}
   playerColors:
@@ -97473,16 +97474,16 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 865f2cf6b866a8d46b71b3e26fb4089a, type: 3}
   - {fileID: 0}
   npcImages:
-  - {fileID: 21300000, guid: 8d787ae034abb45ab812c8bf80a70656, type: 3}
-  - {fileID: 21300000, guid: 8298af715d9974793902f854a444eae6, type: 3}
-  - {fileID: 21300000, guid: ef95820ccb87e47cfac21c299e524e77, type: 3}
-  - {fileID: 21300000, guid: 16c6d63aa6ff7464f8f4228cfdcf606a, type: 3}
-  - {fileID: 21300000, guid: 07d50ef53a150423882f3e2f37c6eede, type: 3}
-  - {fileID: 21300000, guid: 3251322904cfd42a3b3c185eb9a20259, type: 3}
-  - {fileID: 21300000, guid: a7548b1ebce9e42e992c8bca1999ce1c, type: 3}
-  - {fileID: 21300000, guid: 30bb9051ce2444597bab3a814fb31739, type: 3}
-  - {fileID: 21300000, guid: 4580b39f1067f4e4da02a98d9ab01109, type: 3}
-  - {fileID: 21300000, guid: 8c1634ebf13f741759f114e2d926317e, type: 3}
+  - {fileID: 21300000, guid: 923eb8564fc6d43b2af750bc8a5bf8a6, type: 3}
+  - {fileID: 21300000, guid: 02e6765ca42194dc38d76524fafb2f4d, type: 3}
+  - {fileID: 21300000, guid: ffa62a8af5d3d4d87a9b607d45a3defc, type: 3}
+  - {fileID: 21300000, guid: acb9fac25f66c4a1a84f654c5f8d9734, type: 3}
+  - {fileID: 21300000, guid: 57c7063381af64c659ce44b927bf3c52, type: 3}
+  - {fileID: 21300000, guid: 26db2fb117d474ac1ae5308ff6a4cd9b, type: 3}
+  - {fileID: 21300000, guid: 92be11fda9ed041d89ddbfc837988536, type: 3}
+  - {fileID: 21300000, guid: 8ec577c28cc3047839c0526aaa2800c5, type: 3}
+  - {fileID: 21300000, guid: 7352dcccc253b42f2b5cdaf63e2d9ecc, type: 3}
+  - {fileID: 21300000, guid: d9fe1d97e9fff4eea90d5210bf4938f9, type: 3}
   speakerText: {fileID: 891764180}
   dialogueText: {fileID: 935360665}
   continueButton: {fileID: 1864285221}

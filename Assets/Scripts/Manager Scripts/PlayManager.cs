@@ -3495,7 +3495,9 @@ public class PlayManager : Singleton<PlayManager>
 
     public void EasterEggCheck(Player p)
     {
-        if(ComputeSha256Hash(p.Name.Value + "") == "c2f81653c077bd8f56aa6eb34d92646ae5c1c4a2b0f7b42ae59f3e3fe022ba07" && p.Race.Value == "Human" && p.Class.Value == "Paladin" && p.Trait.Value == "Holy")
+        //Debug.Log(p.Name.Value);
+        //Debug.Log(ComputeSha256Hash(p.Name.Value + ""));
+        if (ComputeSha256Hash(p.Name.Value + "") == "c2f81653c077bd8f56aa6eb34d92646ae5c1c4a2b0f7b42ae59f3e3fe022ba07" && p.Race.Value == "Human" && p.Class.Value == "Paladin" && p.Trait.Value == "Holy")
         {
             p.SetValue("Name", "Tychdrion");
             p.SetValue("Image", "ee2");
@@ -3516,6 +3518,11 @@ public class PlayManager : Singleton<PlayManager>
             p.SetValue("Constitution", 20);
             p.SetValue("Energy", 20);
             p.SetValue("LevelUpPoints", 0);
+        }
+        if (ComputeSha256Hash(p.Name.Value + "") == "43b443c3317b3448f6c50ed3b9e74212419589c7ab1154492e3a716b17a69a1e" && p.Race.Value == "Centaur")
+        {
+            p.SetValue("Name", "Suspicious Horse");
+            p.SetValue("Image", "ee3");
         }
     }
 
