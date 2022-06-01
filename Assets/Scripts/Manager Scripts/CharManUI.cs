@@ -60,7 +60,7 @@ public class CharManUI : MonoBehaviour
     public GameObject trait_confirm_button;
     public TMP_InputField inputname;
     public GameObject error_text;
-    public GameObject end_fade;
+    public GameObject trait_container;
     public bool gamestart = false;
 
 
@@ -246,6 +246,7 @@ public class CharManUI : MonoBehaviour
 
     public void ViewedTraits() {
         SceneHeader.GetComponent<TextMeshProUGUI>().SetText("Trait Selection");
+        trait_container.GetComponent<RectTransform>().localPosition = new Vector2(0,-273);
     }
 
     public void PreviewAbility(int abilitynum) {
