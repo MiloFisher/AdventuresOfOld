@@ -676,6 +676,7 @@ namespace AdventuresOfOldMultiplayer
             if (NetworkManager.Singleton.IsServer)
             {
                 XP.Value += total;
+                GainXPNotificationClientRPC(total);
                 LevelUpCheckClientRPC(XP.Value);
             }
             else
@@ -685,6 +686,7 @@ namespace AdventuresOfOldMultiplayer
         private void GainXPServerRPC(int total, ServerRpcParams rpcParams = default)
         {
             XP.Value += total;
+            GainXPNotificationClientRPC(total);
             LevelUpCheckClientRPC(XP.Value);
         }
         [ClientRpc]
@@ -699,6 +701,14 @@ namespace AdventuresOfOldMultiplayer
                     if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Highborn"), this))
                         GainGold(10);
                 }
+            }
+        }
+        [ClientRpc]
+        private void GainXPNotificationClientRPC(int amount, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                PassiveNotificationManager.Instance.AddNotification("<color=#A900DB>+" + amount + " XP</color>");
             }
         }
 
@@ -791,6 +801,7 @@ namespace AdventuresOfOldMultiplayer
 
                 foreach (Player p in PlayManager.Instance.playerList)
                     p.PlayDamageSoundClientRPC();
+                TakeDamageNotificationClientRPC(damage);
 
                 if (JusticarsVow.Value && Health.Value <= PlayManager.Instance.GetMaxHealth(this) * 0.5f)
                 {
@@ -825,6 +836,7 @@ namespace AdventuresOfOldMultiplayer
 
             foreach (Player p in PlayManager.Instance.playerList)
                 p.PlayDamageSoundClientRPC();
+            TakeDamageNotificationClientRPC(damage);
 
             if (JusticarsVow.Value && Health.Value <= PlayManager.Instance.GetMaxHealth(this) * 0.5f)
             {
@@ -846,6 +858,14 @@ namespace AdventuresOfOldMultiplayer
                         IronWillClientRPC();
                     }
                 }
+            }
+        }
+        [ClientRpc]
+        private void TakeDamageNotificationClientRPC(int amount, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                PassiveNotificationManager.Instance.AddNotification("<color=#FF0000>-" + amount + " Health</color>");
             }
         }
 
@@ -912,7 +932,10 @@ namespace AdventuresOfOldMultiplayer
         {
             if (IsOwner && !isBot)
             {
-                PassiveNotificationManager.Instance.AddNotification("<color=#00DCFF>+" + amount + " Ability Charge" + (amount == 1 ? "" : "s") + "</color>");
+                if(amount >= 999)
+                    PassiveNotificationManager.Instance.AddNotification("<color=#00DCFF>+Max Ability Charges</color>");
+                else
+                    PassiveNotificationManager.Instance.AddNotification("<color=#00DCFF>+" + amount + " Ability Charge" + (amount == 1 ? "" : "s") + "</color>");
             }
         }
 
@@ -944,6 +967,7 @@ namespace AdventuresOfOldMultiplayer
                 {
                     foreach (Player p in PlayManager.Instance.playerList)
                         p.PlayHealSoundClientRPC();
+                    RestoreHealthNotificationClientRPC(amount);
                 }
             }
             else
@@ -959,6 +983,18 @@ namespace AdventuresOfOldMultiplayer
             {
                 foreach (Player p in PlayManager.Instance.playerList)
                     p.PlayHealSoundClientRPC();
+                RestoreHealthNotificationClientRPC(amount);
+            }
+        }
+        [ClientRpc]
+        private void RestoreHealthNotificationClientRPC(int amount, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                if (amount >= 999)
+                    PassiveNotificationManager.Instance.AddNotification("<color=#00FF1C>+Max Health</color>");
+                else
+                    PassiveNotificationManager.Instance.AddNotification("<color=#00FF1C>+" + amount + " Health</color>");
             }
         }
 
