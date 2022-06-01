@@ -43,9 +43,10 @@ public class PassiveNotificationManager : Singleton<PassiveNotificationManager>
         }
     }
 
-    public void AddNotification(string notification)
+    public void AddNotification(string notification, bool sendToTextChat = true)
     {
         notifications.Add(new PassiveNotification(notification, 3f));
-        TextChatManager.Instance.SendMessage("<color=#c8c8c8>[System]</color> " + notification);
+        if(sendToTextChat)
+            TextChatManager.Instance.SendMessage("<color=#c8c8c8>[System]</color> " + notification);
     }
 }

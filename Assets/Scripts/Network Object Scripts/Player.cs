@@ -2411,32 +2411,35 @@ namespace AdventuresOfOldMultiplayer
 
         public void SendMessage(string message, string recipient = "all")
         {
+            FixedString64Bytes uuid = UUID.Value;
             if (NetworkManager.Singleton.IsServer)
             {
                 foreach (Player p in PlayManager.Instance.playerList)
                 {
                     if(recipient == "all" || recipient == p.UUID.Value)
-                        p.SendMessageClientRPC(message);
+                        p.SendMessageClientRPC(message, uuid);
                 }
             }
             else
-                SendMessageServerRPC(message, recipient);
+                SendMessageServerRPC(message, recipient, uuid);
         }
         [ServerRpc(RequireOwnership = false)]
-        private void SendMessageServerRPC(FixedString512Bytes message, FixedString64Bytes recipient, ServerRpcParams rpcParams = default)
+        private void SendMessageServerRPC(FixedString512Bytes message, FixedString64Bytes recipient, FixedString512Bytes uuid, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
             {
                 if (recipient == "all" || recipient == p.UUID.Value)
-                    p.SendMessageClientRPC(message);
+                    p.SendMessageClientRPC(message, uuid);
             }
         }
         [ClientRpc]
-        public void SendMessageClientRPC(FixedString512Bytes message, ClientRpcParams clientRpcParams = default)
+        public void SendMessageClientRPC(FixedString512Bytes message, FixedString512Bytes uuid, ClientRpcParams clientRpcParams = default)
         {
             if (IsOwner && !isBot)
             {
                 TextChatManager.Instance.SendMessage(message + "");
+                if(UUID.Value != uuid && !TextChatManager.Instance.IsActive())
+                    PassiveNotificationManager.Instance.AddNotification("<color=#FCFF00>New Message!</color>", false);
             }
         }
         #endregion
