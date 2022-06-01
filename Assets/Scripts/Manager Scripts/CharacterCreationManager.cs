@@ -27,8 +27,8 @@ public class CharacterCreationManager : MonoBehaviour
         new Race("Centaur", new Stats(8,13,9,20,8,12), "", ""),
         new Race("Leonin", new Stats(12,12,6,18,10,12), "", ""),
         new Race("Aasimar", new Stats(11,8,11,18,8,14), "", ""),
-        //xd
-        new Race("Dragon Amongst Men", new Stats(99,99,99,99,99,99), "Do not refuse a toast just to drink a forfeit.", "Peerless")
+        //Admin class
+        //new Race("Dragon Amongst Men", new Stats(99,99,99,99,99,99), "Do not refuse a toast just to drink a forfeit.", "Peerless")
     };
 
 
