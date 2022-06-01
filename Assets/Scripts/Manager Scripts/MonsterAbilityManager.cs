@@ -444,6 +444,7 @@ public class MonsterAbilityManager : Singleton<MonsterAbilityManager>
 
     private void CorruptedTreeSpirit_Passive()
     {
+        CombatManager.Instance.fleeingPrevented = true;
         CombatManager.Instance.OnPlayerSpendAbilityCharge = (t) => {
             if (CombatManager.Instance.IsThisCombatantsTurn(t))
                 CombatManager.Instance.InflictEffect(t, new Effect("Weakened", 2, 3));
