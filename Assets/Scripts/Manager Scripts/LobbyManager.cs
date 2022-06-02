@@ -3,6 +3,7 @@ using UnityEngine;
 using TMPro;
 using Unity.Netcode;
 using System;
+using Unity.Collections;
 
 namespace AdventuresOfOldMultiplayer
 {
@@ -26,6 +27,8 @@ namespace AdventuresOfOldMultiplayer
 
         public int playersInLobby;
         public string lobbyType;
+        public SaveFile save;
+        public GameObject noSavedDataFoundMessage;
 
         private void Awake()
         {
@@ -49,18 +52,68 @@ namespace AdventuresOfOldMultiplayer
             }
             if (inLobby)
             {
-                int x = 0;
-                GameObject[] players = GetOrderedPlayers();
-                playersInLobby = players.Length;
-                foreach (GameObject player in players)
+                if (lobbyType == "New Game")
                 {
-                    if (x < 6)
+                    int x = 0;
+                    GameObject[] players = GetOrderedPlayers();
+                    playersInLobby = players.Length;
+                    foreach (GameObject player in players)
                     {
+                        if (x < 6)
+                        {
+                            if (x == 0)
+                            {
+                                playerList[x].text = "[Host] ";
+                            }
+                            else if (player.GetComponent<Player>().isBot)
+                            {
+                                playerList[x].text = "[Bot] ";
+                            }
+                            else
+                            {
+                                playerList[x].text = "[Client] ";
+                            }
+                            playerList[x].color = Color.black;
+                            playerList[x++].text += player.GetComponent<Player>().Username.Value + "";
+                        }
+
+                        if (x != 0 && x < 6)
+                        {
+                            removeButtonList[x - 1].SetActive(NetworkManager.Singleton.IsHost);
+                        }
+                    }
+
+                    for (; x < 6; x++)
+                    {
+                        playerList[x].text = "";
+                        if (x != 0)
+                            removeButtonList[x - 1].SetActive(false);
+                    }
+
+                    if (playersInLobby > 6 && NetworkManager.Singleton.IsHost)
+                    {
+                        for (int i = 6; i < playersInLobby; i++)
+                        {
+                            RemovePlayer(i);
+                        }
+                    }
+
+                    startGameButton.SetActive(playersInLobby >= 3 && NetworkManager.Singleton.IsHost);
+                    addBotButton.SetActive(playersInLobby < 6 && NetworkManager.Singleton.IsHost);
+                }
+                else if (lobbyType == "Load Game")
+                {
+                    int x = 0;
+                    GameObject[] players = GetOrderedPlayers();
+                    playersInLobby = players.Length;
+                    foreach (PlayerData p in save.playerList)
+                    {
+                        bool joined = PlayerJoined(p.UUID);
                         if (x == 0)
                         {
                             playerList[x].text = "[Host] ";
                         }
-                        else if(player.GetComponent<Player>().isBot)
+                        else if (p.isBot)
                         {
                             playerList[x].text = "[Bot] ";
                         }
@@ -68,38 +121,98 @@ namespace AdventuresOfOldMultiplayer
                         {
                             playerList[x].text = "[Client] ";
                         }
-                        playerList[x++].text += player.GetComponent<Player>().Username.Value + "";
+                        playerList[x].color = joined ? Color.black : Color.white;
+                        playerList[x].text += p.Username + "";
+
+                        if (x != 0)
+                        {
+                            removeButtonList[x - 1].SetActive(NetworkManager.Singleton.IsHost && joined);
+                        }
+                        x++;
                     }
 
-                    if (x != 0 && x < 6)
+                    for (; x < 6; x++)
                     {
-                        removeButtonList[x - 1].SetActive(NetworkManager.Singleton.IsHost);
+                        playerList[x].text = "";
+                        if (x != 0)
+                            removeButtonList[x - 1].SetActive(false);
                     }
-                }
 
-                for (; x < 6; x++)
-                {
-                    playerList[x].text = "";
-                    if(x != 0)
-                        removeButtonList[x-1].SetActive(false);
-                }
-
-                if (playersInLobby > 6)
-                {
-                    for(int i = 6; i < playersInLobby; i++)
+                    if (NetworkManager.Singleton.IsHost)
                     {
-                        RemovePlayer(i);
-                    }
-                }
+                        if(playersInLobby > 6)
+                        {
+                            for (int i = 6; i < playersInLobby; i++)
+                            {
+                                RemovePlayer(i);
+                            }
+                        }
 
-                startGameButton.SetActive(playersInLobby >= 3 && NetworkManager.Singleton.IsHost);
-                addBotButton.SetActive(playersInLobby < 6 && NetworkManager.Singleton.IsHost);
+                        for (int i = 0; i < players.Length; i++)
+                        {
+                            if(!PlayerIsInSave(players[i]))
+                            {
+                                RemovePlayer(i);
+                            }
+                        }
+                    }
+
+                    startGameButton.SetActive(playersInLobby == save.playerList.Count && NetworkManager.Singleton.IsHost);
+                    bool allAdded = true;
+                    foreach (PlayerData p in save.playerList)
+                    {
+                        if (p.isBot)
+                        {
+                            bool exists = false;
+                            foreach (GameObject g in players)
+                            {
+                                if (g.GetComponent<Player>().UUID.Value == p.UUID)
+                                    exists = true;
+                            }
+                            if (!exists)
+                                allAdded = false;
+                        }
+                    }
+                    addBotButton.SetActive(!allAdded && NetworkManager.Singleton.IsHost);
+                }
             }
+        }
+
+        public bool PlayerIsInSave(GameObject player)
+        {
+            for(int i = 0; i < save.playerList.Count; i++)
+            {
+                if (player.GetComponent<Player>().UUID.Value == save.playerList[i].UUID || player.GetComponent<Player>().isBot)
+                    return true;
+            }
+            return false;
+        }
+
+        public bool PlayerJoined(FixedString64Bytes UUID)
+        {
+            GameObject[] players = GetOrderedPlayers();
+            for(int i = 0; i < players.Length; i++)
+            {
+                if (players[i].GetComponent<Player>().UUID.Value == UUID)
+                    return true;
+            }
+            return false;
         }
 
         public void RemovePlayer(int id)
         {
             GameObject[] players = GetOrderedPlayers();
+            if (lobbyType == "Load Game")
+            {
+                for(int i = 0; i < players.Length; i++)
+                {
+                    if(players[i].GetComponent<Player>().UUID.Value == save.playerList[id].UUID)
+                    {
+                        id = i;
+                        break;
+                    }
+                }
+            }
             // If Bot
             if(players[id].GetComponent<Player>().IsOwnedByServer)
             {
@@ -115,12 +228,60 @@ namespace AdventuresOfOldMultiplayer
         public void AddBot()
         {
             if(playersInLobby < 6)
-                Instantiate(botPlayerPrefab, Vector3.zero, Quaternion.identity).GetComponent<NetworkObject>().Spawn();
+            {
+                if(lobbyType == "New Game")
+                    Instantiate(botPlayerPrefab, Vector3.zero, Quaternion.identity).GetComponent<NetworkObject>().Spawn();
+                else if(lobbyType == "Load Game")
+                {
+                    GameObject[] players = GetOrderedPlayers();
+                    bool added = false;
+                    foreach(PlayerData p in save.playerList)
+                    {
+                        if(p.isBot && !added)
+                        {
+                            bool exists = false;
+                            foreach(GameObject g in players)
+                            {
+                                if (g.GetComponent<Player>().UUID.Value == p.UUID)
+                                    exists = true;
+                            }
+                            if(!exists)
+                            {
+                                GameObject bot = Instantiate(botPlayerPrefab, Vector3.zero, Quaternion.identity);
+                                bot.GetComponent<NetworkObject>().Spawn();
+                                bot.GetComponent<Player>().SetValue("Username", p.Username + "");
+                                bot.GetComponent<Player>().SetValue("UUID", p.UUID + "");
+                                added = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        IEnumerator ShowNoSavedDataMessage()
+        {
+            noSavedDataFoundMessage.SetActive(true);
+            yield return new WaitForSeconds(2);
+            noSavedDataFoundMessage.SetActive(false);
         }
 
         public async void HostLobby(string _lobbyType)
         {
             lobbyType = _lobbyType; // "New Game" or "Load Game"
+
+            if(lobbyType == "Load Game")
+            {
+                DataManager d = new DataManager();
+                save = d.GetSaveFile("GameData");
+
+                if (save == default)
+                {
+                    if (!noSavedDataFoundMessage.activeInHierarchy)
+                        StartCoroutine(ShowNoSavedDataMessage());
+                    return;
+                }
+            }
 
             hostingInProgress.SetActive(true);
 

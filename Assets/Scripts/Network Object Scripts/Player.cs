@@ -150,6 +150,8 @@ namespace AdventuresOfOldMultiplayer
         {
             switch (valueName + "")
             {
+                case "Username": Username.Value = value; break;
+                case "UUID": UUID.Value = value; break;
                 case "Image": Image.Value = value; break;
                 case "Name": Name.Value = value; break;
                 case "Race": Race.Value = value; break;
@@ -403,6 +405,7 @@ namespace AdventuresOfOldMultiplayer
         {
             if (NetworkManager.Singleton.IsServer)
             {
+                PlayManager.Instance.SaveGame();
                 PlayManager.Instance.turnOrderPlayerList[turnMarker].StartTurnClientRPC();
             }
             else
@@ -411,7 +414,8 @@ namespace AdventuresOfOldMultiplayer
         [ServerRpc(RequireOwnership = false)]
         private void StartNextPlayerTurnServerRPC(int turnMarker, ServerRpcParams rpcParams = default)
         {
-            PlayManager.Instance.turnOrderPlayerList[turnMarker].StartTurnClientRPC();
+            PlayManager.Instance.SaveGame();
+            PlayManager.Instance.turnOrderPlayerList[turnMarker].StartTurnClientRPC(); 
         }
 
         [ClientRpc]
@@ -448,6 +452,7 @@ namespace AdventuresOfOldMultiplayer
         {
             if (NetworkManager.Singleton.IsServer)
             {
+                PlayManager.Instance.SaveGame();
                 foreach (Player p in PlayManager.Instance.playerList)
                 {
                     if (p.isBot)
@@ -462,6 +467,7 @@ namespace AdventuresOfOldMultiplayer
         [ServerRpc(RequireOwnership = false)]
         private void EndDayForPlayersServerRPC(ServerRpcParams rpcParams = default)
         {
+            PlayManager.Instance.SaveGame();
             foreach (Player p in PlayManager.Instance.playerList)
             {
                 if (p.isBot)
@@ -676,6 +682,7 @@ namespace AdventuresOfOldMultiplayer
             if (NetworkManager.Singleton.IsServer)
             {
                 XP.Value += total;
+                GainXPNotificationClientRPC(total);
                 LevelUpCheckClientRPC(XP.Value);
             }
             else
@@ -685,6 +692,7 @@ namespace AdventuresOfOldMultiplayer
         private void GainXPServerRPC(int total, ServerRpcParams rpcParams = default)
         {
             XP.Value += total;
+            GainXPNotificationClientRPC(total);
             LevelUpCheckClientRPC(XP.Value);
         }
         [ClientRpc]
@@ -699,6 +707,14 @@ namespace AdventuresOfOldMultiplayer
                     if (AbilityManager.Instance.HasAbilityUnlocked(AbilityManager.Instance.GetSkill("Highborn"), this))
                         GainGold(10);
                 }
+            }
+        }
+        [ClientRpc]
+        private void GainXPNotificationClientRPC(int amount, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                PassiveNotificationManager.Instance.AddNotification("<color=#A900DB>+" + amount + " XP</color>");
             }
         }
 
@@ -791,6 +807,7 @@ namespace AdventuresOfOldMultiplayer
 
                 foreach (Player p in PlayManager.Instance.playerList)
                     p.PlayDamageSoundClientRPC();
+                TakeDamageNotificationClientRPC(damage);
 
                 if (JusticarsVow.Value && Health.Value <= PlayManager.Instance.GetMaxHealth(this) * 0.5f)
                 {
@@ -825,6 +842,7 @@ namespace AdventuresOfOldMultiplayer
 
             foreach (Player p in PlayManager.Instance.playerList)
                 p.PlayDamageSoundClientRPC();
+            TakeDamageNotificationClientRPC(damage);
 
             if (JusticarsVow.Value && Health.Value <= PlayManager.Instance.GetMaxHealth(this) * 0.5f)
             {
@@ -846,6 +864,14 @@ namespace AdventuresOfOldMultiplayer
                         IronWillClientRPC();
                     }
                 }
+            }
+        }
+        [ClientRpc]
+        private void TakeDamageNotificationClientRPC(int amount, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                PassiveNotificationManager.Instance.AddNotification("<color=#FF0000>-" + amount + " Health</color>");
             }
         }
 
@@ -912,7 +938,10 @@ namespace AdventuresOfOldMultiplayer
         {
             if (IsOwner && !isBot)
             {
-                PassiveNotificationManager.Instance.AddNotification("<color=#00DCFF>+" + amount + " Ability Charge" + (amount == 1 ? "" : "s") + "</color>");
+                if(amount >= 999)
+                    PassiveNotificationManager.Instance.AddNotification("<color=#00DCFF>+Max Ability Charges</color>");
+                else
+                    PassiveNotificationManager.Instance.AddNotification("<color=#00DCFF>+" + amount + " Ability Charge" + (amount == 1 ? "" : "s") + "</color>");
             }
         }
 
@@ -944,6 +973,7 @@ namespace AdventuresOfOldMultiplayer
                 {
                     foreach (Player p in PlayManager.Instance.playerList)
                         p.PlayHealSoundClientRPC();
+                    RestoreHealthNotificationClientRPC(amount);
                 }
             }
             else
@@ -959,6 +989,18 @@ namespace AdventuresOfOldMultiplayer
             {
                 foreach (Player p in PlayManager.Instance.playerList)
                     p.PlayHealSoundClientRPC();
+                RestoreHealthNotificationClientRPC(amount);
+            }
+        }
+        [ClientRpc]
+        private void RestoreHealthNotificationClientRPC(int amount, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                if (amount >= 999)
+                    PassiveNotificationManager.Instance.AddNotification("<color=#00FF1C>+Max Health</color>");
+                else
+                    PassiveNotificationManager.Instance.AddNotification("<color=#00FF1C>+" + amount + " Health</color>");
             }
         }
 
@@ -2411,32 +2453,35 @@ namespace AdventuresOfOldMultiplayer
 
         public void SendMessage(string message, string recipient = "all")
         {
+            FixedString64Bytes uuid = UUID.Value;
             if (NetworkManager.Singleton.IsServer)
             {
                 foreach (Player p in PlayManager.Instance.playerList)
                 {
                     if(recipient == "all" || recipient == p.UUID.Value)
-                        p.SendMessageClientRPC(message);
+                        p.SendMessageClientRPC(message, uuid);
                 }
             }
             else
-                SendMessageServerRPC(message, recipient);
+                SendMessageServerRPC(message, recipient, uuid);
         }
         [ServerRpc(RequireOwnership = false)]
-        private void SendMessageServerRPC(FixedString512Bytes message, FixedString64Bytes recipient, ServerRpcParams rpcParams = default)
+        private void SendMessageServerRPC(FixedString512Bytes message, FixedString64Bytes recipient, FixedString512Bytes uuid, ServerRpcParams rpcParams = default)
         {
             foreach (Player p in PlayManager.Instance.playerList)
             {
                 if (recipient == "all" || recipient == p.UUID.Value)
-                    p.SendMessageClientRPC(message);
+                    p.SendMessageClientRPC(message, uuid);
             }
         }
         [ClientRpc]
-        public void SendMessageClientRPC(FixedString512Bytes message, ClientRpcParams clientRpcParams = default)
+        public void SendMessageClientRPC(FixedString512Bytes message, FixedString512Bytes uuid, ClientRpcParams clientRpcParams = default)
         {
             if (IsOwner && !isBot)
             {
                 TextChatManager.Instance.SendMessage(message + "");
+                if(UUID.Value != uuid && !TextChatManager.Instance.IsActive())
+                    PassiveNotificationManager.Instance.AddNotification("<color=#FCFF00>New Message!</color>", false);
             }
         }
         #endregion

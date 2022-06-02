@@ -28,6 +28,10 @@ public class TextChatManager : Singleton<TextChatManager>
                 {
                     StartCoroutine(CloseAfterFrame());
                 }
+                if (Input.GetKeyDown(KeyCode.T) && !textInput.isFocused)
+                {
+                    SetTextChatActive(false);
+                }
             }
             else
             {
