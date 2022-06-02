@@ -7,6 +7,13 @@ using Unity.Collections;
 
 public class DataManager
 {
+    public void DeleteSaveFile(string filename)
+    {
+        if (!File.Exists(Application.persistentDataPath + "/" + filename))
+            return;
+        File.Delete(Application.persistentDataPath + "/" + filename);
+    }
+
     public SaveFile GetSaveFile(string filename, bool includeGameData = false)
     {
         if (!File.Exists(Application.persistentDataPath + "/" + filename))

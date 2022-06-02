@@ -245,7 +245,12 @@ public class PlayManager : Singleton<PlayManager>
     {
         // Lose = 0
         // Win = 1
-        if(state == 0)
+
+        // Delete game save on game over
+        DataManager d = new DataManager();
+        d.DeleteSaveFile("GameData");
+
+        if (state == 0)
         {
             localPlayer.ChangeScene("JLFailureMenu");
         }
