@@ -150,6 +150,8 @@ namespace AdventuresOfOldMultiplayer
         {
             switch (valueName + "")
             {
+                case "Username": Username.Value = value; break;
+                case "UUID": UUID.Value = value; break;
                 case "Image": Image.Value = value; break;
                 case "Name": Name.Value = value; break;
                 case "Race": Race.Value = value; break;
@@ -403,6 +405,7 @@ namespace AdventuresOfOldMultiplayer
         {
             if (NetworkManager.Singleton.IsServer)
             {
+                PlayManager.Instance.SaveGame();
                 PlayManager.Instance.turnOrderPlayerList[turnMarker].StartTurnClientRPC();
             }
             else
@@ -411,7 +414,8 @@ namespace AdventuresOfOldMultiplayer
         [ServerRpc(RequireOwnership = false)]
         private void StartNextPlayerTurnServerRPC(int turnMarker, ServerRpcParams rpcParams = default)
         {
-            PlayManager.Instance.turnOrderPlayerList[turnMarker].StartTurnClientRPC();
+            PlayManager.Instance.SaveGame();
+            PlayManager.Instance.turnOrderPlayerList[turnMarker].StartTurnClientRPC(); 
         }
 
         [ClientRpc]
@@ -448,6 +452,7 @@ namespace AdventuresOfOldMultiplayer
         {
             if (NetworkManager.Singleton.IsServer)
             {
+                PlayManager.Instance.SaveGame();
                 foreach (Player p in PlayManager.Instance.playerList)
                 {
                     if (p.isBot)
@@ -462,6 +467,7 @@ namespace AdventuresOfOldMultiplayer
         [ServerRpc(RequireOwnership = false)]
         private void EndDayForPlayersServerRPC(ServerRpcParams rpcParams = default)
         {
+            PlayManager.Instance.SaveGame();
             foreach (Player p in PlayManager.Instance.playerList)
             {
                 if (p.isBot)

@@ -28,7 +28,7 @@ public class PlayManager : Singleton<PlayManager>
     [SerializeField] private List<QuestCard> questDeck;
     public List<QuestCard> quests = new List<QuestCard>();
 
-    [SerializeField] private List<MonsterCard> chapterBossDeck;
+    [SerializeField] public List<MonsterCard> chapterBossDeck;
     public MonsterCard chapterBoss;
 
     [SerializeField] private MonsterCard[] miniBossObjects;
@@ -211,7 +211,7 @@ public class PlayManager : Singleton<PlayManager>
         if (PlayerPrefs.GetString("gameType") == "New Game")
             StartCoroutine(NewGameSetup());
         else
-            LoadGameSetup();
+            StartCoroutine(LoadGameSetup());
     }
 
     private void Update()
@@ -370,7 +370,6 @@ public class PlayManager : Singleton<PlayManager>
         // 6) Miniboss and minion decks already set up
 
         // Give each player a color (host only)
-        //string[] colorList = { "red", "blue", "green", "yellow", "purple", "orange" };
         for (int i = 0; i < playerList.Count; i++)
         {
             playerList[i].SetValue("Color", i);
@@ -385,9 +384,145 @@ public class PlayManager : Singleton<PlayManager>
         StartOfDay();
     }
 
-    private void LoadGameSetup()
+    IEnumerator LoadGameSetup()
     {
+        DataManager d = new DataManager();
+        SaveFile s = d.GetSaveFile("GameData", true);
 
+        // Load playerList
+        List<Player> copy = new List<Player>(playerList);
+        playerList.Clear();
+        foreach(PlayerData p in s.playerList)
+        {
+            Player player = copy.Find((a) => a.UUID.Value == p.UUID);
+            player.SetValue("Image", p.Image + "");
+            player.SetValue("Name", p.Name + "");
+            player.SetValue("Race", p.Race + "");
+            player.SetValue("Class", p.Class + "");
+            player.SetValue("Trait", p.Trait + "");
+            player.SetValue("Gold", p.Gold);
+            player.SetValue("Level", p.Level);
+            player.SetValue("XP", p.XP);
+            player.SetValue("Strength", p.Strength);
+            player.SetValue("Dexterity", p.Dexterity);
+            player.SetValue("Intelligence", p.Intelligence);
+            player.SetValue("Speed", p.Speed);
+            player.SetValue("Constitution", p.Constitution);
+            player.SetValue("Energy", p.Energy);
+            player.SetValue("Health", p.Health);
+            player.SetValue("AbilityCharges", p.AbilityCharges);
+            player.SetValue("Armor", p.Armor + "");
+            player.SetValue("Weapon", p.Weapon + "");
+            player.SetValue("Ring1", p.Ring1 + "");
+            player.SetValue("Ring2", p.Ring2 + "");
+            player.SetValue("Inventory1", p.Inventory1 + "");
+            player.SetValue("Inventory2", p.Inventory2 + "");
+            player.SetValue("Inventory3", p.Inventory3 + "");
+            player.SetValue("Inventory4", p.Inventory4 + "");
+            player.SetValue("Inventory5", p.Inventory5 + "");
+            player.SetValue("LevelUpPoints", p.LevelUpPoints);
+            player.SetValue("FailedEncounters", p.FailedEncounters);
+            player.SetPosition(p.Position);
+            //player.SetValue("TurnPhase", p.TurnPhase);
+            player.SetValue("Color", p.Color);
+            //player.SetValue("Ready", p.Ready);
+            player.ReadyUp();
+            player.SetValue("EndOfDayActivity", p.EndOfDayActivity);
+            player.SetValue("ParticipatingInCombat", p.ParticipatingInCombat);
+            player.SetValue("HasBathWater", p.HasBathWater);
+            player.SetValue("BetrayedBoy", p.BetrayedBoy);
+            player.SetValue("GrabbedHorse", p.GrabbedHorse);
+            player.SetValue("KilledGoblin", p.KilledGoblin);
+            player.SetValue("RequestedTaunt", p.RequestedTaunt);
+            player.SetValue("IronWill", p.IronWill);
+            player.SetValue("HasYetToAttack", p.HasYetToAttack);
+            player.SetValue("JusticarsVow", p.JusticarsVow);
+            player.SetValue("SuccessfullyAttackedMonster", p.SuccessfullyAttackedMonster);
+
+            playerList.Add(player);
+        }
+
+        // Load turn order playerlist
+        turnOrderPlayerList = new List<Player>();
+        foreach (PlayerData p in s.playerList)
+        {
+            turnOrderPlayerList.Add(playerList.Find((a) => a.UUID.Value == p.UUID));
+        }
+
+        // Load quests
+        quests = s.quests;
+        localPlayer.UpdateQuests(quests);
+
+        foreach (Player p in playerList)
+        {
+            // Load the Chaos Counter for (all players)
+            p.SetChaosCounterClientRPC(s.chaosCounter);
+
+            // Load Treasure Tokens for (all players)
+            for(int i = 0; i < s.treasureTiles.Count; i++)
+                p.EnableTreasureTokenClientRPC(s.treasureTiles[i]);
+        }
+
+        // Load chapter boss
+        localPlayer.SetBoss(s.chapterBoss.cardName);
+
+        // Load encounter deck
+        encounterDeck = s.encounterDeck;
+
+        // Load loot deck
+        lootDeck = s.lootDeck;
+
+        yield return new WaitUntil(() => {
+            bool allReady = true;
+            foreach (Player p in playerList)
+            {
+                if (!p.Ready.Value)
+                    allReady = false;
+            }
+            return allReady;
+        });
+
+        yield return new WaitForSeconds(1);
+
+        // Start background music
+        JLAudioManager.Instance.PlaySound("BackgroundMusic");
+
+        if(s.turnMarker == 0)
+        {
+            StartOfDay();
+        }
+        else
+        {
+            FixedString64Bytes[] arr = new FixedString64Bytes[turnOrderPlayerList.Count];
+            for (int i = 0; i < turnOrderPlayerList.Count; i++)
+            {
+                arr[i] = turnOrderPlayerList[i].UUID.Value;
+            }
+            foreach (Player p in playerList)
+            {
+                // Close loading screen for all players
+                p.CloseLoadingScreenClientRPC();
+                // Reset ready up on players
+                p.Unready();
+                // Setup and draw player pieces
+                p.SetupPlayerPiecesClientRPC();
+                //p.DrawPlayerPiecesClientRPC();
+                // Set turn order player list and turn marker
+                p.SetTurnOrderPlayerListClientRPC(arr);
+                p.SetTurnMarkerClientRPC(turnMarker);
+                // Setup and update character panels
+                p.SetupCharacterPanelsClientRPC();
+            }
+
+            if (s.turnMarker < s.playerList.Count)
+            {
+                turnOrderPlayerList[turnMarker].StartTurnClientRPC();
+            }
+            else
+            {
+                localPlayer.EndDayForPlayers();
+            }
+        }
     }
 
     public void SetBoss(string cardName)
@@ -443,6 +578,8 @@ public class PlayManager : Singleton<PlayManager>
             // Play transition for all players
             p.PlayTransitionClientRPC(0); // Transition 0 is Start of Day
         }
+
+        SaveGame();
 
         // Start turn of player who goes first
         turnOrderPlayerList[turnMarker].StartTurnClientRPC();
@@ -3475,6 +3612,51 @@ public class PlayManager : Singleton<PlayManager>
         return "#" + ColorUtility.ToHtmlStringRGB(playerColors[p.Color.Value]);
     }
     #endregion
+
+    public List<Vector3Int> GetTreasureTilePositions()
+    {
+        List<Vector3Int> tiles = new List<Vector3Int>();
+
+        Vector3Int test = new Vector3Int(3, 15, -18);
+        if (gameboard[test].TreasureTokenIsEnabled())
+            tiles.Add(test);
+        test = new Vector3Int(5, 9, -14);
+        if (gameboard[test].TreasureTokenIsEnabled())
+            tiles.Add(test);
+        test = new Vector3Int(3, 3, -6);
+        if (gameboard[test].TreasureTokenIsEnabled())
+            tiles.Add(test);
+        test = new Vector3Int(8, -4, -4);
+        if (gameboard[test].TreasureTokenIsEnabled())
+            tiles.Add(test);
+        test = new Vector3Int(7, 3, -10);
+        if (gameboard[test].TreasureTokenIsEnabled())
+            tiles.Add(test);
+        test = new Vector3Int(8, 6, -14);
+        if (gameboard[test].TreasureTokenIsEnabled())
+            tiles.Add(test);
+        test = new Vector3Int(16, 9, -25);
+        if (gameboard[test].TreasureTokenIsEnabled())
+            tiles.Add(test);
+        test = new Vector3Int(21, 0, -21);
+        if (gameboard[test].TreasureTokenIsEnabled())
+            tiles.Add(test);
+        test = new Vector3Int(15, -1, -14);
+        if (gameboard[test].TreasureTokenIsEnabled())
+            tiles.Add(test);
+        test = new Vector3Int(16, -8, -8);
+        if (gameboard[test].TreasureTokenIsEnabled())
+            tiles.Add(test);
+
+        return tiles;
+    }
+
+    public void SaveGame()
+    {
+        SaveFile s = new SaveFile("GameData", playerList, turnOrderPlayerList, GetTreasureTilePositions(), encounterDeck, lootDeck, quests, chapterBoss, chaosCounter, turnMarker);
+        DataManager d = new DataManager();
+        d.WriteSaveFile(s);
+    }
 
     public void DisconnectFromGame()
     {
