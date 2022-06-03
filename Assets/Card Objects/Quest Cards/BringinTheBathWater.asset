@@ -17,7 +17,7 @@ MonoBehaviour:
   questStep: 0
   objectiveNames:
   - Talk to the <i>Four-Eyed Boy</i>
-  - Go to the <i>Ancestral Spring</i>
+  - Go to the <i>Ancient Spring</i>
   - Talk to the <i>Four-Eyed Boy</i>
   objectiveXPRewards: 040000000400000004000000
   rewardGold: 150

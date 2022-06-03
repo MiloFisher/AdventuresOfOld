@@ -55,7 +55,7 @@ public class QuestManager : Singleton<QuestManager>
 
     public void SetChunk(int id)
     {
-        JLAudioManager.Instance.PlayOneShotSound("PageTurn");
+        JLAudioManager.Instance.PlayOneShotSound("DialogueChange");
         currentChunk = id;
         chunks[id]();
     }
@@ -65,7 +65,7 @@ public class QuestManager : Singleton<QuestManager>
         currentChunk++;
         if (currentChunk < chunks.Count)
         {
-            JLAudioManager.Instance.PlayOneShotSound("PageTurn");
+            JLAudioManager.Instance.PlayOneShotSound("DialogueChange");
             chunks[currentChunk]();
         }
         else
@@ -180,6 +180,30 @@ public class QuestManager : Singleton<QuestManager>
             case "Webbed Forest":
                 isLocation = true;
                 locationImage.sprite = locationImages[6];
+                break;
+            case "Discord Kitten":
+                isLocation = true;
+                locationImage.sprite = locationImages[7];
+                break;
+            case "Raging Discord Kitten":
+                isLocation = true;
+                locationImage.sprite = locationImages[8];
+                break;
+            case "Goblin Horde":
+                isLocation = true;
+                locationImage.sprite = locationImages[9];
+                break;
+            case "Rainbow Slime":
+                isLocation = true;
+                locationImage.sprite = locationImages[10];
+                break;
+            case "Spooky Spider":
+                isLocation = true;
+                locationImage.sprite = locationImages[11];
+                break;
+            case "Bandit Weeb Lord":
+                isLocation = true;
+                locationImage.sprite = locationImages[12];
                 break;
         }
         locationImage.gameObject.SetActive(isLocation);

@@ -45,28 +45,28 @@ public class JLAudioManager : Singleton<JLAudioManager>
             float mixerValue;
             bool result = masterMixer.GetFloat("MasterMixer", out mixerValue);
             if (result)
-                masterSlider.value = Mathf.Clamp(Mathf.Pow(10, mixerValue / 20), 0.0001f, 4f);
+                masterSlider.value = Mathf.Clamp(Mathf.Pow(10, PlayerPrefs.GetFloat("MasterMixer", mixerValue) / 20), 0.0001f, 4f);
         }
         if (musicSlider)
         {
             float mixerValue;
             bool result = musicMixer.GetFloat("MusicMasterMixer", out mixerValue);
             if (result)
-                musicSlider.value = Mathf.Clamp(Mathf.Pow(10, mixerValue / 20), 0.0001f, 4f);
+                musicSlider.value = Mathf.Clamp(Mathf.Pow(10, PlayerPrefs.GetFloat("MusicMasterMixer", mixerValue) / 20), 0.0001f, 4f);
         }
         if (effectsSlider)
         {
             float mixerValue;
             bool result = effectsMixer.GetFloat("EffectsMasterMixer", out mixerValue);
             if (result)
-                effectsSlider.value = Mathf.Clamp(Mathf.Pow(10, mixerValue / 20), 0.0001f, 4f);
+                effectsSlider.value = Mathf.Clamp(Mathf.Pow(10, PlayerPrefs.GetFloat("EffectsMasterMixer", mixerValue) / 20), 0.0001f, 4f);
         }
         if (voiceSlider)
         {
             float mixerValue;
             bool result = voiceMixer.GetFloat("VoiceMasterMixer", out mixerValue);
             if (result)
-                voiceSlider.value = Mathf.Clamp(Mathf.Pow(10, mixerValue / 20), 0.0001f, 4f);
+                voiceSlider.value = Mathf.Clamp(Mathf.Pow(10, PlayerPrefs.GetFloat("VoiceMasterMixer", mixerValue) / 20), 0.0001f, 4f);
         }
     }
 
@@ -131,19 +131,31 @@ public class JLAudioManager : Singleton<JLAudioManager>
         s.audioSource.pitch = pitch;
     }
 
-    public void SetMasterVolume(float sliderValue) {
-        masterMixer.SetFloat("MasterMixer", Mathf.Log10(sliderValue) * 20);
+    public void SetMasterVolume(float sliderValue)
+    {
+        float val = Mathf.Log10(sliderValue) * 20;
+        masterMixer.SetFloat("MasterMixer", val);
+        PlayerPrefs.SetFloat("MasterMixer", val);
     }
 
-    public void SetMusicVolume(float sliderValue) {
-        musicMixer.SetFloat("MusicMasterMixer", Mathf.Log10(sliderValue) * 20);
+    public void SetMusicVolume(float sliderValue)
+    {
+        float val = Mathf.Log10(sliderValue) * 20;
+        musicMixer.SetFloat("MusicMasterMixer", val);
+        PlayerPrefs.SetFloat("MusicMasterMixer", val);
     }
 
-    public void SetEffectsVolume(float sliderValue) {
-        effectsMixer.SetFloat("EffectsMasterMixer", Mathf.Log10(sliderValue) * 20);
+    public void SetEffectsVolume(float sliderValue)
+    {
+        float val = Mathf.Log10(sliderValue) * 20;
+        effectsMixer.SetFloat("EffectsMasterMixer", val);
+        PlayerPrefs.SetFloat("EffectsMasterMixer", val);
     }
 
-    public void SetVoiceVolume(float sliderValue) {
-        voiceMixer.SetFloat("VoiceMasterMixer", Mathf.Log10(sliderValue) * 20);
+    public void SetVoiceVolume(float sliderValue)
+    {
+        float val = Mathf.Log10(sliderValue) * 20;
+        voiceMixer.SetFloat("VoiceMasterMixer", val);
+        PlayerPrefs.SetFloat("VoiceMasterMixer", val);
     }
 }

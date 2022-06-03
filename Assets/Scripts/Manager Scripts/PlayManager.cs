@@ -154,6 +154,7 @@ public class PlayManager : Singleton<PlayManager>
         // Construct Quest Reference dictionary
         foreach (QuestCard q in questDeck)
         {
+            q.questStep = 0;
             questReference.Add(q.cardName, q);
         }
 
@@ -1350,8 +1351,8 @@ public class PlayManager : Singleton<PlayManager>
                 // Chunk 1 (Intro)
                 QuestManager.Instance.SetImage("Crazed Hermit");
                 QuestManager.Instance.SetSpeaker("Narrator");
-                QuestManager.Instance.SetDialogue("An old man is standing about, using a rickety cane to stand.  He’s covered in old, torn rags that are covered with dirt and grime.  Any area close to him seems to almost be dying as moves about, the grass turning gray and disappearing and the trees almost shaking with discomfort.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetDialogue("An old man is idling about, using a rickety cane to stand.  He’s covered in old, torn rags that are covered with dirt and grime.  Any area close to him seems to almost be dying as moves about, the grass turning gray and disappearing and the trees almost shaking with discomfort.");
+                QuestManager.Instance.PlayAudio("CrazedHermitIntro", 0.8f, 18.6f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -1359,7 +1360,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Crazed Hermit");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("The hermit runs up to you and starts loudly speaking,");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorAbandonedPath1", 1.6f, 4.6f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -1425,7 +1426,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Distressed Villager");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("A young woman is looking around frantically.  She is covered in dirt and seems to be wounded.  You see tears forming around her eyes and a look of desperation consumes her face.  You can tell something has terribly frightened this woman.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("DistressedVillagerIntro", 0.8f, 15f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -1433,7 +1434,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Distressed Villager");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("The young woman sees you approaching and rushes over to you.  She frantically cries,");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorGoblinHunt1", 1.2f, 6.5f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -1441,7 +1442,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Distressed Villager");
                 QuestManager.Instance.SetSpeaker("Distressed Villager");
                 QuestManager.Instance.SetDialogue("Please, you have to help me!  I saw an army of goblins making camp nearby!  They spotted me spying on them so I ran as fast as I could, but what if they track me down!  Please, adventurer, you have to kill them before they get to me!");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("DistressedVillagerGoblinHunt", 0f, 13.5f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
             }
         }, OnComplete);
@@ -1491,7 +1492,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Forest Hag");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("An old lady using a wooden stick to stand is beside her desolate shack.  Her skin is an odd shade of green, her nose is long and pimply, and the rags she uses as clothes are ridden with dirt and grime.  Her voice is coarse as she sings to herself while stirring her pot of... meat?");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("ForestHagIntro", 0.6f, 19.5f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -1499,7 +1500,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Forest Hag");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("The hag turns and calls out to you.  As you walk over, she cackles to herself and begins asking you for a favor,");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorDoubleRainbow1", 1.3f, 8.4f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -1507,7 +1508,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Forest Hag");
                 QuestManager.Instance.SetSpeaker("Forest Hag");
                 QuestManager.Instance.SetDialogue("One of my little pets escaped from my home, can you be a sweet little dear and capture it for me?  When you do find it, don’t forget to give it a good spanking for being... so so disobedient hehehe!  I won’t mind if you kill it either, I can always find new pets!");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("ForestHagDoubleRainbow", 0f, 25.5f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -1515,7 +1516,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Forest Hag");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("She points her wooden stick towards the Overgrown Temple, and suddenly a brick road the color of egg yolk appears.  The hag cackles again and exclaims to follow the road as she returns to stirring her pot of meat.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorDoubleRainbow2", 0.8f, 13.6f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
             }
         }, OnComplete);
@@ -1602,7 +1603,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Four-Eyed Boy");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("A small boy appears before you, his glasses are cracked and he talks to himself.  Something is off about this boy though, his body distorts and the image of himself seems to split.  It happens so quickly you question if it’s just your mind playing tricks...");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("FourEyedBoyIntro", 0.8f, 16.5f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -1610,7 +1611,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Four-Eyed Boy");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("The boy faces towards you, his eyes are filled with tears.  He asks if you’re here to finish him off.  You shake your head and he states,");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorIsekai7", 1.7f, 9.6f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -1618,7 +1619,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Four-Eyed Boy");
                 QuestManager.Instance.SetSpeaker("Four-Eyed Boy");
                 QuestManager.Instance.SetDialogue("I don’t even know why I’m here!  I was just sitting in my room talking to my discord kitten and suddenly I’m in this strange land!  I hope my little kitten is okay, I have to get back and tell her...");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("FourEyedBoyIsekai1", 0f, 10.925f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -1626,7 +1627,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Four-Eyed Boy");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("As he was about to finish his sentence, the sky turns dark and hovering in the clouds is a frightening smile and a pair of red eyes, it laughs as the  boy’s body begins to distort violently.  The boy screams for help but just as fast as it started, the boy’s body freezes and he looks at you.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorIsekai8", 1.2f, 18.8f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -1634,7 +1635,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Four-Eyed Boy");
                 QuestManager.Instance.SetSpeaker("Four-Eyed Boy");
                 QuestManager.Instance.SetDialogue("Wow you’re an adventurer aren’t you!  Back at the village I would tell everyone I was going to be an adventurer too!");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("FourEyedBoyIsekai2", 0f, 5.991f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -1642,7 +1643,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Four-Eyed Boy");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("He keeps talking, seemingly unaware of what happened moments ago.  You leave confused, but in the back of your mind the smile appears again and your hand forcibly checks your pockets, someone or something rewards you for completing your task.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorIsekai9", 1.2f, 17.6f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
             }
         }, OnComplete);
@@ -1673,7 +1674,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Four-Eyed Boy");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("A small boy appears before you, his glasses are cracked and he talks to himself.  Something is off about this boy though, his body distorts and the image of himself seems to split.  It happens so quickly you question if it’s just your mind playing tricks...");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("FourEyedBoyIntro", 0.8f, 16.5f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -1681,7 +1682,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Four-Eyed Boy");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("As you begin to approach the boy, his body distorts again and you hear him mumbling to himself,");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorBathwater1", 1.6f, 6.5f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -1689,7 +1690,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Four-Eyed Boy");
                 QuestManager.Instance.SetSpeaker("Four-Eyed Boy");
                 QuestManager.Instance.SetDialogue("It’s somewhere around here, where is it...  where is it!");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("FourEyedBoyBathwater1", 0f, 5.8f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -1697,7 +1698,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Four-Eyed Boy");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("Before you can get any closer the boy notices you and his eyes sparkle with opportunity,");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorBathwater2", 1.2f, 6f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -1705,7 +1706,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Four-Eyed Boy");
                 QuestManager.Instance.SetSpeaker("Four-Eyed Boy");
                 QuestManager.Instance.SetDialogue("Hey adventurer!  Could you help me out?  I heard there was a spring here with mystical forbidden waters, and if you drink it you will have the power of over 9000 men and no one will be able to resist you!  Doesn’t that sound great?");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("FourEyedBoyBathwater2", 0f, 13.66f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -1713,7 +1714,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Four-Eyed Boy");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("He shows you a poorly drawn map,");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorBathwater3", 1.4f, 3.3f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -1721,7 +1722,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Four-Eyed Boy");
                 QuestManager.Instance.SetSpeaker("Four-Eyed Boy");
                 QuestManager.Instance.SetDialogue("It’s somewhere around here, but I was never really good at reading, or fighting, or even walking.  Can you help me out?  I’ll reward you!");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("FourEyedBoyBathwater3", 0f, 10.55f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -1729,7 +1730,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Four-Eyed Boy");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("You agree and begin looking for the location on the map.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorBathwater4", 1.4f, 4.3f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
             }
         }, OnComplete);
@@ -1765,7 +1766,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Four-Eyed Boy");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("The boy notices you approaching almost immediately.  He shoots up from his sorry looking state, and seems incredibly excited, shaking with anticipation.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorBathwater10", 1.2f, 10f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -1773,15 +1774,15 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Four-Eyed Boy");
                 QuestManager.Instance.SetSpeaker("Four-Eyed Boy");
                 QuestManager.Instance.SetDialogue("D-did you get it?");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("FourEyedBoyBathwater4", 0f, 1.76f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
                 // Chunk 3
                 QuestManager.Instance.SetImage("Four-Eyed Boy");
                 QuestManager.Instance.SetSpeaker("Narrator");
-                QuestManager.Instance.SetDialogue("he asks.  You tell him that you got some special water from the spring.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetDialogue("You tell him that you got some special water from the spring.");
+                QuestManager.Instance.PlayAudio("NarratorBathwater11", 1.2f, 4.2f);
                 QuestManager.Instance.SetChoices(2, new string[2]{ "Give him \"Good Stuff\"", "Give him some water"}, new Action[2]{
                     () => {
                         // Gave him good stuff
@@ -1807,7 +1808,7 @@ public class PlayManager : Singleton<PlayManager>
                     QuestManager.Instance.SetImage("Four-Eyed Boy");
                     QuestManager.Instance.SetSpeaker("Narrator");
                     QuestManager.Instance.SetDialogue("You hand over the jar of water to the boy.  He inspects it, then removes the lid and inhales deeply.  The boy looks at you and says");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("NarratorBathwater14", 1.4f, 10.2f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
                 }
                 else
@@ -1815,7 +1816,7 @@ public class PlayManager : Singleton<PlayManager>
                     QuestManager.Instance.SetImage("Four-Eyed Boy");
                     QuestManager.Instance.SetSpeaker("Narrator");
                     QuestManager.Instance.SetDialogue("You hand the jar over to the boy and he squeals in excitement.  You begin to ask for your reward when all of a sudden, the boy opens the lid of the jar and begins chugging the water at an ungodly rate.");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("NarratorBathwater12", 1.2f, 12.5f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
                 }
             },
@@ -1826,7 +1827,7 @@ public class PlayManager : Singleton<PlayManager>
                     QuestManager.Instance.SetImage("Four-Eyed Boy");
                     QuestManager.Instance.SetSpeaker("Four-Eyed Boy");
                     QuestManager.Instance.SetDialogue("Something isn’t right, I don’t smell their wonderful scent.  Is this just regular spring water?");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("FourEyedBoyBathwater6", 0f, 12.1f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
                 }
                 else
@@ -1834,7 +1835,7 @@ public class PlayManager : Singleton<PlayManager>
                     QuestManager.Instance.SetImage("Four-Eyed Boy");
                     QuestManager.Instance.SetSpeaker("Narrator");
                     QuestManager.Instance.SetDialogue("You’re taken aback by the display, but you continue to ask about the reward.  Once he is done, he looks at you and grins,");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("NarratorBathwater12", 12.5f, 19.5f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
                 }
             },
@@ -1845,7 +1846,7 @@ public class PlayManager : Singleton<PlayManager>
                     QuestManager.Instance.SetImage("Four-Eyed Boy");
                     QuestManager.Instance.SetSpeaker("Narrator");
                     QuestManager.Instance.SetDialogue("You look at him quizzically.  Could this boy really smell the difference between spring water and spring water that an elemental had been in?  You tell the boy that this is the special water he ordered so he better pay up.");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("NarratorBathwater15", 1.3f, 13.2f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
                 }
                 else
@@ -1853,7 +1854,7 @@ public class PlayManager : Singleton<PlayManager>
                     QuestManager.Instance.SetImage("Four-Eyed Boy");
                     QuestManager.Instance.SetSpeaker("Four-Eyed Boy");
                     QuestManager.Instance.SetDialogue("I have the strength of over 9000 men and you think you have the power to make demands of me?!");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("FourEyedBoyBathwater5", 0f, 9.1f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
                 }
             },
@@ -1864,7 +1865,7 @@ public class PlayManager : Singleton<PlayManager>
                     QuestManager.Instance.SetImage("Four-Eyed Boy");
                     QuestManager.Instance.SetSpeaker("Narrator");
                     QuestManager.Instance.SetDialogue("The boy angrily eyes you, then takes his jar and then throws your reward on the ground.  (+1 Chaos)");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("NarratorBathwater15", 13.2f, 19f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
                 }
                 else
@@ -1872,7 +1873,7 @@ public class PlayManager : Singleton<PlayManager>
                     QuestManager.Instance.SetImage("Four-Eyed Boy");
                     QuestManager.Instance.SetSpeaker("Narrator");
                     QuestManager.Instance.SetDialogue("He sprints full speed towards you, you calmly pull out your weapon and sigh, smacking the boy with the blunt end of your weapon, knocking him out.  You loot the boy’s body and leave.");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("NarratorBathwater13", 1.2f, 12.3f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
                 }
             }
@@ -1940,15 +1941,15 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Pablo the Noob");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("A young man, barely in his teens, stands before you.  His small frame and loose armor makes it seem like he weighs less than a single gold piece.  He’s panting and covered in visible scratches and bruises.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("PabloTheNoobIntro", 1f, 13.6f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
-                // Chunk 2
+                // Chunk 2 (Intro Cont.)
                 QuestManager.Instance.SetImage("Pablo the Noob");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("Under his breath you can clearly tell he’s cursing to himself... something about wanting his mom to come get him?");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("PabloTheNoobIntro", 13.6f, 20.2f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -1956,7 +1957,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Pablo the Noob");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("You ask him if he has seen any notable monsters or Chaos activity around the area.  His eyes perk up almost immediately as he points you towards the Ominous Clearing and exclaims,");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorDisharMeowny1", 1.2f, 10.5f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -1964,7 +1965,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Pablo the Noob");
                 QuestManager.Instance.SetSpeaker("Pablo the Noob");
                 QuestManager.Instance.SetDialogue("I was attacked by the scariest monster I’ve ever seen over there!  My mom was right, I should never have left home!  I hate touching all this grass, it gets everywhere!");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("PabloTheNoobDisharMeowny1", 0.5f, 12.2f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
             }
         }, OnComplete);
@@ -1995,7 +1996,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Pablo the Noob");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("You begin chiding Pablo for making you fight such a small feline.  He looks at you confused,");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorDisharMeowny3", 0.8f, 6.2f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -2003,7 +2004,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Pablo the Noob");
                 QuestManager.Instance.SetSpeaker("Pablo the Noob");
                 QuestManager.Instance.SetDialogue("Small cat... did you...  did you kill Mr. Whiskers?!  That wasn’t the monster, that was my cat!  I was trying to save him from the monster!");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("PabloTheNoobDisharMeowny2", 0.5f, 14.6f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -2011,7 +2012,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Pablo the Noob");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("Just as he says that, a loud roar can be heard at the Ominous Clearing, something is very angwy...");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorDisharMeowny4", 0.8f, 7.8f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
             }
         }, OnComplete);
@@ -2061,7 +2062,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Shifty Peddler");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("A man is leaning against a tree at the side of the forest trail. His long coat and large hat are out of place in the surrounding area, but he seems unbothered by it all.  He whispers to himself and large grins stretch almost forcibly across his face.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("ShiftyPeddlerIntro", 0.8f, 16.3f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -2069,15 +2070,15 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Shifty Peddler");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("The peddler approaches you, his grin going from cheek to cheek in an almost terrifying manner.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorIsekai1", 1.3f, 7f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
                 // Chunk 3
                 QuestManager.Instance.SetImage("Shifty Peddler");
                 QuestManager.Instance.SetSpeaker("Shifty Peddler");
-                QuestManager.Instance.SetDialogue("Hello there stranger, enjoying the sights?  It’s all marvelous isn’t it, this strange land?  Almost like it was crafted for us.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetDialogue("Hello there traveler, enjoying the sights?  It’s all marvelous isn’t it, this strange land?  Almost like it was crafted for us.");
+                QuestManager.Instance.PlayAudio("ShiftyPeddlerIsekai1", 0.4f, 12.8f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -2085,7 +2086,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Shifty Peddler");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("His smile somehow grows even wider and in a blink of an eye, he disappears from your sight and you hear his voice deep within the forest.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorIsekai2", 1.3f, 9.8f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -2093,7 +2094,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Shifty Peddler");
                 QuestManager.Instance.SetSpeaker("Shifty Peddler");
                 QuestManager.Instance.SetDialogue("We oughta help each other, after all we are both travelers here heh heh heh...");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("ShiftyPeddlerIsekai2", 0.7f, 5.8f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -2101,15 +2102,15 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Shifty Peddler");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("Your head begins to forcibly turn towards an almost invisible path,");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorIsekai3", 1f, 5f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
                 // Chunk 7
                 QuestManager.Instance.SetImage("Shifty Peddler");
                 QuestManager.Instance.SetSpeaker("Shifty Peddler");
-                QuestManager.Instance.SetDialogue("Now now, don’t worry.  All I need from you is to have a little fun with someone down that road.  Simple isn’t it?  He he he...");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetDialogue("Now now, don’t worry.  All I need from you is to have a little fun with someone down that road.  It's quite simple, isn’t it?  He he he...");
+                QuestManager.Instance.PlayAudio("ShiftyPeddlerIsekai3", 0.5f, 10.2f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -2117,7 +2118,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Shifty Peddler");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("Your mind fills with the information of your task, and the voice in the forest retreats.  Still though... in the back of your mind you see the image of a large grin.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorIsekai4", 0.7f, 10.5f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
             }
         }, OnComplete);
@@ -2167,7 +2168,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Suspicious Horse");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("A horse stands in the middle of an open clearing, jumping about and enjoying its freedom.  As it spots you, it turns as still as a statue and begins staring you down.  It’s eyes, red and almost human-like, following your every movement.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("SuspiciousHorseIntro", 0.7f, 16.3f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -2175,7 +2176,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Suspicious Horse");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("You approach the horse...");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorAbandonedPath2", 1.5f, 2.8f);
                 QuestManager.Instance.SetChoices(2, new string[2]{ "Grab the Horse", "Speak to the Horse"}, new Action[2]{
                     () => {
                         // Grabbed the Horse
@@ -2201,7 +2202,7 @@ public class PlayManager : Singleton<PlayManager>
                     QuestManager.Instance.SetImage("Suspicious Horse");
                     QuestManager.Instance.SetSpeaker("Narrator");
                     QuestManager.Instance.SetDialogue("You grab the reins of the horse and you start leading it back to the hermit’s home.");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("NarratorAbandonedPath3", 1.2f, 5.6f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
                 }
                 else
@@ -2209,7 +2210,7 @@ public class PlayManager : Singleton<PlayManager>
                     QuestManager.Instance.SetImage("Suspicious Horse");
                     QuestManager.Instance.SetSpeaker("Suspicious Horse");
                     QuestManager.Instance.SetDialogue("DON’T BRING ME BACK TO THAT CRAZY MAN, HE WANTS TO FEED ME TO THAT SPIDER!");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("SuspiciousHorseAbandonedPath", 0f, 8.2f);
                     QuestManager.Instance.SetChoices(2, new string[2]{ "Ignore the Horse", "Trust the Horse"}, new Action[2]{
                     () => {
                         // Ignored the Horse
@@ -2236,7 +2237,7 @@ public class PlayManager : Singleton<PlayManager>
                     QuestManager.Instance.SetImage("Suspicious Horse");
                     QuestManager.Instance.SetSpeaker("Narrator");
                     QuestManager.Instance.SetDialogue("You tell the horse he’s crazy and take him back anyway.");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("NarratorAbandonedPath5", 0.8f, 4.2f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
                 }
                 else
@@ -2244,7 +2245,7 @@ public class PlayManager : Singleton<PlayManager>
                     QuestManager.Instance.SetImage("Suspicious Horse");
                     QuestManager.Instance.SetSpeaker("Narrator");
                     QuestManager.Instance.SetDialogue("You heed the horse’s warning and head back cautiously, leaving the horse behind.");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("NarratorAbandonedPath4", 1.3f, 6f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
                 }
             }
@@ -2295,7 +2296,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Veteran Hunter");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("A hooded figure seems to be stomping over something on the ground.  A large black coat and gray mask obstruct any view of the person underneath.  They seem to pay you no mind.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("VeteranHunterIntro", 0.5f, 10.5f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -2303,7 +2304,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Veteran Hunter");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("You approach the hunter and ask if they know anything about the goblin horde in the area.  The hunter turns to you and gives a wide grin.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorGoblinHunt3", 1.3f, 8.5f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -2311,7 +2312,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Veteran Hunter");
                 QuestManager.Instance.SetSpeaker("Veteran Hunter");
                 QuestManager.Instance.SetDialogue("Oh you want to kill Goblins too?  Good, they all deserve to die!");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("VeteranHunterGoblinHunt1", 0f, 4.796f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -2319,7 +2320,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Veteran Hunter");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("His grin widens as he reveals what he was stomping on, a young goblin on the brink of death.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorGoblinHunt4", 1.2f, 6.7f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -2327,15 +2328,15 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Veteran Hunter");
                 QuestManager.Instance.SetSpeaker("Veteran Hunter");
                 QuestManager.Instance.SetDialogue("How about you come over and finish this little one off huh?  I mean, how am I supposed to trust you if you can’t even kill this measly little runt?");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("VeteranHunterGoblinHunt2", 0f, 8f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
                 // Chunk 6
-                QuestManager.Instance.SetImage("Veteran Hunter");
+                QuestManager.Instance.SetImage("Goblin Prince");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("The young goblin locks eyes with you as you approach, pleading for its life.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorGoblinHunt5", 1f, 5.2f);
                 QuestManager.Instance.SetChoices(2, new string[2]{ "Kill the Goblin", "Kill the Hunter"}, new Action[2]{
                     () => {
                         // Killed the Goblin
@@ -2358,10 +2359,10 @@ public class PlayManager : Singleton<PlayManager>
                 // Chunk 7
                 if(localPlayer.KilledGoblin.Value)
                 {
-                    QuestManager.Instance.SetImage("Veteran Hunter");
+                    QuestManager.Instance.SetImage("Goblin Prince");
                     QuestManager.Instance.SetSpeaker("Narrator");
                     QuestManager.Instance.SetDialogue("You swing your weapon down, taking whatever miniscule amount of life was left in the young goblin.  The hunter crouches and proceeds to cut the goblin’s finger off.");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("NarratorGoblinHunt6", 0.7f, 9.5f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
                 }
                 else
@@ -2369,7 +2370,7 @@ public class PlayManager : Singleton<PlayManager>
                     QuestManager.Instance.SetImage("Veteran Hunter");
                     QuestManager.Instance.SetSpeaker("Narrator");
                     QuestManager.Instance.SetDialogue("You strike the Veteran Hunter and as they fall to the ground they shout,");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("NarratorGoblinHunt8", 1.3f, 5.6f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
                 }
             },
@@ -2380,7 +2381,7 @@ public class PlayManager : Singleton<PlayManager>
                     QuestManager.Instance.SetImage("Veteran Hunter");
                     QuestManager.Instance.SetSpeaker("Veteran Hunter");
                     QuestManager.Instance.SetDialogue("Ruthless, I like that.  We’re going to need that ruthlessness when we exterminate them from the face of this world.  They’re a pest!  No, they’re even worse than that...");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("VeteranHunterGoblinHunt3", 0f, 11.5f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
                 }
                 else
@@ -2388,7 +2389,7 @@ public class PlayManager : Singleton<PlayManager>
                     QuestManager.Instance.SetImage("Veteran Hunter");
                     QuestManager.Instance.SetSpeaker("Veteran Hunter");
                     QuestManager.Instance.SetDialogue("You’re siding with those scum?  You’re no better than them, all of you deserve to burn in the Chaos!");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("VeteranHunterGoblinHunt4", 0f, 6.849f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
                 }
             },
@@ -2399,15 +2400,15 @@ public class PlayManager : Singleton<PlayManager>
                     QuestManager.Instance.SetImage("Veteran Hunter");
                     QuestManager.Instance.SetSpeaker("Narrator");
                     QuestManager.Instance.SetDialogue("The hunter continues his ramblings as he begins walking north, you follow closely behind.");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("NarratorGoblinHunt7", 1.3f, 6.8f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
                 }
                 else
                 {
-                    QuestManager.Instance.SetImage("Veteran Hunter");
+                    QuestManager.Instance.SetImage("Goblin Prince");
                     QuestManager.Instance.SetSpeaker("Narrator");
                     QuestManager.Instance.SetDialogue("The ring on his finger slips as he dies, you pick it up just in case.  As you help the young goblin up, he looks at you confused by your kindness.  Nevertheless, he leans against you and points north, beckoning you to continue heading in that direction.");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("NarratorGoblinHunt9", 1.3f, 18f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
                 }
             }
@@ -2458,7 +2459,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Abandoned Outpost");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("What once seemed to have been a very busy forest outpost, is now empty and void of life.  Everything seems to have been picked up and moved in a hurry, with items scattered about from frantic packing and traveling.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("AbandonedOutpostIntro", 0.8f, 12.6f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -2466,7 +2467,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Abandoned Outpost");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("As you take a closer look at the outpost, you notice signs of recent activity.  Footsteps caked in the mud, and the smell of blood lingering in the air.  You also see some signs of a struggle, with the trail of broken branches and small blood splatters leading towards a small campsite.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorGoblinHunt2", 1.3f, 17.3f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
             }
         }, OnComplete);
@@ -2516,15 +2517,15 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Ancient Spring");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("This spring seems to be rather untouched by the Chaos of the surrounding region.  The pools combine beautiful smooth stones with a vibrant flora.  An aura of steam looms over the springs, creating a very tranquil and almost spa-like atmosphere.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("AncientSpringIntro", 0.8f, 15.3f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
-                // Chunk 2
+                // Chunk 2 (Intro Cont.)
                 QuestManager.Instance.SetImage("Ancient Spring");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("In the distance you think you hear what might even be laughter...");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("AncientSpringIntro", 15.3f, 19f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -2532,7 +2533,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Ancient Spring");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("As you approach the hot spring, you can barely make out what seems to be a red-orange glowing light behind a thick wall of steam.  You walk towards the light and it begins to grow, until it finally begins to take form.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorBathwater5", 1.5f, 13.5f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -2540,7 +2541,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Fire Elemental");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("You take a couple more steps forward until a female fire elemental is standing before you.  You stand there unsure of what to say, but the elemental speaks first,");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorBathwater5", 13.5f, 23f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -2548,7 +2549,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Fire Elemental");
                 QuestManager.Instance.SetSpeaker("Fire Elemental");
                 QuestManager.Instance.SetDialogue("Welcome to the Witch Stream!  Since the Chaos has been destroying the area we need to move streams, but the elementals at Utoob Stream want us to pay money first before we move in,");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("FireElementalBathwater1", 0f, 9.2f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -2556,7 +2557,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Fire Elemental");
                 QuestManager.Instance.SetSpeaker("Fire Elemental");
                 QuestManager.Instance.SetDialogue("...so we have to charge you 20 Gold for any water you want.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("FireElementalBathwater1", 9.2f, 13f);
                 QuestManager.Instance.SetChoices(2, new string[2]{ "Pay the fee", "Refuse to pay"}, new Action[2]{
                     () => {
                         // Paid the fee
@@ -2583,7 +2584,7 @@ public class PlayManager : Singleton<PlayManager>
                     QuestManager.Instance.SetImage("Fire Elemental");
                     QuestManager.Instance.SetSpeaker("Fire Elemental");
                     QuestManager.Instance.SetDialogue("Great!  Follow me over here...");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("FireElementalBathwater2", 0f, 2.4f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
                 }
                 else
@@ -2591,7 +2592,7 @@ public class PlayManager : Singleton<PlayManager>
                     QuestManager.Instance.SetImage("Fire Elemental");
                     QuestManager.Instance.SetSpeaker("Narrator");
                     QuestManager.Instance.SetDialogue("You inform the fire elemental that 20 Gold is a bit too pricey.");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("NarratorBathwater8", 1.4f, 5.3f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
                 }
             },
@@ -2601,8 +2602,8 @@ public class PlayManager : Singleton<PlayManager>
                 {
                     QuestManager.Instance.SetImage("Fire Elemental");
                     QuestManager.Instance.SetSpeaker("Narrator");
-                    QuestManager.Instance.SetDialogue("exclaims the fire elemental.  She then leads you over to a hidden pool in the back, where there are 2 other female elementals soaking in the pool.  Your guide elemental then grabs a glass jar and scoops up some of the water from the pool.");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetDialogue("She then leads you over to a hidden pool in the back, where there are 2 other female elementals soaking in the pool.  Your guide elemental then grabs a glass jar and scoops up some of the water from the pool.");
+                    QuestManager.Instance.PlayAudio("NarratorBathwater6", 1.6f, 11.8f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
                 }
                 else
@@ -2610,7 +2611,7 @@ public class PlayManager : Singleton<PlayManager>
                     QuestManager.Instance.SetImage("Fire Elemental");
                     QuestManager.Instance.SetSpeaker("Fire Elemental");
                     QuestManager.Instance.SetDialogue("It’s literally only 20 gold, everyone has 20 gold!");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("FireElementalBathwater4", 0f, 5.29f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
                 }
             },
@@ -2621,15 +2622,15 @@ public class PlayManager : Singleton<PlayManager>
                     QuestManager.Instance.SetImage("Fire Elemental");
                     QuestManager.Instance.SetSpeaker("Fire Elemental");
                     QuestManager.Instance.SetDialogue("Here you go, and remember you can find us at Utoob!");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("FireElementalBathwater3", 0f, 3.95f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
                 }
                 else
                 {
                     QuestManager.Instance.SetImage("Fire Elemental");
-                    QuestManager.Instance.SetSpeaker("Fire Elemental");
-                    QuestManager.Instance.SetDialogue("she replies.  You tell her that you are just gonna take some of the other water.  She frustratedly turns around and leaves you to your devices.  You find some spring water and fill up a jar with it.");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetSpeaker("Narrator");
+                    QuestManager.Instance.SetDialogue("You tell her that you are just gonna take some of the other water.  She frustratedly turns around and leaves you to your devices.  You find some spring water and fill up a jar with it.");
+                    QuestManager.Instance.PlayAudio("NarratorBathwater9", 1.3f, 10.3f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
                 }
             },
@@ -2640,7 +2641,7 @@ public class PlayManager : Singleton<PlayManager>
                     QuestManager.Instance.SetImage("Fire Elemental");
                     QuestManager.Instance.SetSpeaker("Narrator");
                     QuestManager.Instance.SetDialogue("You walk away with a confused expression on your face.");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("NarratorBathwater7", 1.2f, 4.6f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
                 }
             }
@@ -2685,15 +2686,15 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Bandit Hideout");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("The bandit hideout is against a mountain wall, crates and equipment strewn about.  It's a large space and in the middle of it, a battle is occurring.  A boy with glasses is fighting off waves of bandits...");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("BanditHideoutIntro", 0.5f, 12.4f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
-                // Chunk 2
+                // Chunk 2 (Intro Cont.)
                 QuestManager.Instance.SetImage("Bandit Hideout");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("...and by fighting off, he’s actually curled up on a ball and everytime a bandit attacks him, a wave of force sends them flying.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("BanditHideoutIntro", 12.4f, 19.6f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -2701,23 +2702,23 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Bandit Hideout");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("As you rush in to save the boy, your vision darkens and a frighteningly wide smile appears before you.  It exclaims,");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorIsekai5", 1f, 8.8f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
                 // Chunk 4
                 QuestManager.Instance.SetImage("Shifty Peddler");
                 QuestManager.Instance.SetSpeaker("Shifty Peddler");
-                QuestManager.Instance.SetDialogue("This is so much fun! So many things to play with!  Let’s see how well you do!,");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetDialogue("This is so much fun!  So many things to play with!  Let’s see how well you do!,");
+                QuestManager.Instance.PlayAudio("ShiftyPeddlerIsekai4", 0.5f, 7.7f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
                 // Chunk 5
-                QuestManager.Instance.SetImage("Bandit Hideout");
+                QuestManager.Instance.SetImage("Bandit Weeb Lord");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("Your vision returns but things have changed, the bandits are no more and instead, the boy with glasses is staring at a dark version of himself floating in the air.  The boy runs away as the dark version turns to face you and attacks!");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorIsekai6", 1.3f, 16.2f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
             }
         }, OnComplete);
@@ -2780,7 +2781,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Howling Cave");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("The cave forms like a jagged mouth protruding from a rocky overhang.  Sharp rocks line the entrance of the cave on all sides.  If the appearance wasn’t inviting enough, distant sounds of wailing and screaming seem to echo from the depths.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("HowlingCaveIntro", 1f, 14.8f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -2790,7 +2791,7 @@ public class PlayManager : Singleton<PlayManager>
                     QuestManager.Instance.SetImage("Howling Cave");
                     QuestManager.Instance.SetSpeaker("Narrator");
                     QuestManager.Instance.SetDialogue("You approach alongside the hunter, when suddenly the walls of the cave are lit up and an army of goblins stands before you.  The hunter laughs to himself, ready to kill every single last one of them.");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("NarratorGoblinHunt10", 1.3f, 12f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
                 }
                 else
@@ -2798,7 +2799,7 @@ public class PlayManager : Singleton<PlayManager>
                     QuestManager.Instance.SetImage("Howling Cave");
                     QuestManager.Instance.SetSpeaker("Narrator");
                     QuestManager.Instance.SetDialogue("You approach alongside the young goblin, when suddenly the walls of the cave are lit up and an army of goblins stands before you.  Before they can attack you, the young goblin raises his hands and says something in their language.");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("NarratorGoblinHunt11", 1.3f, 13.7f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
                 }
             },
@@ -2806,18 +2807,18 @@ public class PlayManager : Singleton<PlayManager>
                 // Chunk 3
                 if(localPlayer.KilledGoblin.Value)
                 {
-                    QuestManager.Instance.SetImage("Howling Cave");
+                    QuestManager.Instance.SetImage("Goblin Horde");
                     QuestManager.Instance.SetSpeaker("Narrator");
                     QuestManager.Instance.SetDialogue("He opens his mouth as if to give a speech but is suddenly stopped as an arrow forces its way into his head.  The finger of the young goblin falls out of his pocket, and the goblins stare at it.  After they realize what it is, they launch their attack.");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("NarratorGoblinHunt10", 12f, 26.2f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
                 }
                 else
                 {
-                    QuestManager.Instance.SetImage("Howling Cave");
+                    QuestManager.Instance.SetImage("Goblin Horde");
                     QuestManager.Instance.SetSpeaker("Narrator");
-                    QuestManager.Instance.SetDialogue("They lower their weapons and begin talking amongst themselves.  A large goblin walks past the horde and comes face to face with you,");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetDialogue("They lower their weapons and begin talking amongst themselves.  The young goblin looks towards you and begins walking towards his people, they begin to bow and you realize that this young goblin was royalty to them.");
+                    QuestManager.Instance.PlayAudio("NarratorGoblinHunt11", 13.7f, 25f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
                 }
             },
@@ -2826,9 +2827,9 @@ public class PlayManager : Singleton<PlayManager>
                 if(!localPlayer.KilledGoblin.Value)
                 {
                     QuestManager.Instance.SetImage("Goblin Prince");
-                    QuestManager.Instance.SetSpeaker("Goblin Prince");
-                    QuestManager.Instance.SetDialogue("You save...  prince.  You are...  friend of...  goblins.");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetSpeaker("Narrator");
+                    QuestManager.Instance.SetDialogue("You give him the ring of the dead hunter and the young goblin prince speaks,");
+                    QuestManager.Instance.PlayAudio("NarratorGoblinHunt11", 25f, 29.6f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
                 }
             },
@@ -2837,9 +2838,9 @@ public class PlayManager : Singleton<PlayManager>
                 if(!localPlayer.KilledGoblin.Value)
                 {
                     QuestManager.Instance.SetImage("Goblin Prince");
-                    QuestManager.Instance.SetSpeaker("Narrator");
-                    QuestManager.Instance.SetDialogue("The young goblin looks towards you and nods in agreement as he begins walking towards his people.  You give him the ring of the dead hunter and the young goblin prince speaks,");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetSpeaker("Goblin Prince");
+                    QuestManager.Instance.SetDialogue("Bad man... hunt goblin... years.  All we want... peace.");
+                    QuestManager.Instance.PlayAudio("GoblinPrinceGoblinHunt1", 1f, 8.5f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
                 }
             },
@@ -2848,9 +2849,9 @@ public class PlayManager : Singleton<PlayManager>
                 if(!localPlayer.KilledGoblin.Value)
                 {
                     QuestManager.Instance.SetImage("Goblin Prince");
-                    QuestManager.Instance.SetSpeaker("Goblin Prince");
-                    QuestManager.Instance.SetDialogue("Bad man... hunt goblin... years.  All we want... peace.");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.SetSpeaker("Narrator");
+                    QuestManager.Instance.SetDialogue("You prepare to leave but are given valuable treasure and parting words as thanks for saving the prince.");
+                    QuestManager.Instance.PlayAudio("NarratorGoblinHunt12", 1.2f, 7f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
                 }
             },
@@ -2859,20 +2860,9 @@ public class PlayManager : Singleton<PlayManager>
                 if(!localPlayer.KilledGoblin.Value)
                 {
                     QuestManager.Instance.SetImage("Goblin Prince");
-                    QuestManager.Instance.SetSpeaker("Narrator");
-                    QuestManager.Instance.SetDialogue("You prepare to leave but are given valuable treasure and parting words as thanks for saving the prince.");
-                    QuestManager.Instance.PlayAudio("");
-                    QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
-                }
-            },
-            () => {
-                // Chunk 8
-                if(!localPlayer.KilledGoblin.Value)
-                {
-                    QuestManager.Instance.SetImage("Goblin Prince");
                     QuestManager.Instance.SetSpeaker("Goblin Prince");
                     QuestManager.Instance.SetDialogue("May the... peace... be with you.");
-                    QuestManager.Instance.PlayAudio("");
+                    QuestManager.Instance.PlayAudio("GoblinPrinceGoblinHunt2", 1f, 3.7f);
                     QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
                 }
             }
@@ -2934,15 +2924,15 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Ominous Clearing");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("You approach the forest clearing, a seemingly unremarkable patch of land aside from the clearly out-of-place throne in the middle of it.  As you get closer to the throne, a spine-chilling aura emanates from it that fills you with dread.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("OminiousClearingIntro", 1f, 14.5f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
                 // Chunk 2
-                QuestManager.Instance.SetImage("Ominous Clearing");
+                QuestManager.Instance.SetImage("Discord Kitten");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("You approach the throne, taking notice of the small paw prints along the ground.  As you get closer, a small feline appears on the throne, and eyes you suspiciously.  It begins purring and stretches across the length of the throne, it’s not until you get closer that it leaps at you!");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorDisharMeowny2", 0.8f, 15.6f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
             }
         }, OnComplete);
@@ -2967,15 +2957,15 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Ominous Clearing");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("You return to the area, the sounds of a very ominous purring echoing across the land.  You almost believe it’s nighttime when a large shadow begins to cover the sun, you look up only to come across the largest feline you’ve ever seen.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorDisharMeowny5", 1f, 14.5f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
                 // Chunk 2
-                QuestManager.Instance.SetImage("Ominous Clearing");
+                QuestManager.Instance.SetImage("Raging Discord Kitten");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("Clearly corrupted with Chaos, the feline stares at you with only murderous intent in it’s eyes, you have made it very angwy.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorDisharMeowny5", 14.5f, 23f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
             }
         }, OnComplete);
@@ -3019,7 +3009,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Overgrown Temple");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("The temple is in a state of decay, its once magnificent designs falling into ruin as nature reclaims its land.  Leaves and vines wrap around the columns, patches of dirt and soil sprout from the floor, and nothing but the smell of dew fills the air.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("OvergrownTempleIntro", 0.7f, 16.2f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -3027,23 +3017,23 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Overgrown Temple");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("The sound of plopping fills the temple, becoming more and more viscous as you come closer to the main hall.  As you reach the middle ground of the temple, a Rainbow Slime drops from the air.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorDoubleRainbow3", 1.2f, 12.5f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
                 // Chunk 3
-                QuestManager.Instance.SetImage("Overgrown Temple");
+                QuestManager.Instance.SetImage("Rainbow Slime");
                 QuestManager.Instance.SetSpeaker("Narrator");
-                QuestManager.Instance.SetDialogue("Its eyes are filled with anger as it prepares to attack you, but you spot something else in its eyes … fear?  You notice two tiny crimson slippers within the slime's body, and begin to wonder if the slime was the pet or whoever the owner of the slippers were.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.SetDialogue("Its eyes are filled with anger as it prepares to attack you, but you spot something else in its eyes... fear?  You notice two tiny crimson slippers within the slime's body, and begin to wonder if the slime was the pet or whoever the owner of the slippers were.");
+                QuestManager.Instance.PlayAudio("NarratorDoubleRainbow3", 12.5f, 28.5f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
                 // Chunk 4
-                QuestManager.Instance.SetImage("Overgrown Temple");
+                QuestManager.Instance.SetImage("Rainbow Slime");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("Before you can ponder any longer, the slime's body glows with magnificent brightness, it’s prepared to fight.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorDoubleRainbow3", 28.5f, 36.2f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
             }
         }, OnComplete);
@@ -3087,7 +3077,7 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Webbed Forest");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("The trees are littered with cobwebs stretching from trunk to trunk, the same can be said as you walk across the forest ground.  You hear the constant rustling of leaves and bushes and occasionally, you can catch red-eyes staring at you from the shadows in the forest before they disappear.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("WebbedForestIntro", 0.6f, 16.5f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
@@ -3095,15 +3085,15 @@ public class PlayManager : Singleton<PlayManager>
                 QuestManager.Instance.SetImage("Webbed Forest");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("You begin to approach the location where the hermit claimed to live, yet all you see are eerie spiderwebs caking the surrounding trees.  You advance further until you hear the faintest of noises behind you.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorAbandonedPath6", 1.6f, 13.6f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
             () => {
                 // Chunk 3
-                QuestManager.Instance.SetImage("Webbed Forest");
+                QuestManager.Instance.SetImage("Spooky Spider");
                 QuestManager.Instance.SetSpeaker("Narrator");
                 QuestManager.Instance.SetDialogue("You turn around slowly to see a gigantic, ghastly white spider descending from the canopy above.");
-                QuestManager.Instance.PlayAudio("");
+                QuestManager.Instance.PlayAudio("NarratorAbandonedPath6", 13.6f, 19.4f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
             }
         }, OnComplete);
@@ -3661,6 +3651,7 @@ public class PlayManager : Singleton<PlayManager>
         SaveFile s = new SaveFile("GameData", playerList, turnOrderPlayerList, GetTreasureTilePositions(), encounterDeck, lootDeck, quests, chapterBoss, chaosCounter, turnMarker);
         DataManager d = new DataManager();
         d.WriteSaveFile(s);
+        TextChatManager.Instance.SendMessage("<color=#c8c8c8>[System] Autosave complete.</color>");
     }
 
     public void DisconnectFromGame()

@@ -101,6 +101,8 @@ public class JLPauseMenu : MonoBehaviour
                 animText.text = "Not Working";
                 break;
         }
+
+        PlayerPrefs.SetFloat("animSpeed", Global.animSpeed);
     }
 
     public void FramerateCap(float value)

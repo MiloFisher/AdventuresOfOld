@@ -30,13 +30,15 @@ public class MenuManager : Singleton<MenuManager>
 
         if (animSlider)
         {
+            Global.animSpeed = PlayerPrefs.GetFloat("animSpeed", Global.animSpeed);
             animSlider.value = -1 * Global.animSpeed;
             AnimationSpeed(Global.animSpeed);
         }
 
         if(frameSlider)
         {
-            frameSlider.value = PlayerPrefs.GetInt("animSteps", Global.animSteps);
+            Global.animSteps = PlayerPrefs.GetInt("animSteps", Global.animSteps);
+            frameSlider.value = Global.animSteps;
             FramerateCap(Global.animSteps);
         }
 
@@ -113,6 +115,8 @@ public class MenuManager : Singleton<MenuManager>
                 animText.text = "Not Working";
                 break;
         }
+
+        PlayerPrefs.SetFloat("animSpeed", Global.animSpeed);
     }
 
     public void FramerateCap(float value)
