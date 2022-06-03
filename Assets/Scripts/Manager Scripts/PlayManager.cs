@@ -386,8 +386,15 @@ public class PlayManager : Singleton<PlayManager>
         // Start background music
         JLAudioManager.Instance.PlaySound("BackgroundMusic");
 
-        // Begin Game with Start of Day (host only)
-        StartOfDay();
+        if(PlayerPrefs.GetInt("IntroEnabled", 1) == 1)
+        {
+            StartWithCutscene();
+        }
+        else
+        {
+            // Begin Game with Start of Day (host only)
+            StartOfDay();
+        }
     }
 
     IEnumerator LoadGameSetup()
@@ -589,6 +596,42 @@ public class PlayManager : Singleton<PlayManager>
 
         // Start turn of player who goes first
         turnOrderPlayerList[turnMarker].StartTurnClientRPC();
+    }
+
+    public void StartWithCutscene()
+    {
+        // Calculate turn order player list
+        turnOrderPlayerList = new List<Player>(playerList);
+        ShuffleDeck(turnOrderPlayerList);
+        turnOrderPlayerList.Sort((a, b) => GetSpeed(b) - GetSpeed(a));
+        FixedString64Bytes[] arr = new FixedString64Bytes[turnOrderPlayerList.Count];
+        for (int i = 0; i < turnOrderPlayerList.Count; i++)
+        {
+            arr[i] = turnOrderPlayerList[i].UUID.Value;
+        }
+
+        // Set turn marker
+        turnMarker = 0;
+
+        foreach (Player p in playerList)
+        {
+            // Close loading screen for all players
+            p.CloseLoadingScreenClientRPC();
+            // Reset ready up on players
+            p.Unready();
+            // Setup and draw player pieces
+            p.SetupPlayerPiecesClientRPC();
+            //p.DrawPlayerPiecesClientRPC();
+            // Set turn order player list and turn marker
+            p.SetTurnOrderPlayerListClientRPC(arr);
+            p.SetTurnMarkerClientRPC(turnMarker);
+            // Setup and update character panels
+            p.SetupCharacterPanelsClientRPC();
+        }
+
+        SaveGame();
+
+        localPlayer.LoadIntoQuest("IntroCutscene");
     }
 
     public void EndOfDay()
@@ -3607,6 +3650,43 @@ public class PlayManager : Singleton<PlayManager>
         return "#" + ColorUtility.ToHtmlStringRGB(playerColors[p.Color.Value]);
     }
     #endregion
+
+    public void IntroCutscene()
+    {
+        Action OnComplete = default;
+        if (NetworkManager.Singleton.IsHost)
+        {
+            OnComplete = () => {
+                foreach (Player p in playerList)
+                {
+                    // Play transition for all players
+                    p.PlayTransitionClientRPC(0); // Transition 0 is Start of Day
+                }
+
+                // Start turn of player who goes first
+                turnOrderPlayerList[turnMarker].StartTurnClientRPC();
+            };
+        }
+
+        QuestManager.Instance.LoadIntoQuest(NetworkManager.Singleton.IsHost, new List<Action> {
+            () => {
+                // Chunk 1 (Intro)
+                QuestManager.Instance.SetImage("Intro");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("Your party sets off into the nearby forest, where the closest Chaos pillar erupted.  As your party searches for the Acolyte in the area, the Chaos seems to be seeping into the very land and infecting both the wildlife and the flora.");
+                QuestManager.Instance.PlayAudio("Prophecy", 143f, 158.8f);
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 2
+                QuestManager.Instance.SetImage("Intro");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("Your party was also tasked to ensure that the powerful beasts in the lands don’t become Chaos imbued as well, causing them to become too dangerous for even whole armies to deal with.");
+                QuestManager.Instance.PlayAudio("Prophecy", 158.8f, 171f);
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+            }
+        }, OnComplete);
+    }
 
     public List<Vector3Int> GetTreasureTilePositions()
     {

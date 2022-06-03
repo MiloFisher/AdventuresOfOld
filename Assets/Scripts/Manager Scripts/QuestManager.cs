@@ -80,6 +80,8 @@ public class QuestManager : Singleton<QuestManager>
 
     public void PlayAudio(string name, float startTime = 0, float endTime = -1)
     {
+        if(audioFileName != default)
+            JLAudioManager.Instance.StopSound(audioFileName);
         audioFileName = name;
         JLAudioManager.Instance.PlaySound(name, startTime, endTime);
         if(endTime > startTime && isYourTurn)
@@ -204,6 +206,10 @@ public class QuestManager : Singleton<QuestManager>
             case "Bandit Weeb Lord":
                 isLocation = true;
                 locationImage.sprite = locationImages[12];
+                break;
+            case "Intro":
+                isLocation = true;
+                locationImage.sprite = locationImages[13];
                 break;
         }
         locationImage.gameObject.SetActive(isLocation);

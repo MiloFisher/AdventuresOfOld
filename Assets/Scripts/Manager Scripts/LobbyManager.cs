@@ -29,6 +29,8 @@ namespace AdventuresOfOldMultiplayer
         public string lobbyType;
         public SaveFile save;
         public GameObject noSavedDataFoundMessage;
+        public GameObject introToggle;
+        public bool botsEnabled;
 
         private void Awake()
         {
@@ -41,6 +43,7 @@ namespace AdventuresOfOldMultiplayer
             hostingInProgress.SetActive(false);
             joiningInProgress.SetActive(false);
 
+            PlayerPrefs.SetInt("IntroEnabled", 1);
             Application.targetFrameRate = Global.frameCap;
         }
 
@@ -99,7 +102,8 @@ namespace AdventuresOfOldMultiplayer
                     }
 
                     startGameButton.SetActive(playersInLobby >= 3 && NetworkManager.Singleton.IsHost);
-                    addBotButton.SetActive(playersInLobby < 6 && NetworkManager.Singleton.IsHost);
+                    addBotButton.SetActive(playersInLobby < 6 && NetworkManager.Singleton.IsHost && botsEnabled);
+                    introToggle.SetActive(true);
                 }
                 else if (lobbyType == "Load Game")
                 {
@@ -173,7 +177,8 @@ namespace AdventuresOfOldMultiplayer
                                 allAdded = false;
                         }
                     }
-                    addBotButton.SetActive(!allAdded && NetworkManager.Singleton.IsHost);
+                    addBotButton.SetActive(!allAdded && NetworkManager.Singleton.IsHost && botsEnabled);
+                    introToggle.SetActive(false);
                 }
             }
         }
@@ -401,6 +406,11 @@ namespace AdventuresOfOldMultiplayer
                 p.GetComponent<Player>().ChangeScene("Core Game");
             else
                 Debug.LogError("Unknown LobbyType: \"" + lobbyType + "\"");
+        }
+
+        public void EnableIntroCutscene(bool active)
+        {
+            PlayerPrefs.SetInt("IntroEnabled", active ? 1 : 0);
         }
 
         //public string GetLocalIPv4()

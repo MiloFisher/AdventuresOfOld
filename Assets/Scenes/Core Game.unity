@@ -47007,9 +47007,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: They lower their weapons and begin talking amongst themselves.  The young
-    goblin looks towards you and begins walking towards his people, they begin to
-    bow and you realize that this young goblin was royalty to them.
+  m_text: "Your party was also tasked to ensure that the powerful beasts in the lands
+    don\u2019t become Chaos imbued as well, causing them to become too dangerous
+    for even whole armies to deal with."
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a8dcbf322d1104a599ad7f192eddaa0c, type: 2}
   m_sharedMaterial: {fileID: -2024710304679377605, guid: a8dcbf322d1104a599ad7f192eddaa0c, type: 2}
@@ -69223,7 +69223,7 @@ PrefabInstance:
       objectReference: {fileID: 401544540}
     - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
       propertyPath: soundArray.Array.size
-      value: 118
+      value: 119
       objectReference: {fileID: 0}
     - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
       propertyPath: soundArray.Array.data[0].name
@@ -69834,6 +69834,10 @@ PrefabInstance:
       value: NarratorIsekai9
       objectReference: {fileID: 0}
     - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: soundArray.Array.data[118].name
+      value: Prophecy
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
       propertyPath: soundArray.Array.data[11].pitch
       value: 1
       objectReference: {fileID: 0}
@@ -70302,6 +70306,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: soundArray.Array.data[118].pitch
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
       propertyPath: soundArray.Array.data[11].volume
       value: 0.3
       objectReference: {fileID: 0}
@@ -70727,6 +70735,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
       propertyPath: soundArray.Array.data[117].volume
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: soundArray.Array.data[118].volume
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
@@ -71201,6 +71213,10 @@ PrefabInstance:
       propertyPath: soundArray.Array.data[117].audioClip
       value: 
       objectReference: {fileID: 8300000, guid: 90e1ec00a6276744dbe562b456a9901d, type: 3}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: soundArray.Array.data[118].audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: afe52df5a81f01048abedf4beec63a60, type: 3}
     - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
       propertyPath: soundArray.Array.data[1].playOnAwake
       value: 0
@@ -71677,6 +71693,10 @@ PrefabInstance:
       propertyPath: soundArray.Array.data[117].audioMixerGroup
       value: 
       objectReference: {fileID: -2802509955807920919, guid: bde724a783de5ec49acd55fbed01529c, type: 2}
+    - target: {fileID: 7321469740590159519, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
+      propertyPath: soundArray.Array.data[118].audioMixerGroup
+      value: 
+      objectReference: {fileID: -689994064969802828, guid: bde724a783de5ec49acd55fbed01529c, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a4fd9a503908b034b953bf01902f8500, type: 3}
 --- !u!114 &1358492349 stripped
@@ -99348,6 +99368,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 20f420a3a050917409ae5023448d8729, type: 3}
   - {fileID: 21300000, guid: c815af453afa36548855e67ed1a69c3f, type: 3}
   - {fileID: 21300000, guid: 6d7780d6c48fa1748bd186b935c2e001, type: 3}
+  - {fileID: 21300000, guid: f34021dd562236546bea7170a9a9b8f1, type: 3}
   npcImages:
   - {fileID: 21300000, guid: 923eb8564fc6d43b2af750bc8a5bf8a6, type: 3}
   - {fileID: 21300000, guid: 02e6765ca42194dc38d76524fafb2f4d, type: 3}
