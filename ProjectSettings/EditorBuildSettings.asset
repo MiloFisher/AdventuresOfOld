@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/JLMainMenu.unity
     guid: 3a4d2e1cc0e6c444e831e2ab565d2987
   - enabled: 1
+    path: Assets/Scenes/Prophecy.unity
+    guid: 49be8d2833df644dbba80f0d6f706f7b
+  - enabled: 1
     path: Assets/Scenes/Character Creation.unity
     guid: e24f688509df7474fb2b1ab5325ccb88
   - enabled: 1

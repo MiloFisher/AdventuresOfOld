@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using System;
+using AdventuresOfOldMultiplayer;
 
 public enum ButtonDisplay { NONE, CONTINUE, FINISH, CHOICES };
 
@@ -44,8 +45,14 @@ public class QuestManager : Singleton<QuestManager>
     private bool onLastChunk;
     private bool onChoice;
 
-    public void LoadIntoQuest(bool isYourTurn, List<Action> chunks, Action OnComplete)
+    private Player localPlayer;
+
+    public void LoadIntoQuest(bool isYourTurn, List<Action> chunks, Action OnComplete, Player p = default)
     {
+        if (p == default)
+            localPlayer = PlayManager.Instance.localPlayer;
+        else
+            localPlayer = p;
         this.isYourTurn = isYourTurn;
         this.chunks = chunks;
         this.OnComplete = OnComplete;
@@ -94,9 +101,9 @@ public class QuestManager : Singleton<QuestManager>
         if (currentChunk == lastChunk && !onChoice)
         {
             if(onLastChunk)
-                PlayManager.Instance.localPlayer.EndDialogue();
+               localPlayer.EndDialogue();
             else
-                PlayManager.Instance.localPlayer.SetNextDialogueChunk();
+               localPlayer.SetNextDialogueChunk();
         }
     }
 
@@ -112,6 +119,7 @@ public class QuestManager : Singleton<QuestManager>
 
     public void SetImage(string name)
     {
+        bool noVisual = false;
         bool isLocation = false;
         switch(name)
         {
@@ -211,9 +219,12 @@ public class QuestManager : Singleton<QuestManager>
                 isLocation = true;
                 locationImage.sprite = locationImages[13];
                 break;
+            default:
+                noVisual = true;
+                break;
         }
-        locationImage.gameObject.SetActive(isLocation);
-        npcImage.gameObject.SetActive(!isLocation);
+        locationImage.gameObject.SetActive(isLocation && !noVisual);
+        npcImage.gameObject.SetActive(!isLocation && !noVisual);
     }
 
     public void SetChoices(int choices, string[] choiceTexts, Action[] ChoiceResults, Func<bool>[] ChoiceRequirements)
@@ -382,7 +393,7 @@ public class QuestManager : Singleton<QuestManager>
             return;
 
         StartCoroutine(ButtonCooldown());
-        PlayManager.Instance.localPlayer.SetNextDialogueChunk();
+       localPlayer.SetNextDialogueChunk();
     }
 
     // Finish Button
@@ -393,7 +404,7 @@ public class QuestManager : Singleton<QuestManager>
 
         StartCoroutine(ButtonCooldown());
         JLAudioManager.Instance.StopSound(audioFileName);
-        PlayManager.Instance.localPlayer.EndDialogue();
+       localPlayer.EndDialogue();
     }
 
     // Choice Buttons
@@ -404,7 +415,7 @@ public class QuestManager : Singleton<QuestManager>
 
         StartCoroutine(ButtonCooldown());
         OnChoiceMade[id]();
-        PlayManager.Instance.localPlayer.SetNextDialogueChunk();
+       localPlayer.SetNextDialogueChunk();
     }
 
     IEnumerator ButtonCooldown()
@@ -412,5 +423,10 @@ public class QuestManager : Singleton<QuestManager>
         buttonOnCooldown = true;
         yield return new WaitForSeconds(0.5f);
         buttonOnCooldown = false;
+    }
+
+    public bool InQuest()
+    {
+        return questLayout.activeInHierarchy;
     }
 }

@@ -2046,8 +2046,8 @@ namespace AdventuresOfOldMultiplayer
         {
             if (NetworkManager.Singleton.IsServer)
             {
-                foreach (Player p in PlayManager.Instance.playerList)
-                    p.SetNextDialogueChunkClientRPC();
+                foreach (GameObject g in GameObject.FindGameObjectsWithTag("Player"))
+                    g.GetComponent<Player>().SetNextDialogueChunkClientRPC();
             }
             else
                 SetNextDialogueChunkServerRPC();
@@ -2055,8 +2055,8 @@ namespace AdventuresOfOldMultiplayer
         [ServerRpc(RequireOwnership = false)]
         private void SetNextDialogueChunkServerRPC(ServerRpcParams rpcParams = default)
         {
-            foreach (Player p in PlayManager.Instance.playerList)
-                p.SetNextDialogueChunkClientRPC();
+            foreach (GameObject g in GameObject.FindGameObjectsWithTag("Player"))
+                g.GetComponent<Player>().SetNextDialogueChunkClientRPC();
         }
         [ClientRpc]
         public void SetNextDialogueChunkClientRPC(ClientRpcParams clientRpcParams = default)
@@ -2071,8 +2071,8 @@ namespace AdventuresOfOldMultiplayer
         {
             if (NetworkManager.Singleton.IsServer)
             {
-                foreach (Player p in PlayManager.Instance.playerList)
-                    p.EndDialogueClientRPC();
+                foreach (GameObject g in GameObject.FindGameObjectsWithTag("Player"))
+                    g.GetComponent<Player>().EndDialogueClientRPC();
             }
             else
                 EndDialogueServerRPC();
@@ -2080,8 +2080,8 @@ namespace AdventuresOfOldMultiplayer
         [ServerRpc(RequireOwnership = false)]
         private void EndDialogueServerRPC(ServerRpcParams rpcParams = default)
         {
-            foreach (Player p in PlayManager.Instance.playerList)
-                p.EndDialogueClientRPC();
+            foreach (GameObject g in GameObject.FindGameObjectsWithTag("Player"))
+                g.GetComponent<Player>().EndDialogueClientRPC();
         }
         [ClientRpc]
         public void EndDialogueClientRPC(ClientRpcParams clientRpcParams = default)
@@ -2482,6 +2482,31 @@ namespace AdventuresOfOldMultiplayer
                 TextChatManager.Instance.SendMessage(message + "");
                 if(UUID.Value != uuid && !TextChatManager.Instance.IsActive())
                     PassiveNotificationManager.Instance.AddNotification("<color=#FCFF00>New Message!</color>", false);
+            }
+        }
+
+        public void LoadIntoCutscene(string cutsceneName)
+        {
+            if (NetworkManager.Singleton.IsServer)
+            {
+                foreach (GameObject g in GameObject.FindGameObjectsWithTag("Player"))
+                    g.GetComponent<Player>().LoadIntoCutsceneClientRPC(cutsceneName);
+            }
+            else
+                LoadIntoCutsceneServerRPC(cutsceneName);
+        }
+        [ServerRpc(RequireOwnership = false)]
+        private void LoadIntoCutsceneServerRPC(FixedString64Bytes cutsceneName, ServerRpcParams rpcParams = default)
+        {
+            foreach (GameObject g in GameObject.FindGameObjectsWithTag("Player"))
+                g.GetComponent<Player>().LoadIntoCutsceneClientRPC(cutsceneName);
+        }
+        [ClientRpc]
+        public void LoadIntoCutsceneClientRPC(FixedString64Bytes cutsceneName, ClientRpcParams clientRpcParams = default)
+        {
+            if (IsOwner && !isBot)
+            {
+                CutsceneManager.Instance.LoadCutsceneEncounter(cutsceneName + "");
             }
         }
         #endregion
