@@ -29,7 +29,6 @@ namespace AdventuresOfOldMultiplayer
         public string lobbyType;
         public SaveFile save;
         public GameObject noSavedDataFoundMessage;
-        public GameObject introToggle;
         public bool botsEnabled;
 
         private void Awake()
@@ -103,7 +102,6 @@ namespace AdventuresOfOldMultiplayer
 
                     startGameButton.SetActive(playersInLobby >= 3 && NetworkManager.Singleton.IsHost);
                     addBotButton.SetActive(playersInLobby < 6 && NetworkManager.Singleton.IsHost && botsEnabled);
-                    introToggle.SetActive(true);
                 }
                 else if (lobbyType == "Load Game")
                 {
@@ -178,7 +176,6 @@ namespace AdventuresOfOldMultiplayer
                         }
                     }
                     addBotButton.SetActive(!allAdded && NetworkManager.Singleton.IsHost && botsEnabled);
-                    introToggle.SetActive(false);
                 }
             }
         }
@@ -401,12 +398,7 @@ namespace AdventuresOfOldMultiplayer
             GameObject p = GetOrderedPlayers()[0];
             PlayerPrefs.SetString("gameType", lobbyType);
             if (lobbyType == "New Game")
-            {
-                if(PlayerPrefs.GetInt("IntroEnabled", 1) == 1)
-                     p.GetComponent<Player>().ChangeScene("Prophecy");
-                else
-                    p.GetComponent<Player>().ChangeScene("Character Creation");
-            }  
+                p.GetComponent<Player>().ChangeScene("Prophecy");
             else if (lobbyType == "Load Game")
                 p.GetComponent<Player>().ChangeScene("Core Game");
             else

@@ -253,11 +253,11 @@ public class PlayManager : Singleton<PlayManager>
 
         if (state == 0)
         {
-            localPlayer.ChangeScene("JLFailureMenu");
+            localPlayer.ChangeScene("FailCutscene");
         }
         else
         {
-            localPlayer.ChangeScene("JLSuccessMenu");
+            localPlayer.ChangeScene("WinCutscene");
         }
     }
 
@@ -386,15 +386,7 @@ public class PlayManager : Singleton<PlayManager>
         // Start background music
         JLAudioManager.Instance.PlaySound("BackgroundMusic");
 
-        if(PlayerPrefs.GetInt("IntroEnabled", 1) == 1)
-        {
-            StartWithCutscene();
-        }
-        else
-        {
-            // Begin Game with Start of Day (host only)
-            StartOfDay();
-        }
+        StartWithCutscene();
     }
 
     IEnumerator LoadGameSetup()

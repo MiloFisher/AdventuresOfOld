@@ -5,6 +5,7 @@ using AdventuresOfOldMultiplayer;
 using Unity.Netcode;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.SceneManagement;
 
 public class CharacterCreationManager : MonoBehaviour
 {
@@ -33,8 +34,6 @@ public class CharacterCreationManager : MonoBehaviour
 
 
     void setupLocalCharacter() {
-        players = GameObject.FindGameObjectsWithTag("Player");
-
         // Gets local player
         foreach(GameObject p in players)
         {
@@ -147,7 +146,9 @@ public class CharacterCreationManager : MonoBehaviour
 
     // Start is called before the first frame update
     void Start()
-    {   
+    {
+        players = GameObject.FindGameObjectsWithTag("Player");
+
         //Setting up beginning screen
         title = GameObject.Find("Title_TXT");
         title.GetComponent<TextMeshProUGUI>().SetText("Race Selection");
@@ -168,5 +169,27 @@ public class CharacterCreationManager : MonoBehaviour
             setupLocalCharacter();
             readiedUp = true;
         }
+
+        if ((!NetworkManager.Singleton.IsConnectedClient && !NetworkManager.Singleton.IsHost) || PlayerDisconnected())
+        {
+            DisconnectFromGame();
+        }
+    }
+
+    public void DisconnectFromGame()
+    {
+        if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsConnectedClient)
+            NetworkManager.Singleton.Shutdown();
+        SceneManager.LoadScene("JLMainMenu");
+    }
+
+    public bool PlayerDisconnected()
+    {
+        for (int i = 0; i < players.Length; i++)
+        {
+            if (players[i] == null)
+                return true;
+        }
+        return false;
     }
 }

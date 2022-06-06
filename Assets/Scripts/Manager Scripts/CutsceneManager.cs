@@ -4,14 +4,20 @@ using UnityEngine;
 using AdventuresOfOldMultiplayer;
 using System;
 using Unity.Netcode;
+using UnityEngine.SceneManagement;
 
 public class CutsceneManager : Singleton<CutsceneManager>
 {
-    GameObject[] players;
-    Player localPlayer;
+    public GameObject skipButton;
+    public string cutscene;
 
-    void Start()
+    private GameObject[] players;
+    private Player localPlayer;
+
+    private void Start()
     {
+        skipButton.SetActive(false);
+
         players = GameObject.FindGameObjectsWithTag("Player");
 
         // Gets local player
@@ -33,6 +39,14 @@ public class CutsceneManager : Singleton<CutsceneManager>
         }
     }
 
+    private void Update()
+    {
+        if ((!NetworkManager.Singleton.IsConnectedClient && !NetworkManager.Singleton.IsHost) || PlayerDisconnected())
+        {
+            DisconnectFromGame();
+        }
+    }
+
     IEnumerator WaitForPlayers()
     {
         // Wait until all players are ready
@@ -46,6 +60,8 @@ public class CutsceneManager : Singleton<CutsceneManager>
             return allReady;
         });
 
+        skipButton.SetActive(true);
+
         // Once all players are ready, unready them all and start the game
         foreach (GameObject g in players)
         {
@@ -53,7 +69,7 @@ public class CutsceneManager : Singleton<CutsceneManager>
         }
 
         // when all players are ready, have host do this:
-        localPlayer.LoadIntoCutscene("Prophecy");
+        localPlayer.LoadIntoCutscene(cutscene);
     }
 
     public void LoadCutsceneEncounter(string cutsceneName)
@@ -124,7 +140,7 @@ public class CutsceneManager : Singleton<CutsceneManager>
                 // Chunk 7
                 QuestManager.Instance.SetImage("");
                 QuestManager.Instance.SetSpeaker("Narrator");
-                QuestManager.Instance.SetDialogue("The land stood silent as the blood seeped deep into their world. Then, all at once, the pillars of Chaos erupted shooting into the starry heavens above.  In the hours since, the various beings of the realm convened to discuss the coming doom.");
+                QuestManager.Instance.SetDialogue("The land stood silent as the blood seeped deep into their world.  Then, all at once, the pillars of Chaos erupted shooting into the starry heavens above.  In the hours since, the various beings of the realm convened to discuss the coming doom.");
                 QuestManager.Instance.PlayAudio("Prophecy", 60.5f, 79.5f);
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
             },
@@ -161,5 +177,95 @@ public class CutsceneManager : Singleton<CutsceneManager>
                 QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
             }
         }, OnComplete, localPlayer);
+    }
+
+    public void Win()
+    {
+        Action OnComplete = default;
+        if (NetworkManager.Singleton.IsHost)
+        {
+            OnComplete = () => {
+                localPlayer.ChangeScene("JLSuccessMenu");
+            };
+        }
+
+        QuestManager.Instance.LoadIntoQuest(NetworkManager.Singleton.IsHost, new List<Action> {
+            () => {
+                // Chunk 1
+                QuestManager.Instance.SetImage("");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("As the Acolyte falls and your party almost drops from exhaustion, the Chaos around you seems to slowly but surely dissipate and return from where it once came.  Your party follows the retreating Chaos and you all notice the forest returning to life,");
+                QuestManager.Instance.PlayAudio("Win", 0f, 15.2f);
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 2
+                QuestManager.Instance.SetImage("");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("the lush greenery and the inquisitive fauna all making their reappearance.  The trail of Chaos finally vanishes at the edge of a cliff, with the sun setting on a now safe region.  You all decide to spend the night at the precipice, a well deserved rest for a long journey.");
+                QuestManager.Instance.PlayAudio("Win", 15.2f, 33f);
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 3
+                QuestManager.Instance.SetImage("");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("There will be more battles to come, but for now you can rest as saviors of the forest.");
+                QuestManager.Instance.PlayAudio("Win", 33f, 41.48f);
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+            }
+        }, OnComplete, localPlayer);
+    }
+
+    public void Fail()
+    {
+        Action OnComplete = default;
+        if (NetworkManager.Singleton.IsHost)
+        {
+            OnComplete = () => {
+                localPlayer.ChangeScene("JLFailureMenu");
+            };
+        }
+
+        QuestManager.Instance.LoadIntoQuest(NetworkManager.Singleton.IsHost, new List<Action> {
+             () => {
+                // Chunk 1
+                QuestManager.Instance.SetImage("Wasteland");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("Turns out this wasn’t a tale of heroes, this was a tale of misfits who died tragic deaths and left the world to ruin.  Did I really expect much else?  Not really, but I didn’t want to SAY it.  The realm of Sol is doomed, and frankly, it’s all of your guys' fault.");
+                QuestManager.Instance.PlayAudio("Fail", 0f, 19.6f);
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.CONTINUE);
+            },
+            () => {
+                // Chunk 2
+                QuestManager.Instance.SetImage("Corrupted Tree Spirit");
+                QuestManager.Instance.SetSpeaker("Narrator");
+                QuestManager.Instance.SetDialogue("Remember that while the Chaos is killing every single being in the realm and turning the entire land into a fiery hellscape.");
+                QuestManager.Instance.PlayAudio("Fail", 19.6f, 30.8f);
+                QuestManager.Instance.SetButtonDisplay(ButtonDisplay.FINISH);
+            }
+        }, OnComplete, localPlayer);
+    }
+
+    public void SkipCutscene(string scene)
+    {
+        localPlayer.ChangeScene(scene);
+    }
+
+    public void DisconnectFromGame()
+    {
+        if (NetworkManager.Singleton.IsHost || NetworkManager.Singleton.IsConnectedClient)
+            NetworkManager.Singleton.Shutdown();
+        SceneManager.LoadScene("JLMainMenu");
+    }
+
+    public bool PlayerDisconnected()
+    {
+        for (int i = 0; i < players.Length; i++)
+        {
+            if (players[i] == null)
+                return true;
+        }
+        return false;
     }
 }

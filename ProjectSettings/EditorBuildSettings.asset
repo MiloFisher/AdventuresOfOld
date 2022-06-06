@@ -18,8 +18,14 @@ EditorBuildSettings:
     path: Assets/Scenes/Core Game.unity
     guid: 360118703c17f4e89a37d7bd15d01d70
   - enabled: 1
+    path: Assets/Scenes/WinCutscene.unity
+    guid: 3709e53b3e68a422e89c36514b9655ad
+  - enabled: 1
     path: Assets/Scenes/JLSuccessMenu.unity
     guid: 6bc06a91029b78446afec68876095cad
+  - enabled: 1
+    path: Assets/Scenes/FailCutscene.unity
+    guid: 2bc9f9f2220354566989c212a3894c72
   - enabled: 1
     path: Assets/Scenes/JLFailureMenu.unity
     guid: bad1358edb6ba9a42b799586cdda69db

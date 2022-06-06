@@ -219,6 +219,14 @@ public class QuestManager : Singleton<QuestManager>
                 isLocation = true;
                 locationImage.sprite = locationImages[13];
                 break;
+            case "Corrupted Tree Spirit":
+                isLocation = true;
+                locationImage.sprite = locationImages[14];
+                break;
+            case "Wasteland":
+                isLocation = true;
+                locationImage.sprite = locationImages[15];
+                break;
             default:
                 noVisual = true;
                 break;
