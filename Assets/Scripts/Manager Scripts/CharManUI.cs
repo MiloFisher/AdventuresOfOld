@@ -9,6 +9,9 @@ using TMPro;
 
 public class CharManUI : MonoBehaviour
 {
+    // Setting reference for animation manager
+    public Anim_Charcreation AnimManager;
+
     public TMP_FontAsset font;
     public GameObject MenuManager;
     public GameObject SceneHeader;
@@ -85,8 +88,9 @@ public class CharManUI : MonoBehaviour
         buttoncolors.disabledColor = new Color32(200,200,200,128);
         racebutton.GetComponent<Button>().colors = buttoncolors;
         racebutton.transform.SetParent(objectToSetTo, false);
-        racebutton.GetComponent<Button>().onClick.AddListener(() => MenuManager.GetComponent<MenuManager>().SwapScene(1));
+        // racebutton.GetComponent<Button>().onClick.AddListener(() => MenuManager.GetComponent<MenuManager>().SwapScene(1));
         racebutton.GetComponent<Button>().onClick.AddListener(() => SetRaceDetails(race));
+        racebutton.GetComponent<Button>().onClick.AddListener(() => AnimManager.PlayAnim(0));
         racebutton.GetComponent<Button>().onClick.AddListener(() => JLAudioManager.Instance.PlaySound("OnClick"));
     }
 
@@ -158,12 +162,28 @@ public class CharManUI : MonoBehaviour
         class_spd_text.GetComponent<TextMeshProUGUI>().SetText("SPD: " + createdchar.getChosen_race().get_stats().get_spd());
         class_con_text.GetComponent<TextMeshProUGUI>().SetText("CON: " + createdchar.getChosen_race().get_stats().get_con());
         class_eng_text.GetComponent<TextMeshProUGUI>().SetText("ENG: " + createdchar.getChosen_race().get_stats().get_eng());
+        chosen_class_image.SetActive(false);
     }
 
     public void BackToRace() {
-        stat_container.SetActive(false);
-        chosen_race_image.SetActive(false);
+        //stat_container.SetActive(false);
+        chosen_race_image.SetActive(true);
         chosen_class_image.SetActive(false);
+        // Edited by Ethan
+        // Changed color and stats back to pre-select class
+        class_str_text.GetComponent<TextMeshProUGUI>().SetText("STR: " + createdchar.getChosen_race().get_stats().get_str());
+        class_str_text.GetComponent<TextMeshProUGUI>().color = new Color32(0, 0, 0, 255);
+        class_dex_text.GetComponent<TextMeshProUGUI>().SetText("DEX: " + createdchar.getChosen_race().get_stats().get_dex());
+        class_dex_text.GetComponent<TextMeshProUGUI>().color = new Color32(0, 0, 0, 255);
+        class_int_text.GetComponent<TextMeshProUGUI>().SetText("INT: " + createdchar.getChosen_race().get_stats().get_inte());
+        class_int_text.GetComponent<TextMeshProUGUI>().color = new Color32(0, 0, 0, 255);
+        class_spd_text.GetComponent<TextMeshProUGUI>().SetText("SPD: " + createdchar.getChosen_race().get_stats().get_spd());
+        class_spd_text.GetComponent<TextMeshProUGUI>().color = new Color32(0, 0, 0, 255);
+        class_con_text.GetComponent<TextMeshProUGUI>().SetText("CON: " + createdchar.getChosen_race().get_stats().get_con());
+        class_con_text.GetComponent<TextMeshProUGUI>().color = new Color32(0, 0, 0, 255);
+        class_eng_text.GetComponent<TextMeshProUGUI>().SetText("ENG: " + createdchar.getChosen_race().get_stats().get_eng());
+        class_eng_text.GetComponent<TextMeshProUGUI>().color = new Color32(0, 0, 0, 255);
+        // End edit
         SceneHeader.GetComponent<TextMeshProUGUI>().SetText("Race Selection");
     }
 
@@ -194,7 +214,7 @@ public class CharManUI : MonoBehaviour
         //By copying the scuffed switch case - Ethan
         //confirm_Class_Image.GetComponent<Image>().sprite = aasimar_image;'
         confirm_Class_Image.GetComponent<Image>().sprite = Resources.Load<Sprite>("Icons/Icon_" + createdchar.getChosen_class().getName());
-
+        ability_desc_text.GetComponent<TextMeshProUGUI>().SetText("Ability Description");
     }
 
     public void BackToClass() {
@@ -210,10 +230,12 @@ public class CharManUI : MonoBehaviour
             createdchar.getChosen_race().get_stats().get_con());
         class_eng_text.GetComponent<TextMeshProUGUI>().SetText("ENG: " + 
             createdchar.getChosen_race().get_stats().get_eng());
-        ability_desc_panel.SetActive(false);
-        class_confirm_button.SetActive(false);
-        chosen_class_image.SetActive(false);
+        //ability_desc_panel.SetActive(false);
+        //class_confirm_button.SetActive(false);
+        //chosen_class_image.SetActive(false);
+        ability_desc_text.GetComponent<TextMeshProUGUI>().SetText("");
         SceneHeader.GetComponent<TextMeshProUGUI>().SetText("Class Selection");
+        chosen_class_image.SetActive(false);
     }
 
     public void ConfirmTrait() {
@@ -237,10 +259,11 @@ public class CharManUI : MonoBehaviour
         class_spd_text.GetComponent<TextMeshProUGUI>().color = black;
         class_con_text.GetComponent<TextMeshProUGUI>().color = black;
         class_eng_text.GetComponent<TextMeshProUGUI>().color = black;
-        trait_details_container.SetActive(false);
-        trait_confirm_button.SetActive(false);
-        stat_container.SetActive(true);
+        //trait_details_container.SetActive(false);
+        //trait_confirm_button.SetActive(false);
+        //stat_container.SetActive(true);
         SceneHeader.GetComponent<TextMeshProUGUI>().SetText("View Abilities");
+        ability_desc_text.GetComponent<TextMeshProUGUI>().SetText("Ability Description");
         error_text.SetActive(false);
     }
 
@@ -251,7 +274,7 @@ public class CharManUI : MonoBehaviour
 
     public void PreviewAbility(int abilitynum) {
         if (abilitynum == -1) {
-            ability_desc_panel.SetActive(false);
+            //ability_desc_panel.SetActive(false);
         }
         else {
             ability_desc_text.GetComponent<TextMeshProUGUI>().SetText(createdchar.getChosen_class().getAbilities()[abilitynum].getDesc());
@@ -259,7 +282,7 @@ public class CharManUI : MonoBehaviour
             /* ability_cost_text.GetComponent<TextMeshProUGUI>().SetText("Ability cost: " + createdchar.getChosen_class().getAbilities()[abilitynum].getCost());
             ability_type_text.GetComponent<TextMeshProUGUI>().SetText("Ability type: " + createdchar.getChosen_class().getAbilities()[abilitynum].getType());
             ability_level_text.GetComponent<TextMeshProUGUI>().SetText("Ability level: " + createdchar.getChosen_class().getAbilities()[abilitynum].getLevel()); */
-            ability_desc_panel.SetActive(true);
+            //ability_desc_panel.SetActive(true);
         }
     }
 
@@ -327,8 +350,8 @@ public class CharManUI : MonoBehaviour
 
     public void PreviewTrait(string traitname) {
         createdchar.setChosen_trait(new Trait(traitname));
-        trait_details_container.SetActive(true);
-        trait_confirm_button.SetActive(true);
+        // trait_details_container.SetActive(true);
+        // trait_confirm_button.SetActive(true);
         trait_details_text.GetComponent<TextMeshProUGUI>().SetText(createdchar.getChosen_trait().getDesc());
         Color32 green = new Color32(175, 255, 0, 255);
         Color32 black = new Color32(0, 0, 0, 255);
@@ -408,8 +431,8 @@ public class CharManUI : MonoBehaviour
     }
 
     public void ViewPowerful() {
-        trait_details_container.SetActive(true);
-        trait_confirm_button.SetActive(false);
+        //trait_details_container.SetActive(true);
+        //trait_confirm_button.SetActive(false);
         trait_details_text.GetComponent<TextMeshProUGUI>().SetText(
             "Gain +3 in either STR, DEX, or INT, then lose -1 from the two Stats you didn’t choose.");
     }
@@ -418,7 +441,7 @@ public class CharManUI : MonoBehaviour
     //0,1,2 refers to the index position in the Unity Editor dropdown object
     public void PreviewPowerful(int type) {
         powerful_text.GetComponent<TextMeshProUGUI>().color = new Color32(59,255,0,255);
-        trait_confirm_button.SetActive(false);
+        //trait_confirm_button.SetActive(false);
         if(type == 0) {
             PreviewTrait("Musclehead");
         }
@@ -432,7 +455,7 @@ public class CharManUI : MonoBehaviour
             // do nothing dont need case to do for now
         }
         //Renable the confirm button and scroll after dropdown selection.
-        trait_confirm_button.SetActive(true);
+        // trait_confirm_button.SetActive(true);
     }
 
     public void setCharName() {
@@ -444,7 +467,7 @@ public class CharManUI : MonoBehaviour
             createdchar.setName(inputname.text);
             error_text.SetActive(false);
             gamestart = true;
-            MenuManager.GetComponent<MenuManager>().SwapScene(6);
+            //MenuManager.GetComponent<MenuManager>().SwapScene(6);
         }
     }
 
@@ -455,4 +478,8 @@ public class CharManUI : MonoBehaviour
     void Awake() {
         powerful_text.GetComponent<TMP_Dropdown>().SetValueWithoutNotify(3);//Setting default value of dropdown menu to not selected
     }
+
+
+
+
 }
