@@ -227,6 +227,58 @@ public class QuestManager : Singleton<QuestManager>
                 isLocation = true;
                 locationImage.sprite = locationImages[15];
                 break;
+            case "Lush Greenery":
+                isLocation = true;
+                locationImage.sprite = locationImages[14];
+                break;
+            case "Victory":
+                isLocation = true;
+                locationImage.sprite = locationImages[14];
+                break;
+            case "Oracle1":
+                isLocation = false;
+                npcImage.sprite = npcImages[10];
+                break;
+            case "Oracle2":
+                isLocation = false;
+                npcImage.sprite = npcImages[11];
+                break;
+            case "Oracle3":
+                isLocation = false;
+                npcImage.sprite = npcImages[12];
+                break;
+            case "Oracle4":
+                isLocation = false;
+                npcImage.sprite = npcImages[13];
+                break;
+            case "Prophecy1":
+                isLocation = false;
+                npcImage.sprite = npcImages[14];
+                break;
+            case "Prophecy2":
+                isLocation = false;
+                npcImage.sprite = npcImages[15];
+                break;
+            case "Prophecy3":
+                isLocation = false;
+                npcImage.sprite = npcImages[16];
+                break;
+            case "Prophecy4":
+                isLocation = false;
+                npcImage.sprite = npcImages[17];
+                break;
+            case "Prophecy5":
+                isLocation = false;
+                npcImage.sprite = npcImages[18];
+                break;
+            case "Prophecy6":
+                isLocation = false;
+                npcImage.sprite = npcImages[19];
+                break;
+            case "Prophecy7":
+                isLocation = false;
+                npcImage.sprite = npcImages[20];
+                break;
             default:
                 noVisual = true;
                 break;

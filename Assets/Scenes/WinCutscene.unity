@@ -1779,6 +1779,8 @@ MonoBehaviour:
   - {fileID: 21300000, guid: c815af453afa36548855e67ed1a69c3f, type: 3}
   - {fileID: 21300000, guid: 6d7780d6c48fa1748bd186b935c2e001, type: 3}
   - {fileID: 21300000, guid: f34021dd562236546bea7170a9a9b8f1, type: 3}
+  - {fileID: 21300000, guid: b9ebf2ffbc1996f49b4d659f32fd2d33, type: 3}
+  - {fileID: 21300000, guid: b1366f0f75a885d4d85cb2b32dc32faa, type: 3}
   npcImages:
   - {fileID: 21300000, guid: 923eb8564fc6d43b2af750bc8a5bf8a6, type: 3}
   - {fileID: 21300000, guid: 02e6765ca42194dc38d76524fafb2f4d, type: 3}

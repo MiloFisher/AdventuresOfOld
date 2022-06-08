@@ -756,6 +756,17 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 8ec577c28cc3047839c0526aaa2800c5, type: 3}
   - {fileID: 21300000, guid: 7352dcccc253b42f2b5cdaf63e2d9ecc, type: 3}
   - {fileID: 21300000, guid: d9fe1d97e9fff4eea90d5210bf4938f9, type: 3}
+  - {fileID: 21300000, guid: 48f76de66c39e2a4aa8508db480d7e10, type: 3}
+  - {fileID: 21300000, guid: 476ece0c4fac4204e8e4aca9ea29ea72, type: 3}
+  - {fileID: 21300000, guid: 08a8b20332ca4a14d863cbeec0358bfb, type: 3}
+  - {fileID: 21300000, guid: dfe6049b434dfd549989b179177bab70, type: 3}
+  - {fileID: 21300000, guid: 86073a7267edd544585ffb06f7a1aa70, type: 3}
+  - {fileID: 21300000, guid: fe4285da5396c804bacbb8d5684f4d05, type: 3}
+  - {fileID: 21300000, guid: 1b20d3499aa6677499451604ad734325, type: 3}
+  - {fileID: 21300000, guid: 157ba21512af9cc4ea16f8ffe3f74db7, type: 3}
+  - {fileID: 21300000, guid: ee0c8267cdc2aba4da923cacb96adc82, type: 3}
+  - {fileID: 21300000, guid: 5936125f4370f9944b270c62556ef23a, type: 3}
+  - {fileID: 21300000, guid: 303faf6ec5c0bbf4eab3557a3c6cb67a, type: 3}
   speakerText: {fileID: 1237556259}
   dialogueText: {fileID: 1216718957}
   continueButton: {fileID: 116856809}

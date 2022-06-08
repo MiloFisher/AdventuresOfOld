@@ -314,11 +314,11 @@ namespace AdventuresOfOldMultiplayer
         }
 
         [ClientRpc]
-        public void PlayTransitionClientRPC(int id, ClientRpcParams clientRpcParams = default)
+        public void PlayTransitionClientRPC(int id, bool tutorialCheck = false, ClientRpcParams clientRpcParams = default)
         {
             if (IsOwner && !isBot)
             {
-                PlayManager.Instance.CallTransition(id);
+                PlayManager.Instance.CallTransition(id, tutorialCheck);
             }
         }
 

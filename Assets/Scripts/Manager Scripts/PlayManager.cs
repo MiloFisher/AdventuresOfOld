@@ -99,6 +99,8 @@ public class PlayManager : Singleton<PlayManager>
 
     public Player playerMovingWithYou;
 
+    public GameObject tutorial;
+
     void Start()
     {
         // Activate loadingScreen
@@ -913,8 +915,13 @@ public class PlayManager : Singleton<PlayManager>
             t.Value.Deactivate();
     }
 
-    public void CallTransition(int id)
+    public void CallTransition(int id, bool tutorialCheck = false)
     {
+        if(tutorialCheck && PlayerPrefs.GetInt("Tutorial", 0) == 0)
+        {
+            tutorial.SetActive(true);
+            PlayerPrefs.SetInt("Tutorial", 1);
+        }
         transitions.transform.GetChild(id).gameObject.SetActive(true);
         InventoryManager.Instance.HideOptions();
     }
@@ -3652,7 +3659,7 @@ public class PlayManager : Singleton<PlayManager>
                 foreach (Player p in playerList)
                 {
                     // Play transition for all players
-                    p.PlayTransitionClientRPC(0); // Transition 0 is Start of Day
+                    p.PlayTransitionClientRPC(0, true); // Transition 0 is Start of Day
                 }
 
                 // Start turn of player who goes first
