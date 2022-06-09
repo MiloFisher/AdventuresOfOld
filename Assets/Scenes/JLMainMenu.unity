@@ -968,7 +968,7 @@ MonoBehaviour:
   playersInLobby: 0
   lobbyType: 
   noSavedDataFoundMessage: {fileID: 170495125}
-  botsEnabled: 1
+  botsEnabled: 0
 --- !u!1 &130625085
 GameObject:
   m_ObjectHideFlags: 0
@@ -9770,6 +9770,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SP_BUTTON
       objectReference: {fileID: 0}
+    - target: {fileID: 5054663507758471553, guid: 3e2b791ff927cf046b97558b04097aa4, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5054663507758471554, guid: 3e2b791ff927cf046b97558b04097aa4, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -9853,6 +9857,30 @@ PrefabInstance:
     - target: {fileID: 5054663507758471554, guid: 3e2b791ff927cf046b97558b04097aa4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5054663507758471555, guid: 3e2b791ff927cf046b97558b04097aa4, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5054663507758471555, guid: 3e2b791ff927cf046b97558b04097aa4, type: 3}
+      propertyPath: m_Interactable
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5054663507758471555, guid: 3e2b791ff927cf046b97558b04097aa4, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5054663507758471555, guid: 3e2b791ff927cf046b97558b04097aa4, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.b
+      value: 0.61587757
+      objectReference: {fileID: 0}
+    - target: {fileID: 5054663507758471555, guid: 3e2b791ff927cf046b97558b04097aa4, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.g
+      value: 0.71039003
+      objectReference: {fileID: 0}
+    - target: {fileID: 5054663507758471555, guid: 3e2b791ff927cf046b97558b04097aa4, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.r
+      value: 0.754717
       objectReference: {fileID: 0}
     - target: {fileID: 5054663507758471555, guid: 3e2b791ff927cf046b97558b04097aa4, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
@@ -12982,7 +13010,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5054663507758471554, guid: 3e2b791ff927cf046b97558b04097aa4, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 5054663507758471554, guid: 3e2b791ff927cf046b97558b04097aa4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -16767,7 +16795,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5054663507758471554, guid: 3e2b791ff927cf046b97558b04097aa4, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -140
+      value: -100
       objectReference: {fileID: 0}
     - target: {fileID: 5054663507758471554, guid: 3e2b791ff927cf046b97558b04097aa4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -17393,7 +17421,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5054663507758471554, guid: 3e2b791ff927cf046b97558b04097aa4, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -280
+      value: -240
       objectReference: {fileID: 0}
     - target: {fileID: 5054663507758471554, guid: 3e2b791ff927cf046b97558b04097aa4, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
