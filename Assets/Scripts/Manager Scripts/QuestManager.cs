@@ -236,20 +236,20 @@ public class QuestManager : Singleton<QuestManager>
                 locationImage.sprite = locationImages[14];
                 break;
             case "Oracle1":
-                isLocation = false;
-                npcImage.sprite = npcImages[10];
+                isLocation = true;
+                locationImage.sprite = locationImages[14];
                 break;
             case "Oracle2":
-                isLocation = false;
-                npcImage.sprite = npcImages[11];
+                isLocation = true;
+                locationImage.sprite = locationImages[15];
                 break;
             case "Oracle3":
-                isLocation = false;
-                npcImage.sprite = npcImages[12];
+                isLocation = true;
+                locationImage.sprite = locationImages[16];
                 break;
             case "Oracle4":
-                isLocation = false;
-                npcImage.sprite = npcImages[13];
+                isLocation = true;
+                locationImage.sprite = locationImages[17];
                 break;
             case "Prophecy1":
                 isLocation = false;
