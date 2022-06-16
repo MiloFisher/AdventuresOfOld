@@ -82,6 +82,7 @@ public class QuestManager : Singleton<QuestManager>
     public void EndDialogue()
     {
         currentChunk++;
+        JLAudioManager.Instance.StopSound(audioFileName);
         StartCoroutine(FadeOutScene());
     }
 
@@ -464,7 +465,7 @@ public class QuestManager : Singleton<QuestManager>
 
         StartCoroutine(ButtonCooldown());
         JLAudioManager.Instance.StopSound(audioFileName);
-       localPlayer.EndDialogue();
+        localPlayer.EndDialogue();
     }
 
     // Choice Buttons

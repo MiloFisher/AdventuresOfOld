@@ -33,7 +33,7 @@ public class EventOptions : ScriptableObject
                 PlayManager.Instance.MakeStatRoll("DEX", 9);
                 PlayManager.Instance.StatRollListener((a) => {
                     if (a == 1)
-                        PlayManager.Instance.ReduceChaos(1);
+                        PlayManager.Instance.localPlayer.ReduceChaos(1);
                     p.CompleteEncounter(true, p.UUID.Value);
                     p.GainXP(xp);
                 });

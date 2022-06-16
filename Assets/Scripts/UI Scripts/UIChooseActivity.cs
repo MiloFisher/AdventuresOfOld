@@ -122,6 +122,8 @@ public class UIChooseActivity : MonoBehaviour
             selection.GetComponent<RectTransform>().sizeDelta = new Vector2(selectionStartWidth + (selectionEndWidth - selectionStartWidth) * i * Global.animRate, selectionStartHeight + (selectionEndHeight - selectionStartHeight) * i * Global.animRate);
             yield return new WaitForSeconds(selectionShiftLength * Global.animTimeMod * Global.animSpeed);
         }
+        foreach (Image img in buttons)
+            img.gameObject.SetActive(false);
 
         // Next fade in playerNames and activities
         playerNames.SetActive(true);

@@ -582,7 +582,7 @@ public class InventoryManager : Singleton<InventoryManager>
     {
         if (PlayManager.Instance.GetHealth(PlayManager.Instance.localPlayer) <= 0)
             return;
-        PlayManager.Instance.TargetPlayerSelection("Choose Trade Partner", true, false, false, (p) => {
+        PlayManager.Instance.TargetPlayerSelection("Choose Trade Partner", true, true, false, (p) => {
             // Trade to player p
             SetFirstEmptySlotInInventory(p, cards[selectedID].GetComponent<UILootCard>().cardName);
             Discard();

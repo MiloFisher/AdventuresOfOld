@@ -54,56 +54,7 @@ namespace AdventuresOfOldMultiplayer
             }
             if (inLobby)
             {
-                if (lobbyType == "New Game")
-                {
-                    int x = 0;
-                    GameObject[] players = GetOrderedPlayers();
-                    playersInLobby = players.Length;
-                    foreach (GameObject player in players)
-                    {
-                        if (x < 6)
-                        {
-                            if (x == 0)
-                            {
-                                playerList[x].text = "[Host] ";
-                            }
-                            else if (player.GetComponent<Player>().isBot)
-                            {
-                                playerList[x].text = "[Bot] ";
-                            }
-                            else
-                            {
-                                playerList[x].text = "[Client] ";
-                            }
-                            playerList[x].color = Color.black;
-                            playerList[x++].text += player.GetComponent<Player>().Username.Value + "";
-                        }
-
-                        if (x != 0 && x < 6)
-                        {
-                            removeButtonList[x - 1].SetActive(NetworkManager.Singleton.IsHost);
-                        }
-                    }
-
-                    for (; x < 6; x++)
-                    {
-                        playerList[x].text = "";
-                        if (x != 0)
-                            removeButtonList[x - 1].SetActive(false);
-                    }
-
-                    if (playersInLobby > 6 && NetworkManager.Singleton.IsHost)
-                    {
-                        for (int i = 6; i < playersInLobby; i++)
-                        {
-                            RemovePlayer(i);
-                        }
-                    }
-
-                    startGameButton.SetActive(playersInLobby >= 3 && NetworkManager.Singleton.IsHost);
-                    addBotButton.SetActive(playersInLobby < 6 && NetworkManager.Singleton.IsHost && botsEnabled);
-                }
-                else if (lobbyType == "Load Game")
+                if (lobbyType == "Load Game")
                 {
                     int x = 0;
                     GameObject[] players = GetOrderedPlayers();
@@ -176,6 +127,55 @@ namespace AdventuresOfOldMultiplayer
                         }
                     }
                     addBotButton.SetActive(!allAdded && NetworkManager.Singleton.IsHost && botsEnabled);
+                }
+                else // if (lobbyType == "New Game")
+                {
+                    int x = 0;
+                    GameObject[] players = GetOrderedPlayers();
+                    playersInLobby = players.Length;
+                    foreach (GameObject player in players)
+                    {
+                        if (x < 6)
+                        {
+                            if (x == 0)
+                            {
+                                playerList[x].text = "[Host] ";
+                            }
+                            else if (player.GetComponent<Player>().isBot)
+                            {
+                                playerList[x].text = "[Bot] ";
+                            }
+                            else
+                            {
+                                playerList[x].text = "[Client] ";
+                            }
+                            playerList[x].color = Color.black;
+                            playerList[x++].text += player.GetComponent<Player>().Username.Value + "";
+                        }
+
+                        if (x != 0 && x < 6)
+                        {
+                            removeButtonList[x - 1].SetActive(NetworkManager.Singleton.IsHost);
+                        }
+                    }
+
+                    for (; x < 6; x++)
+                    {
+                        playerList[x].text = "";
+                        if (x != 0)
+                            removeButtonList[x - 1].SetActive(false);
+                    }
+
+                    if (playersInLobby > 6 && NetworkManager.Singleton.IsHost)
+                    {
+                        for (int i = 6; i < playersInLobby; i++)
+                        {
+                            RemovePlayer(i);
+                        }
+                    }
+
+                    startGameButton.SetActive(playersInLobby >= 3 && NetworkManager.Singleton.IsHost);
+                    addBotButton.SetActive(playersInLobby < 6 && NetworkManager.Singleton.IsHost && botsEnabled);
                 }
             }
         }
